@@ -20,6 +20,7 @@ updated: 2026-10-26T20:00:00Z
 
 ## Pages
 
+- [[32-wearlab/what-we-reuse|Synthetic data from WearLab]] — reusable night, step and PPG simulators for the demo and synthetic path
 - [[05-data/data-sources|Data sources]] — Watch = context, laptop = behaviour, study task = performance
 - [[05-data/data-pipeline|Data pipeline]] — Validate, dedupe, time-align, store; observation schema; missingness
 

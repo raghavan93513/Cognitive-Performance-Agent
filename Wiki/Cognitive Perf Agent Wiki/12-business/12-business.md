@@ -16,7 +16,11 @@ updated: 2026-10-26T20:00:00Z
 
 > **Answers:** How this becomes a company.
 
-**Status (2026-10-26):** Not started.
+**Status (2026-10-26):** Competitive landscape drafted from WearLab's sourced brand histories.
+
+## Pages
+
+- [[12-business/competitive-landscape|Competitive landscape]] — Fitbit, WHOOP, Oura, Garmin, Apple: who measures what, and where we differ
 
 ## Planned pages
 

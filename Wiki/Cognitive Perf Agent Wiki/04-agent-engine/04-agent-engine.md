@@ -20,6 +20,8 @@ updated: 2026-10-26T20:00:00Z
 
 ## Pages
 
+- [[32-wearlab/heart-signal-pipelines|Heart-signal pipelines (WearLab)]] — how HR, HRV, SpO₂ and ECG numbers are made and fail
+- [[32-wearlab/motion-sleep-recovery-pipelines|Motion, sleep and recovery pipelines (WearLab)]] — steps, sleep staging, recovery, temperature baselines
 - [[04-agent-engine/performance-model|Performance model]] — Rules, then a regularized model; estimate + uncertainty or abstain
 - [[04-agent-engine/multi-agent-decision|Multi agent decision]] — Signal / Evidence / Action agents and the deterministic policy engine
 

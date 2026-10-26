@@ -16,7 +16,7 @@ updated: 2026-10-26T20:00:00Z
 
 > **Answers:** People, organisations, tools, data providers, competitors.
 
-**Status (2026-10-26):** Team, course staff and key tools.
+**Status (2026-10-26):** Team, course staff, key tools and the five wearable brands.
 
 ## Pages
 
@@ -25,6 +25,15 @@ updated: 2026-10-26T20:00:00Z
 - [[22-entities/xuhai-orson-xu|Xuhai orson xu]] — Course staff — HCI and health
 - [[22-entities/eugene-wu|Eugene wu]] — Course staff — data systems and agents
 - [[22-entities/langgraph|Langgraph]] — Tool — agent orchestration
+- [[22-entities/heramb-chaudhari|Heramb chaudhari]] — Team — built WearLab, set up this wiki
+
+### Wearable brands (from WearLab's Time Machines)
+
+- [[22-entities/fitbit|Fitbit]] — what our course's loaner devices are
+- [[22-entities/whoop|WHOOP]] — screenless band built around recovery and strain
+- [[22-entities/oura|Oura]] — smart ring, temperature trends
+- [[22-entities/garmin|Garmin]] — GPS watches, battery life in weeks
+- [[22-entities/apple-watch|Apple Watch]] — smartwatch, ECG
 
 ## Related
 

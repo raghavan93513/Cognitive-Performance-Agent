@@ -287,6 +287,10 @@ All three use device `displayName` "Fictional Course Fitbit". The in-notebook cl
 - The OAuth roles (client ID, callback, scopes, code, access token, refresh token); registration ≠ consent.
 - The DataPoint envelope: `dataSource` plus one typed payload. Empty response = no observations.
 
+## See it working: WearLab
+
+Our own [[32-wearlab/32-wearlab|WearLab]] app simulates this week's pipelines end to end, with tested code you can break and fix: optical HR in [[32-wearlab/heart-signal-pipelines|Heart-signal pipelines]], and steps and sleep in [[32-wearlab/motion-sleep-recovery-pipelines|Motion, sleep and recovery pipelines]]. Where WearLab and the slides disagree, the WearLab pages say so. ^[inferred]
+
 ## Sources
 
 - `binf4070-2026/week-03/slides-03.pdf`: pipeline p. 5; IMU pp. 7–9; step counter pp. 10–17; PPG/HR pp. 19–21; HRV pp. 22–23; sleep pp. 25–29; time and quality pp. 33–41; API/OAuth pp. 43–48; lab pp. 50–53. Slides 19–21, 28, 37 and 38 were also viewed as images for figure content.

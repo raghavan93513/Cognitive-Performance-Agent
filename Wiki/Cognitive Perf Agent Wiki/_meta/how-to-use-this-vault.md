@@ -31,7 +31,7 @@ The links behind each row: [[01-foundation/project-overview|Project overview]] �
 
 - **`01`–`17` — the company.** One folder per domain, read in order. Each folder's hub page has the same name as the folder (e.g. `05-data/05-data`) and is that domain's front door.
 - **`20`–`25` — the knowledge layer.** Decisions, concepts, entities, references, synthesis and the journal. Domains link *into* these instead of repeating them.
-- **`30`–`31` — context.** The course we're building this in, and every deck we've made.
+- **`30`–`32` — context.** The course we're building this in, every deck we've made, and [[32-wearlab/32-wearlab|WearLab]], our earlier product.
 - **`attachments/`** holds original files that pages embed. **`_meta/`** holds conventions, the tag list and templates. **`_raw/`, `_staging/`, `_archives/`** are framework working folders.
 
 See [[_meta/conventions|Conventions]] for naming, frontmatter and linking rules, and [[_meta/taxonomy|Tag taxonomy]] for tags.

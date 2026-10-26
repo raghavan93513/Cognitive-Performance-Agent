@@ -48,6 +48,12 @@ Questions the two design documents leave open or answer differently. Update this
 15. **Do we want a "what if" model?** Dr. Heydari's agent design includes a world model that predicts the effect of an action (e.g. what a walk would do). Ours only predicts performance. → [[30-course/guest-talks/ali-heydari-physiological-world-models|Guest talk]] ^[inferred]
 16. **Which user data, if any, goes to a hosted LLM?** Name this data flow explicitly in [[13-trust-safety/privacy-and-consent|Privacy and consent]]. Week 5 lists semantic-operator privacy leaks and prompt injection as risks. ^[inferred]
 
+### Raised by WearLab (2026-10-26)
+
+17. **Reuse WearLab's simulators as our synthetic-data generator?** About 1–2 days of work to add a person layer, a calendar, laptop and task streams, and Google-Health-shaped output. It needs Heramb's OK and a licence on WearLab first. → [[32-wearlab/what-we-reuse|What we reuse]] ^[inferred]
+18. **Which device do participants wear?** The course lends a Fitbit Air, which WearLab's Fitbit catalog doesn't cover. Confirm the model, and whether it reports overnight HRV. → [[22-entities/fitbit|Fitbit]] ^[inferred]
+19. **Absolute or personal thresholds?** WearLab's HRV lab uses absolute bands (≥ 50 / < 30 ms), while our design uses personal baselines. Proposed: personal baselines with a 28-night look-back and a 14-night learning period. → [[04-agent-engine/performance-model|Performance model]] ^[inferred]
+
 ## Decided
 
 *Nothing yet.*

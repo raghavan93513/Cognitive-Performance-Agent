@@ -16,7 +16,11 @@ updated: 2026-10-26T20:00:00Z
 
 > **Answers:** How we explain it and how people find it.
 
-**Status (2026-10-26):** Not started. The showcase lightning pitch is our first marketing artifact.
+**Status (2026-10-26):** Not started. WearLab is an existing marketing asset; the showcase lightning pitch is the first planned one.
+
+## Pages
+
+- [[32-wearlab/32-wearlab|WearLab]] — our live, education-led explainer: a possible front door to the agent
 
 ## Planned pages
 

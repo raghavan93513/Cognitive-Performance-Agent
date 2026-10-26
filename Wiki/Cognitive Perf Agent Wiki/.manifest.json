@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-10-26T20:45:00Z",
+  "last_updated": "2026-10-26T21:50:00Z",
   "sources": {
     "/Users/herambchaudhari/Desktop/Cognitive Perf agent/Cognitive-Performance-Agent/README.md": {
       "content_hash": "7312f79068989a34946c8afeb6519351b4b949ff2a79f5f65a3b11c92659b98b",
@@ -294,6 +294,110 @@
       "source_type": "course",
       "project": "cognitive-performance-agent",
       "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Fitbit/README.md": {
+      "content_hash": "89f4217b7d090ef1ff1cb1e15a5a38a5541970d4f0535797f72faa0d8e6b041d",
+      "last_ingested": "2026-10-26T20:25:10.161969+00:00",
+      "pages_produced": [
+        "32-wearlab/32-wearlab.md",
+        "32-wearlab/product-tour.md",
+        "32-wearlab/architecture.md"
+      ],
+      "project": "wearlab",
+      "source_type": "code",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Fitbit/docs/PLAN.md": {
+      "content_hash": "ca533396dee4a980f3445d60d26af546e3156b1ad7e79630f07196f1ed41b30a",
+      "last_ingested": "2026-10-26T20:25:10.224939+00:00",
+      "pages_produced": [
+        "32-wearlab/32-wearlab.md",
+        "32-wearlab/product-tour.md",
+        "32-wearlab/architecture.md",
+        "32-wearlab/teardowns-and-parts.md",
+        "32-wearlab/curriculum-and-quizzes.md",
+        "32-wearlab/brand-histories.md"
+      ],
+      "project": "wearlab",
+      "source_type": "code",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Fitbit/src/data": {
+      "content_hash": "d3c93e6a8cf1c057e4e7289d2d0917e3e870d815b85f76fb1d5d4821d4ed760e",
+      "last_ingested": "2026-10-26T20:25:10.295258+00:00",
+      "pages_produced": [
+        "32-wearlab/teardowns-and-parts.md",
+        "32-wearlab/curriculum-and-quizzes.md",
+        "32-wearlab/product-tour.md"
+      ],
+      "project": "wearlab",
+      "source_type": "code",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Fitbit/src/journey": {
+      "content_hash": "415e3f6b3ad8b0db2609418e1e701cc2520611108c41e922f97e1f8a379f9464",
+      "last_ingested": "2026-10-26T20:25:10.365992+00:00",
+      "pages_produced": [
+        "32-wearlab/heart-signal-pipelines.md",
+        "21-concepts/photoplethysmography.md",
+        "21-concepts/heart-rate-variability.md"
+      ],
+      "project": "wearlab",
+      "source_type": "code",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Fitbit/src/lab": {
+      "content_hash": "1d08e4c2d35cfa518ea483154d7338bc8c9d93170c9574bd930920ff7f66affc",
+      "last_ingested": "2026-10-26T20:25:10.443636+00:00",
+      "pages_produced": [
+        "32-wearlab/heart-signal-pipelines.md",
+        "32-wearlab/motion-sleep-recovery-pipelines.md",
+        "21-concepts/blood-oxygen-spo2.md",
+        "21-concepts/ecg-and-atrial-fibrillation.md",
+        "21-concepts/recovery-and-strain.md",
+        "21-concepts/skin-temperature-trends.md"
+      ],
+      "project": "wearlab",
+      "source_type": "code",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Fitbit/src/steps": {
+      "content_hash": "b465bca42f73fd58e803c03bf92cd189963b3815483c93cac432f7ef333ea229",
+      "last_ingested": "2026-10-26T20:25:10.513235+00:00",
+      "pages_produced": [
+        "32-wearlab/motion-sleep-recovery-pipelines.md",
+        "21-concepts/step-counting.md"
+      ],
+      "project": "wearlab",
+      "source_type": "code",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Fitbit/src/sleep": {
+      "content_hash": "085217ffe6d616d41ec7a0ee71a6d1fab4b2338b839e7c36588e1e7e13b00c5a",
+      "last_ingested": "2026-10-26T20:25:10.582009+00:00",
+      "pages_produced": [
+        "32-wearlab/motion-sleep-recovery-pipelines.md",
+        "21-concepts/sleep-staging.md"
+      ],
+      "project": "wearlab",
+      "source_type": "code",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Fitbit/src/timemachine": {
+      "content_hash": "6fdac413645d8f1f663e803ce0d6573f694a7e7e0c0554a736192dc889e75bf8",
+      "last_ingested": "2026-10-26T20:25:10.652174+00:00",
+      "pages_produced": [
+        "32-wearlab/brand-histories.md",
+        "22-entities/fitbit.md",
+        "22-entities/whoop.md",
+        "22-entities/oura.md",
+        "22-entities/garmin.md",
+        "22-entities/apple-watch.md",
+        "12-business/competitive-landscape.md"
+      ],
+      "project": "wearlab",
+      "source_type": "code",
+      "read_only_external": true
     }
   },
   "projects": {
@@ -301,12 +405,18 @@
       "source_path": "/Users/herambchaudhari/Desktop/Cognitive Perf agent/Cognitive-Performance-Agent",
       "vault_path": ".",
       "last_ingested": "2026-10-26T20:45:00Z"
+    },
+    "wearlab": {
+      "source_path": "/Users/herambchaudhari/Desktop/Fitbit",
+      "live_url": "https://wearlab-learn.vercel.app",
+      "vault_path": "32-wearlab",
+      "last_ingested": "2026-10-26T21:50:00Z"
     }
   },
   "stats": {
-    "total_sources_ingested": 21,
-    "total_pages": 114,
-    "total_projects": 1,
+    "total_sources_ingested": 29,
+    "total_pages": 136,
+    "total_projects": 2,
     "last_full_rebuild": null
   }
 }

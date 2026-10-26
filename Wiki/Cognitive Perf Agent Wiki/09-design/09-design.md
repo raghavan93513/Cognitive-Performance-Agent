@@ -18,6 +18,10 @@ updated: 2026-10-26T20:00:00Z
 
 **Status (2026-10-26):** Nothing yet. Course week 8 is the design studio.
 
+## Pages
+
+- [[32-wearlab/architecture|WearLab design language]] — dark theme, chunky UI, explain cards, no-game stance (a starting point)
+
 ## Planned pages
 
 *Not written yet. Create them from `_meta/templates/` when the work starts.*

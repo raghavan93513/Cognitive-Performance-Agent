@@ -16,7 +16,13 @@ updated: 2026-10-26T20:00:00Z
 
 > **Answers:** Who we are, who owns what, how we decide.
 
-**Status (2026-10-26):** Team members known from the repo history. Add the rest of the team.
+**Status (2026-10-26):** Members known so far from the repos. Add anyone missing.
+
+## Members
+
+- [[22-entities/heramb-chaudhari|Heramb Chaudhari]] — built [[32-wearlab/32-wearlab|WearLab]]; set up this wiki
+- [[22-entities/raghavan-vaidhyaraman|Raghavan Vaidhyaraman]] — repo owner; lean architecture deck
+- [[22-entities/alexa-kafka|Alexa Kafka]] — system design and deployment plan
 
 ## Planned pages
 

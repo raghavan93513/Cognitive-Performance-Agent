@@ -76,8 +76,9 @@ Hubs: [[20-decisions/20-decisions|20]] · [[21-concepts/21-concepts|21]] · [[22
 |---|---|---|
 | 30 | Course | BINF 4070: schedule, grading, requirements, deliverables, every week, every reading |
 | 31 | Decks | Every deck we've made, each with a summary and the original embedded |
+| 32 | WearLab | Heramb's 3D wearables-explainer app: product, signal pipelines, brand histories, what we reuse |
 
-Hubs: [[30-course/30-course|30 · Course]] · [[31-decks/31-decks|31 · Decks]] ·
+Hubs: [[30-course/30-course|30 · Course]] · [[31-decks/31-decks|31 · Decks]] · [[32-wearlab/32-wearlab|32 · WearLab]] ·
 [[30-course/readings/30-course-readings|Readings]] · [[30-course/project-requirements|Project requirements]]
 
 ## Most important pages right now
@@ -87,6 +88,7 @@ Hubs: [[30-course/30-course|30 · Course]] · [[31-decks/31-decks|31 · Decks]] 
 - [[24-synthesis/open-decisions|Open decisions]]: what we must decide before building
 - [[30-course/project-requirements|Project requirements]]: the course's bar and our gap check
 - [[04-agent-engine/multi-agent-decision|Multi-agent decision]]: the core of the agent
+- [[32-wearlab/what-we-reuse|What we reuse from WearLab]]: synthetic data, signal pipelines, brand data, design
 
 ## System
 

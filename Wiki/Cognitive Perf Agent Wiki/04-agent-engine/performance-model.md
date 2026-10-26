@@ -57,6 +57,22 @@ Both designs reject an unexplained universal "readiness" or productivity score. 
 - Essential session data missing, or confidence below threshold, or the input is out of distribution → **abstain**: show "Not enough data" / "not enough recent data to personalize a recommendation". Manual break controls stay available.
 - Each prediction returns the estimate, uncertainty, model version, feature-window reference and quality flags.
 
+## Lessons from WearLab and the course (2026-10-26)
+
+From [[32-wearlab/what-we-reuse|What we reuse from WearLab]] and [[30-course/weeks/week-07-time-series-multimodal-features|course week 7]]: ^[inferred]
+
+- **Personal baselines:**
+  - one robust value per night;
+  - a 28-night look-back;
+  - a 14-night learning period before any alert;
+  - thresholds in natural units;
+  - flagged or anomalous days left out of the baseline.
+
+  A plain 7-day z-score fails on both counts: it misses a sick day and raises a false alarm.
+- **Wearable features worth testing:** last night's sleep quantity and timing; an overnight composite of HRV, resting HR and breathing against the student's normal; minutes since last movement; a temperature-deviation flag.
+- **Leave out:** deep/REM minutes (about 28% error a night even in simulation), strain scores, and any HR measured while steps are being counted.
+- **HR quality gate:** treat HR as missing when the beat-interval coefficient of variation is ≥ 0.20, when steps > 0, or when |HR − steps per minute| < 5 (cadence lock). → [[21-concepts/photoplethysmography|PPG]]
+
 ## Drift and release gates (Alexa)
 
 - Track feature distributions, missingness, calibration, subgroup performance and task-outcome relationships.
