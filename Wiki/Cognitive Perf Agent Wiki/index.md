@@ -89,6 +89,7 @@ Hubs: [[30-course/30-course|30 · Course]] · [[31-decks/31-decks|31 · Decks]] 
 - [[30-course/project-requirements|Project requirements]]: the course's bar and our gap check
 - [[04-agent-engine/multi-agent-decision|Multi-agent decision]]: the core of the agent
 - [[32-wearlab/what-we-reuse|What we reuse from WearLab]]: synthetic data, signal pipelines, brand data, design
+- [[05-data/synthetic-data-generator|Synthetic data generator]]: the first accepted decision ([[20-decisions/adr-001-reuse-wearlab-simulators-for-synthetic-data|ADR-001]])
 
 ## System
 

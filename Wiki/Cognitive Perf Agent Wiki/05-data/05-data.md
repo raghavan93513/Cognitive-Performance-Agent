@@ -20,7 +20,7 @@ updated: 2026-10-26T20:00:00Z
 
 ## Pages
 
-- [[32-wearlab/what-we-reuse|Synthetic data from WearLab]] — reusable night, step and PPG simulators for the demo and synthetic path
+- [[05-data/synthetic-data-generator|Synthetic data generator]] — planned: seeded student days (watch, laptop, tasks) with a hidden ground truth, built on WearLab ([[20-decisions/adr-001-reuse-wearlab-simulators-for-synthetic-data|ADR-001]])
 - [[05-data/data-sources|Data sources]] — Watch = context, laptop = behaviour, study task = performance
 - [[05-data/data-pipeline|Data pipeline]] — Validate, dedupe, time-align, store; observation schema; missingness
 
@@ -31,7 +31,6 @@ updated: 2026-10-26T20:00:00Z
 - Fitbit / Google Health access via the course OAuth helper
 - Laptop collector spec
 - Study task spec
-- Synthetic data generator
 - Data quality checks
 
 ## Related

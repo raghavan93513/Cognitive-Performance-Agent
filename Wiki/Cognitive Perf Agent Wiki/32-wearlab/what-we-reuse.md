@@ -30,10 +30,12 @@ updated: 2026-10-26T21:45:00Z
 
 [[32-wearlab/32-wearlab|WearLab]] already contains working, tested versions of several things the [[01-foundation/project-overview|Cognitive Performance Agent]] needs. The helpers ran WearLab's own test scripts read-only, and all passed: journey, ECG 44, steps 51, sleep 80, recovery 43, temperature 21, battery 31, compare 617, Time Machine 27,231.
 
-> [!warning] Licence first
-> WearLab's package has no LICENSE file. Heramb wrote it, so copying code into the team repo just needs his explicit OK, and ideally a licence added to WearLab. ^[inferred]
+> [!success] Reuse approved (2026-10-26)
+> Heramb, WearLab's author, approved reusing its code. See [[20-decisions/adr-001-reuse-wearlab-simulators-for-synthetic-data|ADR-001]]. Still to do: add a licence file to WearLab (MIT recommended) so the vendored copy carries one.
 
 ## 1. A synthetic-data generator for the demo (highest value)
+
+**Now planned:** [[05-data/synthetic-data-generator|Synthetic data generator]].
 
 - **What exists.** `src/sleep/night.ts`, `band.ts`, `classify.ts` and `model.gen.ts` build a full night in about 0.1 s: a lab hypnogram, every heartbeat, six features per 30-second page, the band's staging and a morning report. `src/lab/recovery-model.ts` adds minute-by-minute daytime HR and night-to-night physiology. `src/journey/ppg.ts` (`PpgSim`) is seeded, needs no browser, and simulates a day of PPG heart rate in about 4 s. `src/steps/sim.ts` produces step streams. All are plain TypeScript that runs with `node --experimental-strip-types`, with no npm packages. → [[32-wearlab/motion-sleep-recovery-pipelines|Motion, sleep and recovery pipelines]], [[32-wearlab/heart-signal-pipelines|Heart-signal pipelines]]
 - **Why it matters.** The course lets teams use a synthetic-data path, and the showcase demands a recorded fallback and honest labelling of mocked data. → [[30-course/project-requirements|Project requirements]] We need believable student days (a night, then study sessions, then breaks), and this is most of that.

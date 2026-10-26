@@ -19,7 +19,7 @@ lifecycle: draft
 lifecycle_changed: 2026-10-26
 tier: core
 created: 2026-10-26T19:30:00Z
-updated: 2026-10-26T20:30:00Z
+updated: 2026-10-26T22:15:00Z
 ---
 
 # Open Decisions
@@ -50,13 +50,13 @@ Questions the two design documents leave open or answer differently. Update this
 
 ### Raised by WearLab (2026-10-26)
 
-17. **Reuse WearLab's simulators as our synthetic-data generator?** About 1–2 days of work to add a person layer, a calendar, laptop and task streams, and Google-Health-shaped output. It needs Heramb's OK and a licence on WearLab first. → [[32-wearlab/what-we-reuse|What we reuse]] ^[inferred]
+17. ~~**Reuse WearLab's simulators as our synthetic-data generator?**~~ **Decided 2026-10-26: yes.** See [[20-decisions/adr-001-reuse-wearlab-simulators-for-synthetic-data|ADR-001]].
 18. **Which device do participants wear?** The course lends a Fitbit Air, which WearLab's Fitbit catalog doesn't cover. Confirm the model, and whether it reports overnight HRV. → [[22-entities/fitbit|Fitbit]] ^[inferred]
 19. **Absolute or personal thresholds?** WearLab's HRV lab uses absolute bands (≥ 50 / < 30 ms), while our design uses personal baselines. Proposed: personal baselines with a 28-night look-back and a 14-night learning period. → [[04-agent-engine/performance-model|Performance model]] ^[inferred]
 
 ## Decided
 
-*Nothing yet.*
+- **2026-10-26 — Reuse WearLab's simulators for synthetic data** (was #17). → [[20-decisions/adr-001-reuse-wearlab-simulators-for-synthetic-data|ADR-001]] · plan: [[05-data/synthetic-data-generator|Synthetic data generator]]
 
 ## Sources
 

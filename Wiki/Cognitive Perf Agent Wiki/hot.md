@@ -1,6 +1,6 @@
 ---
 title: Hot Cache
-updated: 2026-10-26T21:50:00Z
+updated: 2026-10-26T22:15:00Z
 ---
 
 # Hot Cache
@@ -9,12 +9,13 @@ updated: 2026-10-26T21:50:00Z
 
 ## Recent Activity
 
+- [2026-10-26] **First decision: ADR-001.** We reuse WearLab's simulators for synthetic data. The plan is in [[05-data/synthetic-data-generator]]: seeded student days with a hidden ground truth, plausible, null and laptop-only worlds, 10 scenarios, and milestones to Dec 11.
 - [2026-10-26] **Ingested WearLab** (Heramb's 3D wearables-explainer app) into a new `32-wearlab` folder. It added 8 product and pipeline pages, 6 new concept pages (SpO₂, ECG/AF, step counting, sleep staging, recovery/strain, temperature trends), 5 brand pages, a competitive landscape, and a reuse plan. All WearLab tests pass read-only.
 - [2026-10-26] **Restructured into a startup-style vault.** It now has 17 company domains (01–17), a knowledge layer (20–25) and context (30 course, 31 decks), with a hub page per folder. The 22 existing pages moved and their links were rewritten.
-- [2026-10-26] **Ingested the whole BINF 4070 course.** That covers weeks 1–7 slides and labs (358 slide pages), weeks 5–7 exercises, the schedule, the project requirements and the guest talk. It produced 13 week pages, 26 reading pages, 8 new concept pages, deliverable pages, staff pages and a requirements gap check.
 
 ## Active Threads
 
+- **Build the synthetic-data generator.** First milestone is one sample day for the Nov 6 proposal slide. See [[05-data/synthetic-data-generator]].
 - **Proposal prep, due Nov 6** (design studio Oct 30). Checklist on [[30-course/deliverables/part-2-proposal-presentation]].
 - **Decide scope.** Lean desktop pilot or production plan. The course readings lean towards the lean choices: Postgres first, SQL retrieval before pgvector. See [[24-synthesis/design-comparison]].
 - **Open decisions** grew to 16, including choosing retrieval by measured precision/recall, escalation to a human, and which data goes to a hosted LLM. See [[24-synthesis/open-decisions]].

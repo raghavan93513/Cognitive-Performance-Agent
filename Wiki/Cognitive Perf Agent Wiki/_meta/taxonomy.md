@@ -78,3 +78,5 @@ Canonical tags for this vault. Use these before inventing new ones; max 5 per pa
 | `bias` | Fairness and bias |
 | `rag` | Retrieval-augmented generation |
 | `fhir` | FHIR standard |
+| `synthetic` | Synthetic data and generators |
+| `wearlab` | WearLab app |
