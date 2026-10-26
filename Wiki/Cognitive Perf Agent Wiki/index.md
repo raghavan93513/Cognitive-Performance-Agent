@@ -1,70 +1,95 @@
 ---
-title: Wiki Index
+title: Cognitive Performance Agent — Wiki Index
+category: meta
+tags: [meta, moc]
+summary: The front door. What we are building, where the project stands, the next deadline, and a map of every folder.
+created: 2026-10-26T19:30:00Z
+updated: 2026-10-26T20:00:00Z
 ---
 
-# Wiki Index
+# Cognitive Performance Agent
 
-*This index is automatically maintained. Last updated: 2026-10-26T19:30:00Z*
+> A wellness agent for students and athletes. It reads watch and laptop signals and answers
+> *"Should I keep going or take a break?"*. It suggests continue, a short walk, or a break, always with its reasons
+> and sources, and says "not enough data" when it doesn't know.
 
-**Start here:** [[projects/cognitive-performance-agent/cognitive-performance-agent|Cognitive Performance Agent]], the project hub.
+**Status (2026-10-26):** design stage. Two system designs exist, no code yet. Being built as the
+final project of Columbia's [[30-course/30-course|BINF 4070]].
 
-## Projects
+> [!important] Next deadline
+> **Fri Oct 30** design studio, then **Fri Nov 6** proposal presentation (15%). See the
+> [[30-course/deliverables/part-2-proposal-presentation|proposal prep checklist]].
 
-- [[projects/cognitive-performance-agent/cognitive-performance-agent|Cognitive Performance Agent]] — Wellness agent for students/athletes: watch + laptop signals → continue / walk / break. Design stage only. ( #project #agents)
+**New here?** Read [[_meta/how-to-use-this-vault|How to use this vault]], then
+[[01-foundation/project-overview|Project overview]].
 
-### Cognitive Performance Agent — concepts
+---
 
-- [[projects/cognitive-performance-agent/concepts/system-architecture|System Architecture]] — The 5-stage flow and how each design packages it ( #architecture)
-- [[projects/cognitive-performance-agent/concepts/data-sources|Data Sources]] — Watch = context, laptop = behaviour, study task = performance; what's never collected ( #data #wearables)
-- [[projects/cognitive-performance-agent/concepts/data-pipeline|Data Pipeline]] — Validate, dedupe, time-align, store; canonical observation schema ( #data #backend)
-- [[projects/cognitive-performance-agent/concepts/performance-model|Performance Model]] — Rules then scikit-learn; defined task target; estimate + uncertainty or abstain ( #ml)
-- [[projects/cognitive-performance-agent/concepts/multi-agent-decision|Multi-Agent Decision]] — Signal / Evidence / Action agents + deterministic policy engine ( #agents #llm)
-- [[projects/cognitive-performance-agent/concepts/student-interface-and-feedback|Student Interface and Feedback]] — Accept / snooze / decline, then a comparable follow-up task ( #frontend #evaluation)
-- [[projects/cognitive-performance-agent/concepts/evaluation-plan|Evaluation Plan]] — Two tests, randomized vs fixed breaks, release gates ( #evaluation #research)
-- [[projects/cognitive-performance-agent/concepts/privacy-and-consent|Privacy and Consent]] — Default-deny collection, consent, RLS, deletion, LLM boundary ( #privacy #security)
-- [[projects/cognitive-performance-agent/concepts/database-and-api|Database and API]] — Proposed Postgres entities and /v1 endpoints ( #backend #database)
-- [[projects/cognitive-performance-agent/concepts/tech-stack|Tech Stack]] — Agreed tools and where the designs differ ( #architecture #infrastructure)
-- [[projects/cognitive-performance-agent/concepts/roadmap|Roadmap]] — Raghavan's 6 proof steps and Alexa's 12-week plan ( #planning)
-- [[projects/cognitive-performance-agent/concepts/deployment-and-operations|Deployment and Operations]] — Environments, CI/CD, SLOs, monitoring, scaling ( #infrastructure #devops)
+## The company
 
-### Cognitive Performance Agent — synthesis
+Numbered folders read in order. Each opens with a hub page named after the folder.
 
-- [[projects/cognitive-performance-agent/synthesis/design-comparison|Design Comparison]] — Lean desktop pilot vs production plan: agreements and conflicts ( #decision #synthesis)
-- [[projects/cognitive-performance-agent/synthesis/open-decisions|Open Decisions]] — What the team must decide before building ( #decision #planning)
+| | Domain | What it answers |
+|---|---|---|
+| 01 | Foundation | Why this exists, what we believe, what we refuse to build |
+| 02 | Product | What we're building and how a user moves through it |
+| 03 | Users | Who it's for, what they need, what they told us |
+| 04 | Agent engine | **The core IP:** signals → model → agents → a trustworthy suggestion |
+| 05 | Data | What we collect, how it arrives, how we know it's good |
+| 06 | Database | How data is stored, related, retained and deleted |
+| 07 | Backend | Services, APIs, workers, the LLM layer |
+| 08 | Frontend | What the student sees and touches |
+| 09 | Design | How it looks, feels and earns trust |
+| 10 | Landing page | The public front door |
+| 11 | Marketing | How we explain it and how people find it |
+| 12 | Business | How this becomes a company |
+| 13 | Trust and safety | Privacy, consent, security, safety, fairness |
+| 14 | Engineering | How we build, ship and run it |
+| 15 | Research | What we believe, how we test it, what we found |
+| 16 | Traction | Whether people want it, in numbers |
+| 17 | Team | Who we are, who owns what, how we decide |
 
-### Cognitive Performance Agent — references
+Hubs: [[01-foundation/01-foundation|01]] · [[02-product/02-product|02]] · [[03-users/03-users|03]] ·
+[[04-agent-engine/04-agent-engine|04]] · [[05-data/05-data|05]] · [[06-database/06-database|06]] ·
+[[07-backend/07-backend|07]] · [[08-frontend/08-frontend|08]] · [[09-design/09-design|09]] ·
+[[10-landing-page/10-landing-page|10]] · [[11-marketing/11-marketing|11]] · [[12-business/12-business|12]] ·
+[[13-trust-safety/13-trust-safety|13]] · [[14-engineering/14-engineering|14]] · [[15-research/15-research|15]] ·
+[[16-traction/16-traction|16]] · [[17-team/17-team|17]]
 
-- [[projects/cognitive-performance-agent/references/raghavan-architecture-deck|Raghavan's Architecture Deck]] — 11-slide lean pilot design, 2026-10-15 ( #reference #design-doc)
-- [[projects/cognitive-performance-agent/references/alexa-kafka-system-design|Alexa Kafka's System Design]] — 12-page system design & deployment plan, 2026-10-19 ( #reference #design-doc)
+## The knowledge layer
 
-## Concepts
+| | Folder | Holds |
+|---|---|---|
+| 20 | Decisions | Decision records: what we chose, why, when to revisit |
+| 21 | Concepts | HRV, RAG, FHIR, PPG, embeddings, time-series features… |
+| 22 | Entities | Team, course staff, tools, providers, competitors |
+| 23 | References | External sources that aren't course readings |
+| 24 | Synthesis | Design comparison, open decisions |
+| 25 | Journal | Dated notes and meeting notes |
 
-- [[concepts/heart-rate-variability|Heart Rate Variability (HRV)]] — Overnight RMSSD; daily context, not a live focus score ( #physiology #wearables)
-- [[concepts/retrieval-augmented-generation|Retrieval-Augmented Generation (RAG)]] — Grounding the LLM in retrieved records; the Evidence agent's job ( #llm #agents)
+Hubs: [[20-decisions/20-decisions|20]] · [[21-concepts/21-concepts|21]] · [[22-entities/22-entities|22]] ·
+[[23-references/23-references|23]] · [[24-synthesis/24-synthesis|24]] · [[25-journal/25-journal|25]]
 
-## Entities
+## Context
 
-- [[entities/raghavan-vaidhyaraman|Raghavan Vaidhyaraman]] — Repo owner; author of the architecture deck ( #person #team)
-- [[entities/alexa-kafka|Alexa Kafka]] — Author of the system design & deployment plan ( #person #team)
-- [[entities/langgraph|LangGraph]] — Agent orchestration framework for the three agent roles ( #tool #agents)
+| | Folder | Holds |
+|---|---|---|
+| 30 | Course | BINF 4070: schedule, grading, requirements, deliverables, every week, every reading |
+| 31 | Decks | Every deck we've made, each with a summary and the original embedded |
 
-## Skills
+Hubs: [[30-course/30-course|30 · Course]] · [[31-decks/31-decks|31 · Decks]] ·
+[[30-course/readings/30-course-readings|Readings]] · [[30-course/project-requirements|Project requirements]]
 
-*None yet.*
+## Most important pages right now
 
-## References
+- [[01-foundation/project-overview|Project overview]]: what it is and how one session flows
+- [[24-synthesis/design-comparison|Design comparison]]: the two designs, where they agree and conflict
+- [[24-synthesis/open-decisions|Open decisions]]: what we must decide before building
+- [[30-course/project-requirements|Project requirements]]: the course's bar and our gap check
+- [[04-agent-engine/multi-agent-decision|Multi-agent decision]]: the core of the agent
 
-*Project references are listed under the project above.*
+## System
 
-## Synthesis
-
-*Project synthesis pages are listed under the project above.*
-
-## Journal
-
-*None yet.*
-
-## Meta
-
-- [[_meta/taxonomy|Tag Taxonomy]] — Canonical tag vocabulary for this vault ( #meta)
-- [[Welcome]] — The obsidian-wiki framework README: how this wiki is built and maintained ( #meta)
+[[_meta/how-to-use-this-vault|How to use]] · [[_meta/conventions|Conventions]] · [[_meta/taxonomy|Tag taxonomy]] ·
+templates in `_meta/templates/` · [[hot|Hot cache]] · [[log|Log]] · [[Welcome|obsidian-wiki framework README]].
+`_raw/` `_staging/` `_archives/` are framework working folders.

@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "last_updated": "2026-10-26T19:33:14Z",
+  "last_updated": "2026-10-26T20:45:00Z",
   "sources": {
     "/Users/herambchaudhari/Desktop/Cognitive Perf agent/Cognitive-Performance-Agent/README.md": {
       "content_hash": "7312f79068989a34946c8afeb6519351b4b949ff2a79f5f65a3b11c92659b98b",
       "last_ingested": "2026-10-26T19:33:13.980433+00:00",
       "pages_produced": [
-        "projects/cognitive-performance-agent/cognitive-performance-agent.md"
+        "01-foundation/project-overview.md"
       ],
       "source_type": "document",
       "project": "cognitive-performance-agent"
@@ -15,25 +15,25 @@
       "content_hash": "a639d60cb4e6eb384f0d77733c0eea3a3f7c4614906c526b90129e20391d607e",
       "last_ingested": "2026-10-26T19:33:14.026034+00:00",
       "pages_produced": [
-        "projects/cognitive-performance-agent/cognitive-performance-agent.md",
-        "projects/cognitive-performance-agent/concepts/system-architecture.md",
-        "projects/cognitive-performance-agent/concepts/data-sources.md",
-        "projects/cognitive-performance-agent/concepts/data-pipeline.md",
-        "projects/cognitive-performance-agent/concepts/performance-model.md",
-        "projects/cognitive-performance-agent/concepts/multi-agent-decision.md",
-        "projects/cognitive-performance-agent/concepts/student-interface-and-feedback.md",
-        "projects/cognitive-performance-agent/concepts/evaluation-plan.md",
-        "projects/cognitive-performance-agent/concepts/privacy-and-consent.md",
-        "projects/cognitive-performance-agent/concepts/database-and-api.md",
-        "projects/cognitive-performance-agent/concepts/tech-stack.md",
-        "projects/cognitive-performance-agent/concepts/roadmap.md",
-        "projects/cognitive-performance-agent/synthesis/design-comparison.md",
-        "projects/cognitive-performance-agent/synthesis/open-decisions.md",
-        "projects/cognitive-performance-agent/references/raghavan-architecture-deck.md",
-        "entities/raghavan-vaidhyaraman.md",
-        "entities/langgraph.md",
-        "concepts/heart-rate-variability.md",
-        "concepts/retrieval-augmented-generation.md"
+        "01-foundation/project-overview.md",
+        "07-backend/system-architecture.md",
+        "05-data/data-sources.md",
+        "05-data/data-pipeline.md",
+        "04-agent-engine/performance-model.md",
+        "04-agent-engine/multi-agent-decision.md",
+        "08-frontend/student-interface-and-feedback.md",
+        "15-research/evaluation-plan.md",
+        "13-trust-safety/privacy-and-consent.md",
+        "06-database/database-and-api.md",
+        "07-backend/tech-stack.md",
+        "02-product/roadmap.md",
+        "24-synthesis/design-comparison.md",
+        "24-synthesis/open-decisions.md",
+        "31-decks/raghavan-architecture-deck.md",
+        "22-entities/raghavan-vaidhyaraman.md",
+        "22-entities/langgraph.md",
+        "21-concepts/heart-rate-variability.md",
+        "21-concepts/retrieval-augmented-generation.md"
       ],
       "source_type": "document",
       "project": "cognitive-performance-agent"
@@ -42,39 +42,270 @@
       "content_hash": "0d979863eda8f7d59980f65a8198859e1a145a8f5f9009e3ae1dc16c1f77ab87",
       "last_ingested": "2026-10-26T19:33:14.072178+00:00",
       "pages_produced": [
-        "projects/cognitive-performance-agent/cognitive-performance-agent.md",
-        "projects/cognitive-performance-agent/concepts/system-architecture.md",
-        "projects/cognitive-performance-agent/concepts/data-sources.md",
-        "projects/cognitive-performance-agent/concepts/data-pipeline.md",
-        "projects/cognitive-performance-agent/concepts/performance-model.md",
-        "projects/cognitive-performance-agent/concepts/multi-agent-decision.md",
-        "projects/cognitive-performance-agent/concepts/student-interface-and-feedback.md",
-        "projects/cognitive-performance-agent/concepts/evaluation-plan.md",
-        "projects/cognitive-performance-agent/concepts/privacy-and-consent.md",
-        "projects/cognitive-performance-agent/concepts/database-and-api.md",
-        "projects/cognitive-performance-agent/concepts/tech-stack.md",
-        "projects/cognitive-performance-agent/concepts/roadmap.md",
-        "projects/cognitive-performance-agent/concepts/deployment-and-operations.md",
-        "projects/cognitive-performance-agent/synthesis/design-comparison.md",
-        "projects/cognitive-performance-agent/synthesis/open-decisions.md",
-        "projects/cognitive-performance-agent/references/alexa-kafka-system-design.md",
-        "entities/alexa-kafka.md",
-        "concepts/retrieval-augmented-generation.md"
+        "01-foundation/project-overview.md",
+        "07-backend/system-architecture.md",
+        "05-data/data-sources.md",
+        "05-data/data-pipeline.md",
+        "04-agent-engine/performance-model.md",
+        "04-agent-engine/multi-agent-decision.md",
+        "08-frontend/student-interface-and-feedback.md",
+        "15-research/evaluation-plan.md",
+        "13-trust-safety/privacy-and-consent.md",
+        "06-database/database-and-api.md",
+        "07-backend/tech-stack.md",
+        "02-product/roadmap.md",
+        "14-engineering/deployment-and-operations.md",
+        "24-synthesis/design-comparison.md",
+        "24-synthesis/open-decisions.md",
+        "31-decks/alexa-kafka-system-design.md",
+        "22-entities/alexa-kafka.md",
+        "21-concepts/retrieval-augmented-generation.md"
       ],
       "source_type": "document",
       "project": "cognitive-performance-agent"
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/binf4070-2026/week-01/slides-01.pdf": {
+      "content_hash": "74a1bd993f66a58f9956e71a7ea8a4b3d0fbbc0529898596e1fe490eedd8dedd",
+      "last_ingested": "2026-10-26T20:02:15.783788+00:00",
+      "pages_produced": [
+        "30-course/weeks/week-01-personal-health-data-foundations.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/binf4070-2026/week-01/lab-01.ipynb": {
+      "content_hash": "fa8e4e49bd18940aa04afd3a843ae9c6adf3d6b149d2ec48ebe16cceaa799930",
+      "last_ingested": "2026-10-26T20:02:15.846309+00:00",
+      "pages_produced": [
+        "30-course/weeks/week-01-personal-health-data-foundations.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/binf4070-2026/week-02/slides-02.pdf": {
+      "content_hash": "ccfe46affa419ed1e1af15a525769f61e3e6bbb815375bb71f963573c3fdadb7",
+      "last_ingested": "2026-10-26T20:02:15.911039+00:00",
+      "pages_produced": [
+        "30-course/weeks/week-02-clinical-records-and-fhir.md",
+        "21-concepts/fhir.md",
+        "21-concepts/medical-coding-systems.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/binf4070-2026/week-02/lab-02.ipynb": {
+      "content_hash": "848fefc55f714b3e0924664b9bc15d8c51d5b4466251721758150aacdeb50e11",
+      "last_ingested": "2026-10-26T20:02:15.972243+00:00",
+      "pages_produced": [
+        "30-course/weeks/week-02-clinical-records-and-fhir.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/binf4070-2026/week-03/slides-03.pdf": {
+      "content_hash": "aed67f1503f0e913b9bc768061cc309407f34a0cef46020f13c35d246c244467",
+      "last_ingested": "2026-10-26T20:02:16.039377+00:00",
+      "pages_produced": [
+        "30-course/weeks/week-03-wearable-sensors-and-measurements.md",
+        "21-concepts/photoplethysmography.md",
+        "21-concepts/wearable-measurement-error.md",
+        "05-data/data-sources.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/binf4070-2026/week-03/lab-03.ipynb": {
+      "content_hash": "37265d4a69286131d8af3792c2731448a0521c96059c979c5380ac51a7116c33",
+      "last_ingested": "2026-10-26T20:02:16.100773+00:00",
+      "pages_produced": [
+        "30-course/weeks/week-03-wearable-sensors-and-measurements.md",
+        "05-data/data-sources.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/binf4070-2026/week-04/slides-04.pdf": {
+      "content_hash": "477e4be248d23b2c65f59646208640049037586b322394346abf71a651725dde",
+      "last_ingested": "2026-10-26T20:02:16.159821+00:00",
+      "pages_produced": [
+        "30-course/weeks/week-04-team-formation-and-project-scoping.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/binf4070-2026/week-04/lab-04.ipynb": {
+      "content_hash": "724e13bcd99587983377febbfa7e7ffcc3574e88a5809da9b16628dede280361",
+      "last_ingested": "2026-10-26T20:02:16.219883+00:00",
+      "pages_produced": [
+        "30-course/weeks/week-04-team-formation-and-project-scoping.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/binf4070-2026/week-05/slides-05.pdf": {
+      "content_hash": "a110bc3979b7e4fb1272373d50a696faef70bee68e998a7f9f8cd25e66f822a0",
+      "last_ingested": "2026-10-26T20:02:16.280160+00:00",
+      "pages_produced": [
+        "30-course/weeks/week-05-relational-document-clinical-stores.md",
+        "21-concepts/health-data-stores.md",
+        "21-concepts/llm-generated-sql-and-semantic-operators.md",
+        "05-data/data-pipeline.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/personal-health-agent.github.io/public/weeks/05-exercise.ipynb": {
+      "content_hash": "b405e1795301b202cb70fa2054660dc59b7b2afee0eaf08872651dbc0aadc675",
+      "last_ingested": "2026-10-26T20:02:16.339744+00:00",
+      "pages_produced": [
+        "30-course/weeks/week-05-relational-document-clinical-stores.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/binf4070-2026/week-06/slides-06.pdf": {
+      "content_hash": "851ec602ba2b4f0553c3fde4910ba1876979f200dc9999a294c1d5fca096116c",
+      "last_ingested": "2026-10-26T20:02:16.399164+00:00",
+      "pages_produced": [
+        "30-course/weeks/week-06-embeddings-vector-search-rag.md",
+        "21-concepts/embeddings-and-vector-search.md",
+        "21-concepts/retrieval-augmented-generation.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/personal-health-agent.github.io/public/weeks/06-exercise.ipynb": {
+      "content_hash": "59c12ade06c2966ff3a214537328ae83e7b4e5b545c2a1ec8efdfccd38fcec64",
+      "last_ingested": "2026-10-26T20:02:16.460206+00:00",
+      "pages_produced": [
+        "30-course/weeks/week-06-embeddings-vector-search-rag.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/binf4070-2026/week-07/slides-07.pdf": {
+      "content_hash": "286f0b10f408d649a1b983cdc358902134683b84dfbcf1821108f052069fa8ff",
+      "last_ingested": "2026-10-26T20:02:16.521550+00:00",
+      "pages_produced": [
+        "30-course/weeks/week-07-time-series-multimodal-features.md",
+        "21-concepts/time-series-feature-extraction.md",
+        "05-data/data-pipeline.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/personal-health-agent.github.io/public/weeks/07-exercise.ipynb": {
+      "content_hash": "db9e19ce542da2df3352a4744e38b3000f935a048eb06929e4db425631bc0d0f",
+      "last_ingested": "2026-10-26T20:02:16.583446+00:00",
+      "pages_produced": [
+        "30-course/weeks/week-07-time-series-multimodal-features.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/personal-health-agent.github.io/src/content/weeks": {
+      "content_hash": "bc315fb9873d1b29bcf83650fb34eb6c282c66d65276102fe8147a77a9ddb838",
+      "last_ingested": "2026-10-26T20:02:16.652109+00:00",
+      "pages_produced": [
+        "30-course/weeks/week-08-hci-interface-trust-uncertainty.md",
+        "30-course/weeks/week-09-proposal-presentations.md",
+        "30-course/weeks/week-10-agents-tool-use-function-calling.md",
+        "30-course/weeks/week-11-agents-planning-memory.md",
+        "30-course/weeks/week-13-privacy-safety-ethics-integration.md",
+        "30-course/weeks/week-14-final-showcase.md",
+        "30-course/readings/30-course-readings.md",
+        "30-course/readings/amershi-2019-human-ai-guidelines.md",
+        "30-course/readings/beede-2020-human-centered-eval-deployed-dl.md",
+        "30-course/readings/bent-2020-wearable-optical-hr-inaccuracy.md",
+        "30-course/readings/bucinca-2021-cognitive-forcing.md",
+        "30-course/readings/estrin-2014-small-data-n-of-me.md",
+        "30-course/readings/freedman-2020-time-series-db-comparison.md",
+        "30-course/readings/gao-2024-rag-survey.md",
+        "30-course/readings/greshake-2023-indirect-prompt-injection.md",
+        "30-course/readings/johnson-2023-mimic-iv.md",
+        "30-course/readings/kelly-2019-clinical-impact-ai.md",
+        "30-course/readings/lewis-2020-rag.md",
+        "30-course/readings/mandel-2016-smart-on-fhir.md",
+        "30-course/readings/mongodb-2023-edenlab-fhir-server.md",
+        "30-course/readings/obermeyer-2019-racial-bias-population-health.md",
+        "30-course/readings/openai-2024-function-calling.md",
+        "30-course/readings/owasp-2025-llm-top-10.md",
+        "30-course/readings/rajkomar-2018-deep-learning-ehr.md",
+        "30-course/readings/schick-2023-toolformer.md",
+        "30-course/readings/singhal-2023-llms-encode-clinical-knowledge.md",
+        "30-course/readings/sjoding-2020-racial-bias-pulse-oximetry.md",
+        "30-course/readings/timescale-2024-glooko.md",
+        "30-course/readings/topol-2019-deep-medicine-intro.md",
+        "30-course/readings/topol-2019-high-performance-medicine.md",
+        "30-course/readings/walonoski-2018-synthea.md",
+        "30-course/readings/wang-2024-llm-agents-survey.md",
+        "30-course/readings/yao-2023-react.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/personal-health-agent.github.io/src/pages/project-details.astro": {
+      "content_hash": "e475e020ff2e3b342a29ecc074895ec2f8e4b00678e61eb8dbf488e6d435d90d",
+      "last_ingested": "2026-10-26T20:02:16.713327+00:00",
+      "pages_produced": [
+        "30-course/project-requirements.md",
+        "30-course/deliverables/part-1-project-idea-one-pager.md",
+        "30-course/deliverables/part-2-proposal-presentation.md",
+        "30-course/deliverables/part-3-final-showcase.md",
+        "30-course/deliverables/final-writeup.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/personal-health-agent.github.io/src/pages/index.astro": {
+      "content_hash": "ef7b52da1df3e02addaed119c4af58692bb7c293b541a9265306718d7ec7d3a4",
+      "last_ingested": "2026-10-26T20:02:16.773857+00:00",
+      "pages_produced": [
+        "30-course/30-course.md",
+        "22-entities/xuhai-orson-xu.md",
+        "22-entities/eugene-wu.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/course-reference/personal-health-agent.github.io/src/content/guest-speakers/ali-heydari.md": {
+      "content_hash": "fa43e3ff4b5a9caba23be5ddbde19614b8e4de8649a8aaf53ca926d2e305e2b1",
+      "last_ingested": "2026-10-26T20:02:16.835329+00:00",
+      "pages_produced": [
+        "30-course/guest-talks/ali-heydari-physiological-world-models.md"
+      ],
+      "source_type": "course",
+      "project": "cognitive-performance-agent",
+      "read_only_external": true
     }
   },
   "projects": {
     "cognitive-performance-agent": {
       "source_path": "/Users/herambchaudhari/Desktop/Cognitive Perf agent/Cognitive-Performance-Agent",
-      "vault_path": "projects/cognitive-performance-agent",
-      "last_ingested": "2026-10-26T19:33:14Z"
+      "vault_path": ".",
+      "last_ingested": "2026-10-26T20:45:00Z"
     }
   },
   "stats": {
-    "total_sources_ingested": 3,
-    "total_pages": 22,
+    "total_sources_ingested": 21,
+    "total_pages": 114,
     "total_projects": 1,
     "last_full_rebuild": null
   }

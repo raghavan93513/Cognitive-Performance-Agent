@@ -48,3 +48,33 @@ Canonical tags for this vault. Use these before inventing new ones; max 5 per pa
 | `person` | People |
 | `team` | Project team members |
 | `tool` | Third-party tools/frameworks |
+| `moc` | Hub / map-of-content pages |
+| `meta` | Vault system pages |
+| `course` | Course (BINF 4070) material |
+| `week` | Course week pages |
+| `reading` | Course reading summaries |
+| `deliverable` | Course deliverables |
+| `requirements` | Requirements and acceptance bars |
+| `guest-talk` | Guest lectures |
+| `course-staff` | Instructors and TAs |
+| `concept` | Concept pages |
+| `entity` | Entity hub |
+| `clinical-data` | EHR, FHIR, medical codes |
+| `retrieval` | Embeddings, vector search, RAG |
+| `time-series` | Time-series data and features |
+| `hci` | Human-AI interaction |
+| `design` | UX / visual design |
+| `product` | Product scope and features |
+| `users` | Users, personas, research |
+| `foundation` | Vision, principles |
+| `landing-page` | Public site |
+| `marketing` | Positioning, channels |
+| `business` | Business model, market |
+| `engineering` | Build and run |
+| `traction` | Metrics and growth |
+| `journal` | Dated notes |
+| `meeting` | Meeting notes |
+| `deck` | Decks we produced |
+| `bias` | Fairness and bias |
+| `rag` | Retrieval-augmented generation |
+| `fhir` | FHIR standard |

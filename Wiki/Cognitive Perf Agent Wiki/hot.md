@@ -1,6 +1,6 @@
 ---
 title: Hot Cache
-updated: 2026-10-26T19:30:00Z
+updated: 2026-10-26T20:45:00Z
 ---
 
 # Hot Cache
@@ -9,26 +9,31 @@ updated: 2026-10-26T19:30:00Z
 
 ## Recent Activity
 
-- [2026-10-26] INIT: vault created for the Cognitive Performance Agent, routed with `@cogperf`.
-- [2026-10-26] Ingested the repo's README and both system-design PDFs. This produced the project hub, 12 component pages (architecture, data sources, pipeline, model, agents, UI/feedback, evaluation, privacy, DB/API, stack, roadmap, ops), a design comparison, an open-decisions list, 2 source summaries, and 5 global pages (HRV, RAG, LangGraph, two team members).
+- [2026-10-26] **Restructured into a startup-style vault.** It now has 17 company domains (01–17), a knowledge layer (20–25) and context (30 course, 31 decks), with a hub page per folder. The 22 existing pages moved and their links were rewritten.
+- [2026-10-26] **Ingested the whole BINF 4070 course.** That covers weeks 1–7 slides and labs (358 slide pages), weeks 5–7 exercises, the schedule, the project requirements and the guest talk. It produced 13 week pages, 26 reading pages, 8 new concept pages, deliverable pages, staff pages and a requirements gap check.
+- [2026-10-26] Ingested README and both design decks (project hub, 12 component pages, comparison, open decisions).
 
 ## Active Threads
 
-- **Pick a design.** Raghavan's lean Electron pilot or Alexa's mobile + web + desktop production plan. See [[projects/cognitive-performance-agent/synthesis/design-comparison]].
-- **Pick the study task and prediction target.** Nothing can be validated without them. See [[projects/cognitive-performance-agent/synthesis/open-decisions]].
-- **Resolve what the Evidence agent retrieves:** personal history via SQL, or a research corpus via pgvector.
+- **Proposal prep, due Nov 6** (design studio Oct 30). Checklist on [[30-course/deliverables/part-2-proposal-presentation]].
+- **Decide scope.** Lean desktop pilot or production plan. The course readings lean towards the lean choices: Postgres first, SQL retrieval before pgvector. See [[24-synthesis/design-comparison]].
+- **Open decisions** grew to 16, including choosing retrieval by measured precision/recall, escalation to a human, and which data goes to a hosted LLM. See [[24-synthesis/open-decisions]].
 
 ## Key Takeaways
 
-- The project is design-only; there is no code in the repo yet.
-- Watch = context, laptop = behaviour, study task = measured performance.
-- Numeric code produces the estimate. The LLM agents only propose an action, and deterministic policy code decides.
-- When data is thin it abstains with "Not enough data", and manual break controls stay available.
-- Two separate hypotheses to test: watch data improves prediction, and adaptive breaks beat fixed breaks. A negative result simplifies the product.
+- The project is the BINF 4070 final project. The course grades grounding with visible sources, honest uncertainty, escalation to a human, a non-technical UI, and safety designed in.
+- **Watch data is sparse, synced and noisy.** HR arrives roughly every 5 minutes after cloud sync and is worst during motion, so use it as daily context only. The course labs never fetch HRV, so it's unverified.
+- **Pipeline corrections from the course:**
+  - bucket daily data by the student's local day;
+  - use time-based windows with coverage counts, and treat gaps as unknown, not 0;
+  - align sources with as-of joins;
+  - pick one step source;
+  - add database CHECKs and versioned transformations.
+- Retrieved text is untrusted: keep allowlisted typed actions and a policy veto (prompt injection).
 
 ## Flagged Contradictions
 
-- Clients: Electron-only (Raghavan) vs React Native + Next.js + desktop (Alexa).
-- Watch API: Google Health vs HealthKit/Health Connect.
-- Background jobs: Postgres task list vs managed queue.
-- Evidence agent: personal history (SQL) vs approved research snippets (pgvector).
+- Clients: Electron-only (Raghavan) vs RN + Next.js + desktop (Alexa).
+- Watch API: Google Health vs HealthKit/Health Connect. The course loaner Fitbit favours Google Health.
+- Evidence agent: personal history (SQL) vs research corpus (pgvector).
+- The course's week 7 reading cites "Freedman et al., *Sensors* 2020", but that DOI doesn't resolve. The matching paper looks like Grzesik & Mrozek, ICCS 2020; confirm with course staff.
