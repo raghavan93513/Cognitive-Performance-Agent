@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "last_updated": "2026-10-26T19:33:14Z",
+  "sources": {
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/Cognitive-Performance-Agent/README.md": {
+      "content_hash": "7312f79068989a34946c8afeb6519351b4b949ff2a79f5f65a3b11c92659b98b",
+      "last_ingested": "2026-10-26T19:33:13.980433+00:00",
+      "pages_produced": [
+        "projects/cognitive-performance-agent/cognitive-performance-agent.md"
+      ],
+      "source_type": "document",
+      "project": "cognitive-performance-agent"
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/Cognitive-Performance-Agent/System Design/Cognitive_Performance_Architecture.pdf": {
+      "content_hash": "a639d60cb4e6eb384f0d77733c0eea3a3f7c4614906c526b90129e20391d607e",
+      "last_ingested": "2026-10-26T19:33:14.026034+00:00",
+      "pages_produced": [
+        "projects/cognitive-performance-agent/cognitive-performance-agent.md",
+        "projects/cognitive-performance-agent/concepts/system-architecture.md",
+        "projects/cognitive-performance-agent/concepts/data-sources.md",
+        "projects/cognitive-performance-agent/concepts/data-pipeline.md",
+        "projects/cognitive-performance-agent/concepts/performance-model.md",
+        "projects/cognitive-performance-agent/concepts/multi-agent-decision.md",
+        "projects/cognitive-performance-agent/concepts/student-interface-and-feedback.md",
+        "projects/cognitive-performance-agent/concepts/evaluation-plan.md",
+        "projects/cognitive-performance-agent/concepts/privacy-and-consent.md",
+        "projects/cognitive-performance-agent/concepts/database-and-api.md",
+        "projects/cognitive-performance-agent/concepts/tech-stack.md",
+        "projects/cognitive-performance-agent/concepts/roadmap.md",
+        "projects/cognitive-performance-agent/synthesis/design-comparison.md",
+        "projects/cognitive-performance-agent/synthesis/open-decisions.md",
+        "projects/cognitive-performance-agent/references/raghavan-architecture-deck.md",
+        "entities/raghavan-vaidhyaraman.md",
+        "entities/langgraph.md",
+        "concepts/heart-rate-variability.md",
+        "concepts/retrieval-augmented-generation.md"
+      ],
+      "source_type": "document",
+      "project": "cognitive-performance-agent"
+    },
+    "/Users/herambchaudhari/Desktop/Cognitive Perf agent/Cognitive-Performance-Agent/System Design/Cognitive Performance Agent - System Design - Alexa Kafka.pdf": {
+      "content_hash": "0d979863eda8f7d59980f65a8198859e1a145a8f5f9009e3ae1dc16c1f77ab87",
+      "last_ingested": "2026-10-26T19:33:14.072178+00:00",
+      "pages_produced": [
+        "projects/cognitive-performance-agent/cognitive-performance-agent.md",
+        "projects/cognitive-performance-agent/concepts/system-architecture.md",
+        "projects/cognitive-performance-agent/concepts/data-sources.md",
+        "projects/cognitive-performance-agent/concepts/data-pipeline.md",
+        "projects/cognitive-performance-agent/concepts/performance-model.md",
+        "projects/cognitive-performance-agent/concepts/multi-agent-decision.md",
+        "projects/cognitive-performance-agent/concepts/student-interface-and-feedback.md",
+        "projects/cognitive-performance-agent/concepts/evaluation-plan.md",
+        "projects/cognitive-performance-agent/concepts/privacy-and-consent.md",
+        "projects/cognitive-performance-agent/concepts/database-and-api.md",
+        "projects/cognitive-performance-agent/concepts/tech-stack.md",
+        "projects/cognitive-performance-agent/concepts/roadmap.md",
+        "projects/cognitive-performance-agent/concepts/deployment-and-operations.md",
+        "projects/cognitive-performance-agent/synthesis/design-comparison.md",
+        "projects/cognitive-performance-agent/synthesis/open-decisions.md",
+        "projects/cognitive-performance-agent/references/alexa-kafka-system-design.md",
+        "entities/alexa-kafka.md",
+        "concepts/retrieval-augmented-generation.md"
+      ],
+      "source_type": "document",
+      "project": "cognitive-performance-agent"
+    }
+  },
+  "projects": {
+    "cognitive-performance-agent": {
+      "source_path": "/Users/herambchaudhari/Desktop/Cognitive Perf agent/Cognitive-Performance-Agent",
+      "vault_path": "projects/cognitive-performance-agent",
+      "last_ingested": "2026-10-26T19:33:14Z"
+    }
+  },
+  "stats": {
+    "total_sources_ingested": 3,
+    "total_pages": 22,
+    "total_projects": 1,
+    "last_full_rebuild": null
+  }
+}
