@@ -47,9 +47,9 @@ updated: 2026-10-26T20:00:00Z
 ## What this means for us
 
 - If we ever use a watch's **SpO₂** reading, it must be treated as unvalidated and kept out of the recommendation logic. That fits the current [[05-data/data-sources|data sources]] scope, which does not depend on SpO₂. ^[inferred]
-- Our [[15-research/evaluation-plan|evaluation plan]] should report model error and recommendation rates **by subgroup** (including skin tone where participants consent to share it) and not just one average. ^[inferred]
+- Our [[12-research/evaluation-plan|evaluation plan]] should report model error and recommendation rates **by subgroup** (including skin tone where participants consent to share it) and not just one average. ^[inferred]
 - "Absence of evidence of bias" for heart rate in Bent is not proof for our specific watch, so a small validation check of our chosen device against a chest strap would be cheap insurance. ^[inferred]
-- Recommendations that rest on biased signals can be unfair to some students. [[13-trust-safety/privacy-and-consent|Privacy and consent]] and the fairness checks should name sensor bias explicitly. ^[inferred]
+- Recommendations that rest on biased signals can be unfair to some students. [[10-trust-safety/privacy-and-consent|Privacy and consent]] and the fairness checks should name sensor bias explicitly. ^[inferred]
 
 ## Read status
 

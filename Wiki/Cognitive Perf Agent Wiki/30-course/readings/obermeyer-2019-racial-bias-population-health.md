@@ -48,8 +48,8 @@ updated: 2026-10-26T20:00:00Z
 
 - **Our label is a proxy too.** The [[04-agent-engine/performance-model|performance model]] predicts a defined task outcome, such as accuracy dropping on the study task. That is a proxy for "should take a break" or "cognitive fatigue". We must state that gap explicitly and check it, for example against self-reported fatigue. ^[inferred]
 - **Watch for access-like confounders.** Students with heavier workloads, jobs or worse sleep conditions may show different baselines. A model trained on "who performed well" can learn privilege rather than fatigue. ^[inferred]
-- **Audit by subgroup, at equal scores.** Copy Obermeyer's method in the [[15-research/evaluation-plan|evaluation plan]]: at the same predicted risk, do different groups have the same actual outcomes? ^[inferred]
-- Not using a sensitive attribute as input does **not** make a model fair. The fairness section of [[13-trust-safety/privacy-and-consent|privacy and consent]] should say so. ^[inferred]
+- **Audit by subgroup, at equal scores.** Copy Obermeyer's method in the [[12-research/evaluation-plan|evaluation plan]]: at the same predicted risk, do different groups have the same actual outcomes? ^[inferred]
+- Not using a sensitive attribute as input does **not** make a model fair. The fairness section of [[10-trust-safety/privacy-and-consent|privacy and consent]] should say so. ^[inferred]
 - The choice of target metric is already flagged on [[24-synthesis/open-decisions|open decisions]]. This paper is the strongest argument for treating that choice as an ethical decision, not just a technical one. ^[inferred]
 
 ## Read status

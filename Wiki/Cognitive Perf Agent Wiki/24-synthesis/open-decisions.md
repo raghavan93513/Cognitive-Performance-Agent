@@ -36,9 +36,9 @@ Questions the two design documents leave open or answer differently. Update this
 6. **Target desktop OS.** The foreground-app adapter is OS-specific, and Alexa notes the duration depends on it. ^[inferred]
 7. **Background jobs.** Postgres task list or a managed queue. → [[05-data/data-pipeline|Data pipeline]] ^[ambiguous]
 8. **Which LLM provider** sits behind LangGraph / the provider adapter. Neither doc names one. ^[inferred]
-9. **Randomization level.** Per session/block or per participant. → [[15-research/evaluation-plan|Evaluation plan]]
+9. **Randomization level.** Per session/block or per participant. → [[12-research/evaluation-plan|Evaluation plan]]
 10. **Students vs athletes.** The README names both audiences, but both designs only describe study sessions. Is an athlete use case in scope for the pilot? ^[inferred]
-11. **Research approval.** Does the pilot count as human-subject research that needs institutional review? → [[13-trust-safety/privacy-and-consent|Privacy and consent]]
+11. **Research approval.** Does the pilot count as human-subject research that needs institutional review? → [[10-trust-safety/privacy-and-consent|Privacy and consent]]
 12. **When do we escalate to a human?** The course grades whether the assistant "knows when to escalate to a human". Neither design covers this (e.g. persistent poor sleep, signs of distress). → [[30-course/project-requirements|Project requirements]] ^[inferred]
 
 ### Raised by the course material (2026-10-26)
@@ -46,7 +46,7 @@ Questions the two design documents leave open or answer differently. Update this
 13. **How to choose the Evidence agent's retrieval.** Week 6 says to measure precision@k and recall@k on 20–50 labelled questions, comparing plain SQL, BM25, pgvector and a hybrid. Filter by user *before* ranking. This would settle #5. → [[30-course/weeks/week-06-embeddings-vector-search-rag|Week 6]] ^[inferred]
 14. **Does minute-level watch data need a time-series store?** Week 7 treats it as time-series data. Plain Postgres is probably fine at pilot scale, but decide deliberately. → [[21-concepts/time-series-feature-extraction|Time-series feature extraction]] ^[inferred]
 15. **Do we want a "what if" model?** Dr. Heydari's agent design includes a world model that predicts the effect of an action (e.g. what a walk would do). Ours only predicts performance. → [[30-course/guest-talks/ali-heydari-physiological-world-models|Guest talk]] ^[inferred]
-16. **Which user data, if any, goes to a hosted LLM?** Name this data flow explicitly in [[13-trust-safety/privacy-and-consent|Privacy and consent]]. Week 5 lists semantic-operator privacy leaks and prompt injection as risks. ^[inferred]
+16. **Which user data, if any, goes to a hosted LLM?** Name this data flow explicitly in [[10-trust-safety/privacy-and-consent|Privacy and consent]]. Week 5 lists semantic-operator privacy leaks and prompt injection as risks. ^[inferred]
 
 ### Raised by WearLab (2026-10-26)
 

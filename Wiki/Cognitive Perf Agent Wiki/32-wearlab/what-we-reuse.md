@@ -53,7 +53,7 @@ From the heart-signal work, these feed [[04-agent-engine/multi-agent-decision|Mu
 - **Show "--", never a stale or imputed number.** It matches our abstain rule.
 - **Grade HR quality from beat-interval consistency:** good below 0.10 coefficient of variation, fair below 0.20, otherwise poor.
 - **Distrust wrist HR while steps are being counted.** Without motion correction, walking makes HR lock onto step cadence (112 bpm shown for a true 96; 124 with a loose strap). Running near the arm-swing rate (about 80–90 bpm) gives 7–36 bpm errors, and the quality flag can still say "good". Proposed guard: ignore HR when steps > 0, and flag when |HR − steps per minute| < 5. → [[21-concepts/photoplethysmography|PPG]]
-- **Consequence for the "short walk" suggestion:** don't use HR *during* the walk as evidence it worked. Measure the follow-up task. → [[15-research/evaluation-plan|Evaluation plan]]
+- **Consequence for the "short walk" suggestion:** don't use HR *during* the walk as evidence it worked. Measure the follow-up task. → [[12-research/evaluation-plan|Evaluation plan]]
 - **HRV is fragile.** One missed beat takes RMSSD from 37 to 221 ms, so require clean beat series and use overnight values only. → [[21-concepts/heart-rate-variability|HRV]]
 
 ## 3. A personal-baseline recipe for the performance model
@@ -94,7 +94,7 @@ WearLab's **sourcing rules** carry over to our evidence corpus too: take the uni
 - **A UI starter.** The React 19 + Vite + Tailwind v4 + zustand stack is teammate-built and deployed, so it's a ready template for our frontend if we go web or Electron + React. → [[07-backend/tech-stack|Tech stack]]
 - **Explain cards.** WearLab's What / Simple / Like… / Deep dive card is a good shape for our "why this suggestion" panel. → [[32-wearlab/teardowns-and-parts|Teardowns and parts]], [[08-frontend/student-interface-and-feedback|Student interface]]
 - **Design language and the no-game stance.** WearLab's dark theme, chunky UI and "quiet ✓, no streaks" approach suit a tool that shouldn't nag students. → [[32-wearlab/architecture|Architecture]], [[32-wearlab/curriculum-and-quizzes|Curriculum and quizzes]], [[09-design/09-design|Design]]
-- **Engineering habits worth keeping.** Plain-TypeScript models tested headless, and a validator that checks every cross-reference. → [[14-engineering/14-engineering|Engineering]]
+- **Engineering habits worth keeping.** Plain-TypeScript models tested headless, and a validator that checks every cross-reference. → [[11-engineering/11-engineering|Engineering]]
 
 ## Gaps WearLab doesn't cover
 

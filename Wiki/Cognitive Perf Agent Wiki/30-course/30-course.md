@@ -43,7 +43,7 @@ The [[01-foundation/project-overview|Cognitive Performance Agent]] is our team's
 | Data management (stores, RAG, time series) | 5–7 | 05-data, 06-database, 04-agent-engine |
 | HCI: trust and uncertainty | 8 | 09-design, 08-frontend |
 | Agents: tools, planning, memory | 10–11 | 04-agent-engine |
-| Privacy, safety, ethics, integration | 13 | 13-trust-safety |
+| Privacy, safety, ethics, integration | 13 | 10-trust-safety |
 
 ## Schedule
 

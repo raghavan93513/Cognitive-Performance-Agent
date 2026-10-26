@@ -228,8 +228,8 @@ The tokens are defined in `src/index.css` under `@theme`, with the comment "dark
 ^[inferred]
 - **Front-end stack.** If we build the student UI as React inside Electron (one option in [[08-frontend/student-interface-and-feedback|Student interface and feedback]]), WearLab's React 19 + Vite + Tailwind v4 + zustand setup is a working template from a teammate. Its explainers could even be embedded or deep-linked through hash routes.
 - **Data-first and computed cross-links** carry over to our agent. Keeping signal definitions, thresholds and explanations as typed data, and checking them with a validator script, is the same discipline our deterministic policy code needs. See [[04-agent-engine/multi-agent-decision|Multi-agent decision]].
-- **The headless-test pattern** fits our numeric model well: seeded, deterministic simulations with numeric assertions, run with plain Node. See [[15-research/evaluation-plan|Evaluation plan]].
-- **Privacy posture.** WearLab stores only quiz and journey completion, in the browser, with no network calls. That is a useful baseline to compare against when we design consent for real biometric data. See [[13-trust-safety/privacy-and-consent|Privacy and consent]].
+- **The headless-test pattern** fits our numeric model well: seeded, deterministic simulations with numeric assertions, run with plain Node. See [[12-research/evaluation-plan|Evaluation plan]].
+- **Privacy posture.** WearLab stores only quiz and journey completion, in the browser, with no network calls. That is a useful baseline to compare against when we design consent for real biometric data. See [[10-trust-safety/privacy-and-consent|Privacy and consent]].
 - **Caveat:** WearLab is a teaching tool with no API, auth or database. None of its architecture covers our ingestion path ([[05-data/data-pipeline|Data pipeline]]).
 
 ## Sources

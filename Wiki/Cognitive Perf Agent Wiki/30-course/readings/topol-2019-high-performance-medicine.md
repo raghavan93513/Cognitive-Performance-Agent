@@ -49,8 +49,8 @@ updated: 2026-10-26T20:00:00Z
 
 - **We sit at Topol's "patient" level:** helping individuals use their own data. That framing (empowerment, not diagnosis) is a good one-line pitch for the [[30-course/deliverables/part-3-final-showcase|final showcase]]. ^[inferred]
 - **Answer the limits explicitly in the showcase:** ^[inferred]
-  - **Bias:** subgroup checks in the [[15-research/evaluation-plan|evaluation plan]]. ^[inferred]
-  - **Privacy and security:** [[13-trust-safety/privacy-and-consent|privacy and consent]], plus the OWASP controls. ^[inferred]
+  - **Bias:** subgroup checks in the [[12-research/evaluation-plan|evaluation plan]]. ^[inferred]
+  - **Privacy and security:** [[10-trust-safety/privacy-and-consent|privacy and consent]], plus the OWASP controls. ^[inferred]
   - **Transparency:** reasons and sources shown to students. ^[inferred]
 - **"Strengthen, not erode" the relationship:** our version is the relationship between students and their own judgement. The agent should build self-awareness, not dependence. See [[30-course/readings/bucinca-2021-cognitive-forcing|Buçinca 2021]]. ^[inferred]
 

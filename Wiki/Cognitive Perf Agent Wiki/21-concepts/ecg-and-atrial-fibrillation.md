@@ -76,7 +76,7 @@ In AFib the upper chambers quiver instead of contracting. There are **no P waves
 
 ^[inferred]
 - **We have no ECG data and won't ask for it.** Our watch inputs are PPG-derived HR, overnight HRV and sleep ([[05-data/data-sources|Data sources]]). ECG recordings are user-initiated, 30 s, and regulated (FDA-cleared). That puts them outside a wellness agent.
-- **Guardrail:** the LLM agents must never describe HR or HRV as "ECG", "rhythm", "arrhythmia" or "AFib", and must never interpret irregular HR samples as a heart condition. This strengthens the existing rule on [[21-concepts/photoplethysmography|PPG]]. → [[04-agent-engine/multi-agent-decision|Multi-agent decision]], [[13-trust-safety/privacy-and-consent|Privacy and consent]]
+- **Guardrail:** the LLM agents must never describe HR or HRV as "ECG", "rhythm", "arrhythmia" or "AFib", and must never interpret irregular HR samples as a heart condition. This strengthens the existing rule on [[21-concepts/photoplethysmography|PPG]]. → [[04-agent-engine/multi-agent-decision|Multi-agent decision]], [[10-trust-safety/privacy-and-consent|Privacy and consent]]
 - **Reusable pattern:** the verdict ladder checks *signal quality first* ("Poor recording" or "Inconclusive" before any physiological claim). Our Signal agent should do the same: refuse to judge a window with too few or too noisy samples before the Evidence agent reasons about it. WearLab's `classify()` in `ecg-model.ts` is a compact model for that ordering.
 - ECG is the gold standard for **HRV timing**. Watch-PPG RMSSD is a noisier proxy for it, which is one more reason to use HRV only as baseline-relative daily context. See [[21-concepts/heart-rate-variability|HRV]].
 

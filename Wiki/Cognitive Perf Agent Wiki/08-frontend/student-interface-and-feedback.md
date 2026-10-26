@@ -6,7 +6,7 @@ aliases: [student interface, show suggestion, accept snooze decline]
 relationships:
   - target: "[[04-agent-engine/multi-agent-decision]]"
     type: uses
-  - target: "[[15-research/evaluation-plan]]"
+  - target: "[[12-research/evaluation-plan]]"
     type: related_to
 sources: [System Design/Cognitive_Performance_Architecture.pdf, System Design/Cognitive Performance Agent - System Design - Alexa Kafka.pdf]
 summary: Stage 5. Show the action, reason and sources; the student accepts, snoozes or declines; a comparable follow-up task measures what happened. Closes the feedback loop.
@@ -52,7 +52,7 @@ Stage 5 of the [[07-backend/system-architecture|system architecture]]: **Suggest
 - A missing follow-up stays missing and is not filled in.
 - Responses and outcomes are saved in PostgreSQL, and later sessions use this history.
 
-How these outcomes are used to judge the product is on [[15-research/evaluation-plan|Evaluation plan]].
+How these outcomes are used to judge the product is on [[12-research/evaluation-plan|Evaluation plan]].
 
 ## Sources
 

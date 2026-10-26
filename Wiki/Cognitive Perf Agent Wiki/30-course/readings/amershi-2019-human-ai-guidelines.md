@@ -68,14 +68,14 @@ The 18 guidelines, in the paper's four phases:
 
 A guideline-by-guideline audit of our design ^[inferred]:
 
-- **G1/G2:** onboarding must say plainly that the agent suggests continue, walk or break, is wellness-only, and how often its suggestions turn out wrong. See [[08-frontend/student-interface-and-feedback|student interface and feedback]] and [[13-trust-safety/privacy-and-consent|privacy and consent]]. ^[inferred]
+- **G1/G2:** onboarding must say plainly that the agent suggests continue, walk or break, is wellness-only, and how often its suggestions turn out wrong. See [[08-frontend/student-interface-and-feedback|student interface and feedback]] and [[10-trust-safety/privacy-and-consent|privacy and consent]]. ^[inferred]
 - **G3 is our core problem.** *When* to interrupt is the product. Suggestions should come at task boundaries, never mid-question. ^[inferred]
 - **G7–G9:** accept, snooze and decline are efficient dismissal and correction. Add "ask now" for invocation. ^[inferred]
 - **G10:** matches the abstain path in [[04-agent-engine/performance-model|performance model]]. ^[inferred]
 - **G11:** matches "show the reason and sources". ^[inferred]
 - **G13–G16:** learning from accept and decline must be cautious and visible, for example "you usually snooze before 11 am, so we'll ask less then". ^[inferred]
 - **G17:** a global pause and data controls are already in the privacy design. ^[inferred]
-- **G18:** tell students when the model or policy changes mid-study. This also matters for the integrity of the [[15-research/evaluation-plan|evaluation plan]]. ^[inferred]
+- **G18:** tell students when the model or policy changes mid-study. This also matters for the integrity of the [[12-research/evaluation-plan|evaluation plan]]. ^[inferred]
 - **G6:** check that recommendation rates do not differ unfairly across groups, as in the Week 3 and Week 13 bias readings. ^[inferred]
 
 ## Read status

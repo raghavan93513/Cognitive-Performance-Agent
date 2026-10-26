@@ -250,7 +250,7 @@ The faithful version keeps the **source, status and recorded time** visible, and
   - **two clocks**: `effective` ≈ our `observed_at`, receipt ≈ our `received_at`;
   - a `dataAbsentReason`-style reason code for missing values. ^[inferred]
 - **Snapshot discipline.** Lab 2's `snapshot_at` is exactly our "use only data received before the recommendation" rule, and it is a ready-made test pattern. ^[inferred]
-- **SMART's scope model** is a good template for our own consent grants per data type: request by job, honour partial grants and degrade gracefully. See [[13-trust-safety/privacy-and-consent|Privacy and consent]]. ^[inferred]
+- **SMART's scope model** is a good template for our own consent grants per data type: request by job, honour partial grants and degrade gracefully. See [[10-trust-safety/privacy-and-consent|Privacy and consent]]. ^[inferred]
 - **Faithful rendering** should govern the Action agent's rationale text in [[04-agent-engine/multi-agent-decision|Multi-agent decision]]. ^[inferred]
 - **The document-DB pattern.** Week 1 named "FHIR Observation JSON in MongoDB" as the document-DB example (week 1 slides p. 53), and week 5 revisits clinical stores. See [[30-course/weeks/week-05-relational-document-clinical-stores|Week 05]]. ^[inferred]
 

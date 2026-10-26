@@ -35,9 +35,9 @@ Don't inflate results the demo can't back up. Overclaiming is on the course's "m
 ## Feeding it from this wiki ^[inferred]
 
 - Architecture → [[07-backend/system-architecture]]
-- Safety and privacy → [[13-trust-safety/privacy-and-consent]]
-- Results → [[15-research/evaluation-plan]] and the results log in [[15-research/15-research|15-research]]
-- Who did what → [[17-team/17-team|17-team]]
+- Safety and privacy → [[10-trust-safety/privacy-and-consent]]
+- Results → [[12-research/evaluation-plan]] and the results log in [[12-research/12-research|12-research]]
+- Who did what → [[13-team/13-team|13-team]]
 - Decisions and why → [[20-decisions/20-decisions|20-decisions]]
 
 ## Related

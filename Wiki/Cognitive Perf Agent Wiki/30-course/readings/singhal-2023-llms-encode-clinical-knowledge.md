@@ -54,9 +54,9 @@ updated: 2026-10-26T20:00:00Z
 
 ## What this means for us
 
-- **Evaluate the LLM's words, not just the model's predictions.** The [[15-research/evaluation-plan|evaluation plan]] should include a small human rating of agent explanations (accurate? overclaiming? potentially harmful? helpful?) modelled on Singhal's axes. ^[inferred]
+- **Evaluate the LLM's words, not just the model's predictions.** The [[12-research/evaluation-plan|evaluation plan]] should include a small human rating of agent explanations (accurate? overclaiming? potentially harmful? helpful?) modelled on Singhal's axes. ^[inferred]
 - **Deferral is a feature.** The selective-prediction result supports our [[04-agent-engine/performance-model|performance model]] design of returning an estimate plus uncertainty, or abstaining. The LLM layer should also be allowed to say "not enough evidence". ^[inferred]
-- **Wellness framing still matters.** Students may ask health questions. Our scope in [[13-trust-safety/privacy-and-consent|privacy and consent]] (non-medical, no diagnosis) avoids the high-harm territory Singhal measures. ^[inferred]
+- **Wellness framing still matters.** Students may ask health questions. Our scope in [[10-trust-safety/privacy-and-consent|privacy and consent]] (non-medical, no diagnosis) avoids the high-harm territory Singhal measures. ^[inferred]
 
 ## Read status
 

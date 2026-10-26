@@ -48,7 +48,7 @@ flowchart LR
 4. **Agents decide.** Signal, Evidence and Action agents propose a step, and deterministic code approves or blocks it. → [[04-agent-engine/multi-agent-decision|Multi-agent decision]]
 5. **Show and measure.** The student accepts, snoozes or declines, and a later comparable task measures the result. → [[08-frontend/student-interface-and-feedback|Student interface and feedback]]
 
-Consent, user-only data access, and pause/delete apply to every stage. → [[13-trust-safety/privacy-and-consent|Privacy and consent]]
+Consent, user-only data access, and pause/delete apply to every stage. → [[10-trust-safety/privacy-and-consent|Privacy and consent]]
 
 ## Raghavan's packaging: one app, one backend, one database
 

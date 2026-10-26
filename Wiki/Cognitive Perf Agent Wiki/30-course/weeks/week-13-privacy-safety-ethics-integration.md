@@ -32,6 +32,6 @@ updated: 2026-10-26T20:00:00Z
 
 ## What this means for us ^[inferred]
 
-- **Red-teaming:** classmates will try to make our agent diagnose, override a rate limit, or follow instructions planted in retrieved text. Our policy engine and "retrieved text is untrusted" rule are the defences. Test them before Dec 4. → [[13-trust-safety/privacy-and-consent|Privacy and consent]]
-- **Bias:** optical HR is less accurate on some skin tones (see [[30-course/weeks/week-03-wearable-sensors-and-measurements|week 3]]), so a model leaning on HR could serve some students worse. Report subgroup performance where we ethically can. → [[15-research/evaluation-plan|Evaluation plan]]
+- **Red-teaming:** classmates will try to make our agent diagnose, override a rate limit, or follow instructions planted in retrieved text. Our policy engine and "retrieved text is untrusted" rule are the defences. Test them before Dec 4. → [[10-trust-safety/privacy-and-consent|Privacy and consent]]
+- **Bias:** optical HR is less accurate on some skin tones (see [[30-course/weeks/week-03-wearable-sensors-and-measurements|week 3]]), so a model leaning on HR could serve some students worse. Report subgroup performance where we ethically can. → [[12-research/evaluation-plan|Evaluation plan]]
 - **Integration by Dec 4** means the full path (collector → backend → model → agents → UI) must already run. Plan the [[02-product/roadmap|roadmap]] backwards from this date, not from Dec 11.

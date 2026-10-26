@@ -84,7 +84,7 @@ Short sleep and a very hard day lower recovery more gently, and an easy day nudg
 - **Don't show users a brand-like 1–99% number.** The [[04-agent-engine/performance-model|Performance model]] rejects unexplained universal readiness scores. Show the inputs in plain words instead, for example "HRV below your usual for 2 nights". ^[inferred]
 - **Strain is mostly irrelevant for studying students.** It measures training load, and a sitting day is near a rest day (about 4). It may matter for our **athlete** users: a high-strain day raises sleep need, which then feeds tonight's expected sleep. ^[inferred]
 - **Synthetic data.** `recovery-model.ts` gives us `dayTrace()` (minute-by-minute daytime HR for a day's sessions) and `nightOf()` (overnight HRV, resting HR, breathing and temperature from strain, sleep, drinks or illness). Together they form a ready night-to-night physiology layer for the synthetic path. ^[inferred]
-- Whether recovery-type features add predictive value beyond laptop data remains an **open test** ([[15-research/evaluation-plan|Evaluation plan]]). ^[inferred]
+- Whether recovery-type features add predictive value beyond laptop data remains an **open test** ([[12-research/evaluation-plan|Evaluation plan]]). ^[inferred]
 
 ## Sources
 

@@ -45,7 +45,7 @@ updated: 2026-10-26T20:00:00Z
 ## What this means for us
 
 - **Our "clinic" is a student's desk:** bad watch fit, a dead battery, Bluetooth gaps, or a laptop agent paused by the OS are our version of ungradable images. The system must **degrade gracefully** (for example "not enough data, no suggestion") rather than nag or guess. See the failure rules in [[04-agent-engine/multi-agent-decision|multi-agent decision]]. ^[inferred]
-- **Strict quality gates have a cost.** If the [[05-data/data-pipeline|data pipeline]] quality gates reject too much data, students will see the agent as useless. We should measure the abstain rate as a first-class metric in the [[15-research/evaluation-plan|evaluation plan]]. ^[inferred]
+- **Strict quality gates have a cost.** If the [[05-data/data-pipeline|data pipeline]] quality gates reject too much data, students will see the agent as useless. We should measure the abstain rate as a first-class metric in the [[12-research/evaluation-plan|evaluation plan]]. ^[inferred]
 - **Observe real use:** add a small qualitative arm (short interviews or think-alouds) to the pilot. Accept, snooze and decline logs from [[08-frontend/student-interface-and-feedback|student interface and feedback]] tell us *what* happened, not *why*. ^[inferred]
 - Workflow fit matters more than accuracy, so recommendations should arrive at natural task boundaries, not mid-question. ^[inferred]
 

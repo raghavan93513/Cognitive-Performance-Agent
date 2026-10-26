@@ -1,6 +1,6 @@
 ---
 title: Deployment and Operations
-category: 14-engineering
+category: 11-engineering
 tags: [infrastructure, devops, reliability]
 aliases: [CI/CD, SLOs, monitoring, scaling, deployment]
 relationships:

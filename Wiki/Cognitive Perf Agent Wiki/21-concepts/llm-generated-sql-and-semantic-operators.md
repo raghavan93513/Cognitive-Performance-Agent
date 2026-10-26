@@ -10,7 +10,7 @@ relationships:
     type: related_to
   - target: "[[06-database/database-and-api]]"
     type: related_to
-  - target: "[[13-trust-safety/privacy-and-consent]]"
+  - target: "[[10-trust-safety/privacy-and-consent]]"
     type: related_to
 sources: ["binf4070-2026/week-05/slides-05.pdf", "personal-health-agent.github.io/public/weeks/05-exercise.ipynb"]
 summary: How LLMs write schemas and SQL, and run inside SQL as semantic operators (Flock, ai_filter) or decision models (jev); the failure modes BINF 4070 Week 5 demonstrates and the mitigations.
@@ -200,7 +200,7 @@ Extraction sits inside the curation pipeline: **Ingest → Extract → Normalize
 - **Most of our evaluation queries are fan-out-prone.** Acceptance rate per user and outcome averages by recommendation type join one-to-many tables (sessions → recommendations → feedback events). Write them once, by hand, with tests that check row counts. ^[inferred]
 - **If we label free text, prefer typed outputs.** For student feedback or reasons for skipping a break, use a fixed label set or a probability (decision-model style), materialized once with model version and date. Don't re-prompt per query. ^[inferred]
 - **Treat any user-supplied text as data, not instructions.** Task titles, notes and calendar text reaching an LLM can carry injections (the N7 lesson). This links to [[30-course/weeks/week-13-privacy-safety-ethics-integration|Week 13]] and [[30-course/readings/greshake-2023-indirect-prompt-injection|Greshake et al.]]. ^[inferred]
-- **Sending rows to a hosted model is a data flow that needs consent.** Our [[13-trust-safety/privacy-and-consent|Privacy and consent]] design should name it, or we use a local model. ^[inferred]
+- **Sending rows to a hosted model is a data flow that needs consent.** Our [[10-trust-safety/privacy-and-consent|Privacy and consent]] design should name it, or we use a local model. ^[inferred]
 - **Numbers stay in deterministic code.** The course does unit conversion and range checks in SQL, not in the model. This is consistent with our rule that the LLM never computes physiological scores ([[21-concepts/heart-rate-variability|HRV]], [[04-agent-engine/performance-model|Performance model]]). ^[inferred]
 
 ## Sources

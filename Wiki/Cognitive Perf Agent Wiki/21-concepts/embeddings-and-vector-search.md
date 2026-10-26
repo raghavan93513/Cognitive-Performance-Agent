@@ -92,7 +92,7 @@ Build a labelled set of **20–50 real questions** with their relevant items **b
 ## In the Cognitive Performance Agent
 
 - The **Evidence agent** ([[04-agent-engine/multi-agent-decision|Multi-agent decision]]) is the consumer. Alexa's design (`evidence_chunks` + pgvector, exact search first, HNSW later) matches the course's PostgreSQL option. Raghavan's plain-SQL design is the "keyword/structured" end of the same spectrum. See [[24-synthesis/open-decisions|Open decisions]]. ^[inferred]
-- Personal-history embeddings fall under [[13-trust-safety/privacy-and-consent|Privacy and consent]] (inversion risk, deletion cascade). ^[inferred]
+- Personal-history embeddings fall under [[10-trust-safety/privacy-and-consent|Privacy and consent]] (inversion risk, deletion cascade). ^[inferred]
 - Always scope by `user_id` **before** ranking; never rely on an ANN index plus post-filter for user isolation. ^[inferred]
 - Our research snippets will contain negations and population qualifiers that embeddings blur, so a model check after retrieval is required before the Action agent uses a snippet. ^[inferred]
 

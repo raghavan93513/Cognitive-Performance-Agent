@@ -277,7 +277,7 @@ Course view: [[30-course/weeks/week-03-wearable-sensors-and-measurements|Week 3]
   - Treat any HR sample taken while steps > 0 as unreliable.
   - Flag samples where |HR − steps/min| < 5 as possible cadence lock.
   - Judge whether a walk "worked" from the follow-up task, plus HR only from SEDENTARY samples a few minutes after walking stops.
-  - This matches [[15-research/evaluation-plan|Evaluation plan]] and the existing warning on [[30-course/weeks/week-03-wearable-sensors-and-measurements|Week 3]].
+  - This matches [[12-research/evaluation-plan|Evaluation plan]] and the existing warning on [[30-course/weeks/week-03-wearable-sensors-and-measurements|Week 3]].
 - **Synthetic HR for the demo:** `PpgSim` is plain TypeScript, seeded, with no DOM. It ran an hour of simulation in about 0.18 s in my probe, so a full day takes about 4 s.
   - Approach: drive `sim.set({ hr, motion })` from a scripted day (study blocks, a walk), then sample `sim.bpm` and `sim.quality()` every 300 s to mimic Google Health point samples, with realistic artefacts (cadence lock, "--" gaps).
   - Caveats: `hr` is an input you script (there is no physiology model). The motion is a fixed 1.42 Hz *running* swing (there is no walking mode). And there is no LICENSE file, so ask Heramb before copying.

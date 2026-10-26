@@ -219,8 +219,8 @@ Move from a clinical question to a bounded **data, authorization and safety cont
   - "Preliminary" = a sync is still in progress.
   - This reinforces "Not enough data" in [[08-frontend/student-interface-and-feedback|Student interface and feedback]]. ^[inferred]
 - **Faithful rendering.** The p. 64 pattern ("your record lists…") is the style our Evidence/Action agents should use: "Your watch recorded 5 h 48 min of sleep (synced 07:10)", not "You are sleep-deprived". This links to the LLM safeguards in [[04-agent-engine/multi-agent-decision|Multi-agent decision]]. ^[inferred]
-- **Scoped access by job.** "Request access by job, not convenience" is the course's version of our data-minimization rule ([[13-trust-safety/privacy-and-consent|Privacy and consent]]). Request only the Google Health / HealthKit data types the model uses, and honour partial grants. ^[inferred]
-- **Testing ladder.** Synthetic data → sandbox → pilot with consent mirrors the staged plan in [[02-product/roadmap|Roadmap]] and [[15-research/evaluation-plan|Evaluation plan]]. ^[inferred]
+- **Scoped access by job.** "Request access by job, not convenience" is the course's version of our data-minimization rule ([[10-trust-safety/privacy-and-consent|Privacy and consent]]). Request only the Google Health / HealthKit data types the model uses, and honour partial grants. ^[inferred]
+- **Testing ladder.** Synthetic data → sandbox → pilot with consent mirrors the staged plan in [[02-product/roadmap|Roadmap]] and [[12-research/evaluation-plan|Evaluation plan]]. ^[inferred]
 - **Design starts with one user decision.** Ours is "continue / walk / break, right now, for this student". The "unsafe shortcut" to avoid is treating high HR or low HRV as fatigue on its own. ^[inferred]
 
 ## Likely quiz material

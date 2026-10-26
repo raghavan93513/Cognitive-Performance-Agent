@@ -69,7 +69,7 @@ A step counter turns a 3-axis accelerometer stream into a count of steps. It doe
 
 - Treat step counts as an **estimate with known blind spots**. Undercounting from pushing things or holding the arm still is the main risk for confirming breaks. Rhythmic vibration on transport adds false steps. ^[inferred]
 - Use **sedentary time and whether a walk happened** as policy inputs. Don't treat step totals as a cognitive signal. ^[inferred] → [[04-agent-engine/performance-model|Performance model]]
-- Record our tolerance for step error in the [[15-research/evaluation-plan|evaluation plan]] before we rely on step-confirmed breaks. ^[inferred]
+- Record our tolerance for step error in the [[12-research/evaluation-plan|evaluation plan]] before we rely on step-confirmed breaks. ^[inferred]
 
 ## Sources
 

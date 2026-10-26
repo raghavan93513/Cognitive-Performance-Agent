@@ -35,7 +35,7 @@ updated: 2026-10-26T19:30:00Z
 ## Section map
 
 - **§1 Executive summary** → [[01-foundation/project-overview|Project hub]]
-- **§2 Product scope and design principles** (in-scope, non-goals, principles) → [[07-backend/system-architecture|System architecture]], [[13-trust-safety/privacy-and-consent|Privacy and consent]]
+- **§2 Product scope and design principles** (in-scope, non-goals, principles) → [[07-backend/system-architecture|System architecture]], [[10-trust-safety/privacy-and-consent|Privacy and consent]]
 - **§3 High-level architecture** → [[07-backend/system-architecture|System architecture]]
 - **§4 Client apps and data collection** (RN, Next.js, desktop collector, wearables/CGM) → [[05-data/data-sources|Data sources]], [[08-frontend/student-interface-and-feedback|Student interface]]
 - **§5 Backend, storage and infrastructure choices** → [[07-backend/tech-stack|Tech stack]]
@@ -43,9 +43,9 @@ updated: 2026-10-26T19:30:00Z
 - **§7 ML and personalization** → [[04-agent-engine/performance-model|Performance model]]
 - **§8 Agent workflow and recommendation policy** → [[04-agent-engine/multi-agent-decision|Multi-agent decision]]
 - **§9 Database and API design** → [[06-database/database-and-api|Database and API]]
-- **§10 Security, privacy and governance** → [[13-trust-safety/privacy-and-consent|Privacy and consent]]
-- **§11 Experimentation and evaluation** → [[15-research/evaluation-plan|Evaluation plan]]
-- **§12–14 Deployment/CI-CD, SLOs/monitoring, scaling** → [[14-engineering/deployment-and-operations|Deployment and operations]]
+- **§10 Security, privacy and governance** → [[10-trust-safety/privacy-and-consent|Privacy and consent]]
+- **§11 Experimentation and evaluation** → [[12-research/evaluation-plan|Evaluation plan]]
+- **§12–14 Deployment/CI-CD, SLOs/monitoring, scaling** → [[11-engineering/deployment-and-operations|Deployment and operations]]
 - **§15 Illustrative 12-week roadmap** → [[02-product/roadmap|Roadmap]]
 - **§16 Key risks and mitigations** → below
 - **§17 Primary sources [1]–[13]** → below

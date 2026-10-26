@@ -8,7 +8,7 @@ relationships:
     type: related_to
   - target: "[[05-data/data-pipeline]]"
     type: related_to
-  - target: "[[15-research/evaluation-plan]]"
+  - target: "[[12-research/evaluation-plan]]"
     type: related_to
   - target: "[[30-course/weeks/week-03-wearable-sensors-and-measurements]]"
     type: derived_from
@@ -116,7 +116,7 @@ The core message of [[30-course/weeks/week-03-wearable-sensors-and-measurements|
 - **Store quality context with every value.** Keep `dataSource` (package, device, recordingMethod), `motionContext`, per-window sample count and coverage. Our canonical schema has `source` and `quality_status`, but nothing for motion context or window coverage counts yet. ^[inferred] → [[05-data/data-pipeline|Data pipeline]]
 - **Add a step-source selection rule.** Dedup by provider ID does not prevent cross-application double counting. ^[inferred]
 - **Keep "unavailable", "zero" and "normal" distinct.** This is already a pipeline rule, now with course-backed failure cases. ^[inferred]
-- **Don't treat walk-time HR as evidence that a break worked.** Use task-performance labels, which our design already makes primary. ^[inferred] → [[15-research/evaluation-plan|Evaluation plan]]
+- **Don't treat walk-time HR as evidence that a break worked.** Use task-performance labels, which our design already makes primary. ^[inferred] → [[12-research/evaluation-plan|Evaluation plan]]
 - **Write our own claim sentence(s) using the p. 40 template** in the evaluation plan, including the subgroup (skin tone, wrist placement) and coverage parts. ^[inferred]
 - **Tell the user the data's age and coverage** in the interface ("based on 2 HR readings in the last 15 min, synced 20 min ago"). ^[inferred] → [[08-frontend/student-interface-and-feedback|Student interface]]
 

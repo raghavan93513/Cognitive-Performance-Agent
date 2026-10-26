@@ -1,6 +1,6 @@
 ---
-title: "14 · Engineering"
-category: 14-engineering
+title: "11 · Engineering"
+category: 11-engineering
 tags: [moc, engineering]
 summary: "Hub for engineering — how we build, ship and run it."
 sources: []
@@ -12,7 +12,7 @@ created: 2026-10-26T20:00:00Z
 updated: 2026-10-26T20:00:00Z
 ---
 
-# 14 · Engineering
+# 11 · Engineering
 
 > **Answers:** How we build, ship and run it.
 
@@ -20,7 +20,7 @@ updated: 2026-10-26T20:00:00Z
 
 ## Pages
 
-- [[14-engineering/deployment-and-operations|Deployment and operations]] — Environments, CI/CD, SLOs, monitoring, scaling
+- [[11-engineering/deployment-and-operations|Deployment and operations]] — Environments, CI/CD, SLOs, monitoring, scaling
 
 ## Planned pages
 

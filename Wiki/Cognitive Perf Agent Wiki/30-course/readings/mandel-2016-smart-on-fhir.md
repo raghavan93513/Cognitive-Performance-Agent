@@ -46,7 +46,7 @@ updated: 2026-10-26T20:00:00Z
 
 - We are not building an EHR app, so SMART on FHIR is **out of scope** for the pilot. Its lessons still apply to our data: ^[inferred]
   - **Profiles = our canonical observation schema.** The [[05-data/data-pipeline|data pipeline]] canonical schema (fixed units, timestamps, source and quality flags) does the same job FHIR profiles do. Without it, watch and laptop records from different devices are syntactically valid but not comparable. ^[inferred]
-  - **Scoped, consented access** (OAuth2-style) is the right model for any wearable API we connect to, and it fits the user-only access rule in [[13-trust-safety/privacy-and-consent|privacy and consent]]. ^[inferred]
+  - **Scoped, consented access** (OAuth2-style) is the right model for any wearable API we connect to, and it fits the user-only access rule in [[10-trust-safety/privacy-and-consent|privacy and consent]]. ^[inferred]
 - If the team ever wants to send summaries to a clinician, expressing observations as FHIR `Observation` resources with LOINC codes would be the interoperable route. That belongs on [[24-synthesis/open-decisions|open decisions]], not the pilot. ^[inferred]
 
 ## Read status

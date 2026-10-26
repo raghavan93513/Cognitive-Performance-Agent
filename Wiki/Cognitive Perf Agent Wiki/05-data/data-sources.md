@@ -50,7 +50,7 @@ More on overnight HRV and how to read it: [[21-concepts/heart-rate-variability|H
 
 ## What is never collected (by default)
 
-Keystrokes, typed text, screenshots, clipboard contents, window titles, URLs, document contents and message contents. Collection is visible and pausable, with an easy uninstall/disable path. → [[13-trust-safety/privacy-and-consent|Privacy and consent]]
+Keystrokes, typed text, screenshots, clipboard contents, window titles, URLs, document contents and message contents. Collection is visible and pausable, with an easy uninstall/disable path. → [[10-trust-safety/privacy-and-consent|Privacy and consent]]
 
 ## Optional / later sources
 

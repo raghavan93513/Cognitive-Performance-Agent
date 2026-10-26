@@ -57,8 +57,8 @@ updated: 2026-10-26T20:00:00Z
   - In Alexa's design, research snippets would be retrieved from an approved corpus. The corpus must be curated and frozen, never live web content. ^[inferred]
   - In Raghavan's design, the agent retrieves students' own notes and preferences. Any free text a student writes, such as decline reasons, is also a potential injection channel and should be passed to the LLM as clearly delimited data. ^[inferred]
 - **Limit what a hijacked LLM can do.** Our defences are the deterministic policy and allowlisted actions. The worst a successful injection can do is choose among continue, walk or break, and policy code can still veto that. Keep it so: no LLM tools that send messages, fetch URLs or read other students' data. ^[inferred]
-- **Red-team plan for Week 13:** plant instructions in a session note and in a fake evidence snippet, then check that (a) the action stays in the allowlist, (b) no data leaks into the rationale, and (c) the attempt is logged. Add this to the [[15-research/evaluation-plan|evaluation plan]] or safety tests. ^[inferred]
-- Ties to [[13-trust-safety/privacy-and-consent|privacy and consent]] (LLM data boundaries) and [[21-concepts/retrieval-augmented-generation|retrieval-augmented generation]]. ^[inferred]
+- **Red-team plan for Week 13:** plant instructions in a session note and in a fake evidence snippet, then check that (a) the action stays in the allowlist, (b) no data leaks into the rationale, and (c) the attempt is logged. Add this to the [[12-research/evaluation-plan|evaluation plan]] or safety tests. ^[inferred]
+- Ties to [[10-trust-safety/privacy-and-consent|privacy and consent]] (LLM data boundaries) and [[21-concepts/retrieval-augmented-generation|retrieval-augmented generation]]. ^[inferred]
 
 ## Read status
 

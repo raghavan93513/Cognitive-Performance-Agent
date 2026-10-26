@@ -1,6 +1,6 @@
 ---
-title: "13 · Trust and Safety"
-category: 13-trust-safety
+title: "10 · Trust and Safety"
+category: 10-trust-safety
 tags: [moc, privacy]
 summary: "Hub for trust and safety — privacy, consent, security, safety and fairness."
 sources: []
@@ -12,7 +12,7 @@ created: 2026-10-26T20:00:00Z
 updated: 2026-10-26T20:00:00Z
 ---
 
-# 13 · Trust and Safety
+# 10 · Trust and Safety
 
 > **Answers:** Privacy, consent, security, safety and fairness.
 
@@ -20,7 +20,7 @@ updated: 2026-10-26T20:00:00Z
 
 ## Pages
 
-- [[13-trust-safety/privacy-and-consent|Privacy and consent]] — Default-deny collection, consent, RLS, deletion, LLM data boundary
+- [[10-trust-safety/privacy-and-consent|Privacy and consent]] — Default-deny collection, consent, RLS, deletion, LLM data boundary
 
 ## Planned pages
 

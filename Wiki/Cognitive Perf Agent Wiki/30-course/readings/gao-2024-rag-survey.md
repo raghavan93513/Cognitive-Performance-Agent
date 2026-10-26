@@ -52,7 +52,7 @@ updated: 2026-10-26T20:00:00Z
 - **Start naive, measure, then add.** The Evidence agent in [[04-agent-engine/multi-agent-decision|multi-agent decision]] can begin as Naive RAG over SQL-filtered history (Raghavan's design). Advanced steps (reranking, pgvector, as in Alexa's design) come in only if retrieval metrics show the need. This is one way to settle that disagreement on [[24-synthesis/design-comparison|design comparison]]. ^[inferred]
 - **Metadata routing over pure embeddings.** Our records are structured (student, task type, time, outcome), so metadata filters are likely to beat semantic search for "what happened last time I did this task tired?". ^[inferred]
 - **Keep context short.** Because of "lost in the middle", pass the LLM a few high-value records, not a long dump of sessions. ^[inferred]
-- **Evaluate retrieval separately from generation** in the [[15-research/evaluation-plan|evaluation plan]]: did we fetch the right sessions, and did the explanation stay faithful to them? ^[inferred]
+- **Evaluate retrieval separately from generation** in the [[12-research/evaluation-plan|evaluation plan]]: did we fetch the right sessions, and did the explanation stay faithful to them? ^[inferred]
 - See also [[21-concepts/retrieval-augmented-generation|retrieval-augmented generation]].
 
 ## Read status

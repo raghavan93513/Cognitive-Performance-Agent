@@ -28,7 +28,7 @@ updated: 2026-10-26T21:30:00Z
 
 - **Live:** <https://wearlab-learn.vercel.app>
 - **Source:** `~/Desktop/Fitbit` on Heramb's Mac (package `wearlab` v0.1.0). It has no git remote yet, so the code exists only on that machine.
-- **Built by:** [[17-team/17-team|Heramb Chaudhari]]. 4 commits, all on 2026-09-27; the deployed build is from 2026-10-20.
+- **Built by:** [[13-team/13-team|Heramb Chaudhari]]. 4 commits, all on 2026-09-27; the deployed build is from 2026-10-20.
 - **Stack:** Vite, React 19, React Three Fiber / three.js, TypeScript, Tailwind v4, zustand. Hosted on Vercel. → [[32-wearlab/architecture|Architecture]]
 
 ![[attachments/wearlab/wearlab-home.jpg]]
@@ -50,7 +50,7 @@ updated: 2026-10-26T21:30:00Z
 
 WearLab matters to the [[01-foundation/project-overview|Cognitive Performance Agent]] in three ways: ^[inferred]
 
-1. **A product we already shipped.** It shows the team can build polished, sourced, plain-language health-tech UX. That's useful for the proposal and the showcase. → [[17-team/17-team|Team]]
+1. **A product we already shipped.** It shows the team can build polished, sourced, plain-language health-tech UX. That's useful for the proposal and the showcase. → [[13-team/13-team|Team]]
 2. **A tested knowledge base about the exact signals we use.** Its PPG, HRV, sleep-staging, step-counting, recovery and temperature pipelines are plain TypeScript with headless tests. They're the most detailed explanation we have of how our input numbers are made and where they break. → [[32-wearlab/heart-signal-pipelines|Heart-signal pipelines]], [[32-wearlab/motion-sleep-recovery-pipelines|Motion, sleep and recovery pipelines]]
 3. **Reusable assets.** Its simulators can generate synthetic wearable data, its sourced brand histories map the competition, and its explain-card pattern and design language can carry over. → [[32-wearlab/what-we-reuse|What we reuse]]
 

@@ -1,6 +1,6 @@
 ---
-title: "17 · Team"
-category: 17-team
+title: "13 · Team"
+category: 13-team
 tags: [moc, team]
 summary: "Hub for team — who we are, who owns what, how we decide."
 sources: []
@@ -12,7 +12,7 @@ created: 2026-10-26T20:00:00Z
 updated: 2026-10-26T20:00:00Z
 ---
 
-# 17 · Team
+# 13 · Team
 
 > **Answers:** Who we are, who owns what, how we decide.
 

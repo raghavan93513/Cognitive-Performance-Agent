@@ -10,7 +10,7 @@ relationships:
     type: related_to
   - target: "[[21-concepts/recovery-and-strain]]"
     type: related_to
-  - target: "[[13-trust-safety/privacy-and-consent]]"
+  - target: "[[10-trust-safety/privacy-and-consent]]"
     type: related_to
 sources: ["wearlab/src/lab/temp-model.ts", "wearlab/scripts/test-temp.ts", "wearlab/src/lab/labs/temp.tsx", "wearlab/src/data/topics.ts", "wearlab/src/sleep/night.ts", "https://wearlab-learn.vercel.app"]
 summary: Nightly skin temperature is one robust number per night compared with a learned personal baseline. WearLab's alert at +0.5 °C catches a cold but not a menstrual cycle, a template for our baselines.
@@ -73,7 +73,7 @@ The course's [[30-course/weeks/week-07-time-series-multimodal-features|Week 7]] 
 
   → [[04-agent-engine/performance-model|Performance model]]
 - **Temperature, if used at all, is a "take it easy today" flag.** Possible illness lowers the bar for suggesting breaks. It is never named as illness and never a diagnosis. ^[inferred]
-- **Privacy.** Nightly temperature reveals the menstrual cycle. Don't infer, store or surface cycle phase. If temperature is ingested, keep only the deviation flag, and ask for explicit consent ([[13-trust-safety/privacy-and-consent|Privacy and consent]]). It may be simpler to leave temperature out of the MVP. ^[inferred]
+- **Privacy.** Nightly temperature reveals the menstrual cycle. Don't infer, store or surface cycle phase. If temperature is ingested, keep only the deviation flag, and ask for explicit consent ([[10-trust-safety/privacy-and-consent|Privacy and consent]]). It may be simpler to leave temperature out of the MVP. ^[inferred]
 - **Synthetic data.** `temp-model.ts` generates 56 nights with cycle, cold, drinks and hot-room events. That is a ready test set for our anomaly-flag code, including the "doesn't fire on the cycle" check. ^[inferred]
 
 ## Sources

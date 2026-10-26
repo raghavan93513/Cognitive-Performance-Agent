@@ -52,7 +52,7 @@ updated: 2026-10-26T20:00:00Z
 
 - **Our stakes are low, so friction should be low.** A break suggestion is not a medical decision. Heavy forcing (30-second waits, decide-first) would annoy students and drive them to switch the agent off. Default to a lightweight, dismissible nudge. ^[inferred]
 - **But we do want reflection, not blind compliance.** A light "update"-style design could ask "How focused do you feel (1–5)?" *before* showing the suggestion. That is cognitive forcing and also gives a self-report label for the [[04-agent-engine/performance-model|performance model]]. ^[inferred]
-- **Measure overreliance.** The [[15-research/evaluation-plan|evaluation plan]] should check whether students accept suggestions regardless of whether those suggestions were good, for example by comparing acceptance with outcomes when the model was wrong. ^[inferred]
+- **Measure overreliance.** The [[12-research/evaluation-plan|evaluation plan]] should check whether students accept suggestions regardless of whether those suggestions were good, for example by comparing acceptance with outcomes when the model was wrong. ^[inferred]
 - **Watch for unequal benefit.** If the reflective prompts help only already-reflective students, report it. This is a fairness point next to the bias readings. ^[inferred]
 - Relevant UI page: [[08-frontend/student-interface-and-feedback|student interface and feedback]]. ^[inferred]
 

@@ -27,4 +27,4 @@ Team member on the [[01-foundation/project-overview|Cognitive Performance Agent]
 
 ## Related
 
-- [[22-entities/raghavan-vaidhyaraman|Raghavan Vaidhyaraman]] · [[22-entities/alexa-kafka|Alexa Kafka]] · [[17-team/17-team|Team]]
+- [[22-entities/raghavan-vaidhyaraman|Raghavan Vaidhyaraman]] · [[22-entities/alexa-kafka|Alexa Kafka]] · [[13-team/13-team|Team]]

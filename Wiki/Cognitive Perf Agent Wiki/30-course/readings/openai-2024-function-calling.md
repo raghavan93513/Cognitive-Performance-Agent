@@ -64,7 +64,7 @@ This guide maps almost one to one onto our [[04-agent-engine/multi-agent-decisio
 - **Enums prevent invalid states.** The action should be `enum: [continue, short_walk, quiet_break]` plus a bounded duration, with strict mode on and all fields re-validated server-side. ^[inferred]
 - **Don't make the model fill known arguments.** `participant_id` and `session_id` come from the authenticated context in code, never from the LLM. This is also an injection defence, because the model cannot query another student's data. ^[inferred]
 - **Few tools.** Our whole tool surface could be about five tools (get features, score, retrieve evidence, propose action, log rationale). ^[inferred]
-- Token cost matters for [[14-engineering/deployment-and-operations|deployment and operations]] budgets. ^[inferred]
+- Token cost matters for [[11-engineering/deployment-and-operations|deployment and operations]] budgets. ^[inferred]
 - Our designs name a generic "LLM layer" ([[07-backend/tech-stack|tech stack]]). The same patterns apply with any provider's tool-calling API. ^[inferred]
 
 ## Read status

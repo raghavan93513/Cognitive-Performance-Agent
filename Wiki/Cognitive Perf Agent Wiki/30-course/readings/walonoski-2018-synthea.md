@@ -48,9 +48,9 @@ updated: 2026-10-26T20:00:00Z
 - **The idea is a fit: build our own synthetic generator.** A small simulator that produces fake students with modelled sleep, HRV, heart rate, activity and task-accuracy dynamics would let us: ^[inferred]
   - demo the full pipeline at the proposal ([[30-course/deliverables/part-2-proposal-presentation|Part 2 proposal]]) before any real participant data exists; ^[inferred]
   - unit-test the [[05-data/data-pipeline|data pipeline]] (gaps, duplicates, late syncs) and the [[04-agent-engine/multi-agent-decision|decision policy]] with known ground truth; ^[inferred]
-  - check that the [[04-agent-engine/performance-model|performance model]] can recover a planted effect before we run the [[15-research/evaluation-plan|evaluation]]. ^[inferred]
+  - check that the [[04-agent-engine/performance-model|performance model]] can recover a planted effect before we run the [[12-research/evaluation-plan|evaluation]]. ^[inferred]
 - Following Synthea, the simulator's rules (state machines in JSON or Python) should be documented so the team can say exactly what the synthetic data can and cannot show. ^[inferred]
-- Developing with synthetic data first reduces how much real student data we handle, which helps [[13-trust-safety/privacy-and-consent|privacy and consent]]. ^[inferred]
+- Developing with synthetic data first reduces how much real student data we handle, which helps [[10-trust-safety/privacy-and-consent|privacy and consent]]. ^[inferred]
 
 ## Read status
 

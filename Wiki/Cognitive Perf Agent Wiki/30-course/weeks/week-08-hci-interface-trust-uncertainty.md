@@ -42,7 +42,7 @@ All three go into the [[30-course/deliverables/part-2-proposal-presentation|Nov 
 - The **suggestion card** is our whole product surface. It must show the action, the reason, the evidence and the uncertainty without reading like a diagnosis. → [[08-frontend/student-interface-and-feedback|Student interface]]
 - **Saying "I don't know"** is already our abstain state. Design it as a first-class screen, not an error.
 - **Trust without overstepping:** we recommend and never act. Snoozing or declining must cost the student nothing.
-- **Cognitive forcing** (Bučinca) suggests sometimes asking the student how they feel *before* showing our estimate, so they don't just defer to it. That's a possible experiment arm for [[15-research/evaluation-plan|Evaluation plan]].
+- **Cognitive forcing** (Bučinca) suggests sometimes asking the student how they feel *before* showing our estimate, so they don't just defer to it. That's a possible experiment arm for [[12-research/evaluation-plan|Evaluation plan]].
 - Interruptions are themselves a cost to focus. Rate limits and quiet hours are a design concern, not only a policy concern. → [[04-agent-engine/multi-agent-decision|Multi-agent decision]]
 
 ## Related

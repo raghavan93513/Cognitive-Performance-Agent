@@ -57,10 +57,10 @@ Our three-agent design, mapped onto the survey's modules ^[inferred]:
 - **Memory:**
   - *Short-term:* the current session's features and the last few recommendations, passed in context. ^[inferred]
   - *Long-term:* the student's past sessions, outcomes and stated preferences, kept in PostgreSQL and retrieved by the Evidence agent. This is the survey's "external store", and it need not be a vector database to start (see [[21-concepts/retrieval-augmented-generation|retrieval-augmented generation]]). ^[inferred]
-  - Memory is personal data, so retention and deletion rules from [[13-trust-safety/privacy-and-consent|privacy and consent]] apply to it. ^[inferred]
+  - Memory is personal data, so retention and deletion rules from [[10-trust-safety/privacy-and-consent|privacy and consent]] apply to it. ^[inferred]
 - **Planning:** keep it **shallow and fixed** (collect, score, retrieve, propose, validate) rather than letting the LLM plan freely. Our task does not need open-ended planning, and a fixed graph is easier to test. ^[inferred]
 - **Action:** a tiny, typed action space with a deterministic validator, as on the [[30-course/readings/openai-2024-function-calling|function-calling]] page. ^[inferred]
-- **Evaluation:** combine subjective ratings (did the explanation make sense to the student?) with objective outcomes (task accuracy after the suggestion) in the [[15-research/evaluation-plan|evaluation plan]]. ^[inferred]
+- **Evaluation:** combine subjective ratings (did the explanation make sense to the student?) with objective outcomes (task accuracy after the suggestion) in the [[12-research/evaluation-plan|evaluation plan]]. ^[inferred]
 
 ## Read status
 

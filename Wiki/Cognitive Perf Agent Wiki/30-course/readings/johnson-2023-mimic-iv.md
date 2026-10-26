@@ -52,7 +52,7 @@ updated: 2026-10-26T20:00:00Z
 - **Copy the design patterns, not the data.** MIMIC-IV is ICU data and has nothing to do with student performance. But its stable IDs, modules by provenance and time-shifted identifiers are a good template for [[06-database/database-and-api|database and API]]. ^[inferred]
   - Use a pseudonymous `participant_id` separate from login identity, and keep session and observation IDs that join cleanly. ^[inferred]
   - Group tables by provenance (watch, laptop, task, agent) the way MIMIC groups hosp, icu and note. ^[inferred]
-- **De-identify for analysis exports:** for research datasets from our pilot, consider MIMIC-style date shifting per participant so time intervals are kept but calendar dates are hidden. This adds to [[13-trust-safety/privacy-and-consent|privacy and consent]]. ^[inferred]
+- **De-identify for analysis exports:** for research datasets from our pilot, consider MIMIC-style date shifting per participant so time intervals are kept but calendar dates are hidden. This adds to [[10-trust-safety/privacy-and-consent|privacy and consent]]. ^[inferred]
 - **Document the transformation:** MIMIC publishes its SQL build scripts. Our [[05-data/data-pipeline|data pipeline]] transforms should be versioned and reproducible the same way. ^[inferred]
 - PostgreSQL as the relational core matches our [[07-backend/tech-stack|tech stack]]. ^[inferred]
 

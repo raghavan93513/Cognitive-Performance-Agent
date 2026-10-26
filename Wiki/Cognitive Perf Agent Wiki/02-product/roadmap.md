@@ -4,7 +4,7 @@ category: 02-product
 tags: [planning, roadmap]
 aliases: [build order, development order, implementation plan]
 relationships:
-  - target: "[[15-research/evaluation-plan]]"
+  - target: "[[12-research/evaluation-plan]]"
     type: related_to
   - target: "[[24-synthesis/open-decisions]]"
     type: related_to

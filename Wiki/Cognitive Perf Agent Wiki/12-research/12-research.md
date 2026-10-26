@@ -1,6 +1,6 @@
 ---
-title: "15 · Research"
-category: 15-research
+title: "12 · Research"
+category: 12-research
 tags: [moc, research]
 summary: "Hub for research — what we believe, how we test it, what we found."
 sources: []
@@ -12,7 +12,7 @@ created: 2026-10-26T20:00:00Z
 updated: 2026-10-26T20:00:00Z
 ---
 
-# 15 · Research
+# 12 · Research
 
 > **Answers:** What we believe, how we test it, what we found.
 
@@ -20,7 +20,7 @@ updated: 2026-10-26T20:00:00Z
 
 ## Pages
 
-- [[15-research/evaluation-plan|Evaluation plan]] — Randomized adaptive vs fixed breaks; release gates
+- [[12-research/evaluation-plan|Evaluation plan]] — Randomized adaptive vs fixed breaks; release gates
 
 ## Planned pages
 

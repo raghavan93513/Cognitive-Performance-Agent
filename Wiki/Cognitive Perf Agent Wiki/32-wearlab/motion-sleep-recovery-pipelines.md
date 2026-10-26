@@ -272,7 +272,7 @@ const r = report(s.smooth);               // asleep, stages, awakenings, onset, 
 
    Keep the simulator's truth (lab stages, true steps) in a separate **label** table so we can measure our own pipeline's error.
 6. **Steps at day scale.** The 50 Hz simulator costs about 3.4 s per simulated hour of walking. That is fine for short bursts (for example, verifying that a "short walk" break happened) but heavy for whole days. For per-minute step streams, generate counts from cadence × minutes walked. Apply the error profiles WearLab measured: wrist trolley 84–95%, nothing counted for walks under 10 steps, false steps on steady cobbled roads (27 in 48 s).
-7. **Be honest about realism.** It is a teaching model built from published typical effect sizes. Use it to exercise pipelines, data checks, abstention and policy, never to claim our model's accuracy (see [[15-research/evaluation-plan|Evaluation plan]]).
+7. **Be honest about realism.** It is a teaching model built from published typical effect sizes. Use it to exercise pipelines, data checks, abstention and policy, never to claim our model's accuracy (see [[12-research/evaluation-plan|Evaluation plan]]).
 
 Effort: about 1–2 days for one person to vendor the files, add the person and calendar layers and write the JSON emitter. ^[inferred]
 
@@ -313,7 +313,7 @@ Neither WearLab model excludes flagged days from the baseline. The course page s
 | Floors, GPS, fall detection | No | Not about cognition, and GPS is a privacy cost (see Privacy and consent) |
 | Battery state | Operational only | Charging gaps explain missing HR. An always-on AMOLED dies in about 7 days |
 
-Related: [[21-concepts/heart-rate-variability|HRV]] · [[13-trust-safety/privacy-and-consent|Privacy and consent]]
+Related: [[21-concepts/heart-rate-variability|HRV]] · [[10-trust-safety/privacy-and-consent|Privacy and consent]]
 
 ## What this means for the Cognitive Performance Agent
 

@@ -40,15 +40,15 @@ Numbered folders read in order. Each opens with a hub page named after the folde
 | 07 | Backend | Services, APIs, workers, the LLM layer |
 | 08 | Frontend | What the student sees and touches |
 | 09 | Design | How it looks, feels and earns trust |
-| 13 | Trust and safety | Privacy, consent, security, safety, fairness |
-| 14 | Engineering | How we build, ship and run it |
-| 15 | Research | What we believe, how we test it, what we found |
-| 17 | Team | Who we are, who owns what, how we decide |
+| 10 | Trust and safety | Privacy, consent, security, safety, fairness |
+| 11 | Engineering | How we build, ship and run it |
+| 12 | Research | What we believe, how we test it, what we found |
+| 13 | Team | Who we are, who owns what, how we decide |
 
 Hubs: [[01-foundation/01-foundation|01]] · [[02-product/02-product|02]] · [[03-users/03-users|03]] ·
 [[04-agent-engine/04-agent-engine|04]] · [[05-data/05-data|05]] · [[06-database/06-database|06]] ·
-[[07-backend/07-backend|07]] · [[08-frontend/08-frontend|08]] · [[09-design/09-design|09]] · [[13-trust-safety/13-trust-safety|13]] · [[14-engineering/14-engineering|14]] · [[15-research/15-research|15]] ·
-[[17-team/17-team|17]]
+[[07-backend/07-backend|07]] · [[08-frontend/08-frontend|08]] · [[09-design/09-design|09]] · [[10-trust-safety/10-trust-safety|10]] · [[11-engineering/11-engineering|11]] · [[12-research/12-research|12]] ·
+[[13-team/13-team|13]]
 
 ## The knowledge layer
 

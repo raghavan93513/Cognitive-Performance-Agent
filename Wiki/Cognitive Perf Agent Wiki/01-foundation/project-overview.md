@@ -43,7 +43,7 @@ Repo: <https://github.com/raghavan93513/Cognitive-Performance-Agent>
 3. **Analyze** to get a numeric estimate with uncertainty → [[04-agent-engine/performance-model|Performance model]]
 4. **Agents decide** on an action, then code checks it → [[04-agent-engine/multi-agent-decision|Multi-agent decision]]
 5. **Show the suggestion** and record the student's choice → [[08-frontend/student-interface-and-feedback|Student interface and feedback]]
-6. **Measure the outcome** with a later comparable task → [[15-research/evaluation-plan|Evaluation plan]]
+6. **Measure the outcome** with a later comparable task → [[12-research/evaluation-plan|Evaluation plan]]
 
 The full picture is on [[07-backend/system-architecture|System architecture]].
 
@@ -53,10 +53,10 @@ Multimodal context may help predict when performance is likely to drop, and pers
 
 ## Cross-cutting topics
 
-- [[13-trust-safety/privacy-and-consent|Privacy and consent]]
+- [[10-trust-safety/privacy-and-consent|Privacy and consent]]
 - [[07-backend/tech-stack|Tech stack]]
 - [[06-database/database-and-api|Database and API]]
-- [[14-engineering/deployment-and-operations|Deployment and operations]]
+- [[11-engineering/deployment-and-operations|Deployment and operations]]
 - [[02-product/roadmap|Roadmap]]
 
 ## Background concepts

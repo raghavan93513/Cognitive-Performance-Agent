@@ -50,9 +50,9 @@ This is an opinion piece, so its "findings" are arguments:
 
 - Our agent is an n=me system: the [[04-agent-engine/performance-model|performance model]] should compare a student against **their own baseline** (their usual heart rate, sleep and task accuracy), not only against population norms. ^[inferred]
 - "Behavioral pulse" maps well onto the laptop-behaviour signals in [[05-data/data-sources|data sources]] (activity patterns, idle time, task performance), as long as we keep the rule that private content such as keystrokes or screenshots is never captured. ^[inferred]
-- Estrin's "not diagnosis" stance matches our wellness, non-medical framing in [[13-trust-safety/privacy-and-consent|privacy and consent]]. ^[inferred]
+- Estrin's "not diagnosis" stance matches our wellness, non-medical framing in [[10-trust-safety/privacy-and-consent|privacy and consent]]. ^[inferred]
 - Data liberation cuts both ways: giving students export and delete of their own data (see [[06-database/database-and-api|database and API]]) is the n=me ethos applied to us. ^[inferred]
-- Single-person data is noisy and confounded. Our [[15-research/evaluation-plan|evaluation plan]] uses randomised within-person sessions, the rigorous version of n-of-1 evidence. ^[inferred]
+- Single-person data is noisy and confounded. Our [[12-research/evaluation-plan|evaluation plan]] uses randomised within-person sessions, the rigorous version of n-of-1 evidence. ^[inferred]
 
 ## Read status
 

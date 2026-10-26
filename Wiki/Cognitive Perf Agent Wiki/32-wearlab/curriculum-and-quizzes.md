@@ -167,7 +167,7 @@ I compared WearLab's teaching with [[30-course/weeks/week-03-wearable-sensors-an
 ^[inferred]
 - **The no-game stance supports our wellness framing.** No streaks, scores or locks is a deliberate, tested choice from a teammate. It argues against adding streaks or points to our break suggestions, which could push students to over-comply or game the system. See [[08-frontend/student-interface-and-feedback|Student interface and feedback]] and [[24-synthesis/open-decisions|Open decisions]].
 - **Reusable onboarding content.** The HR, HRV, sleep and steps quizzes, especially items 3–8 above, could become a short "what your watch numbers can and can't tell you" onboarding. Linking the live `#/quiz/<id>` routes would cost nothing.
-- **Comprehension as an evaluation probe.** A few WearLab items could be adapted into pre/post questions measuring whether students understand the agent's rationale. See [[15-research/evaluation-plan|Evaluation plan]].
+- **Comprehension as an evaluation probe.** A few WearLab items could be adapted into pre/post questions measuring whether students understand the agent's rationale. See [[12-research/evaluation-plan|Evaluation plan]].
 - **Validator pattern.** The "every item has one home, every reference resolves" check is a cheap model for validating our policy rule tables and explanation templates in CI. See [[04-agent-engine/multi-agent-decision|Multi-agent decision]].
 - **Do not copy vendor bands.** WHOOP's 67/34 colour cut-offs are product rules, not science we should adopt. See [[21-concepts/recovery-and-strain|Recovery and strain]] and [[04-agent-engine/performance-model|Performance model]].
 

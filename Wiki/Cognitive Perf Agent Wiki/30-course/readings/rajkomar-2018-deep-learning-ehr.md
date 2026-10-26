@@ -51,7 +51,7 @@ updated: 2026-10-26T20:00:00Z
 
 - **Keep the raw record, not just engineered features.** Our [[05-data/data-pipeline|data pipeline]] should store raw-but-validated observations in a canonical schema, so later models can learn features we did not think of. ^[inferred]
 - We should not copy the deep-learning approach. We will have few students and few sessions, so the [[04-agent-engine/performance-model|performance model]]'s plan (rules, then regularised scikit-learn) fits our data better than sequence models. ^[inferred]
-- Their honest comparison against **simple clinical baselines** is a model for our [[15-research/evaluation-plan|evaluation plan]]: any watch-informed model must beat a "fixed break schedule" or "laptop-only" baseline. ^[inferred]
+- Their honest comparison against **simple clinical baselines** is a model for our [[12-research/evaluation-plan|evaluation plan]]: any watch-informed model must beat a "fixed break schedule" or "laptop-only" baseline. ^[inferred]
 - Attributions behind each prediction support the "show the reason and sources" rule in [[08-frontend/student-interface-and-feedback|student interface and feedback]]. ^[inferred]
 
 ## Read status

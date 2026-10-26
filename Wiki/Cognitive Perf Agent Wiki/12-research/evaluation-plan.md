@@ -1,6 +1,6 @@
 ---
 title: Evaluation Plan
-category: 15-research
+category: 12-research
 tags: [evaluation, research, ml]
 aliases: [experiment design, release gates, how we know it works]
 relationships:
@@ -58,7 +58,7 @@ Recommendation **acceptance is a process measure, not proof of benefit**. Someon
 
 ## Research ethics
 
-If the project involves human-subject research, work out the institutional review, consent, privacy and data-management requirements **before recruiting participants**. See [[13-trust-safety/privacy-and-consent|Privacy and consent]].
+If the project involves human-subject research, work out the institutional review, consent, privacy and data-management requirements **before recruiting participants**. See [[10-trust-safety/privacy-and-consent|Privacy and consent]].
 
 ## Sources
 

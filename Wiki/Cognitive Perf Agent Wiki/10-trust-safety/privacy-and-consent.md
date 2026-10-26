@@ -1,6 +1,6 @@
 ---
 title: Privacy and Consent
-category: 13-trust-safety
+category: 10-trust-safety
 tags: [privacy, security, ethics]
 aliases: [security, governance, data minimization]
 relationships:

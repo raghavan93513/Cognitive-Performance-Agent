@@ -83,7 +83,7 @@ A risk-by-risk check of our design ^[inferred]:
 | LLM09 Misinformation | Health-ish explanations | Wellness framing; cite records; allow abstaining |
 | LLM10 Unbounded consumption | LLM calls per session | Rate-limit decisions; budget alerts |
 
-- These controls live in [[04-agent-engine/multi-agent-decision|multi-agent decision]], [[13-trust-safety/privacy-and-consent|privacy and consent]] and [[14-engineering/deployment-and-operations|deployment and operations]]. The table is our self-assessment, not OWASP's. ^[inferred]
+- These controls live in [[04-agent-engine/multi-agent-decision|multi-agent decision]], [[10-trust-safety/privacy-and-consent|privacy and consent]] and [[11-engineering/deployment-and-operations|deployment and operations]]. The table is our self-assessment, not OWASP's. ^[inferred]
 - "Validate output with deterministic code" and "least privilege" are already core to our design. OWASP gives us standard names to use in the [[30-course/deliverables/part-3-final-showcase|final showcase]] safety story. ^[inferred]
 
 ## Read status

@@ -43,7 +43,7 @@ updated: 2026-10-26T20:00:00Z
 
 - Lightning-pitch hook candidate: "It noticed I'd been switching apps every 40 seconds for 20 minutes after a 5-hour night, and suggested a walk. My next quiz score went back up."
 - Demo path: a live study session, then a suggestion with its reason and sources, then a follow-up task. Fallback: a screen recording of the same path on synthetic data.
-- Poster: the 5-stage diagram from [[07-backend/system-architecture|System architecture]] and the results from the [[15-research/evaluation-plan|evaluation plan]].
+- Poster: the 5-stage diagram from [[07-backend/system-architecture|System architecture]] and the results from the [[12-research/evaluation-plan|evaluation plan]].
 
 ## Related
 

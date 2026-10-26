@@ -14,3 +14,4 @@ title: Wiki Log
 - [2026-10-26T21:50:00Z] INGEST source="wearlab (~/Desktop/Fitbit, read-only) + https://wearlab-learn.vercel.app" pages_created=20 pages_updated=14 mode=full folder=32-wearlab
 - [2026-10-26T22:15:00Z] DECISION adr="20-decisions/adr-001-reuse-wearlab-simulators-for-synthetic-data" status=accepted decider="Heramb Chaudhari" pages_created=2 pages_updated=6
 - [2026-10-26T22:40:00Z] RESTRUCTURE removed=10-landing-page,11-marketing,12-business,16-traction moved="12-business/competitive-landscape -> 24-synthesis/competitive-landscape" reason="not needed now" requested_by=user
+- [2026-10-26T22:55:00Z] RENUMBER 13-trust-safety->10-trust-safety 14-engineering->11-engineering 15-research->12-research 17-team->13-team requested_by=user

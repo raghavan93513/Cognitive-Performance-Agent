@@ -83,7 +83,7 @@ Concepts: [[21-concepts/ecg-and-atrial-fibrillation|ECG and AF]] · [[21-concept
 
 ## What this means for the Cognitive Performance Agent
 
-- Apple's health features that need regulatory clearance (ECG, irregular rhythm notifications) mark the line we must **not** cross. We are a wellness tool, not a diagnostic one, and our agent should never interpret rhythm or SpO2 as a medical finding. See [[13-trust-safety/privacy-and-consent|Privacy and consent]] and [[24-synthesis/competitive-landscape|Competitive landscape]]. ^[inferred]
+- Apple's health features that need regulatory clearance (ECG, irregular rhythm notifications) mark the line we must **not** cross. We are a wellness tool, not a diagnostic one, and our agent should never interpret rhythm or SpO2 as a medical finding. See [[10-trust-safety/privacy-and-consent|Privacy and consent]] and [[24-synthesis/competitive-landscape|Competitive landscape]]. ^[inferred]
 - Apple's 18-hour battery means the watch is likely off-wrist for charging at some point each day. Expect daily gaps in Apple-sourced data and record coverage per window. ^[inferred]
 
 ## Sources

@@ -55,7 +55,7 @@ Week 3 covers SpO₂ only as a polysomnography channel and a sleep-model input (
 
 ^[inferred]
 - **We don't use SpO₂.** It isn't in [[05-data/data-sources|Data sources]], and it has no plausible link to study focus in daytime windows. Keep it out of the performance model and the agents' prompts.
-- If a watch export includes overnight SpO₂, store it only as raw context, never interpret it, and never surface it to students. Low readings carry health-alarm risk that our wellness framing can't handle. → [[13-trust-safety/privacy-and-consent|Privacy and consent]]
+- If a watch export includes overnight SpO₂, store it only as raw context, never interpret it, and never surface it to students. Low readings carry health-alarm risk that our wellness framing can't handle. → [[10-trust-safety/privacy-and-consent|Privacy and consent]]
 - **The general lesson we do use:** quality gates need an *independent* motion signal. A self-consistency check on the measured signal can pass while the number is garbage. The same rule applies to our HR features. See [[32-wearlab/heart-signal-pipelines|Heart signal pipelines]].
 
 ## Sources

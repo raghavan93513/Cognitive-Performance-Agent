@@ -100,7 +100,7 @@ Every reading assigned on the course site, grouped by week. Each page covers the
    - For us: this supports the [[04-agent-engine/performance-model|performance model]]'s estimate-plus-uncertainty-or-abstain design, and using [[21-concepts/heart-rate-variability|HRV]] only as daily context. ^[inferred]
 2. **Accuracy is not impact.**
    - Rajkomar reports strong AUROCs, but Kelly (the "AI chasm") and Beede (field reality) show what lies between a good model and a useful one.
-   - For us: the [[15-research/evaluation-plan|evaluation plan]]'s randomised adaptive-vs-fixed comparison and abstain-rate tracking are the right response. ^[inferred]
+   - For us: the [[12-research/evaluation-plan|evaluation plan]]'s randomised adaptive-vs-fixed comparison and abstain-rate tracking are the right response. ^[inferred]
 3. **Bias enters through sensors, labels and proxies, not just through the data mix.**
    - Sjoding (sensor), Obermeyer (label), Kelly (confounders) and Buçinca (benefit depends on the user).
    - For us: audit outcomes by subgroup at equal scores, and treat the choice of target metric on [[24-synthesis/open-decisions|open decisions]] as an ethical decision. ^[inferred]

@@ -6,7 +6,7 @@ aliases: [data model, endpoints, schema]
 relationships:
   - target: "[[05-data/data-pipeline]]"
     type: related_to
-  - target: "[[13-trust-safety/privacy-and-consent]]"
+  - target: "[[10-trust-safety/privacy-and-consent]]"
     type: related_to
 sources: [System Design/Cognitive Performance Agent - System Design - Alexa Kafka.pdf, System Design/Cognitive_Performance_Architecture.pdf]
 summary: Proposed PostgreSQL entities (observations, predictions, recommendations, outcomes, consents…) and the illustrative /v1 REST endpoints from Alexa's design. Nothing is implemented yet.
@@ -66,7 +66,7 @@ The `observations` field-by-field schema is on [[05-data/data-pipeline|Data pipe
 
 ## Protections
 
-User-scoped parameterized queries, strict validation, row-level security as defence in depth, separate migration/service roles, and audit logs for consent changes, exports and deletions. See [[13-trust-safety/privacy-and-consent|Privacy and consent]].
+User-scoped parameterized queries, strict validation, row-level security as defence in depth, separate migration/service roles, and audit logs for consent changes, exports and deletions. See [[10-trust-safety/privacy-and-consent|Privacy and consent]].
 
 ## Sources
 

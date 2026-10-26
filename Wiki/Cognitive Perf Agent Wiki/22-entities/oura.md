@@ -78,7 +78,7 @@ Concepts: [[21-concepts/skin-temperature-trends|Skin temperature trends]] · [[2
 ## What this means for the Cognitive Performance Agent
 
 - Oura's whole product is **change from your own normal**, night after night. That is the framing our overnight-HRV and sleep features should use, not population thresholds. ^[inferred]
-- Daytime Stress and Symptom Radar mean Oura already makes "stress" and "you may be getting ill" claims. Our product should make neither. We predict study-task performance and suggest continue, walk or break, with sources or abstention. See [[24-synthesis/competitive-landscape|Competitive landscape]] and [[13-trust-safety/privacy-and-consent|Privacy and consent]]. ^[inferred]
+- Daytime Stress and Symptom Radar mean Oura already makes "stress" and "you may be getting ill" claims. Our product should make neither. We predict study-task performance and suggest continue, walk or break, with sources or abstention. See [[24-synthesis/competitive-landscape|Competitive landscape]] and [[10-trust-safety/privacy-and-consent|Privacy and consent]]. ^[inferred]
 
 ## Sources
 

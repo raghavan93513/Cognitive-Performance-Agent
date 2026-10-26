@@ -61,7 +61,7 @@ This is the **week 9 lab notebook**: the five-part structure taught in class (pr
 - [ ] Data access plan: Fitbit via the course OAuth helper or the synthetic path, plus the laptop collector → [[05-data/data-sources|Data sources]]
 - [ ] Architecture sketch on one slide → [[07-backend/system-architecture|System architecture]]
 - [ ] Storyboard + user flow + low-fi suggestion card from the Oct 30 studio → [[08-frontend/student-interface-and-feedback|Student interface]]
-- [ ] Evaluation: adaptive vs fixed breaks, classmate pilot → [[15-research/evaluation-plan|Evaluation plan]]
+- [ ] Evaluation: adaptive vs fixed breaks, classmate pilot → [[12-research/evaluation-plan|Evaluation plan]]
 - [ ] Timeline to Dec 11 with an integration checkpoint at week 13 → [[02-product/roadmap|Roadmap]]
 - [ ] Answer "when do we escalate to a human?" (a course criterion we haven't covered) → [[30-course/project-requirements|Requirements gap check]]
 - [ ] Two feedback questions to end on

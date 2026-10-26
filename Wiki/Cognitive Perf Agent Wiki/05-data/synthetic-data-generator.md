@@ -39,7 +39,7 @@ updated: 2026-10-26T22:15:00Z
 - **Real data alone can't test us.** With real students we never know the true cause of a bad study session. A generator with a **hidden ground truth** lets us check two things: whether our pipeline, model and agents recover an effect we planted, and whether they correctly find *nothing* when we plant nothing. ^[inferred]
 - **It exercises the failure paths.** Charging gaps, missing nights, sync lag, duplicate uploads and cadence-locked HR are rare in a short pilot but certain in production. ^[inferred]
 
-**Non-goals.** This data never supports an accuracy or effectiveness claim. Every record says it's synthetic, and the UI shows a "Synthetic data" badge. → [[15-research/evaluation-plan|Evaluation plan]]
+**Non-goals.** This data never supports an accuracy or effectiveness claim. Every record says it's synthetic, and the UI shows a "Synthetic data" badge. → [[12-research/evaluation-plan|Evaluation plan]]
 
 ## What it produces: one simulated student, day by day
 
@@ -84,7 +84,7 @@ Each minute, the simulated student has a latent **cognitive readiness** that dri
 
 Every effect size is a parameter, and there are three standard worlds:
 1. **Plausible world:** effects set from published typical sizes.
-2. **Null world:** watch signals have *zero* effect on readiness. Our model must not "find" one. This protects the core hypothesis test in [[15-research/evaluation-plan|Evaluation plan]].
+2. **Null world:** watch signals have *zero* effect on readiness. Our model must not "find" one. This protects the core hypothesis test in [[12-research/evaluation-plan|Evaluation plan]].
 3. **Laptop-only world:** only behaviour matters, which tests the laptop-only fallback model in [[04-agent-engine/performance-model|Performance model]].
 
 ## Scenarios (named, seeded, reproducible)

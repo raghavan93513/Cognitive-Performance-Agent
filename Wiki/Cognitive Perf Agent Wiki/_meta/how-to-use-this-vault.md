@@ -21,7 +21,7 @@ updated: 2026-10-26T20:00:00Z
 | Understand the product in 5 minutes | `01-foundation/project-overview` |
 | Prepare for the next class deliverable | `30-course/30-course` (the "Next up" box) |
 | Study for a quiz | `30-course/weeks/` (each page ends with "Likely quiz material") |
-| Build something | The domain hub: `04`–`08`, then `14-engineering` |
+| Build something | The domain hub: `04`–`08`, then `11-engineering` |
 | Make or look up a decision | `24-synthesis/open-decisions`, then `20-decisions` |
 | Find a slide deck we made | `31-decks` |
 
@@ -29,7 +29,7 @@ The links behind each row: [[01-foundation/project-overview|Project overview]] �
 
 ## How it's organised
 
-- **`01`–`17` — the company.** One folder per domain, read in order. Each folder's hub page has the same name as the folder (e.g. `05-data/05-data`) and is that domain's front door.
+- **`01`–`13` — the company.** One folder per domain, read in order. Each folder's hub page has the same name as the folder (e.g. `05-data/05-data`) and is that domain's front door.
 - **`20`–`25` — the knowledge layer.** Decisions, concepts, entities, references, synthesis and the journal. Domains link *into* these instead of repeating them.
 - **`30`–`32` — context.** The course we're building this in, every deck we've made, and [[32-wearlab/32-wearlab|WearLab]], our earlier product.
 - **`attachments/`** holds original files that pages embed. **`_meta/`** holds conventions, the tag list and templates. **`_raw/`, `_staging/`, `_archives/`** are framework working folders.

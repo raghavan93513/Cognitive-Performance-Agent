@@ -50,9 +50,9 @@ updated: 2026-10-26T20:00:00Z
 
 ## What this means for us
 
-- **Metrics students can understand:** the [[15-research/evaluation-plan|evaluation plan]] should report outcomes in plain terms, such as how often a "take a walk" suggestion was followed by better task accuracy, alongside precision and recall at our operating threshold, not AUROC alone. ^[inferred]
+- **Metrics students can understand:** the [[12-research/evaluation-plan|evaluation plan]] should report outcomes in plain terms, such as how often a "take a walk" suggestion was followed by better task accuracy, alongside precision and recall at our operating threshold, not AUROC alone. ^[inferred]
 - **Prospective beats retrospective:** our planned randomised sessions (adaptive vs fixed breaks) are the small-scale equivalent of Kelly's gold standard. Retrospective "the model predicted dips" results alone would not show impact. ^[inferred]
-- **Dataset shift is built in:** students' routines change across the semester and exam periods. The [[04-agent-engine/performance-model|performance model]] needs drift checks and a retraining policy, and [[14-engineering/deployment-and-operations|deployment and operations]] should monitor prediction error over time. ^[inferred]
+- **Dataset shift is built in:** students' routines change across the semester and exam periods. The [[04-agent-engine/performance-model|performance model]] needs drift checks and a retraining policy, and [[11-engineering/deployment-and-operations|deployment and operations]] should monitor prediction error over time. ^[inferred]
 - **Confounders:** time of day, caffeine and task difficulty can all drive both watch signals and accuracy. The study task should control difficulty, or the model may learn "afternoon" instead of "fatigue". ^[inferred]
 - Interpretability and human barriers support the rule to show the reason and sources in [[08-frontend/student-interface-and-feedback|student interface and feedback]]. ^[inferred]
 

@@ -56,7 +56,7 @@ updated: 2026-10-26T20:00:00Z
 - **Steal the patterns, not the product:** ^[inferred]
   - **Partition and query by participant-day.** Our features (overnight HRV, daily sleep, session windows) are naturally per participant per day or session.
   - **Precompute rollups.** Daily and session features in a materialised table mean the [[04-agent-engine/performance-model|performance model]] never scans raw minute data at decision time.
-  - **Retention policies.** Delete or coarsen raw high-frequency data after features are computed. This supports data minimisation in [[13-trust-safety/privacy-and-consent|privacy and consent]].
+  - **Retention policies.** Delete or coarsen raw high-frequency data after features are computed. This supports data minimisation in [[10-trust-safety/privacy-and-consent|privacy and consent]].
   - **Handle late-arriving data.** Watch syncs arrive late, so the [[05-data/data-pipeline|data pipeline]] must accept back-filled windows.
   - **A data-service boundary.** Clients talk to our API, never to the database, which matches [[07-backend/system-architecture|system architecture]].
 - Since TimescaleDB is a Postgres extension, it remains an easy upgrade path if needed. ^[inferred]
