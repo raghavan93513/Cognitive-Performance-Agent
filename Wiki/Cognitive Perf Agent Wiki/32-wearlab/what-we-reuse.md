@@ -89,12 +89,11 @@ WearLab's **sourcing rules** carry over to our evidence corpus too: take the uni
 ## 6. Product, market and design
 
 - **Key on data types, not device models.** Hardware ships switched off and wakes later (SpO₂, ECG), and features get switched off (Apple Blood Oxygen in the US, 2024–25, after a court ruling). So decide per user, per day, which data types are actually present. → [[05-data/data-sources|Data sources]]
-- **Positioning.** Every brand already covers the physiological core: optical HR, HRV, sleep, temperature, SpO₂. Our difference has to be laptop context, measured study-task performance, and sourced suggestions that can abstain. → [[12-business/competitive-landscape|Competitive landscape]]
+- **Positioning.** Every brand already covers the physiological core: optical HR, HRV, sleep, temperature, SpO₂. Our difference has to be laptop context, measured study-task performance, and sourced suggestions that can abstain. → [[24-synthesis/competitive-landscape|Competitive landscape]]
 - **"Learn why" deep links.** Every WearLab topic and quiz has a stable hash route, e.g. `https://wearlab-learn.vercel.app/#/how/hrv`. A suggestion's rationale could link "why your watch's overnight HRV matters" straight to the explainer, turning each nudge into a chance to learn. → [[32-wearlab/product-tour|Product tour]]
 - **A UI starter.** The React 19 + Vite + Tailwind v4 + zustand stack is teammate-built and deployed, so it's a ready template for our frontend if we go web or Electron + React. → [[07-backend/tech-stack|Tech stack]]
 - **Explain cards.** WearLab's What / Simple / Like… / Deep dive card is a good shape for our "why this suggestion" panel. → [[32-wearlab/teardowns-and-parts|Teardowns and parts]], [[08-frontend/student-interface-and-feedback|Student interface]]
 - **Design language and the no-game stance.** WearLab's dark theme, chunky UI and "quiet ✓, no streaks" approach suit a tool that shouldn't nag students. → [[32-wearlab/architecture|Architecture]], [[32-wearlab/curriculum-and-quizzes|Curriculum and quizzes]], [[09-design/09-design|Design]]
-- **Marketing.** WearLab is an education-led front door: a free, shareable explainer that could funnel curious students to the agent. → [[11-marketing/11-marketing|Marketing]]
 - **Engineering habits worth keeping.** Plain-TypeScript models tested headless, and a validator that checks every cross-reference. → [[14-engineering/14-engineering|Engineering]]
 
 ## Gaps WearLab doesn't cover

@@ -6,7 +6,7 @@ aliases: [Time Machines, brand Time Machines, Compare brands, WearLab brand hist
 relationships:
   - target: "[[32-wearlab/32-wearlab]]"
     type: related_to
-  - target: "[[12-business/competitive-landscape]]"
+  - target: "[[24-synthesis/competitive-landscape]]"
     type: related_to
   - target: "[[22-entities/fitbit]]"
     type: related_to
@@ -276,7 +276,7 @@ These are built from the arrivals and checked by the test. They name the four bi
 - **The sourcing discipline transfers directly.** Our Evidence agent and our wiki should work the same way: a union of named sources, carry over rather than guess, flag illustrative values, and generate sentences only from data that a test checks. `insights()` is a small, readable model for "claims true by construction". ^[inferred]
 - **"Asleep" hardware is a data-availability lesson.** Sensors can ship before their features (SpO2, ECG), and a feature can be switched off by a court ruling (Apple Blood Oxygen in the US, 2024–2025). Our pipeline should key on *which data types are actually present for this user and date*, not on the device model. See [[05-data/data-sources|Data sources]]. ^[inferred]
 - **Personal-baseline readings are now the norm.** Oura's temperature, WHOOP's Stress Monitor (two-week normal) and Garmin's HRV Status ("against your normal") all compare you to your own baseline. Our model already plans to, on [[04-agent-engine/performance-model|Performance model]]. ^[inferred]
-- **Market context lives elsewhere.** The capability table above feeds [[12-business/competitive-landscape|Competitive landscape]]. What we can lift from WearLab is on [[32-wearlab/what-we-reuse|What we reuse]]. ^[inferred]
+- **Market context lives elsewhere.** The capability table above feeds [[24-synthesis/competitive-landscape|Competitive landscape]]. What we can lift from WearLab is on [[32-wearlab/what-we-reuse|What we reuse]]. ^[inferred]
 
 ## Sources
 

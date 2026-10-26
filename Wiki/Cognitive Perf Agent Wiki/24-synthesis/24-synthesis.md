@@ -18,6 +18,7 @@ updated: 2026-10-26T20:00:00Z
 
 ## Pages
 
+- [[24-synthesis/competitive-landscape|Competitive landscape]] — Fitbit, WHOOP, Oura, Garmin, Apple: who measures what, and how we differ
 - [[24-synthesis/design-comparison|Design comparison]] — Lean desktop pilot vs production plan
 - [[24-synthesis/open-decisions|Open decisions]] — Decisions the team must make before building
 

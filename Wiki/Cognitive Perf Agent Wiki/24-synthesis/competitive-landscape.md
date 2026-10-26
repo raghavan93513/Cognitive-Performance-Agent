@@ -1,11 +1,9 @@
 ---
 title: Competitive landscape
-category: 12-business
-tags: [business, competitor, wearables, marketing, synthesis]
+category: 24-synthesis
+tags: [competitor, wearables, synthesis]
 aliases: [competitors, market landscape, wearable market, positioning]
 relationships:
-  - target: "[[12-business/12-business]]"
-    type: related_to
   - target: "[[32-wearlab/brand-histories]]"
     type: derived_from
   - target: "[[01-foundation/project-overview]]"
@@ -29,7 +27,7 @@ lifecycle: draft
 lifecycle_changed: 2026-10-26
 tier: core
 created: 2026-10-26T21:30:00Z
-updated: 2026-10-26T21:30:00Z
+updated: 2026-10-26T22:40:00Z
 ---
 
 # Competitive landscape
@@ -120,7 +118,7 @@ WearLab covers only device makers. These categories compete for the same "help m
 - **OS-level wellbeing tools** (screen-time dashboards, break reminders). ^[inferred]
 - **The brands' own coaching layers** (e.g. AI coaches inside WHOOP, Oura or Garmin apps): not covered by WearLab's hardware catalogs. ^[inferred]
 
-Next step: a short desk review of each, covering what it measures, what it recommends, and whether it validates against performance. Track it on [[12-business/12-business|Business hub]]. ^[inferred]
+Next step: a short desk review of each, covering what it measures, what it recommends, and whether it validates against performance. Track it in [[24-synthesis/open-decisions|Open decisions]] if it becomes a question for the proposal. ^[inferred]
 
 ## What this means for the Cognitive Performance Agent
 

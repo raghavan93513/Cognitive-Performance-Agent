@@ -1,6 +1,6 @@
 ---
 title: Hot Cache
-updated: 2026-10-26T22:15:00Z
+updated: 2026-10-26T22:40:00Z
 ---
 
 # Hot Cache
@@ -9,9 +9,9 @@ updated: 2026-10-26T22:15:00Z
 
 ## Recent Activity
 
+- [2026-10-26] **Trimmed the company side.** Removed landing page, marketing, business and traction (not needed now). Competitive landscape kept, moved to [[24-synthesis/competitive-landscape]].
 - [2026-10-26] **First decision: ADR-001.** We reuse WearLab's simulators for synthetic data. The plan is in [[05-data/synthetic-data-generator]]: seeded student days with a hidden ground truth, plausible, null and laptop-only worlds, 10 scenarios, and milestones to Dec 11.
 - [2026-10-26] **Ingested WearLab** (Heramb's 3D wearables-explainer app) into a new `32-wearlab` folder. It added 8 product and pipeline pages, 6 new concept pages (SpO₂, ECG/AF, step counting, sleep staging, recovery/strain, temperature trends), 5 brand pages, a competitive landscape, and a reuse plan. All WearLab tests pass read-only.
-- [2026-10-26] **Restructured into a startup-style vault.** It now has 17 company domains (01–17), a knowledge layer (20–25) and context (30 course, 31 decks), with a hub page per folder. The 22 existing pages moved and their links were rewritten.
 
 ## Active Threads
 

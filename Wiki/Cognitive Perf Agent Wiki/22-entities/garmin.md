@@ -6,7 +6,7 @@ aliases: [Garmin Forerunner, Garmin fēnix, Garmin fenix, Garmin Connect]
 relationships:
   - target: "[[32-wearlab/brand-histories]]"
     type: derived_from
-  - target: "[[12-business/competitive-landscape]]"
+  - target: "[[24-synthesis/competitive-landscape]]"
     type: related_to
   - target: "[[21-concepts/recovery-and-strain]]"
     type: related_to
@@ -84,7 +84,7 @@ Concepts: [[21-concepts/heart-rate-variability|HRV]] · [[21-concepts/recovery-a
 
 ## What this means for the Cognitive Performance Agent
 
-- Garmin is the main athlete-side competitor. Training Readiness, HRV Status and Body Battery already answer "how ready am I today?" for training. If our athlete use case stays in scope ([[24-synthesis/open-decisions|Open decisions]] #10), we need a clear answer on how ours differs: task-measured performance and in-session suggestions, rather than a morning score. See [[12-business/competitive-landscape|Competitive landscape]]. ^[inferred]
+- Garmin is the main athlete-side competitor. Training Readiness, HRV Status and Body Battery already answer "how ready am I today?" for training. If our athlete use case stays in scope ([[24-synthesis/open-decisions|Open decisions]] #10), we need a clear answer on how ours differs: task-measured performance and in-session suggestions, rather than a morning score. See [[24-synthesis/competitive-landscape|Competitive landscape]]. ^[inferred]
 - Connect+ shows Garmin putting extra insights behind a subscription, which tells us where the market expects to charge. ^[inferred]
 
 ## Sources

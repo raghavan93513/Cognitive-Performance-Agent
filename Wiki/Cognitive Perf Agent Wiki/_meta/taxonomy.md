@@ -67,11 +67,7 @@ Canonical tags for this vault. Use these before inventing new ones; max 5 per pa
 | `product` | Product scope and features |
 | `users` | Users, personas, research |
 | `foundation` | Vision, principles |
-| `landing-page` | Public site |
-| `marketing` | Positioning, channels |
-| `business` | Business model, market |
 | `engineering` | Build and run |
-| `traction` | Metrics and growth |
 | `journal` | Dated notes |
 | `meeting` | Meeting notes |
 | `deck` | Decks we produced |

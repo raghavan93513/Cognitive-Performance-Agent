@@ -50,7 +50,7 @@ updated: 2026-10-26T21:30:00Z
 
 WearLab matters to the [[01-foundation/project-overview|Cognitive Performance Agent]] in three ways: ^[inferred]
 
-1. **A product we already shipped.** It shows the team can build polished, sourced, plain-language health-tech UX. That's useful for the proposal, the showcase and the landing page. → [[11-marketing/11-marketing|Marketing]], [[17-team/17-team|Team]]
+1. **A product we already shipped.** It shows the team can build polished, sourced, plain-language health-tech UX. That's useful for the proposal and the showcase. → [[17-team/17-team|Team]]
 2. **A tested knowledge base about the exact signals we use.** Its PPG, HRV, sleep-staging, step-counting, recovery and temperature pipelines are plain TypeScript with headless tests. They're the most detailed explanation we have of how our input numbers are made and where they break. → [[32-wearlab/heart-signal-pipelines|Heart-signal pipelines]], [[32-wearlab/motion-sleep-recovery-pipelines|Motion, sleep and recovery pipelines]]
 3. **Reusable assets.** Its simulators can generate synthetic wearable data, its sourced brand histories map the competition, and its explain-card pattern and design language can carry over. → [[32-wearlab/what-we-reuse|What we reuse]]
 
@@ -68,7 +68,7 @@ WearLab matters to the [[01-foundation/project-overview|Cognitive Performance Ag
 Knowledge it fed elsewhere:
 - **Concepts:** [[21-concepts/photoplethysmography|PPG]] · [[21-concepts/heart-rate-variability|HRV]] · [[21-concepts/blood-oxygen-spo2|SpO₂]] · [[21-concepts/ecg-and-atrial-fibrillation|ECG and AF]] · [[21-concepts/step-counting|Step counting]] · [[21-concepts/sleep-staging|Sleep staging]] · [[21-concepts/recovery-and-strain|Recovery and strain]] · [[21-concepts/skin-temperature-trends|Skin temperature trends]]
 - **Brands:** [[22-entities/fitbit|Fitbit]] · [[22-entities/whoop|WHOOP]] · [[22-entities/oura|Oura]] · [[22-entities/garmin|Garmin]] · [[22-entities/apple-watch|Apple Watch]]
-- **Market:** [[12-business/competitive-landscape|Competitive landscape]]
+- **Market:** [[24-synthesis/competitive-landscape|Competitive landscape]]
 
 ## A look inside
 

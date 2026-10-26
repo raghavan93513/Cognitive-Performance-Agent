@@ -8,7 +8,7 @@ relationships:
     type: derived_from
   - target: "[[21-concepts/recovery-and-strain]]"
     type: related_to
-  - target: "[[12-business/competitive-landscape]]"
+  - target: "[[24-synthesis/competitive-landscape]]"
     type: related_to
 sources:
   - "wearlab/src/timemachine/whoops.ts"
@@ -75,7 +75,7 @@ Concepts: [[21-concepts/recovery-and-strain|Recovery and strain]] · [[21-concep
 
 ## What this means for the Cognitive Performance Agent
 
-- WHOOP is the **closest positioning neighbour**: it already tells users how "recovered" they are and when they are "stressed". A reviewer will ask how we differ. Our answer is that we measure *performance on a study task*, use laptop behaviour, and recommend a specific short action with sources, or abstain. See [[12-business/competitive-landscape|Competitive landscape]]. ^[inferred]
+- WHOOP is the **closest positioning neighbour**: it already tells users how "recovered" they are and when they are "stressed". A reviewer will ask how we differ. Our answer is that we measure *performance on a study task*, use laptop behaviour, and recommend a specific short action with sources, or abstain. See [[24-synthesis/competitive-landscape|Competitive landscape]]. ^[inferred]
 - The Stress Monitor's design (HR + HRV against a **two-week personal normal**, with motion removed) is a useful reference for our own baseline features on [[04-agent-engine/performance-model|Performance model]]. ^[inferred]
 - The membership model shows that people pay monthly for interpretation, not hardware. ^[inferred]
 

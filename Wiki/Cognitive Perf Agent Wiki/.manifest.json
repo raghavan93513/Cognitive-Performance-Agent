@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-10-26T21:50:00Z",
+  "last_updated": "2026-10-26T22:40:00Z",
   "sources": {
     "/Users/herambchaudhari/Desktop/Cognitive Perf agent/Cognitive-Performance-Agent/README.md": {
       "content_hash": "7312f79068989a34946c8afeb6519351b4b949ff2a79f5f65a3b11c92659b98b",
@@ -393,7 +393,7 @@
         "22-entities/oura.md",
         "22-entities/garmin.md",
         "22-entities/apple-watch.md",
-        "12-business/competitive-landscape.md"
+        "24-synthesis/competitive-landscape.md"
       ],
       "project": "wearlab",
       "source_type": "code",
@@ -415,7 +415,7 @@
   },
   "stats": {
     "total_sources_ingested": 29,
-    "total_pages": 136,
+    "total_pages": 134,
     "total_projects": 2,
     "last_full_rebuild": null
   }

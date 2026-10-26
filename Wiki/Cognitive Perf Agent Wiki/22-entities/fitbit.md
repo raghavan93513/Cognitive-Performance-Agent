@@ -6,7 +6,7 @@ aliases: [Fitbit (Google), Fitbit Charge, Fitbit Sense, Fitbit Versa]
 relationships:
   - target: "[[32-wearlab/brand-histories]]"
     type: derived_from
-  - target: "[[12-business/competitive-landscape]]"
+  - target: "[[24-synthesis/competitive-landscape]]"
     type: related_to
   - target: "[[05-data/data-sources]]"
     type: related_to
@@ -85,7 +85,7 @@ Concepts: [[21-concepts/photoplethysmography|PPG]] · [[21-concepts/heart-rate-v
 
 ## What this means for the Cognitive Performance Agent
 
-- Fitbit is our **data supplier, not our competitor**: it measures the body, and we add laptop behaviour, study-task results and an action. See [[12-business/competitive-landscape|Competitive landscape]]. ^[inferred]
+- Fitbit is our **data supplier, not our competitor**: it measures the body, and we add laptop behaviour, study-task results and an action. See [[24-synthesis/competitive-landscape|Competitive landscape]]. ^[inferred]
 - Fitbit's own history (sleep stages, SpO2 and ECG arriving by update) suggests that what Google Health returns for a given device can change over time. Our pipeline should record data types present per user per day rather than assume them from the model name. ^[inferred]
 
 ## Sources
