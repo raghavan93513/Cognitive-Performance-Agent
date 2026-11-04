@@ -21,6 +21,7 @@ updated: 2026-10-26T20:00:00Z
 ## Pages
 
 - [[12-research/evaluation-plan|Evaluation plan]] — Randomized adaptive vs fixed breaks; release gates
+- [[12-research/science-and-tech-evidence|Science and tech evidence]] — how strong the evidence for breaks, sleep, HRV and adaptive timing is; data access after the Fitbit API turn-off; LLM agent failures; what a small pilot can show
 
 ## Planned pages
 

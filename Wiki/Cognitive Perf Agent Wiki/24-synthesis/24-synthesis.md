@@ -19,6 +19,8 @@ updated: 2026-10-26T20:00:00Z
 ## Pages
 
 - [[24-synthesis/competitive-landscape|Competitive landscape]] — Fitbit, WHOOP, Oura, Garmin, Apple: who measures what, and how we differ
+- [[24-synthesis/market-map|Market map]] — markets and allied markets, who pays, our users in numbers, GTM patterns, retention benchmarks, recent changes
+- [[24-synthesis/casebook|Casebook]] — case studies, good and bad (WHOOP, Oura, Rise, Halo, Pear, Woebot, Flo, Epic Sepsis…) and the lesson for us from each
 - [[24-synthesis/design-comparison|Design comparison]] — Lean desktop pilot vs production plan
 - [[24-synthesis/open-decisions|Open decisions]] — Decisions the team must make before building
 
