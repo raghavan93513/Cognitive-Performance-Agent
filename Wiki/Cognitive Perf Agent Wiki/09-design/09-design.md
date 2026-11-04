@@ -9,29 +9,38 @@ lifecycle: draft
 lifecycle_changed: 2026-10-26
 tier: core
 created: 2026-10-26T20:00:00Z
-updated: 2026-10-26T20:00:00Z
+updated: 2026-11-05T02:10:00Z
 ---
 
 # 09 · Design
 
 > **Answers:** How it looks, feels and earns trust.
 
-**Status (2026-10-26):** Nothing yet. Course week 8 is the design studio.
+**Status (2026-11-04):** No screens yet. The design toolkit is ready: a quality bar with the U1–U8 rubric, `/uiux`, `/mockup`, `/crit`, `/teardown` and `tools/qa/device-walk.mjs`.
 
 ## Pages
 
+- [[09-design/ui-ux-quality-bar|UI and UX quality bar]] — the checklist and U1–U8 rubric every screen passes
+- [[09-design/design-stack-and-resources|Design stack and resources]] — which libraries, AI design skills and inspiration sites we use or skip, and why
+- `design/PRODUCT.md` (in the repo, outside the wiki) — the one-page design brief every design skill reads first
+- [[09-design/design-crit-log|Design crit log]] — taste log plus designer vs blind crit scores
+- [[09-design/design-evidence|Design evidence]] — research on scores, nudges, uncertainty, escalation, consent and athletes, 8 design failures, 12 rules for our screens
+- [[09-design/steal-library|Steal library]] — mechanisms worth taking from other products, plus anti-steals
+- [[09-design/studies/design-studies|Design studies]] — 9 deep studies of ~60 products (wearables, Apple, indie health, student apps, focus tools, calm apps, uncertainty, navigation/money/sport, craft and privacy) and the rules they agree on, screen by screen
+- [[09-design/screen-gallery|Screen gallery]] — screenshots of every state (empty until screens exist)
+- [[09-design/designer-evals|Designer evals]] — trap prompts for the designer persona
+- [[09-design/team-prototypes-week-8|Team prototypes, week 8 lab]] — what Raghavan, Alexa and Yulee each prototyped (archive, not a reference)
 - [[32-wearlab/architecture|WearLab design language]] — dark theme, chunky UI, explain cards, no-game stance (a starting point)
 
 ## Planned pages
 
 *Not written yet. Create them from `_meta/templates/` when the work starts.*
 
-- UX principles
 - Showing uncertainty
 - Storyboard
 - Core user flow
 - Low-fi prototype
-- Design system
+- Design system (`design/DESIGN.md`, once the team picks a direction)
 - Visual identity
 
 ## Related

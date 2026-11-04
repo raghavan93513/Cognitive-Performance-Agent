@@ -1,0 +1,8 @@
+[
+  {"shot": "first-screen", "note": "the card as it first appears"},
+  {"click": "text:Why?", "ms": 5000},
+  {"shot": "reason-open", "note": "opened the reason and sources"},
+  {"click": "text:Snooze"},
+  {"waitFor": "text:Snoozed", "ms": 5000},
+  {"shot": "snoozed", "note": "tapped Snooze"}
+]

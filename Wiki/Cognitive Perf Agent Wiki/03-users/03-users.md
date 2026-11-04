@@ -9,14 +9,19 @@ lifecycle: draft
 lifecycle_changed: 2026-10-26
 tier: core
 created: 2026-10-26T20:00:00Z
-updated: 2026-10-26T20:00:00Z
+updated: 2026-11-04T23:00:00Z
 ---
 
 # 03 · Users
 
 > **Answers:** Who this is for, what they need, what they told us.
 
-**Status (2026-10-26):** No user research yet. The course rewards evaluation with real users (classmates count).
+**Status (2026-11-04):** No user research yet. The course rewards evaluation with real users (classmates count). Five **synthetic** persona testers now exist for rehearsing reviews; they are not research.
+
+## Pages
+
+- [[03-users/personas/icp-personas|ICP Personas]] — five synthetic student and athlete testers run by `/icp` (fiction, never evidence)
+- [[03-users/ux-research-plan|UX research plan]] — interviews, think-aloud tests and a short diary with real classmates (proposal)
 
 ## Planned pages
 
@@ -25,7 +30,6 @@ updated: 2026-10-26T20:00:00Z
 - Persona — undergraduate studying for exams
 - Persona — student-athlete
 - Jobs to be done
-- Interview guide
 - Interview log
 - Usability test log
 - Feedback inbox

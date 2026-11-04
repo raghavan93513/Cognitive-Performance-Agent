@@ -1,0 +1,15 @@
+.DS_Store
+
+# Per-machine Claude Code notes and local settings (see CLAUDE.md)
+.claude/checkpoints/
+.claude/settings.local.json
+
+# Screenshots and raw captures from /icp, /crit, /mockup and /teardown: never committed
+.icp-tests/
+.crits/
+.teardowns/
+
+# Secrets and real data never go in this public repo
+.env
+.env.*
+*.pem

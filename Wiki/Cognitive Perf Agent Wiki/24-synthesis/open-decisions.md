@@ -19,7 +19,7 @@ lifecycle: draft
 lifecycle_changed: 2026-10-26
 tier: core
 created: 2026-10-26T19:30:00Z
-updated: 2026-10-26T22:15:00Z
+updated: 2026-11-05T01:00:00Z
 ---
 
 # Open Decisions
@@ -31,7 +31,7 @@ Questions the two design documents leave open or answer differently. Update this
 1. **Scope of the first build.** Lean desktop pilot or mobile + web + desktop? → [[24-synthesis/design-comparison|Design comparison]] ^[ambiguous]
 2. **The study task.** Which single repeatable task produces the performance labels (e.g. timed quiz, coding exercise, reading comprehension)? It is step 1 of the [[02-product/roadmap|roadmap]], and nothing else can be validated without it. ^[inferred]
 3. **The prediction target and threshold.** The exact outcome (e.g. accuracy dropping below X in the next interval) must be pre-registered. → [[04-agent-engine/performance-model|Performance model]]
-4. **Watch integration.** Google Health, HealthKit or Health Connect, and which physical device(s) the participants will wear. → [[05-data/data-sources|Data sources]] ^[ambiguous]
+4. **Watch integration.** Google Health, HealthKit or Health Connect, and which physical device(s) the participants will wear. → [[05-data/data-sources|Data sources]] ^[ambiguous] **Input 2026-11-05 (Heramb):** the target users are **US college students on iPhones**, so Health Connect (Android) drops out. That leaves two routes. **Apple Watch** data lives in **HealthKit**, which has no web or cloud API: reading it needs a native iOS app (or a small companion app, or user exports). **Fitbit, Garmin, Oura and Whoop** sync to their own cloud APIs, which a web or Electron app can read with OAuth, whatever phone the user has. This is still the team's call; `/decide` it with the course loaner Fitbit and the Dec 11 deadline in mind. ^[inferred] **New fact 2026-11-04 (checked on Google's page):** the **Fitbit Web API was turned off on 2 Nov 2026** (calls return `410 Gone`). Fitbit data now goes through the **Google Health API**, where most scopes are restricted and unverified apps are capped at 100 users. In Testing mode, refresh tokens reportedly expire after 7 days, which needs verifying. Sync is about every 15 minutes, and every user must re-consent. The cloud limits per vendor: Oura allows 10 users before approval and needs a membership; WHOOP's sandbox allows 10; Garmin business access is reportedly paused. Details: [[12-research/science-and-tech-evidence|Science and tech evidence]] §0 and §6.
 5. **What the Evidence agent retrieves.** Personal history (SQL), a curated research corpus (pgvector), or both. → [[04-agent-engine/multi-agent-decision|Multi-agent decision]] ^[ambiguous]
 6. **Target desktop OS.** The foreground-app adapter is OS-specific, and Alexa notes the duration depends on it. ^[inferred]
 7. **Background jobs.** Postgres task list or a managed queue. → [[05-data/data-pipeline|Data pipeline]] ^[ambiguous]

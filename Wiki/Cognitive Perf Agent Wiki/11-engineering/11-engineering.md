@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-10-26
 tier: core
 created: 2026-10-26T20:00:00Z
-updated: 2026-10-26T20:00:00Z
+updated: 2026-11-04T22:40:00Z
 ---
 
 # 11 · Engineering
@@ -21,6 +21,7 @@ updated: 2026-10-26T20:00:00Z
 ## Pages
 
 - [[11-engineering/deployment-and-operations|Deployment and operations]] — Environments, CI/CD, SLOs, monitoring, scaling
+- [[11-engineering/ai-skills|AI skills toolkit]] — the nine Claude Code skills (`/decide`, `/plan-review`, `/algo`, `/icp`, `/review`, `/security`, `/checkpoint`, `/restore`, `/prompt-motion`) and what each writes
 
 ## Planned pages
 

@@ -1,0 +1,82 @@
+{
+  "browser": {
+    "mode": "launch",
+    "executable_path": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+  },
+  "start_url": {
+    "url": "https://example.com/"
+  },
+  "capture": {
+    "network": {
+      "response_body": true
+    },
+    "events": [
+      "network",
+      "console",
+      "page-errors"
+    ],
+    "at_end": [
+      "url",
+      "screenshot",
+      "dom"
+    ],
+    "limits": {
+      "max_network_body_bytes": 4194304,
+      "max_network_body_allocation_bytes": 67108864,
+      "max_event_allocation_bytes": 33554432,
+      "max_total_event_allocation_bytes": 268435456
+    }
+  },
+  "actions": [
+    {
+      "step_id": "settle",
+      "action": "wait_for_timeout",
+      "duration_ms": 2500
+    },
+    {
+      "step_id": "scroll-1",
+      "action": "press",
+      "locator": {
+        "kind": "css",
+        "selector": "body"
+      },
+      "key": "PageDown"
+    },
+    {
+      "step_id": "watch-1",
+      "action": "wait_for_timeout",
+      "duration_ms": 1200
+    },
+    {
+      "step_id": "scroll-2",
+      "action": "press",
+      "locator": {
+        "kind": "css",
+        "selector": "body"
+      },
+      "key": "PageDown"
+    },
+    {
+      "step_id": "watch-2",
+      "action": "wait_for_timeout",
+      "duration_ms": 1200
+    },
+    {
+      "step_id": "to-end",
+      "action": "press",
+      "locator": {
+        "kind": "css",
+        "selector": "body"
+      },
+      "key": "End"
+    },
+    {
+      "step_id": "watch-end",
+      "action": "wait_for_timeout",
+      "duration_ms": 1500
+    }
+  ],
+  "environment": {
+    "reduced_motion": "no-preference"
+  }
+}

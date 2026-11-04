@@ -19,7 +19,7 @@ lifecycle: draft
 lifecycle_changed: 2026-10-26
 tier: core
 created: 2026-10-26T19:30:00Z
-updated: 2026-10-26T20:30:00Z
+updated: 2026-11-05T00:10:00Z
 ---
 
 # Data Sources
@@ -75,6 +75,7 @@ Added after ingesting [[30-course/weeks/week-03-wearable-sensors-and-measurement
   - a true-zero step point may have no `count` field;
   - an empty list means "no observations", not zero.
 - **HRV is unverified.** The course labs never fetch HRV, so the overnight RMSSD record our HRV page relies on hasn't been seen yet. Confirm it during roadmap step 1. ^[inferred]
+- **Target users are on iPhones** (Heramb, 2026-11-05): Health Connect is out. Apple Watch data is only reachable through HealthKit on the phone (a native iOS app or exports, no web API); Fitbit, Garmin, Oura and Whoop expose cloud APIs a web app can use. ^[inferred]
 - **Device choice.** Using the course loaner Fitbit means the course OAuth helper and the Google Health route, not HealthKit or Health Connect. See [[24-synthesis/open-decisions|Open decisions]] #4. ^[inferred]
 
 ## Sources

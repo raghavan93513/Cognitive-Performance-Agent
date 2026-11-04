@@ -9,20 +9,28 @@ lifecycle: draft
 lifecycle_changed: 2026-10-26
 tier: core
 created: 2026-10-26T20:00:00Z
-updated: 2026-10-26T20:00:00Z
+updated: 2026-11-05T00:30:00Z
 ---
 
 # 13 · Team
 
 > **Answers:** Who we are, who owns what, how we decide.
 
-**Status (2026-10-26):** Members known so far from the repos. Add anyone missing.
+**Status (2026-11-05):** Members known so far from the repos and the week 8 lab. Add anyone missing.
 
 ## Members
 
 - [[22-entities/heramb-chaudhari|Heramb Chaudhari]] — built [[32-wearlab/32-wearlab|WearLab]]; set up this wiki
 - [[22-entities/raghavan-vaidhyaraman|Raghavan Vaidhyaraman]] — repo owner; lean architecture deck
-- [[22-entities/alexa-kafka|Alexa Kafka]] — system design and deployment plan
+- [[22-entities/alexa-kafka|Alexa Kafka]] — system design and deployment plan; week 8 desktop dashboard prototype (Figma)
+- **Yulee** — week 8 iPhone "energy outlook" prototype (Figma); full name not recorded yet ^[inferred]
+
+Week 8 lab prototypes from Raghavan (Canva), Alexa and Yulee are archived in [[09-design/team-prototypes-week-8|Team prototypes, week 8]].
+
+## AI advisor seats
+
+- [[13-team/exec-team|AI exec team]] — CEO, CTO, CMO, CSO and UIUX: roles with no personal names; their lanes, rules, memo format and boardroom
+- [[13-team/exec-evals|Exec seat evals]] — test prompts with pass/fail criteria for each seat
 
 ## Planned pages
 
