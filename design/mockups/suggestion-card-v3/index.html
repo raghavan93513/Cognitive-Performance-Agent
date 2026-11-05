@@ -55,9 +55,9 @@ h2{font:600 clamp(26px,3.6vw,38px)/1.05 var(--ui);letter-spacing:-.035em;margin:
       <h1>The <span class="pill">island</span> speaks. The <span class="line">line</span> shows where it fits.</h1>
       <p class="lede">Your two favourites, joined into one design. The Island from round two is the voice: small while you study, it springs open once at a natural pause. B's session line from round one is the page underneath: when you started, where you are now, and your next stop.</p>
       <ol class="beats">
-        <li><i>1</i><p><b>It stays out of the way.</b> <span>A black pill at the top shows your session time. The page shows your clock, today's study blocks, and the line to Chem lab.</span></p></li>
+        <li><i>1</i><p><b>It stays out of the way.</b> <span>A black pill at the top shows your session time. The page shows your session clock and the line to Chem lab.</span></p></li>
         <li><i>2</i><p><b>It speaks once, and shows where the walk fits.</b> <span>The island opens, the page slides down to make room, and a dashed walk slot lights up on the line before your next class.</span></p></li>
-        <li><i>3</i><p><b>The break lives in the island.</b> <span>Tap Walk: the island shrinks into a live countdown, and the slot on the line fills in as a refill. Tap the pill to end the break early or add time.</span></p></li>
+        <li><i>3</i><p><b>The break lives in the island.</b> <span>Tap Walk: the island shrinks into a live countdown, and the walk slot on the line fills in. Tap the pill to end the break early or add time.</span></p></li>
       </ol>
     </div>
     <div class="stage">
@@ -82,6 +82,27 @@ h2{font:600 clamp(26px,3.6vw,38px)/1.05 var(--ui);letter-spacing:-.035em;margin:
       </ul>
     </div>
     <div class="panel">
+      <h4>Changed after the student test</h4>
+      <p>Five synthetic student testers (a rehearsal, not real users) all said "meh". Their top four asks are now in:</p>
+      <ul style="margin:8px 0 14px">
+        <li><b>"Keep going" no longer rewrites the facts.</b> It used to call 5 h 10 min of sleep "your usual". Now it says your call, and the reasons stay the same.</li>
+        <li><b>Every source is named.</b> The next class comes from your calendar (source 4), and location is never used, so "6 min walk away" is gone.</li>
+        <li><b>"Fairly sure" became "Early read"</b>, with what "helped" means: your app switching settled back to usual after a walk, in 4 of 6 afternoons.</li>
+        <li><b>The talk-to-someone card shows only in the morning</b>, leads with the offer, asks about travel or work shifts, and explains itself. "Not now" waits 7 days.</li>
+      </ul>
+      <p>After the re-test (overall 4.8 → 5.4, all five still "meh"), the next three:</p>
+      <ul style="margin:8px 0 14px">
+        <li><b>The numbers agree.</b> The first-week card now says 2 h 40 min, the same as the clock.</li>
+        <li><b>One word for a break.</b> "Refill" and the Today tally are gone.</li>
+        <li><b>You pick which nights.</b> "Travel, games, shifts or exams?" opens a 14-night grid. Away games from your calendar start marked. If most of the rest are still short, it says so kindly and keeps the card.</li>
+      </ul>
+      <p>After the third test (overall flat at 5.4), the quick fixes:</p>
+      <ul style="margin:8px 0 14px">
+        <li><b>Safety: exam and deadline nights stay counted.</b> Travel, games and shifts can explain short sleep; crunch weeks are a reason to talk, not an excuse to stop asking.</li>
+        <li><b>"This looks wrong" works:</b> one task, sleep is off, or that wasn't me.</li>
+        <li><b>Gentler sleep card:</b> booking first, the 24/7 line second, away games already left out of the count, and "at most once a week" instead of "gently".</li>
+        <li><b>Small honesty fixes:</b> one lab time, "watch or ring", the calendar's reach stated, Snooze kept in See why, and no grade-like dot on sleep.</li>
+      </ul>
       <h4>Next steps</h4>
       <ol>
         <li>The CMO locks the words; this uses the calm-friend voice from COPY.md.</li>
@@ -99,11 +120,14 @@ h2{font:600 clamp(26px,3.6vw,38px)/1.05 var(--ui);letter-spacing:-.035em;margin:
 const STATES = [
   ["walk", "Suggests a walk", "The island opens; the walk slot lights up before lab."],
   ["why", "See why", "Each reason with its source, time and your usual range."],
-  ["running", "Walking", "A live countdown pill; the slot fills in as a refill."],
+  ["running", "Walking", "A live countdown pill; the walk slot fills in."],
   ["runopen", "Break, expanded", "Tap the pill: end early or add 5 minutes."],
-  ["keep", "Keep going", "A real answer, not an ad for breaks. Next check marked."],
+  ["keep", "Keep going", "Your call, and the reasons stay the same. Next check marked."],
   ["nodata", "Still learning", "4 of 7 nights. Says what it knows, nothing more."],
-  ["escalate", "Talk to someone", "After 12 of 14 short nights: a kind three-step ladder."],
+  ["escalate", "Talk to someone", "Mornings only, never mid-session. The offer first, the count second."],
+  ["escctx", "Which nights were they?", "Pick a reason, tap the nights. Calendar games start marked; it still says if it's a lot."],
+  ["wrong", "This looks wrong", "Say it was one task, the sleep is off, or it wasn't you, and it adjusts."],
+  ["escwhy", "Why am I seeing this?", "The one number behind it, when it shows up, and that it's not a diagnosis."],
 ];
 document.getElementById("states").innerHTML = STATES.map(([k, t, d], i) => `<article class="st">
   <div class="phone" id="s${i}"><iframe title="${t}" loading="lazy" src="v3/island-forecast.html?state=${k}"></iframe></div>
