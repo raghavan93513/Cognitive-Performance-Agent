@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F4F3EF">
-<title>Halftime Landing Page</title>
+<title>Halftime</title>
+<meta name="description" content="Halftime is a study-break helper for students: it tells you when to keep going, take a short walk, or stop for tonight, and always shows why.">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -26,6 +27,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;touch-
 a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:1px}
 :focus-visible{outline:3px solid var(--mint-ink);outline-offset:3px;border-radius:12px}
 .island :focus-visible{outline-color:var(--mint)}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 ::selection{background:rgba(142,214,188,.55);color:var(--ink)}
 .wrap{max-width:1160px;margin:0 auto;padding-left:max(20px, env(safe-area-inset-left, 0px));padding-right:max(20px, env(safe-area-inset-right, 0px))}
 .mono{font-family:var(--mono)}
@@ -58,7 +60,8 @@ h1 em{font-style:normal;background:linear-gradient(transparent 62%, rgba(142,214
 .opt{min-height:44px;padding:0 15px;border-radius:22px;background:#FFFFFF;color:var(--ink);font:500 .9375rem/1 var(--ui);transition:background .15s ease,color .15s ease}
 .opt[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
 .island{margin-top:18px;background:var(--island);color:var(--on);border-radius:34px;overflow:hidden;height:52px;width:200px;margin-inline:auto;
-  transition:height .5s var(--spring),width .5s var(--spring),border-radius .5s var(--spring);box-shadow:0 14px 34px rgba(20,20,20,.18)}
+  box-shadow:0 10px 24px rgba(20,20,20,.16)}
+.island.opening{transition:height .5s var(--spring),width .5s var(--spring)}
 .island.open{width:var(--w,100%)}
 .pill{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font:500 1rem/1 var(--mono)}
 .pill b{display:flex;align-items:center;gap:9px;font-weight:500}.pill b::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--mint)}
@@ -89,12 +92,12 @@ h1 em{font-style:normal;background:linear-gradient(transparent 62%, rgba(142,214
 /* the session line */
 .line{margin-top:18px}
 .lt{display:flex;justify-content:space-between;font:500 .8125rem/1 var(--ui);color:var(--muted)}
-.track{position:relative;height:14px;border-radius:7px;background:#DCD9D1;margin-top:12px}
+.track{position:relative;contain:layout;height:14px;border-radius:7px;background:#DCD9D1;margin-top:12px}
 .done{position:absolute;left:0;top:0;bottom:0;border-radius:7px;background:var(--ink);transition:width .5s var(--spring)}
 .slot{position:absolute;top:-7px;bottom:-7px;border-radius:10px;background:rgba(142,214,188,.4);outline:2px dashed var(--mint-ink);outline-offset:-2px;transition:left .5s var(--spring),width .5s var(--spring),opacity .25s ease}
 .nowm{position:absolute;top:-10px;bottom:-10px;width:3px;margin-left:-1.5px;border-radius:2px;background:var(--now);transition:left .5s var(--spring)}
 .stop{position:absolute;right:0;top:50%;width:20px;height:20px;margin-top:-10px;border-radius:6px;background:var(--paper2);border:3px solid var(--ink)}
-.ticks{position:relative;height:34px;margin-top:10px;font:500 .75rem/1.3 var(--mono);color:var(--muted)}
+.ticks{position:relative;contain:layout;height:34px;margin-top:10px;font:500 .75rem/1.3 var(--mono);color:var(--muted)}
 .ticks span{position:absolute;top:0;white-space:nowrap}
 .ticks .tn{color:#B42318;transition:left .5s var(--spring)}
 .ticks .ts{top:17px;color:var(--mint-ink);transition:left .5s var(--spring),opacity .25s ease}
@@ -112,11 +115,11 @@ h2{font:650 clamp(1.9rem,3.6vw,2.75rem)/1.04 var(--ui);letter-spacing:-.035em;te
 /* how it works: direction A, "The thread" (team pick, Heramb 2026-11-05). One line becomes the whole story;
    scroll plays it (seek(p) of the section's scroll), ?hw=0.72 freezes a frame, reduced motion snaps per step. */
 .hw-sub{font:400 1.0625rem/1.5 var(--ui);color:var(--ink2);margin-top:10px}
-.hw-scrolly{height:420svh;position:relative;margin-top:8px}
-.hw-fixed .hw-scrolly{height:100svh}
-.hw-pin{position:sticky;top:0;height:100svh;display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1fr);gap:48px;align-items:center;padding-block:20px}
-.hw-stage{min-height:0;height:100%;display:flex;align-items:center;justify-content:center}
-.hw-stage svg{width:100%;height:100%;max-height:calc(100svh - 40px);display:block}
+.hw-scrolly{height:420vh;height:420svh;position:relative;margin-top:8px}
+.hw-fixed .hw-scrolly{height:100vh;height:100svh}
+.hw-pin{position:sticky;top:0;height:100vh;height:100svh;display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1fr);gap:48px;align-items:center;padding-block:20px}
+.hw-stage{min-height:0;height:100%;display:flex;align-items:center;justify-content:center;contain:layout paint}
+.hw-stage svg{width:100%;height:100%;max-height:calc(100vh - 40px);max-height:calc(100svh - 40px);display:block}
 .hw-stage svg text{font-family:var(--ui)} .hw-stage svg .mono{font-family:var(--mono)}
 .hw-caps{list-style:none;display:grid;gap:22px;padding:0;margin:0}
 .hw-caps li{display:grid;grid-template-columns:34px 1fr;gap:4px 14px;cursor:pointer;opacity:.34}
@@ -161,7 +164,7 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
 /* trust sections (team pick 2026-11-06, Heramb "Mix: E then D"): E's "see what it sees" switch for what it reads,
    D's scroll-played honesty cards and joining ticks. Same cards and words as before. */
 .seg{display:inline-flex;background:var(--paper2);border-radius:22px;padding:4px;gap:2px}
-.seg button{min-height:40px;padding:0 14px;border-radius:18px;font:600 .9375rem/1 var(--ui);color:var(--ink2);background:none;border:0;cursor:pointer;touch-action:manipulation;transition:background .2s var(--ease),color .2s var(--ease)}
+.seg button{min-height:44px;padding:0 14px;border-radius:18px;font:600 .9375rem/1 var(--ui);color:var(--ink2);background:none;border:0;cursor:pointer;touch-action:manipulation;transition:background .2s var(--ease),color .2s var(--ease)}
 .seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
 .xray{margin-top:40px;background:#FFFFFF;border-radius:24px;padding:18px}
 .xhead{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
@@ -182,10 +185,10 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
 .sees .counter{opacity:1;transform:none}
 .sees .list.yes li[data-r]{background:rgba(142,214,188,.22);color:var(--ink)}
 .sees .list.no li[data-r]{background:var(--paper2);color:var(--ink)}
-.hsty{height:230svh;position:relative;margin-top:16px}
-.hpin{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;justify-content:center}
+.hsty{height:230vh;height:230svh;position:relative;margin-top:16px}
+.hpin{position:sticky;top:0;height:100vh;height:100svh;display:flex;flex-direction:column;justify-content:center}
 .hsty .honest{margin-top:0}
-.day{margin-top:16px}.day svg{width:100%;height:auto;display:block}.day text{font-family:var(--mono)}
+.day{margin-top:16px;max-width:400px}.day svg{width:100%;height:auto;display:block;overflow:visible}.day text{font-family:var(--mono)}
 .ask2 .checks{gap:10px;max-width:44ch}
 .ask2 .checks li{padding-left:30px}
 .ask2 .checks li::before{left:0;top:.18em;width:20px;height:20px;border-radius:50%;background:none;box-shadow:inset 0 0 0 1.5px var(--on3)}
@@ -194,7 +197,7 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
 .ask2 .checks li.ok::after{content:"";position:absolute;left:6px;top:.5em;width:8px;height:4px;border-left:2px solid #0B3D2E;border-bottom:2px solid #0B3D2E;transform:rotate(-45deg)}
 .tbd{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin-top:18px;font:500 .9375rem/1.4 var(--ui);color:var(--on2)}
 .tbd b{font-weight:500}.tbd span{font:500 .9375rem/1.4 var(--mono);color:var(--on3)}
-.tr-fixed .hsty{height:auto}.tr-fixed .hpin{position:relative;height:auto}
+.tr-fixed .hsty,.tr-loose .hsty{height:auto}.tr-fixed .hpin,.tr-loose .hpin{position:relative;height:auto}
 
 @media (max-width:900px){
   .screen{grid-template-columns:minmax(0,1fr);gap:8px}
@@ -205,10 +208,6 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
   .fineprint{margin-top:12px}
   .joinlink{display:inline}
   .joinlink a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;padding:10px 0}
-  .hw-pin{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:8px;align-items:stretch;padding-block:12px calc(16px + env(safe-area-inset-bottom))}
-  .hw-caps{order:2}.hw-stage{order:1}
-  .hw-caps li{display:none;opacity:1}.hw-caps li.on{display:grid}
-  .hw-caps p{font-size:.9375rem}
   .trust,.honest{grid-template-columns:minmax(0,1fr)}
   .ask2{grid-template-columns:minmax(0,1fr);padding:34px 24px;border-radius:30px}
   .ask2 .ctas{justify-content:flex-start}
@@ -222,6 +221,29 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
   .say{padding:18px 18px 16px}
   .q{font-size:1.625rem}
   .btn{flex:1 1 auto}
+}
+@media (max-width:900px) and (min-width:601px){
+  .hw-pin{grid-template-columns:minmax(0,.9fr) minmax(0,1fr);gap:28px}
+  .hw-caps{gap:16px}.hw-caps h3{font-size:1.1875rem}.hw-caps p{font-size:.9375rem}
+}
+@media (max-width:600px){
+  .hw-pin{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:8px;align-items:stretch;padding-block:12px calc(16px + env(safe-area-inset-bottom))}
+  .hw-caps{order:2}.hw-stage{order:1}
+  .hw-caps li{display:none;opacity:1}.hw-caps li.on{display:grid}
+  .hw-caps p{font-size:.9375rem}
+  .hw-stage{margin-inline:-20px}
+  .day{margin-inline:-8px}
+}
+@media (max-width:600px) and (max-height:700px){
+  .hw-pin{padding-block:6px 10px;gap:4px}
+  .hw-caps h3{font-size:1.125rem;padding-top:3px}.hw-caps p{font-size:.875rem;line-height:1.4}
+  .hw-caps li{gap:2px 12px}
+}
+@media (max-height:560px) and (orientation:landscape){
+  .honest{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .hw-pin{padding-block:8px}
+  .hw-stage svg{max-height:calc(100vh - 16px);max-height:calc(100svh - 16px)}
+  .hw-caps{gap:10px}.hw-caps p{font-size:.875rem}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation:none!important}}
 </style>
@@ -274,49 +296,49 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
       <li><span class="n">4</span><h3>You decide.</h3><p>Walk, keep going or snooze. It asks once, then stays quiet.</p></li>
     </ol>
           <div class="hw-stage" aria-hidden="true">
-<svg viewBox="0 0 400 520" preserveAspectRatio="xMidYMid meet">
+<svg viewBox="14 0 372 520" preserveAspectRatio="xMidYMid meet">
         <!-- step 1: the session line -->
         <text id="hw-cap1" x="40" y="292" font-size="14" font-weight="600" fill="#141414">2 h 40 min · 14 switches in the last 20 min</text>
         <line x1="40" y1="330" x2="360" y2="330" stroke="#DCD9D1" stroke-width="6" stroke-linecap="round"/>
         <line id="hw-sess" x1="40" y1="330" x2="40" y2="330" stroke="#141414" stroke-width="6" stroke-linecap="round"/>
         <g id="hw-ticks"></g>
-        <text id="hw-lstart" class="mono" x="40" y="358" font-size="12" fill="#5E5C56">Started 12:30</text>
-        <text id="hw-lnow" class="mono" x="253" y="358" font-size="12" fill="#B42318" text-anchor="middle">now 3:10</text>
-        <text id="hw-lend" class="mono" x="360" y="358" font-size="12" fill="#5E5C56" text-anchor="end">lab 4:30</text>
+        <text id="hw-lstart" class="mono" x="40" y="358" font-size="14" fill="#5E5C56">Started 12:30</text>
+        <text id="hw-lnow" class="mono" x="253" y="358" font-size="14" fill="#B42318" text-anchor="middle">now 3:10</text>
+        <text id="hw-lend" class="mono" x="360" y="358" font-size="14" fill="#5E5C56" text-anchor="end">lab 4:30</text>
         <rect id="hw-slot" x="253" y="324" width="0" height="12" rx="3" fill="#8ED6BC"/>
         <line id="hw-quiet" x1="266" y1="330" x2="360" y2="330" stroke="#141414" stroke-width="2" stroke-dasharray="3 6" opacity="0"/>
-        <text id="hw-lquiet" class="mono" x="360" y="312" font-size="12" fill="#5E5C56" text-anchor="end" opacity="0">quiet until the next check</text>
+        <text id="hw-lquiet" class="mono" x="360" y="312" font-size="14" fill="#5E5C56" text-anchor="end" opacity="0">quiet until the next check</text>
         <!-- step 2: last night -->
-        <text id="hw-s2a" x="40" y="414" font-size="13" font-weight="600" fill="#141414">Last night</text>
+        <text id="hw-s2a" x="40" y="414" font-size="14" font-weight="600" fill="#141414">Last night</text>
         <rect id="hw-usual" x="40" y="424" width="210" height="18" rx="9" fill="none" stroke="#141414" stroke-width="1.5" stroke-dasharray="4 4"/>
         <rect id="hw-slept" x="40" y="424" width="0" height="18" rx="9" fill="#141414" stroke="#141414" stroke-width="1.5"/>
-        <text id="hw-s2b" class="mono" x="206" y="460" font-size="12" fill="#141414">slept 5 h</text>
-        <text id="hw-s2c" class="mono" x="260" y="438" font-size="12" fill="#5E5C56">your usual 7 h</text>
-        <text id="hw-s2d" x="40" y="494" font-size="13" fill="#46453F">Plain code: 2 h under your usual. Not an AI.</text>
+        <text id="hw-s2b" class="mono" x="206" y="460" font-size="14" fill="#141414">slept 5 h</text>
+        <text id="hw-s2c" class="mono" x="260" y="438" font-size="14" fill="#5E5C56">your usual 7 h</text>
+        <text id="hw-s2d" x="40" y="494" font-size="14" fill="#46453F">Plain code: 2 h under your usual. Not an AI.</text>
         <!-- step 3: reasons rise into the card -->
         <line id="hw-r1" x1="240" y1="316" x2="240" y2="316" stroke="#0F5E46" stroke-width="2"/>
         <line id="hw-r2" x1="190" y1="424" x2="190" y2="424" stroke="#0F5E46" stroke-width="2"/>
-        <g id="hw-o1"><rect x="231" y="300" width="18" height="18" rx="5" fill="#0F5E46"/><text class="mono" x="240" y="313" font-size="11" fill="#fff" text-anchor="middle">1</text></g>
-        <g id="hw-o2"><rect x="181" y="446" width="18" height="18" rx="5" fill="#0F5E46"/><text class="mono" x="190" y="459" font-size="11" fill="#fff" text-anchor="middle">2</text></g>
+        <g id="hw-o1"><rect x="231" y="300" width="18" height="18" rx="5" fill="#0F5E46"/><text class="mono" x="240" y="313" font-size="14" fill="#fff" text-anchor="middle">1</text></g>
+        <g id="hw-o2"><rect x="181" y="446" width="18" height="18" rx="5" fill="#0F5E46"/><text class="mono" x="190" y="459" font-size="14" fill="#fff" text-anchor="middle">2</text></g>
         <!-- the card -->
         <rect id="hw-card" x="246" y="323" width="14" height="14" rx="7" fill="#0A0A0A" opacity="0"/>
         <g id="hw-cc" opacity="0">
-          <text class="mono" x="44" y="50" font-size="12" fill="rgba(255,255,255,.56)">Halftime · now 3:10</text>
+          <text class="mono" x="44" y="50" font-size="14" fill="rgba(255,255,255,.56)">Halftime · now 3:10</text>
           <text x="44" y="86" font-size="25" font-weight="650" fill="#fff" letter-spacing="-.5">Short walk now?</text>
-          <text x="44" y="112" font-size="14" font-weight="500" fill="#8ED6BC">5 minutes fits. Back by 3:15, before lab.</text>
-          <rect id="hw-ch1" x="44" y="126" width="18" height="18" rx="5" fill="#2C2C2E"/><text class="mono" x="53" y="139" font-size="11" fill="#fff" text-anchor="middle">1</text>
-          <text x="70" y="140" font-size="13" fill="rgba(255,255,255,.8)">2 h 40 min, 14 switches in 20 min</text>
-          <rect id="hw-ch2" x="44" y="152" width="18" height="18" rx="5" fill="#2C2C2E"/><text class="mono" x="53" y="165" font-size="11" fill="#fff" text-anchor="middle">2</text>
-          <text x="70" y="166" font-size="13" fill="rgba(255,255,255,.8)">slept 5 h, 2 h under your usual</text>
-          <rect x="44" y="180" width="86" height="22" rx="11" fill="none" stroke="rgba(255,255,255,.56)"/>
-          <text class="mono" x="87" y="195" font-size="11" fill="#fff" text-anchor="middle">Fairly sure</text>
+          <text x="44" y="112" font-size="14" font-weight="500" fill="#8ED6BC">5 minutes fits. Back by 3:15.</text>
+          <rect id="hw-ch1" x="44" y="126" width="18" height="18" rx="5" fill="#2C2C2E"/><text class="mono" x="53" y="139" font-size="14" fill="#fff" text-anchor="middle">1</text>
+          <text x="70" y="140" font-size="14" fill="rgba(255,255,255,.8)">2 h 40 min, 14 switches in 20 min</text>
+          <rect id="hw-ch2" x="44" y="152" width="18" height="18" rx="5" fill="#2C2C2E"/><text class="mono" x="53" y="165" font-size="14" fill="#fff" text-anchor="middle">2</text>
+          <text x="70" y="166" font-size="14" fill="rgba(255,255,255,.8)">slept 5 h, 2 h under your usual</text>
+          <rect id="hw-surer" x="44" y="180" width="86" height="22" rx="11" fill="none" stroke="rgba(255,255,255,.56)"/>
+          <text id="hw-suret" class="mono" x="87" y="195" font-size="14" fill="#fff" text-anchor="middle">Fairly sure</text>
         </g>
         <g id="hw-btns" opacity="0">
           <rect id="hw-b1" x="44" y="216" width="116" height="34" rx="17" fill="#fff"/><text id="hw-b1t" x="102" y="238" font-size="14" font-weight="600" fill="#141414" text-anchor="middle">Walk 5 min</text>
           <rect x="168" y="216" width="108" height="34" rx="17" fill="#2C2C2E"/><text x="222" y="238" font-size="14" font-weight="600" fill="#fff" text-anchor="middle">Keep going</text>
-          <text x="318" y="238" font-size="13" fill="rgba(255,255,255,.76)" text-anchor="middle" text-decoration="underline">Snooze</text>
+          <text x="318" y="238" font-size="14" fill="rgba(255,255,255,.76)" text-anchor="middle" text-decoration="underline">Snooze</text>
         </g>
-        <text id="hw-pill" class="mono" x="200" y="43" font-size="13" fill="#fff" text-anchor="middle" opacity="0">walk · back 3:15</text>
+        <text id="hw-pill" class="mono" x="200" y="43" font-size="14" fill="#fff" text-anchor="middle" opacity="0">walk · back 3:15</text>
         <text id="hw-fin" x="200" y="512" font-size="16" font-weight="650" fill="#141414" text-anchor="middle" opacity="0">It asks once. Then it stays quiet.</text>
       </svg>
           </div>
@@ -339,6 +361,7 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
               <p class="bubble"><span>are you still at the library?</span></p></div>
           </div>
           <p class="counter">2 h 40 min · 3 switches in 20 min · notes, reading, chat</p>
+          <p class="sr" id="xr-say" aria-live="polite"></p>
         </div>
         <div class="trust">
           <div class="list yes"><h3><i aria-hidden="true"></i>What it reads</h3><ul>
@@ -357,14 +380,14 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
         <div class="honest">
           <div class="hcard"><h3>When it doesn't know, it says so.</h3><p>For the first week it's still learning what's normal for you, and it tells you that instead of guessing.</p><div class="learn" id="tr-learn" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div><span class="mono" id="tr-lt">Still learning your usual sleep · 4 of 7 nights</span></div>
           <div class="hcard"><h3>Some things need a person.</h3><p>If your sleep has been short for weeks, it offers someone to talk to, in the morning, never mid-study. It never tells your coach, team or school.</p>
-            <div class="day" aria-hidden="true"><svg viewBox="0 0 320 74">
-              <line x1="8" y1="40" x2="312" y2="40" stroke="#2C2C2E" stroke-width="4" stroke-linecap="round"/>
-              <rect x="8" y="34" width="96" height="12" rx="6" fill="#46453F"/>
-              <text x="8" y="66" font-size="11" fill="rgba(255,255,255,.56)">10 pm</text>
-              <text x="104" y="66" font-size="11" fill="rgba(255,255,255,.56)" text-anchor="end">studying</text>
-              <text x="250" y="66" font-size="11" fill="rgba(255,255,255,.56)" text-anchor="middle">8 am</text>
-              <line x1="250" y1="30" x2="250" y2="50" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
-              <g id="tr-offer" transform="translate(250 0)"><rect id="tr-ofr" x="-56" y="2" width="112" height="24" rx="12" fill="rgba(142,214,188,.14)" stroke="#8ED6BC" stroke-width="1.5"/><text id="tr-oft" x="0" y="18" font-size="10.5" fill="#8ED6BC" text-anchor="middle">Talk to someone?</text></g>
+            <div class="day" aria-hidden="true"><svg viewBox="0 0 300 86">
+              <line x1="8" y1="50" x2="292" y2="50" stroke="#2C2C2E" stroke-width="4" stroke-linecap="round"/>
+              <rect id="tr-blk" x="8" y="39" width="110" height="22" rx="11" fill="#46453F"/>
+              <text id="tr-blkt" x="63" y="55" font-size="14" fill="rgba(255,255,255,.85)" text-anchor="middle">studying</text>
+              <text x="8" y="82" font-size="15" fill="rgba(255,255,255,.6)">10 pm</text>
+              <text x="225" y="82" font-size="15" fill="rgba(255,255,255,.6)" text-anchor="middle">8 am</text>
+              <line x1="225" y1="39" x2="225" y2="61" stroke="rgba(255,255,255,.45)" stroke-width="1.5"/>
+              <g id="tr-offer" transform="translate(225 0)"><rect id="tr-ofr" x="-75" y="3" width="150" height="29" rx="14.5" fill="rgba(142,214,188,.14)" stroke="#8ED6BC" stroke-width="1.5"/><text id="tr-oft" x="0" y="22.5" font-size="15" fill="#8ED6BC" text-anchor="middle">Talk to someone?</text></g>
             </svg></div>
             <p class="med">Halftime is a wellness tool, not medical advice.</p></div>
         </div>
@@ -456,7 +479,8 @@ function render(swap = true) {
       <p class="sure"><span class="tag">${sure[0]}</span><span>${sure[1]}</span></p>
       <div class="acts"><button class="a yes" data-act="yes">${A.btns[0]}</button><button class="a no" data-act="no">${A.btns[1]}</button></div>
       <div class="links"><button type="button" data-act="snooze">Snooze 20 min</button></div>`;
-  if (swap) { say.classList.remove("swap"); void say.offsetWidth; say.classList.add("swap"); }
+  // fade the new words in on the compositor (the old class-restart trick forced an extra layout per tap)
+  if (swap && say.animate && !matchMedia("(prefers-reduced-motion: reduce)").matches) say.animate([{ opacity: 0, transform: "translateY(4px)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: "cubic-bezier(.23,1,.32,1)" });
   // the session line under the island
   document.getElementById("lfrom").textContent = m().from; document.getElementById("lto").textContent = m().to;
   const pct = (x) => `${Math.min(100, (x / m().span) * 100)}%`, r = t / m().span;
@@ -479,10 +503,12 @@ function fit(instant) {
   if (isl.classList.contains("open")) isl.style.height = document.getElementById("say").scrollHeight + "px";
 }
 
+// build the option buttons once; after that a tap only flips aria-pressed (rebuilding them cost a re-layout per tap)
 function opts() {
   document.querySelectorAll(".opts").forEach((box) => {
-    const q = box.dataset.q, list = q === "w" ? W : q === "t" ? T : S, cur = q === "w" ? w : q === "t" ? t : s;
-    box.innerHTML = list.map(([v, l]) => `<button class="opt" type="button" data-v="${v}" aria-pressed="${v === cur}">${l}</button>`).join("");
+    const q = box.dataset.q, list = q === "w" ? W : q === "t" ? T : S, cur = String(q === "w" ? w : q === "t" ? t : s);
+    if (!box.firstChild) box.innerHTML = list.map(([v, l]) => `<button class="opt" type="button" data-v="${v}" aria-pressed="false">${l}</button>`).join("");
+    for (const b of box.children) { const on = String(b.dataset.v === cur); if (b.getAttribute("aria-pressed") !== on) b.setAttribute("aria-pressed", on); }
   });
 }
 document.addEventListener("click", (e) => {
@@ -497,8 +523,12 @@ document.addEventListener("click", (e) => {
     render();
   }
 });
-function open() { document.getElementById("island").classList.add("open"); fit(); }
-addEventListener("resize", () => fit(true));
+function open() {
+  const isl = document.getElementById("island"); if (isl.classList.contains("open")) return;
+  isl.classList.add("opening", "open"); fit(); setTimeout(() => isl.classList.remove("opening"), 600);
+}
+let lastW = innerWidth;
+addEventListener("resize", () => { if (innerWidth !== lastW) { lastW = innerWidth; fit(true); } });
 opts(); render(false);
 // the one authored moment: the island sits small, then opens with its first answer
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -514,8 +544,15 @@ const seg = (p, a, b) => clamp((p - a) / (b - a));
 const out = (x) => 1 - Math.pow(1 - x, 3);
 const io = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 const lerp = (a, b, t) => a + (b - a) * t;
-const $ = (id) => document.getElementById(id.startsWith("hw-") ? id : "hw-" + id);
-const set = (el, o) => { for (const k in o) el.setAttribute(k, o[k]); };
+const EL = {}, $ = (id) => EL[id] || (EL[id] = document.getElementById(id.startsWith("hw-") ? id : "hw-" + id));
+// write an attribute only when its (rounded) value changes: unchanged writes still cost style and layout work
+const A = (el, k, v) => { if (typeof v === "number") v = Math.round(v * 100) / 100; const m = el.__a || (el.__a = {}); if (m[k] !== v) { m[k] = v; el.setAttribute(k, v); } };
+const set = (el, o) => { for (const k in o) A(el, k, o[k]); };
+// one scheduler for every scroll-played section: at most one frame per scroll, reads before writes
+const jobs = (window.__htJobs = []); let queued = false;
+const tick = () => { queued = false; const v = jobs.map((j) => j.read()); jobs.forEach((j, i) => j.write(v[i])); };
+const ask = (window.__htAsk = () => { if (!queued) { queued = true; requestAnimationFrame(tick); } });
+addEventListener("scroll", ask, { passive: true }); addEventListener("resize", ask);
 
 // session: 12:30 to 4:30 across x 40..360, now = 160 min
 const K = 320 / 240, X = (m) => 40 + m * K, XN = X(160);
@@ -529,49 +566,79 @@ const caps = [...document.querySelectorAll(".hw-caps li")];
 function seek(p) {
   // beat 1: the line draws, then the marks comb in
   const b1 = out(seg(p, .02, .17));
-  $("hw-sess").setAttribute("x2", lerp(40, XN, b1));
-  $("hw-lnow").setAttribute("opacity", seg(p, .12, .17));
-  $("hw-lend").setAttribute("opacity", seg(p, .02, .08));
+  A($("hw-sess"), "x2", lerp(40, XN, b1));
+  A($("hw-lnow"), "opacity", seg(p, .12, .17));
+  A($("hw-lend"), "opacity", seg(p, .02, .08));
   const t = seg(p, .09, .22);
-  tickEls.forEach((el, i) => el.setAttribute("opacity", clamp(t * tickEls.length - i)));
-  $("hw-cap1").setAttribute("opacity", seg(p, .18, .23) * (1 - seg(p, .5, .54)));
+  tickEls.forEach((el, i) => A(el, "opacity", clamp(t * tickEls.length - i)));
+  A($("hw-cap1"), "opacity", seg(p, .18, .23) * (1 - seg(p, .5, .54)));
   // beat 2: last night against your usual
-  ["s2a", "usual"].forEach((id) => $(id).setAttribute("opacity", seg(p, .27, .32)));
-  $("hw-slept").setAttribute("width", 150 * out(seg(p, .31, .42)));
-  $("hw-s2b").setAttribute("opacity", seg(p, .40, .44));
-  $("hw-s2c").setAttribute("opacity", seg(p, .33, .37));
-  $("hw-s2d").setAttribute("opacity", seg(p, .43, .48) * (1 - seg(p, .92, .95)));
+  ["s2a", "usual"].forEach((id) => A($(id), "opacity", seg(p, .27, .32)));
+  A($("hw-slept"), "width", 150 * out(seg(p, .31, .42)));
+  A($("hw-s2b"), "opacity", seg(p, .40, .44));
+  A($("hw-s2c"), "opacity", seg(p, .33, .37));
+  A($("hw-s2d"), "opacity", seg(p, .43, .48) * (1 - seg(p, .92, .95)));
   // beat 3 (signature): the now dot opens into the card; its reasons rise into it
   const dot = seg(p, .50, .54), open = io(seg(p, .54, .64)), grow = io(seg(p, .76, .80)), fold = io(seg(p, .86, .93));
   let x = lerp(XN - 7, 20, open), y = lerp(323, 16, open), w = lerp(14, 360, open), h = lerp(14, 200, open) + 50 * grow, rx = lerp(7, 28, open);
   x = lerp(x, 112, fold); w = lerp(w, 176, fold); h = lerp(h, 40, fold); rx = lerp(rx, 20, fold); y = lerp(y, 18, fold);
   set($("hw-card"), { x, y, width: w, height: h, rx, opacity: dot });
-  $("hw-cc").setAttribute("opacity", seg(p, .62, .67) * (1 - seg(p, .86, .88)));
+  A($("hw-cc"), "opacity", seg(p, .62, .67) * (1 - seg(p, .86, .88)));
   const r = out(seg(p, .66, .74));
-  $("hw-r1").setAttribute("y2", lerp(316, 216, r)); $("hw-r2").setAttribute("y2", lerp(424, 216, r));
+  A($("hw-r1"), "y2", lerp(316, 216, r)); A($("hw-r2"), "y2", lerp(424, 216, r));
   const rf = 1 - seg(p, .86, .89);
-  ["r1", "r2"].forEach((id) => $(id).setAttribute("opacity", rf));
-  $("hw-o1").setAttribute("opacity", seg(p, .64, .67) * rf); $("hw-o2").setAttribute("opacity", seg(p, .64, .67) * rf);
+  ["r1", "r2"].forEach((id) => A($(id), "opacity", rf));
+  A($("hw-o1"), "opacity", seg(p, .64, .67) * rf); A($("hw-o2"), "opacity", seg(p, .64, .67) * rf);
   const lit = seg(p, .72, .74) * rf;
-  ["ch1", "ch2"].forEach((id) => $(id).setAttribute("fill", lit > .5 ? "#0F5E46" : "#2C2C2E"));
+  ["ch1", "ch2"].forEach((id) => A($(id), "fill", lit > .5 ? "#0F5E46" : "#2C2C2E"));
   // beat 4: choose, fold back to a pill, the walk slot, then quiet
-  $("hw-btns").setAttribute("opacity", seg(p, .78, .81) * (1 - seg(p, .86, .88)));
+  A($("hw-btns"), "opacity", seg(p, .78, .81) * (1 - seg(p, .86, .88)));
   const press = seg(p, .82, .84) > .5;
-  $("hw-b1").setAttribute("fill", press ? "#8ED6BC" : "#fff");
-  $("hw-pill").setAttribute("opacity", seg(p, .90, .93));
-  $("hw-slot").setAttribute("width", 10 * out(seg(p, .88, .93)));
-  $("hw-quiet").setAttribute("opacity", seg(p, .93, .97)); $("hw-lquiet").setAttribute("opacity", seg(p, .93, .97));
-  $("hw-fin").setAttribute("opacity", seg(p, .95, 1));
+  A($("hw-b1"), "fill", press ? "#8ED6BC" : "#fff");
+  A($("hw-pill"), "opacity", seg(p, .90, .93));
+  A($("hw-slot"), "width", 10 * out(seg(p, .88, .93)));
+  A($("hw-quiet"), "opacity", seg(p, .93, .97)); A($("hw-lquiet"), "opacity", seg(p, .93, .97));
+  A($("hw-fin"), "opacity", seg(p, .95, 1));
   // captions
   const a = Math.min(3, Math.floor(p * 4));
   caps.forEach((li, i) => li.classList.toggle("on", i === a));
 }
 const scrolly = document.querySelector(".hw-scrolly");
-const progress = () => { const r = scrolly.getBoundingClientRect(), tot = scrolly.offsetHeight - innerHeight; return tot > 0 ? clamp(-r.top / tot) : 1; };
-function frame() { let p = fixed != null ? fixed : progress(); if (reduce && fixed == null) p = [.24, .49, .745, 1][Math.min(3, Math.floor(p * 4))]; seek(p); }
+const progress = () => { const r = scrolly.getBoundingClientRect(), tot = r.height - innerHeight; return tot > 0 ? clamp(-r.top / tot) : 1; };
+let lastP = -1;
+function frame(q) {
+  let p = fixed != null ? fixed : q != null ? q : progress();
+  if (reduce && fixed == null) p = [.24, .49, .745, 1][Math.min(3, Math.floor(p * 4))];
+  p = Math.round(p * 4000) / 4000; if (p === lastP) return; lastP = p; seek(p);
+}
 caps.forEach((li, i) => li.addEventListener("click", () => { const tot = scrolly.offsetHeight - innerHeight; scrollTo({ top: scrolly.offsetTop + tot * (i / 4 + .22) }); }));
 if (fixed != null) document.documentElement.classList.add("hw-fixed");
-else { addEventListener("scroll", () => requestAnimationFrame(frame), { passive: true }); addEventListener("resize", frame); }
+else jobs.push({ read: progress, write: frame });
+// keep every label at 12 px or more on screen: measure the drawing's scale, enlarge small text, then re-fit
+const svgEl = document.querySelector(".hw-stage svg"), texts = [...svgEl.querySelectorAll("text")];
+texts.forEach((el) => { el.dataset.fs = el.getAttribute("font-size"); });
+const ORIG = { cap1: $("cap1").textContent, s2d: $("s2d").textContent };
+let lastS = "";
+function adapt(force) {
+  const m = svgEl.getScreenCTM(); if (!m) return; const s = Math.hypot(m.a, m.b); if (!s) return;
+  const key = s.toFixed(3); if (key === lastS && force !== true) return; lastS = key; // same scale: nothing to re-fit
+  let bumped = false;
+  texts.forEach((el) => { const b = +el.dataset.fs, fs = Math.max(b, 12.3 / s); if (fs > b + .01) bumped = true; el.setAttribute("font-size", fs.toFixed(2)); });
+  // when enlarged: shorter step-1 caption, "lab" label on its own row, "your usual" above the bar's right end, two-line note
+  $("cap1").textContent = bumped ? "2 h 40 min · 14 switches in 20 min" : ORIG.cap1;
+  $("lend").setAttribute("y", bumped ? 380 : 358);
+  const c = $("s2c"); c.setAttribute("x", bumped ? 384 : 260); c.setAttribute("y", bumped ? 414 : 438); c.setAttribute("text-anchor", bumped ? "end" : "start");
+  const d = $("s2d");
+  if (bumped) { d.textContent = ""; ["Plain code: 2 h under your usual.", "Not an AI."].forEach((line, i) => { const ts = document.createElementNS("http://www.w3.org/2000/svg", "tspan"); ts.setAttribute("x", "40"); if (i) ts.setAttribute("dy", "1.25em"); ts.textContent = line; d.appendChild(ts); }); d.setAttribute("y", "484"); }
+  else { d.textContent = ORIG.s2d; d.setAttribute("y", "494"); }
+  // the confidence chip always fits its words
+  const st = $("suret"), sr = $("surer"), w = st.getBBox().width + 20, fs = +st.getAttribute("font-size");
+  sr.setAttribute("width", w.toFixed(1)); st.setAttribute("x", (44 + w / 2).toFixed(1));
+  sr.setAttribute("height", (fs * 1.6).toFixed(1)); st.setAttribute("y", (180 + fs * 1.6 / 2 + fs * .35).toFixed(1));
+}
+addEventListener("resize", () => adapt()); (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => adapt(true)); adapt(true);
+// the drawing also resizes when the active caption changes length: re-fit whenever its box changes
+if ("ResizeObserver" in window) new ResizeObserver(() => requestAnimationFrame(() => adapt())).observe(svgEl);
 frame();
 })();
 </script>
@@ -580,33 +647,77 @@ frame();
 // what you see vs what Halftime sees
 const xr = document.getElementById("xr");
 const vb = [...xr.querySelectorAll(".xhead .seg button")];
-const view = (v) => { xr.classList.toggle("sees", v === "it"); vb.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === v))); };
+const say = document.getElementById("xr-say");
+const view = (v) => { xr.classList.toggle("sees", v === "it"); vb.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === v)));
+  xr.querySelectorAll(".ln, .bubble, .wt .name").forEach((el) => (v === "it" ? el.setAttribute("aria-hidden", "true") : el.removeAttribute("aria-hidden")));
+  say.textContent = v === "it" ? "Halftime's view: every word is hidden. It sees only the kind of app (notes, reading, chat), 2 h 40 min, and 3 switches in 20 min." : ""; };
 vb.forEach((b) => b.addEventListener("click", () => view(b.dataset.v)));
 // honesty and joining, played by scroll: nights fill, the offer skips the study block, joining lines tick in
 const Q = new URLSearchParams(location.search), F2 = Q.has("tr2") ? +Q.get("tr2") : null, F3 = Q.has("tr3") ? +Q.get("tr3") : null;
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x)), seg = (p, a, b) => clamp((p - a) / (b - a));
 const io = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
-const $ = (id) => document.getElementById(id);
+const EL = {}, $ = (id) => EL[id] || (EL[id] = document.getElementById(id));
+const A = (el, k, v) => { const m = el.__a || (el.__a = {}); if (m[k] !== v) { m[k] = v; el.setAttribute(k, v); } };
+const T = (el, v) => { if (el.__t !== v) { el.__t = v; el.textContent = v; } };
 const learn = [...document.querySelectorAll("#tr-learn i")], checks = [...document.querySelectorAll("#tr-checks li")];
+let halfW = 75; // half the offer pill's width, set by adaptDay
 function seek2(p) {
   const n = Math.max(1, Math.min(7, 1 + Math.floor(seg(p, .05, .6) * 7)));
   learn.forEach((el, i) => el.classList.toggle("on", i < n));
-  $("tr-lt").textContent = n < 7 ? `Still learning your usual sleep · ${n} of 7 nights` : "Learned your usual sleep · 7 of 7 nights";
+  T($("tr-lt"), n < 7 ? `Still learning your usual sleep · ${n} of 7 nights` : "Learned your usual sleep · 7 of 7 nights");
   const m = io(seg(p, .45, .85)), land = m > .98;
-  $("tr-offer").setAttribute("transform", `translate(${(64 + 186 * m).toFixed(1)} 0)`);
-  $("tr-ofr").setAttribute("stroke-dasharray", land ? "none" : "3 3");
-  $("tr-ofr").setAttribute("fill", land ? "rgba(142,214,188,.14)" : "none");
-  $("tr-oft").textContent = land ? "Talk to someone?" : p < .45 ? "not mid-study" : "next morning";
+  A($("tr-offer"), "transform", `translate(${Math.min(80 + 145 * m, 296 - halfW).toFixed(1)} 0)`); // never past the strip's end
+  A($("tr-ofr"), "stroke-dasharray", land ? "none" : "3 3");
+  A($("tr-ofr"), "fill", land ? "rgba(142,214,188,.14)" : "none");
+  T($("tr-oft"), land ? "Talk to someone?" : p < .45 ? "not mid-study" : "next morning");
 }
 function seek3(p) { checks.forEach((li, i) => li.classList.toggle("ok", p > (i + 1) / 5)); }
 const hsty = $("tr-hsty"), ask = $("tr-ask2");
-const p2 = () => { const r = hsty.getBoundingClientRect(), tot = hsty.offsetHeight - innerHeight; return tot > 0 ? clamp(-r.top / tot) : 1; };
-const p3 = () => { const r = ask.getBoundingClientRect(); return clamp((innerHeight * .85 - r.top) / (r.height * .9)); };
+// when the two cards are taller than the screen (short phones, landscape), don't pin: play as it scrolls past
+const cards = hsty.querySelector(".honest"), root = document.documentElement;
+const loose = () => cards.offsetHeight > innerHeight - 24;
+// reads only (run before any writes in the frame)
+const read = () => {
+  const lo = loose(), r = hsty.getBoundingClientRect(), ra = ask.getBoundingClientRect(), now = root.classList.contains("tr-loose");
+  const p2 = now ? clamp((innerHeight * .95 - r.top) / (innerHeight * 1.25)) : (r.height - innerHeight > 0 ? clamp(-r.top / (r.height - innerHeight)) : 1);
+  return { lo, now, p2: Math.round(p2 * 2000) / 2000, p3: clamp((innerHeight * .85 - ra.top) / (ra.height * .9)) };
+};
+let l2 = -1, l3 = -1;
+const write = (v) => {
+  if (v.lo !== v.now) { root.classList.toggle("tr-loose", v.lo); window.__htAsk(); return; } // layout changes: measure again next frame
+  if (v.p2 !== l2) { l2 = v.p2; seek2(v.p2); }
+  const k3 = Math.floor(v.p3 * 5); if (k3 !== l3) { l3 = k3; seek3(v.p3); }
+};
 const fixed = F2 != null || F3 != null;
-function frame() { if (fixed) { seek2(F2 ?? 1); seek3(F3 ?? 1); return; } if (reduce) { seek2(1); seek3(1); return; } seek2(p2()); seek3(p3()); }
+function frame() { if (fixed) { seek2(F2 ?? 1); seek3(F3 ?? 1); return; } if (reduce) { seek2(1); seek3(1); return; } write(read()); }
 if (fixed || reduce) document.documentElement.classList.add("tr-fixed");
-else { addEventListener("scroll", () => requestAnimationFrame(frame), { passive: true }); addEventListener("resize", frame); }
+else window.__htJobs.push({ read, write });
+// day strip: keep its words at 12 px or more on screen; the pill and the "studying" block grow to fit
+const daySvg = document.querySelector(".day svg"), dts = [...daySvg.querySelectorAll("text")];
+dts.forEach((el) => { el.dataset.fs = el.getAttribute("font-size"); });
+let lastDS = "";
+function adaptDay(force) {
+  const m = daySvg.getScreenCTM(); if (!m) return; const s = Math.hypot(m.a, m.b); if (!s) return;
+  const key = s.toFixed(3); if (key === lastDS && force !== true) return; lastDS = key;
+  dts.forEach((el) => { const b = +el.dataset.fs; el.setAttribute("font-size", Math.max(b, 12.3 / s).toFixed(2)); });
+  const ot = $("tr-oft"), or = $("tr-ofr"), ofs = +ot.getAttribute("font-size");
+  // the pill fits the longest of its three labels (it was measured on whichever label showed, so Safari's wider mono overflowed)
+  const shown = ot.textContent; let tw = 0;
+  for (const l of ["Talk to someone?", "next morning", "not mid-study"]) { ot.textContent = l; tw = Math.max(tw, ot.getBBox().width); }
+  ot.textContent = shown;
+  const ow = Math.max(150, tw + 28), oh = Math.max(29, ofs * 1.75);
+  halfW = ow / 2;
+  or.setAttribute("width", ow.toFixed(1)); or.setAttribute("x", (-ow / 2).toFixed(1)); or.setAttribute("height", oh.toFixed(1)); or.setAttribute("rx", (oh / 2).toFixed(1));
+  ot.setAttribute("y", (3 + oh / 2 + ofs * .35).toFixed(1));
+  const bt = $("tr-blkt"), br = $("tr-blk"), bfs = +bt.getAttribute("font-size");
+  const bw = Math.max(110, bt.getBBox().width + 20), bh = Math.max(22, bfs * 1.6);
+  br.setAttribute("width", bw.toFixed(1)); br.setAttribute("height", bh.toFixed(1)); br.setAttribute("y", (50 - bh / 2).toFixed(1)); br.setAttribute("rx", (bh / 2).toFixed(1));
+  bt.setAttribute("x", (8 + bw / 2).toFixed(1)); bt.setAttribute("y", (50 + bfs * .35).toFixed(1));
+  l2 = -1; frame(); // the pill's width changed: place it again
+}
+addEventListener("resize", () => adaptDay()); (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => adaptDay(true)); adaptDay(true);
+if ("ResizeObserver" in window) new ResizeObserver(() => requestAnimationFrame(() => adaptDay())).observe(daySvg);
 frame();
 })();
 </script>

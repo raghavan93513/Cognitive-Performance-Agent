@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F4F3EF">
+<title>Halftime</title>
+<meta name="description" content="Halftime is a study-break helper for students: it tells you when to keep going, take a short walk, or stop for tonight, and always shows why.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Halftime">
+<meta property="og:description" content="When to keep going, take a walk, or stop for tonight. Always with the reason. A student project with sample data.">
+<meta property="og:url" content="https://halftime-study.vercel.app/">
+<meta property="og:image" content="https://halftime-study.vercel.app/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Halftime: every long study session needs a halftime. A sample card asks: Stop for tonight?">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: one reading column; the hero splits into the promise (left) and a two-tap demo of the real island (right),
+   stacking on phones so the answer lands right under the taps. One light world on purpose: the product's paper and black island. */
+:root{
+  color-scheme:light;
+  --paper:#F4F3EF; --paper2:#EAE8E1; --ink:#141414; --ink2:#46453F; --muted:#5E5C56; --line:#DCD9D1;
+  --island:#0A0A0A; --on:#FFFFFF; --on2:rgba(255,255,255,.76); --on3:rgba(255,255,255,.56); --well:#1C1C1E; --well2:#2C2C2E;
+  --mint:#8ED6BC; --mint-ink:#0F5E46; --now:#D23B40;
+  --ui:"Geist", system-ui, -apple-system, "Segoe UI", sans-serif; --mono:"Geist Mono", ui-monospace, Menlo, monospace;
+  --spring:cubic-bezier(.32,.72,0,1); --ease:cubic-bezier(.23,1,.32,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;background:var(--paper)}
+body{background:var(--paper);color:var(--ink);font:400 1.0625rem/1.5 var(--ui);font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;touch-action:manipulation}
+a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:1px}
+:focus-visible{outline:3px solid var(--mint-ink);outline-offset:3px;border-radius:12px}
+.island :focus-visible{outline-color:var(--mint)}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+::selection{background:rgba(142,214,188,.55);color:var(--ink)}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(20px, env(safe-area-inset-left, 0px));padding-right:max(20px, env(safe-area-inset-right, 0px))}
+.mono{font-family:var(--mono)}
+
+/* top bar */
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:18px}
+.mark{display:flex;align-items:center;gap:10px;min-height:44px;font:700 1.125rem/1 var(--ui);letter-spacing:-.02em;text-decoration:none}
+.mark i{display:block;width:34px;height:14px;border-radius:7px;background:var(--island);position:relative}
+.mark i::after{content:"";position:absolute;left:5px;top:4.5px;width:5px;height:5px;border-radius:50%;background:var(--mint)}
+.top a.lk{font:500 .9375rem/1 var(--ui);color:var(--ink2);min-height:44px;display:inline-flex;align-items:center}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);gap:56px;align-items:start;padding-block:28px 72px}
+h1{font:650 clamp(2.6rem,6.2vw,4.75rem)/.98 var(--ui);letter-spacing:-.045em;text-wrap:balance}
+h1 em{font-style:normal;background:linear-gradient(transparent 62%, rgba(142,214,188,.75) 62%, rgba(142,214,188,.75) 92%, transparent 92%)}
+.lede{font:400 clamp(1.125rem,1.6vw,1.3rem)/1.45 var(--ui);color:var(--ink2);margin-top:22px;max-width:30ch}
+.ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 24px;border-radius:26px;font:600 1.0625rem/1 var(--ui);text-decoration:none;transition:transform .12s var(--ease)}
+.btn:active{transform:scale(.97)}
+.btn.dark{background:var(--ink);color:var(--paper)}
+.btn.soft{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.fineprint{font:400 .875rem/1.45 var(--ui);color:var(--muted);margin-top:16px}
+
+/* the demo stage */
+.stage{background:var(--paper2);border-radius:32px;padding:22px 20px 20px;position:relative}
+.ask{display:grid;gap:14px}
+.ask fieldset{border:0;min-width:0}
+.ask legend{font:600 .9375rem/1.2 var(--ui);margin-bottom:8px}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opt{min-height:44px;padding:0 15px;border-radius:22px;background:#FFFFFF;color:var(--ink);font:500 .9375rem/1 var(--ui);transition:background .15s ease,color .15s ease}
+.opt[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.island{margin-top:18px;background:var(--island);color:var(--on);border-radius:34px;overflow:hidden;height:52px;width:200px;margin-inline:auto;
+  box-shadow:0 10px 24px rgba(20,20,20,.16)}
+.island.opening{transition:height .5s var(--spring),width .5s var(--spring)}
+.island.open{width:var(--w,100%)}
+.pill{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font:500 1rem/1 var(--mono)}
+.pill b{display:flex;align-items:center;gap:9px;font-weight:500}.pill b::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--mint)}
+.island.open .pill{display:none}
+.say{padding:20px 22px 18px;display:none;width:var(--w,100%)}
+.island.open .say{display:block}
+.say.swap{animation:swap .32s var(--ease)}
+@keyframes swap{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.st{display:flex;justify-content:space-between;gap:10px;font:500 .75rem/1 var(--mono);color:var(--on3);flex-wrap:wrap;column-gap:12px;row-gap:2px}
+.st span{white-space:nowrap}
+.q{font:650 1.875rem/1.05 var(--ui);letter-spacing:-.03em;margin-top:12px;text-wrap:balance}
+.sub{font:500 1rem/1.4 var(--ui);color:var(--mint);margin-top:6px}
+.why{font:400 1rem/1.5 var(--ui);color:var(--on2);margin-top:10px}
+.why b{color:var(--on);font-weight:500}
+.nw{white-space:nowrap}
+.src{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;border-radius:7px;background:var(--well2);color:var(--on2);font:500 .75rem/1 var(--mono);margin-left:4px;vertical-align:1px}
+.sure{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font:400 .875rem/1.4 var(--ui);color:var(--on2)}
+.tag{flex:none;font:500 .75rem/1 var(--mono);color:var(--on);border:1px solid var(--on3);border-radius:999px;padding:5px 9px;margin-top:1px}
+.note{font:400 .875rem/1.4 var(--ui);color:var(--on3);margin-top:8px}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.a{min-height:50px;border-radius:25px;font:600 1rem/1 var(--ui);transition:transform .12s var(--ease)}
+.a:active{transform:scale(.96)}
+.a.yes{background:var(--on);color:#000}.a.no{background:var(--well2);color:var(--on)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:12px;font:500 .8125rem/1.3 var(--ui);color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend span[hidden]{display:none}
+.legend .src{background:var(--ink);color:var(--paper);margin:0}
+/* the session line */
+.line{margin-top:18px}
+.lt{display:flex;justify-content:space-between;font:500 .8125rem/1 var(--ui);color:var(--muted)}
+.track{position:relative;contain:layout;height:14px;border-radius:7px;background:#DCD9D1;margin-top:12px}
+.done{position:absolute;left:0;top:0;bottom:0;border-radius:7px;background:var(--ink);transition:width .5s var(--spring)}
+.slot{position:absolute;top:-7px;bottom:-7px;border-radius:10px;background:rgba(142,214,188,.4);outline:2px dashed var(--mint-ink);outline-offset:-2px;transition:left .5s var(--spring),width .5s var(--spring),opacity .25s ease}
+.nowm{position:absolute;top:-10px;bottom:-10px;width:3px;margin-left:-1.5px;border-radius:2px;background:var(--now);transition:left .5s var(--spring)}
+.stop{position:absolute;right:0;top:50%;width:20px;height:20px;margin-top:-10px;border-radius:6px;background:var(--paper2);border:3px solid var(--ink)}
+.ticks{position:relative;contain:layout;height:34px;margin-top:10px;font:500 .75rem/1.3 var(--mono);color:var(--muted)}
+.ticks span{position:absolute;top:0;white-space:nowrap}
+.ticks .tn{color:#B42318;transition:left .5s var(--spring)}
+.ticks .ts{top:17px;color:var(--mint-ink);transition:left .5s var(--spring),opacity .25s ease}
+.smp{font:500 .75rem/1 var(--mono);color:var(--muted);text-align:center;margin-top:16px}
+.sample{display:block;text-align:center;font:500 .75rem/1.4 var(--ui);color:var(--muted);margin-top:4px}
+.sample b{color:var(--ink);font-weight:600}
+.links{text-align:center;margin-top:6px}
+.links button{background:none;border:0;color:var(--on2);font:500 .9375rem/1 var(--ui);text-decoration:underline;text-underline-offset:3px;min-height:44px;padding:0 14px;cursor:pointer}
+.hcard .med{font-size:.9375rem;margin-top:10px;color:var(--on3)}
+
+/* sections */
+section.band{padding-block:72px;border-top:1px solid var(--line)}
+h2{font:650 clamp(1.9rem,3.6vw,2.75rem)/1.04 var(--ui);letter-spacing:-.035em;text-wrap:balance;max-width:20ch}
+.h2sub{font:400 1.125rem/1.5 var(--ui);color:var(--ink2);margin-top:12px;max-width:44ch}
+/* how it works: direction A, "The thread" (team pick, Heramb 2026-11-05). One line becomes the whole story;
+   scroll plays it (seek(p) of the section's scroll), ?hw=0.72 freezes a frame, reduced motion snaps per step. */
+.hw-sub{font:400 1.0625rem/1.5 var(--ui);color:var(--ink2);margin-top:10px}
+.hw-scrolly{height:420vh;height:420svh;position:relative;margin-top:8px}
+.hw-fixed .hw-scrolly{height:100vh;height:100svh}
+.hw-pin{position:sticky;top:0;height:100vh;height:100svh;display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1fr);gap:48px;align-items:center;padding-block:20px}
+.hw-stage{min-height:0;height:100%;display:flex;align-items:center;justify-content:center;contain:layout paint}
+.hw-stage svg{width:100%;height:100%;max-height:calc(100vh - 40px);max-height:calc(100svh - 40px);display:block}
+.hw-stage svg text{font-family:var(--ui)} .hw-stage svg .mono{font-family:var(--mono)}
+.hw-caps{list-style:none;display:grid;gap:22px;padding:0;margin:0}
+.hw-caps li{display:grid;grid-template-columns:34px 1fr;gap:4px 14px;cursor:pointer;opacity:.34}
+.hw-caps li.on{opacity:1}
+.hw-caps .n{grid-row:span 2;width:34px;height:34px;border-radius:50%;box-shadow:inset 0 0 0 2.5px var(--ink);display:flex;align-items:center;justify-content:center;font:600 .9375rem/1 var(--mono)}
+.hw-caps li.on .n{background:var(--ink);color:var(--paper)}
+.hw-caps li:nth-child(3).on .n{background:var(--mint);color:#0B3D2E;box-shadow:inset 0 0 0 2.5px var(--mint-ink)}
+.hw-caps h3{font:650 1.375rem/1.15 var(--ui);letter-spacing:-.02em;padding-top:5px}
+.hw-caps p{font:400 1rem/1.5 var(--ui);color:var(--ink2);max-width:38ch}
+/* trust */
+.trust{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:40px}
+.list{background:#FFFFFF;border-radius:24px;padding:24px 24px 22px}
+.list h3{font:650 1.25rem/1.2 var(--ui);letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
+.list h3 i{width:12px;height:12px;border-radius:50%;flex:none}
+.list.yes h3 i{background:var(--mint-ink)}.list.no h3 i{background:transparent;box-shadow:inset 0 0 0 2px var(--ink)}
+.list ul{list-style:none;display:grid;gap:10px;margin-top:14px}
+.list li{font:400 1.0625rem/1.4 var(--ui);color:var(--ink2);padding-left:22px;position:relative}
+.list.yes li::before{content:"";position:absolute;left:2px;top:.5em;width:9px;height:5px;border-left:2px solid var(--mint-ink);border-bottom:2px solid var(--mint-ink);transform:rotate(-45deg)}
+.list.no li::before{content:"";position:absolute;left:3px;top:.62em;width:10px;height:2px;background:var(--ink2)}
+.honest{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:16px}
+.hcard{border-radius:24px;padding:24px;background:var(--island);color:var(--on)}
+.hcard h3{font:650 1.25rem/1.2 var(--ui);letter-spacing:-.02em;text-wrap:balance}
+.hcard p{font:400 1rem/1.5 var(--ui);color:var(--on2);margin-top:8px}
+.learn{display:flex;gap:5px;margin-top:16px}.learn i{flex:1;height:6px;border-radius:3px;background:var(--well2)}.learn i.on{background:var(--mint)}
+.hcard .mono{font-size:.8125rem;color:var(--on3);margin-top:8px;display:block}
+/* the ask */
+.ask2{background:var(--island);color:var(--on);border-radius:36px;padding:48px 40px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:32px;align-items:end}
+.ask2 h2{color:var(--on)}
+.ask2 p{font:400 1.125rem/1.5 var(--ui);color:var(--on2);margin-top:12px;max-width:40ch}
+.ask2 .ctas{margin-top:0;justify-content:flex-end}
+.ask2 .btn.dark{background:var(--mint);color:#0B3D2E}
+.ask2 .btn.soft{color:var(--on);box-shadow:inset 0 0 0 1.5px var(--on3)}
+.ask2 .lead{color:var(--on);font-weight:600;margin-top:22px}
+.ask2 ul{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px;max-width:44ch}
+.ask2 li{font:400 1.0625rem/1.45 var(--ui);color:var(--on2);padding-left:18px;position:relative}
+.ask2 li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--on3)}
+.ask2 .later{font-size:.9375rem;color:var(--on3);margin-top:16px}
+.lede strong{color:var(--ink);font-weight:600}
+.joinlink{display:none}
+footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+
+/* trust sections (team pick 2026-11-06, Heramb "Mix: E then D"): E's "see what it sees" switch for what it reads,
+   D's scroll-played honesty cards and joining ticks. Same cards and words as before. */
+.seg{display:inline-flex;background:var(--paper2);border-radius:22px;padding:4px;gap:2px}
+.seg button{min-height:44px;padding:0 14px;border-radius:18px;font:600 .9375rem/1 var(--ui);color:var(--ink2);background:none;border:0;cursor:pointer;touch-action:manipulation;transition:background .2s var(--ease),color .2s var(--ease)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.xray{margin-top:40px;background:#FFFFFF;border-radius:24px;padding:18px}
+.xhead{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.xhead .hint{font:500 .8125rem/1.3 var(--mono);color:var(--muted)}
+.screen{margin-top:14px;background:var(--paper2);border-radius:16px;padding:14px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.win{background:#FFFFFF;border-radius:12px;padding:10px 12px 12px;min-width:0}
+.wt{display:flex;align-items:center;gap:6px;font:600 .8125rem/1.2 var(--ui);color:var(--ink);min-height:20px}
+.wt i{width:8px;height:8px;border-radius:50%;background:var(--line);flex:none}
+.wt .kind{display:none;font:500 .75rem/1 var(--mono);background:var(--mint);color:#0B3D2E;border-radius:6px;padding:3px 7px}
+.ln{margin-top:7px;font:400 .875rem/1.35 var(--ui);color:var(--ink2)}
+.ln span,.bubble span{transition:color .2s var(--ease),background .2s var(--ease)}
+.bubble{display:inline-block;background:var(--paper2);border-radius:12px;padding:6px 10px;margin-top:8px;font:400 .875rem/1.35 var(--ui)}
+.counter{margin-top:10px;font:500 .875rem/1.3 var(--mono);color:var(--mint-ink);min-height:1.3em;opacity:0;transform:translateY(4px);transition:opacity .2s var(--ease),transform .2s var(--ease)}
+#xr .trust{margin-top:16px}
+#xr .list li{border-radius:8px;transition:background .2s var(--ease),color .2s var(--ease)}
+.sees .ln span,.sees .bubble span{color:transparent;background:var(--line);border-radius:4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.sees .wt .name{display:none}.sees .wt .kind{display:inline-block}
+.sees .counter{opacity:1;transform:none}
+.sees .list.yes li[data-r]{background:rgba(142,214,188,.22);color:var(--ink)}
+.sees .list.no li[data-r]{background:var(--paper2);color:var(--ink)}
+.hsty{height:230vh;height:230svh;position:relative;margin-top:16px}
+.hpin{position:sticky;top:0;height:100vh;height:100svh;display:flex;flex-direction:column;justify-content:center}
+.hsty .honest{margin-top:0}
+.day{margin-top:16px;max-width:400px}.day svg{width:100%;height:auto;display:block;overflow:visible}.day text{font-family:var(--mono)}
+.ask2 .checks{gap:10px;max-width:44ch}
+.ask2 .checks li{padding-left:30px}
+.ask2 .checks li::before{left:0;top:.18em;width:20px;height:20px;border-radius:50%;background:none;box-shadow:inset 0 0 0 1.5px var(--on3)}
+.ask2 .checks li.ok{color:var(--on)}
+.ask2 .checks li.ok::before{background:var(--mint);box-shadow:none}
+.ask2 .checks li.ok::after{content:"";position:absolute;left:6px;top:.5em;width:8px;height:4px;border-left:2px solid #0B3D2E;border-bottom:2px solid #0B3D2E;transform:rotate(-45deg)}
+.tbd{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin-top:18px;font:500 .9375rem/1.4 var(--ui);color:var(--on2)}
+.tbd b{font-weight:500}.tbd span{font:500 .9375rem/1.4 var(--mono);color:var(--on3)}
+.tr-fixed .hsty,.tr-loose .hsty{height:auto}.tr-fixed .hpin,.tr-loose .hpin{position:relative;height:auto}
+
+@media (max-width:900px){
+  .screen{grid-template-columns:minmax(0,1fr);gap:8px}
+  .ln.x{display:none}
+  .hero{grid-template-columns:minmax(0,1fr);gap:22px;padding-block:8px 52px}
+  .lede{max-width:36ch;margin-top:16px}
+  .hero .ctas{display:none}
+  .fineprint{margin-top:12px}
+  .joinlink{display:inline}
+  .joinlink a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;padding:10px 0}
+  .trust,.honest{grid-template-columns:minmax(0,1fr)}
+  .ask2{grid-template-columns:minmax(0,1fr);padding:34px 24px;border-radius:30px}
+  .ask2 .ctas{justify-content:flex-start}
+  section.band{padding-block:56px}
+}
+@media (max-width:420px){
+  .stage{padding:18px 14px 16px;border-radius:28px}
+  .ask{gap:10px}
+  .ask legend{margin-bottom:6px}
+  .opt{padding:0 12px}
+  .say{padding:18px 18px 16px}
+  .q{font-size:1.625rem}
+  .btn{flex:1 1 auto}
+}
+@media (max-width:900px) and (min-width:601px){
+  .hw-pin{grid-template-columns:minmax(0,.9fr) minmax(0,1fr);gap:28px}
+  .hw-caps{gap:16px}.hw-caps h3{font-size:1.1875rem}.hw-caps p{font-size:.9375rem}
+}
+@media (max-width:600px){
+  .hw-pin{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:8px;align-items:stretch;padding-block:12px calc(16px + env(safe-area-inset-bottom))}
+  .hw-caps{order:2}.hw-stage{order:1}
+  .hw-caps li{display:none;opacity:1}.hw-caps li.on{display:grid}
+  .hw-caps p{font-size:.9375rem}
+  .hw-stage{margin-inline:-20px}
+  .day{margin-inline:-8px}
+}
+@media (max-width:600px) and (max-height:700px){
+  .hw-pin{padding-block:6px 10px;gap:4px}
+  .hw-caps h3{font-size:1.125rem;padding-top:3px}.hw-caps p{font-size:.875rem;line-height:1.4}
+  .hw-caps li{gap:2px 12px}
+}
+@media (max-height:560px) and (orientation:landscape){
+  .honest{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .hw-pin{padding-block:8px}
+  .hw-stage svg{max-height:calc(100vh - 16px);max-height:calc(100svh - 16px)}
+  .hw-caps{gap:10px}.hw-caps p{font-size:.875rem}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="mark" href="#top" aria-label="Halftime"><i aria-hidden="true"></i>Halftime</a>
+  </header>
+
+  <main id="top">
+    <div class="hero">
+      <div>
+        <h1>Every long study session needs a <em>halftime.</em></h1>
+        <p class="lede"><strong>Two hours into studying, it's hard to tell if you need a break or should push on.</strong> Halftime suggests a short break when one fits, and always shows you why.</p>
+        <div class="ctas"><a class="btn dark" href="#pilot">What joining involves</a><a class="btn soft" href="#how">How it works</a></div>
+        <p class="fineprint">For students and athletes. Works with a Fitbit, Oura or WHOOP, or with no watch at all.<span class="joinlink"> <a href="#pilot">It's a class study, not open yet. What joining involves →</a></span></p>
+      </div>
+
+      <div class="stage" id="try" aria-label="Try Halftime">
+        <div class="ask">
+          <fieldset><legend>When are you studying?</legend><div class="opts" data-q="w"></div></fieldset>
+          <fieldset><legend>You've been studying for</legend><div class="opts" data-q="t"></div></fieldset>
+          <fieldset><legend>Last night's sleep</legend><div class="opts" data-q="s"></div></fieldset>
+        </div>
+        <p class="smp">Sample card · made-up data</p>
+        <div class="island" id="island" role="status" aria-live="polite">
+          <div class="pill" aria-hidden="true"><b id="pt">2:40</b><span>Halftime</span></div>
+          <div class="say" id="say"></div>
+        </div>
+        <div class="legend" aria-label="Where each reason comes from"><span><i class="src">1</i>your laptop</span><span id="lg2"><i class="src">2</i>your watch or ring</span><span><i class="src">3</i>your calendar</span></div>
+        <div class="line" aria-hidden="true">
+          <p class="lt"><span id="lfrom">Started 12:30 pm</span><span id="lto">Chem lab 4:30 pm</span></p>
+          <div class="track"><span class="done" id="done"></span><span class="slot" id="slot"></span><span class="nowm" id="nowm"></span><span class="stop"></span></div>
+          <div class="ticks"><span class="tn" id="tn"></span><span class="ts" id="ts"></span></div>
+        </div>
+        <span class="sample"><b>This black card is how Halftime shows up:</b> small at the top of your iPhone, opening once when it has something to say. Sample demo with simple rules; the real one learns what's usual for you.</span>
+      </div>
+    </div>
+
+    <section class="band" aria-labelledby="how">
+      <h2 id="how">How it works, in four steps.</h2>
+      <p class="hw-sub">Scroll through one afternoon. Sample data.</p>
+      <div class="hw-scrolly">
+        <div class="hw-pin">
+          <ol class="hw-caps">
+      <li><span class="n">1</span><h3>It notices.</h3><p>A small app on your laptop counts how long you've studied and how often you switch apps.</p></li>
+      <li><span class="n">2</span><h3>It reads your watch, carefully.</h3><p>By default it takes one thing: how long you slept, compared with your own usual. Plain code does the math, not an AI. No watch? It skips this step.</p></li>
+      <li><span class="n">3</span><h3>It suggests, and shows why.</h3><p>A small card opens: keep going, a 5-minute walk, or a longer break. Each reason shows where it came from and how sure it is.</p></li>
+      <li><span class="n">4</span><h3>You decide.</h3><p>Walk, keep going or snooze. It asks once, then stays quiet.</p></li>
+    </ol>
+          <div class="hw-stage" aria-hidden="true">
+<svg viewBox="14 0 372 520" preserveAspectRatio="xMidYMid meet">
+        <!-- step 1: the session line -->
+        <text id="hw-cap1" x="40" y="292" font-size="14" font-weight="600" fill="#141414">2 h 40 min · 14 switches in the last 20 min</text>
+        <line x1="40" y1="330" x2="360" y2="330" stroke="#DCD9D1" stroke-width="6" stroke-linecap="round"/>
+        <line id="hw-sess" x1="40" y1="330" x2="40" y2="330" stroke="#141414" stroke-width="6" stroke-linecap="round"/>
+        <g id="hw-ticks"></g>
+        <text id="hw-lstart" class="mono" x="40" y="358" font-size="14" fill="#5E5C56">Started 12:30</text>
+        <text id="hw-lnow" class="mono" x="253" y="358" font-size="14" fill="#B42318" text-anchor="middle">now 3:10</text>
+        <text id="hw-lend" class="mono" x="360" y="358" font-size="14" fill="#5E5C56" text-anchor="end">lab 4:30</text>
+        <rect id="hw-slot" x="253" y="324" width="0" height="12" rx="3" fill="#8ED6BC"/>
+        <line id="hw-quiet" x1="266" y1="330" x2="360" y2="330" stroke="#141414" stroke-width="2" stroke-dasharray="3 6" opacity="0"/>
+        <text id="hw-lquiet" class="mono" x="360" y="312" font-size="14" fill="#5E5C56" text-anchor="end" opacity="0">quiet until the next check</text>
+        <!-- step 2: last night -->
+        <text id="hw-s2a" x="40" y="414" font-size="14" font-weight="600" fill="#141414">Last night</text>
+        <rect id="hw-usual" x="40" y="424" width="210" height="18" rx="9" fill="none" stroke="#141414" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <rect id="hw-slept" x="40" y="424" width="0" height="18" rx="9" fill="#141414" stroke="#141414" stroke-width="1.5"/>
+        <text id="hw-s2b" class="mono" x="206" y="460" font-size="14" fill="#141414">slept 5 h</text>
+        <text id="hw-s2c" class="mono" x="260" y="438" font-size="14" fill="#5E5C56">your usual 7 h</text>
+        <text id="hw-s2d" x="40" y="494" font-size="14" fill="#46453F">Plain code: 2 h under your usual. Not an AI.</text>
+        <!-- step 3: reasons rise into the card -->
+        <line id="hw-r1" x1="240" y1="316" x2="240" y2="316" stroke="#0F5E46" stroke-width="2"/>
+        <line id="hw-r2" x1="190" y1="424" x2="190" y2="424" stroke="#0F5E46" stroke-width="2"/>
+        <g id="hw-o1"><rect x="231" y="300" width="18" height="18" rx="5" fill="#0F5E46"/><text class="mono" x="240" y="313" font-size="14" fill="#fff" text-anchor="middle">1</text></g>
+        <g id="hw-o2"><rect x="181" y="446" width="18" height="18" rx="5" fill="#0F5E46"/><text class="mono" x="190" y="459" font-size="14" fill="#fff" text-anchor="middle">2</text></g>
+        <!-- the card -->
+        <rect id="hw-card" x="246" y="323" width="14" height="14" rx="7" fill="#0A0A0A" opacity="0"/>
+        <g id="hw-cc" opacity="0">
+          <text class="mono" x="44" y="50" font-size="14" fill="rgba(255,255,255,.56)">Halftime · now 3:10</text>
+          <text x="44" y="86" font-size="25" font-weight="650" fill="#fff" letter-spacing="-.5">Short walk now?</text>
+          <text x="44" y="112" font-size="14" font-weight="500" fill="#8ED6BC">5 minutes fits. Back by 3:15.</text>
+          <rect id="hw-ch1" x="44" y="126" width="18" height="18" rx="5" fill="#2C2C2E"/><text class="mono" x="53" y="139" font-size="14" fill="#fff" text-anchor="middle">1</text>
+          <text x="70" y="140" font-size="14" fill="rgba(255,255,255,.8)">2 h 40 min, 14 switches in 20 min</text>
+          <rect id="hw-ch2" x="44" y="152" width="18" height="18" rx="5" fill="#2C2C2E"/><text class="mono" x="53" y="165" font-size="14" fill="#fff" text-anchor="middle">2</text>
+          <text x="70" y="166" font-size="14" fill="rgba(255,255,255,.8)">slept 5 h, 2 h under your usual</text>
+          <rect id="hw-surer" x="44" y="180" width="86" height="22" rx="11" fill="none" stroke="rgba(255,255,255,.56)"/>
+          <text id="hw-suret" class="mono" x="87" y="195" font-size="14" fill="#fff" text-anchor="middle">Fairly sure</text>
+        </g>
+        <g id="hw-btns" opacity="0">
+          <rect id="hw-b1" x="44" y="216" width="116" height="34" rx="17" fill="#fff"/><text id="hw-b1t" x="102" y="238" font-size="14" font-weight="600" fill="#141414" text-anchor="middle">Walk 5 min</text>
+          <rect x="168" y="216" width="108" height="34" rx="17" fill="#2C2C2E"/><text x="222" y="238" font-size="14" font-weight="600" fill="#fff" text-anchor="middle">Keep going</text>
+          <text x="318" y="238" font-size="14" fill="rgba(255,255,255,.76)" text-anchor="middle" text-decoration="underline">Snooze</text>
+        </g>
+        <text id="hw-pill" class="mono" x="200" y="43" font-size="14" fill="#fff" text-anchor="middle" opacity="0">walk · back 3:15</text>
+        <text id="hw-fin" x="200" y="512" font-size="16" font-weight="650" fill="#141414" text-anchor="middle" opacity="0">It asks once. Then it stays quiet.</text>
+      </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="trust">
+      <h2 id="trust">Clear about what it reads.</h2>
+      <p class="h2sub">You choose each source, and you can turn any of them off or delete everything.</p>
+      <div id="xr">
+        <div class="xray">
+          <div class="xhead"><div class="seg" role="group" aria-label="Whose view"><button type="button" aria-pressed="true" data-v="you">What you see</button><button type="button" aria-pressed="false" data-v="it">What Halftime sees</button></div><span class="hint">A sample laptop. Flip it.</span></div>
+          <div class="screen" aria-label="Sample laptop screen">
+            <div class="win"><div class="wt"><i></i><span class="name">Notes · Orgo ch. 7</span><span class="kind">notes</span></div>
+              <p class="ln"><span>SN2: backside attack, so the stereocenter inverts.</span></p><p class="ln x"><span>Rate = k[RX][Nu], one step.</span></p></div>
+            <div class="win"><div class="wt"><i></i><span class="name">Browser · reaction mechanisms</span><span class="kind">reading</span></div>
+              <p class="ln"><span>Nucleophilic substitution happens in one step when…</span></p><p class="ln x"><span>Figure 7.3: energy diagram for SN1.</span></p></div>
+            <div class="win"><div class="wt"><i></i><span class="name">Messages · study group</span><span class="kind">chat</span></div>
+              <p class="bubble"><span>are you still at the library?</span></p></div>
+          </div>
+          <p class="counter">2 h 40 min · 3 switches in 20 min · notes, reading, chat</p>
+          <p class="sr" id="xr-say" aria-live="polite"></p>
+        </div>
+        <div class="trust">
+          <div class="list yes"><h3><i aria-hidden="true"></i>What it reads</h3><ul>
+            <li data-r>How long you've been studying, and your breaks</li>
+            <li data-r>How often you switch apps, and which kind (like notes, reading, video or chat), not the app's name</li>
+            <li>How long you slept, if you connect a watch or ring</li>
+            <li>Your next class, if you turn on your calendar</li></ul></div>
+          <div class="list no"><h3><i aria-hidden="true"></i>What it never reads</h3><ul>
+            <li data-r>What you type, read or browse</li>
+            <li data-r>Your messages or your screen</li>
+            <li>Your location</li>
+            <li>Your watch's own scores, like Readiness or Recovery</li></ul></div>
+        </div>
+      </div>
+      <div class="hsty" id="tr-hsty"><div class="hpin">
+        <div class="honest">
+          <div class="hcard"><h3>When it doesn't know, it says so.</h3><p>For the first week it's still learning what's normal for you, and it tells you that instead of guessing.</p><div class="learn" id="tr-learn" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div><span class="mono" id="tr-lt">Still learning your usual sleep · 4 of 7 nights</span></div>
+          <div class="hcard"><h3>Some things need a person.</h3><p>If your sleep has been short for weeks, it offers someone to talk to, in the morning, never mid-study. It never tells your coach, team or school.</p>
+            <div class="day" aria-hidden="true"><svg viewBox="0 0 300 86">
+              <line x1="8" y1="50" x2="292" y2="50" stroke="#2C2C2E" stroke-width="4" stroke-linecap="round"/>
+              <rect id="tr-blk" x="8" y="39" width="110" height="22" rx="11" fill="#46453F"/>
+              <text id="tr-blkt" x="63" y="55" font-size="14" fill="rgba(255,255,255,.85)" text-anchor="middle">studying</text>
+              <text x="8" y="82" font-size="15" fill="rgba(255,255,255,.6)">10 pm</text>
+              <text x="225" y="82" font-size="15" fill="rgba(255,255,255,.6)" text-anchor="middle">8 am</text>
+              <line x1="225" y1="39" x2="225" y2="61" stroke="rgba(255,255,255,.45)" stroke-width="1.5"/>
+              <g id="tr-offer" transform="translate(225 0)"><rect id="tr-ofr" x="-75" y="3" width="150" height="29" rx="14.5" fill="rgba(142,214,188,.14)" stroke="#8ED6BC" stroke-width="1.5"/><text id="tr-oft" x="0" y="22.5" font-size="15" fill="#8ED6BC" text-anchor="middle">Talk to someone?</text></g>
+            </svg></div>
+            <p class="med">Halftime is a wellness tool, not medical advice.</p></div>
+        </div>
+      </div></div>
+    </section>
+
+    <section class="band" id="pilot" aria-labelledby="ask">
+      <div class="ask2" id="tr-ask2">
+        <div><h2 id="ask">Sign-up isn't open yet.</h2><p>We're a student team. Our course staff have to OK the study before anyone's real data goes in, so for now everything here is a demo with made-up data.</p>
+          <p class="lead">If it opens, joining means:</p>
+          <ul class="checks" id="tr-checks">
+            <li class="ok">Installing a small app on your laptop, and adding Halftime to your iPhone.</li>
+            <li class="ok">Connecting a watch, ring or calendar, only if you want to.</li>
+            <li class="ok">A slow start: at first it mostly says "not enough data yet" while it learns what's usual for you.</li>
+            <li class="ok">No cost, and you can stop whenever you want.</li>
+          </ul>
+          <div class="tbd"><b>How long it runs</b><span>—</span><b>Who can join</b><span>—</span></div>
+          <p class="later">We'll put these here before sign-up opens.</p></div>
+        <div class="ctas"><a class="btn dark" href="#try">Try the demo again</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer><span>Halftime is a BINF 4070 student project at Columbia University. It's a wellness tool, not medical advice.</span><span>Everything on this page is sample data.</span></footer>
+</div>
+
+<script>
+// Sample demo only: simple rules stand in for the real model, which learns each person's usual.
+// Three moments: the same two questions give a different card in the afternoon, late at night, or after practice.
+const T = [[35, "35 min"], [90, "1 h 30"], [160, "2 h 40"], [220, "3 h 40"]];
+const S = [[7, "About 7 h"], [5, "About 5 h"], [0, "Not tracked"]];
+const W = [["day", "Afternoon"], ["night", "Late night"], ["gym", "After practice"]];
+const M = {
+  day:   { start: 12 * 60 + 30, span: 240, from: "Started 12:30 pm", to: "Chem lab 4:30 pm", left: "to lab", past: "lab time" },
+  night: { start: 22 * 60, span: 210, from: "Started 10:00 pm", to: "Bed by 1:30 am", left: "to bed at 1:30", past: "past bedtime" },
+  gym:   { start: 18 * 60 + 30, span: 240, from: "Started 6:30 pm", to: "Library closes 10:30", left: "to library close", past: "library closing" },
+};
+let w = "day", t = 160, s = 5, reply = null;
+const m = () => M[w];
+const clock = (x) => { const a = m().start + x, h = Math.floor(a / 60) % 24, mm = String(a % 60).padStart(2, "0"); return `${h % 12 || 12}:${mm}`; };
+const dur = (x) => (x < 60 ? `${x} min` : `${Math.floor(x / 60)} h${x % 60 ? ` ${x % 60} min` : ""}`);
+const src = (n, l) => `<i class="src" aria-label="source ${n}, ${l}">${n}</i>`;
+const sleepBit = () => (s === 5 ? `, and slept <span class="nw"><b>5 h</b>${src(2, "watch or ring")}</span>, under your usual 7 h.` : s === 7 ? `, and slept about your usual <span class="nw"><b>7 h</b>${src(2, "watch or ring")}.</span>` : ".");
+const sw = (n) => `, with <span class="nw"><b>${n} app switches</b> in 20 min${src(1, "laptop")}</span>`;
+const steady = ["Fairly sure", "It's early, and your app switching is steady."];
+
+function answer() {
+  const note = s === 0 ? `<p class="note">No watch connected, so this uses your laptop and calendar only.</p>` : "";
+  const keepNo = { q: "Break started.", sub: "Your study clock is paused. Come back whenever you're ready." };
+  if (w === "night") {
+    if (t <= 40) return { kind: "keep", q: "Keep going.", sub: "Nothing to change right now.", why: `You're <b class="nw">${dur(t)}</b> in${sw(3)}${sleepBit()}`, sure: steady, note, btns: ["Keep going", "Take a break"], yes: { q: "Keep going.", sub: `Quiet until around ${clock(t + 30)}.` }, no: keepNo };
+    if (t <= 100) return { kind: "keep", q: "Keep going for now.", sub: `Stopping by 1:30 leaves you 8 h before your 9:30 class<span class="nw">${src(3, "calendar")}.</span>`, why: `You're <b class="nw">${dur(t)}</b> in${sw(4)}${sleepBit()}`, sure: ["Fairly sure", "There's still time before 1:30."], note, btns: ["Keep going", "Take a break"], yes: { q: "Keep going.", sub: `Quiet until around ${clock(t + 30)}.` }, no: keepNo };
+    const late = t > 200;
+    return { kind: "stop", q: "Stop for tonight?", sub: late ? `It's past 1:30. Stopping now leaves you ${dur(2010 - (1320 + t))} before your 9:30 class<span class="nw">${src(3, "calendar")}.</span>` : `Stopping now leaves you ${dur(2010 - (1320 + t))} before your 9:30 class<span class="nw">${src(3, "calendar")}.</span>`,
+      why: `You've been at it <b class="nw">${dur(t)}</b>${src(1, "laptop")}${sleepBit()}`, sure: s === 7 ? ["Not sure yet", "You slept well, so this one is a closer call."] : ["Fairly sure", s === 0 ? "Simple math: the time and your 9:30 class. No sleep data." : "Simple math: the time, your 9:30 class, and last night's sleep."], note,
+      btns: ["Stop for tonight", "20 more min"], yes: { q: "Good night.", sub: "I'll stay quiet until morning." }, no: { q: "OK, 20 more.", sub: `I'll ask once more at ${clock(t + 20)}, then stay quiet.` } };
+  }
+  if (w === "gym") {
+    const prac = `, after practice ended at 5:30<span class="nw">${src(3, "calendar")}</span>`;
+    if (t <= 40) return { kind: "keep", q: "Keep going.", sub: "Nothing to change right now.", why: `You're <b class="nw">${dur(t)}</b> in${sw(3)}${prac}${sleepBit()}`, sure: steady, note, btns: ["Keep going", "Take a break"], yes: { q: "Keep going.", sub: `Quiet until around ${clock(t + 30)}.` }, no: keepNo };
+    if (t <= 170) return { kind: "sit", len: 10, q: "Sit for 10?", sub: `You trained today, so this break is a sit, not a walk. Back by ${clock(t + 10)}.`,
+      why: `You've been at it <b class="nw">${dur(t)}</b>${sw(t > 100 ? 14 : 9)}${prac}${sleepBit()}`, sure: t > 100 && s !== 7 ? ["Fairly sure", "You trained today, and a sit fits before the library closes."] : ["Not sure yet", "Only 3 practice days so far."], note,
+      btns: ["Sit 10 min", "Keep going"], yes: { q: "Enjoy the sit.", sub: `Your study clock is paused. Back by ${clock(t + 10)}.` }, no: { q: "OK, keep going.", sub: `Your call. I'll check in again around ${clock(t + 25)}.` } };
+    return { kind: "wrap", q: "Wrap up for today?", sub: `The library closes at 10:30<span class="nw">${src(3, "calendar")}</span>, and you trained today.`, why: `You've been at it <b class="nw">${dur(t)}</b>${src(1, "laptop")}${sleepBit()}`, sure: ["Fairly sure", `The library closes in ${m().span - t} minutes.`], note,
+      btns: ["Wrap up", "Keep going"], yes: { q: "Done for today.", sub: "I'll stay quiet until tomorrow." }, no: { q: "OK, keep going.", sub: "I won't ask again tonight." } };
+  }
+  // afternoon
+  if (t <= 40) return { kind: "keep", q: "Keep going.", sub: "Nothing to change right now.", why: `You're <b class="nw">${dur(t)}</b> in${sw(3)}${sleepBit()}`, sure: ["Fairly sure", "It's early, and nothing points to a break yet."], note, btns: ["Keep going", "Take a break"], yes: { q: "Keep going.", sub: `Quiet until the next check, around ${clock(t + 30)}.` }, no: keepNo };
+  if (t <= 100) return s === 5
+    ? { kind: "keep", q: "Keep going for now.", sub: `I'll check in a little sooner, around ${clock(t + 20)}.`, why: `You're <b class="nw">${dur(t)}</b> in${src(1, "laptop")}${sleepBit()}`, sure: ["Not sure yet", "Only 2 afternoons like this so far."], note, btns: ["Keep going", "Take a break"], yes: { q: "Keep going.", sub: `Quiet until around ${clock(t + 20)}.` }, no: keepNo }
+    : { kind: "keep", q: "Keep going.", sub: `Next check around ${clock(t + 30)}.`, why: `You're <b class="nw">${dur(t)}</b> in${sw(4)}${sleepBit()}`, sure: ["Fairly sure", "Your app switching looks steady."], note, btns: ["Keep going", "Take a break"], yes: { q: "Keep going.", sub: `Quiet until around ${clock(t + 30)}.` }, no: keepNo };
+  if (t <= 170) return { kind: "walk", len: 5, q: "Short walk now?", sub: `5 minutes fits. Back by ${clock(t + 5)}, well before lab<span class="nw">${src(3, "calendar")}.</span>`, why: `You've been at it <b class="nw">${dur(t)}</b>${sw(14)}${sleepBit()}`, sure: s === 7 ? ["Not sure yet", "You slept well, so this one is a closer call."] : ["Fairly sure", "A long stretch, a short night, and a walk fits before lab."], note,
+    btns: ["Walk 5 min", "Keep going"], yes: { q: "Enjoy the walk.", sub: `Your study clock is paused. Back by ${clock(t + 5)}.` }, no: { q: "OK, keep going.", sub: `Your call. I'll check in again around ${clock(t + 25)}.` } };
+  return { kind: "break", len: 15, q: "Take a 15-minute break?", sub: `It still fits before lab at 4:30<span class="nw">${src(3, "calendar")}.</span>`, why: `You've been at it <b class="nw">${dur(t)}</b>${src(1, "laptop")}${sleepBit()}`, sure: ["Fairly sure", "Over 3 hours in, and a break still fits before lab."], note,
+    btns: ["Take 15 min", "Keep going"], yes: { q: "Enjoy the break.", sub: `Your study clock is paused. Back by ${clock(t + 15)}.` }, no: { q: "OK, keep going.", sub: `Your call. I'll check in again around ${clock(t + 25)}.` } };
+}
+
+function render(swap = true) {
+  const A = answer(), say = document.getElementById("say"), left = m().span - t;
+  // with no watch, one source is gone, so "Fairly sure" drops a level
+  const sure = s === 0 && A.sure[0] === "Fairly sure" ? ["Not sure yet", A.sure[1]] : A.sure;
+  document.getElementById("lg2").hidden = s === 0;
+  const st = `<p class="st"><span>Halftime · now ${clock(t)}</span><span>${left > 0 ? `${left} min ${m().left}` : m().past}</span></p>`;
+  say.innerHTML = reply
+    ? `${st}<p class="q">${reply.q}</p><p class="sub">${reply.sub}</p>
+      <div class="acts" style="grid-template-columns:1fr"><button class="a no" data-act="back">Back to the suggestion</button></div>`
+    : `${st}<p class="q">${A.q}</p><p class="sub">${A.sub}</p>
+      <p class="why">${A.why}</p>${A.note}
+      <p class="sure"><span class="tag">${sure[0]}</span><span>${sure[1]}</span></p>
+      <div class="acts"><button class="a yes" data-act="yes">${A.btns[0]}</button><button class="a no" data-act="no">${A.btns[1]}</button></div>
+      <div class="links"><button type="button" data-act="snooze">Snooze 20 min</button></div>`;
+  // fade the new words in on the compositor (the old class-restart trick forced an extra layout per tap)
+  if (swap && say.animate && !matchMedia("(prefers-reduced-motion: reduce)").matches) say.animate([{ opacity: 0, transform: "translateY(4px)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: "cubic-bezier(.23,1,.32,1)" });
+  // the session line under the island
+  document.getElementById("lfrom").textContent = m().from; document.getElementById("lto").textContent = m().to;
+  const pct = (x) => `${Math.min(100, (x / m().span) * 100)}%`, r = t / m().span;
+  document.getElementById("done").style.width = pct(t);
+  document.getElementById("nowm").style.left = pct(t);
+  const tn = document.getElementById("tn"); tn.style.left = pct(t); tn.style.transform = `translateX(${r > .8 ? "-100%" : "-50%"})`; tn.textContent = `now ${clock(t)}`;
+  const slot = document.getElementById("slot"), ts = document.getElementById("ts");
+  const len = reply ? 0 : A.len || 0;
+  slot.style.left = pct(t); slot.style.width = pct(Math.max(len, 2)); slot.style.opacity = len ? 1 : 0;
+  ts.style.left = pct(t + len / 2); ts.style.transform = `translateX(${r > .7 ? "-100%" : "-50%"})`; ts.style.opacity = len ? 1 : 0;
+  ts.textContent = len ? `${A.kind} · back ${clock(t + len)}` : "";
+  document.getElementById("pt").textContent = dur(t).replace(" min", "m").replace(" h", "h");
+  fit();
+}
+function fit(instant) {
+  const isl = document.getElementById("island"), stage = isl.parentElement, cs = getComputedStyle(stage);
+  if (instant === true) { isl.style.transition = "none"; requestAnimationFrame(() => requestAnimationFrame(() => { isl.style.transition = ""; })); }
+  const wd = stage.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  isl.style.setProperty("--w", wd + "px");
+  if (isl.classList.contains("open")) isl.style.height = document.getElementById("say").scrollHeight + "px";
+}
+
+// build the option buttons once; after that a tap only flips aria-pressed (rebuilding them cost a re-layout per tap)
+function opts() {
+  document.querySelectorAll(".opts").forEach((box) => {
+    const q = box.dataset.q, list = q === "w" ? W : q === "t" ? T : S, cur = String(q === "w" ? w : q === "t" ? t : s);
+    if (!box.firstChild) box.innerHTML = list.map(([v, l]) => `<button class="opt" type="button" data-v="${v}" aria-pressed="false">${l}</button>`).join("");
+    for (const b of box.children) { const on = String(b.dataset.v === cur); if (b.getAttribute("aria-pressed") !== on) b.setAttribute("aria-pressed", on); }
+  });
+}
+document.addEventListener("click", (e) => {
+  const o = e.target.closest(".opt");
+  if (o) { const q = o.parentElement.dataset.q, v = o.dataset.v; if (q === "w") w = v; else if (q === "t") t = +v; else s = +v; reply = null; opts(); open(); render(); return; }
+  const a = e.target.closest("[data-act]");
+  if (a) {
+    const A = answer(), k = a.dataset.act;
+    if (k === "back") reply = null;
+    else if (k === "snooze") reply = { q: "Snoozed.", sub: t + 20 >= m().span - 5 ? `I won't ask again ${w === "night" ? "tonight" : w === "gym" ? "before closing" : "before lab"}.` : `I won't ask again until ${clock(t + 20)}.` };
+    else reply = k === "yes" ? A.yes : A.no;
+    render();
+  }
+});
+function open() {
+  const isl = document.getElementById("island"); if (isl.classList.contains("open")) return;
+  isl.classList.add("opening", "open"); fit(); setTimeout(() => isl.classList.remove("opening"), 600);
+}
+let lastW = innerWidth;
+addEventListener("resize", () => { if (innerWidth !== lastW) { lastW = innerWidth; fit(true); } });
+opts(); render(false);
+// the one authored moment: the island sits small, then opens with its first answer
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+setTimeout(() => { open(); render(); }, reduce ? 0 : 700);
+document.fonts && document.fonts.ready.then(() => fit(true));
+</script>
+<script>
+(() => {
+const Q = new URLSearchParams(location.search), fixed = Q.has("hw") ? +Q.get("hw") : null;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const seg = (p, a, b) => clamp((p - a) / (b - a));
+const out = (x) => 1 - Math.pow(1 - x, 3);
+const io = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const lerp = (a, b, t) => a + (b - a) * t;
+const EL = {}, $ = (id) => EL[id] || (EL[id] = document.getElementById(id.startsWith("hw-") ? id : "hw-" + id));
+// write an attribute only when its (rounded) value changes: unchanged writes still cost style and layout work
+const A = (el, k, v) => { if (typeof v === "number") v = Math.round(v * 100) / 100; const m = el.__a || (el.__a = {}); if (m[k] !== v) { m[k] = v; el.setAttribute(k, v); } };
+const set = (el, o) => { for (const k in o) A(el, k, o[k]); };
+// one scheduler for every scroll-played section: at most one frame per scroll, reads before writes
+const jobs = (window.__htJobs = []); let queued = false;
+const tick = () => { queued = false; const v = jobs.map((j) => j.read()); jobs.forEach((j, i) => j.write(v[i])); };
+const ask = (window.__htAsk = () => { if (!queued) { queued = true; requestAnimationFrame(tick); } });
+addEventListener("scroll", ask, { passive: true }); addEventListener("resize", ask);
+
+// session: 12:30 to 4:30 across x 40..360, now = 160 min
+const K = 320 / 240, X = (m) => 40 + m * K, XN = X(160);
+// seeded switch marks: a few early, 14 in the last 20 minutes
+let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+const marks = [18, 41, 63, 88, 112, 131].concat(Array.from({ length: 14 }, (_, i) => 140 + (i + .2 + rnd() * .6) * (20 / 14)));
+$("hw-ticks").innerHTML = marks.map((m, i) => `<line data-i="${i}" x1="${X(m)}" x2="${X(m)}" y1="${318 - (m > 139 ? rnd() * 4 : 0)}" y2="326" stroke="#141414" stroke-width="1.4" opacity="0"/>`).join("");
+const tickEls = [...document.querySelectorAll("#hw-ticks line")];
+const caps = [...document.querySelectorAll(".hw-caps li")];
+
+function seek(p) {
+  // beat 1: the line draws, then the marks comb in
+  const b1 = out(seg(p, .02, .17));
+  A($("hw-sess"), "x2", lerp(40, XN, b1));
+  A($("hw-lnow"), "opacity", seg(p, .12, .17));
+  A($("hw-lend"), "opacity", seg(p, .02, .08));
+  const t = seg(p, .09, .22);
+  tickEls.forEach((el, i) => A(el, "opacity", clamp(t * tickEls.length - i)));
+  A($("hw-cap1"), "opacity", seg(p, .18, .23) * (1 - seg(p, .5, .54)));
+  // beat 2: last night against your usual
+  ["s2a", "usual"].forEach((id) => A($(id), "opacity", seg(p, .27, .32)));
+  A($("hw-slept"), "width", 150 * out(seg(p, .31, .42)));
+  A($("hw-s2b"), "opacity", seg(p, .40, .44));
+  A($("hw-s2c"), "opacity", seg(p, .33, .37));
+  A($("hw-s2d"), "opacity", seg(p, .43, .48) * (1 - seg(p, .92, .95)));
+  // beat 3 (signature): the now dot opens into the card; its reasons rise into it
+  const dot = seg(p, .50, .54), open = io(seg(p, .54, .64)), grow = io(seg(p, .76, .80)), fold = io(seg(p, .86, .93));
+  let x = lerp(XN - 7, 20, open), y = lerp(323, 16, open), w = lerp(14, 360, open), h = lerp(14, 200, open) + 50 * grow, rx = lerp(7, 28, open);
+  x = lerp(x, 112, fold); w = lerp(w, 176, fold); h = lerp(h, 40, fold); rx = lerp(rx, 20, fold); y = lerp(y, 18, fold);
+  set($("hw-card"), { x, y, width: w, height: h, rx, opacity: dot });
+  A($("hw-cc"), "opacity", seg(p, .62, .67) * (1 - seg(p, .86, .88)));
+  const r = out(seg(p, .66, .74));
+  A($("hw-r1"), "y2", lerp(316, 216, r)); A($("hw-r2"), "y2", lerp(424, 216, r));
+  const rf = 1 - seg(p, .86, .89);
+  ["r1", "r2"].forEach((id) => A($(id), "opacity", rf));
+  A($("hw-o1"), "opacity", seg(p, .64, .67) * rf); A($("hw-o2"), "opacity", seg(p, .64, .67) * rf);
+  const lit = seg(p, .72, .74) * rf;
+  ["ch1", "ch2"].forEach((id) => A($(id), "fill", lit > .5 ? "#0F5E46" : "#2C2C2E"));
+  // beat 4: choose, fold back to a pill, the walk slot, then quiet
+  A($("hw-btns"), "opacity", seg(p, .78, .81) * (1 - seg(p, .86, .88)));
+  const press = seg(p, .82, .84) > .5;
+  A($("hw-b1"), "fill", press ? "#8ED6BC" : "#fff");
+  A($("hw-pill"), "opacity", seg(p, .90, .93));
+  A($("hw-slot"), "width", 10 * out(seg(p, .88, .93)));
+  A($("hw-quiet"), "opacity", seg(p, .93, .97)); A($("hw-lquiet"), "opacity", seg(p, .93, .97));
+  A($("hw-fin"), "opacity", seg(p, .95, 1));
+  // captions
+  const a = Math.min(3, Math.floor(p * 4));
+  caps.forEach((li, i) => li.classList.toggle("on", i === a));
+}
+const scrolly = document.querySelector(".hw-scrolly");
+const progress = () => { const r = scrolly.getBoundingClientRect(), tot = r.height - innerHeight; return tot > 0 ? clamp(-r.top / tot) : 1; };
+let lastP = -1;
+function frame(q) {
+  let p = fixed != null ? fixed : q != null ? q : progress();
+  if (reduce && fixed == null) p = [.24, .49, .745, 1][Math.min(3, Math.floor(p * 4))];
+  p = Math.round(p * 4000) / 4000; if (p === lastP) return; lastP = p; seek(p);
+}
+caps.forEach((li, i) => li.addEventListener("click", () => { const tot = scrolly.offsetHeight - innerHeight; scrollTo({ top: scrolly.offsetTop + tot * (i / 4 + .22) }); }));
+if (fixed != null) document.documentElement.classList.add("hw-fixed");
+else jobs.push({ read: progress, write: frame });
+// keep every label at 12 px or more on screen: measure the drawing's scale, enlarge small text, then re-fit
+const svgEl = document.querySelector(".hw-stage svg"), texts = [...svgEl.querySelectorAll("text")];
+texts.forEach((el) => { el.dataset.fs = el.getAttribute("font-size"); });
+const ORIG = { cap1: $("cap1").textContent, s2d: $("s2d").textContent };
+let lastS = "";
+function adapt(force) {
+  const m = svgEl.getScreenCTM(); if (!m) return; const s = Math.hypot(m.a, m.b); if (!s) return;
+  const key = s.toFixed(3); if (key === lastS && force !== true) return; lastS = key; // same scale: nothing to re-fit
+  let bumped = false;
+  texts.forEach((el) => { const b = +el.dataset.fs, fs = Math.max(b, 12.3 / s); if (fs > b + .01) bumped = true; el.setAttribute("font-size", fs.toFixed(2)); });
+  // when enlarged: shorter step-1 caption, "lab" label on its own row, "your usual" above the bar's right end, two-line note
+  $("cap1").textContent = bumped ? "2 h 40 min · 14 switches in 20 min" : ORIG.cap1;
+  $("lend").setAttribute("y", bumped ? 380 : 358);
+  const c = $("s2c"); c.setAttribute("x", bumped ? 384 : 260); c.setAttribute("y", bumped ? 414 : 438); c.setAttribute("text-anchor", bumped ? "end" : "start");
+  const d = $("s2d");
+  if (bumped) { d.textContent = ""; ["Plain code: 2 h under your usual.", "Not an AI."].forEach((line, i) => { const ts = document.createElementNS("http://www.w3.org/2000/svg", "tspan"); ts.setAttribute("x", "40"); if (i) ts.setAttribute("dy", "1.25em"); ts.textContent = line; d.appendChild(ts); }); d.setAttribute("y", "484"); }
+  else { d.textContent = ORIG.s2d; d.setAttribute("y", "494"); }
+  // the confidence chip always fits its words
+  const st = $("suret"), sr = $("surer"), w = st.getBBox().width + 20, fs = +st.getAttribute("font-size");
+  sr.setAttribute("width", w.toFixed(1)); st.setAttribute("x", (44 + w / 2).toFixed(1));
+  sr.setAttribute("height", (fs * 1.6).toFixed(1)); st.setAttribute("y", (180 + fs * 1.6 / 2 + fs * .35).toFixed(1));
+}
+addEventListener("resize", () => adapt()); (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => adapt(true)); adapt(true);
+// the drawing also resizes when the active caption changes length: re-fit whenever its box changes
+if ("ResizeObserver" in window) new ResizeObserver(() => requestAnimationFrame(() => adapt())).observe(svgEl);
+frame();
+})();
+</script>
+<script>
+(() => {
+// what you see vs what Halftime sees
+const xr = document.getElementById("xr");
+const vb = [...xr.querySelectorAll(".xhead .seg button")];
+const say = document.getElementById("xr-say");
+const view = (v) => { xr.classList.toggle("sees", v === "it"); vb.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === v)));
+  xr.querySelectorAll(".ln, .bubble, .wt .name").forEach((el) => (v === "it" ? el.setAttribute("aria-hidden", "true") : el.removeAttribute("aria-hidden")));
+  say.textContent = v === "it" ? "Halftime's view: every word is hidden. It sees only the kind of app (notes, reading, chat), 2 h 40 min, and 3 switches in 20 min." : ""; };
+vb.forEach((b) => b.addEventListener("click", () => view(b.dataset.v)));
+// honesty and joining, played by scroll: nights fill, the offer skips the study block, joining lines tick in
+const Q = new URLSearchParams(location.search), F2 = Q.has("tr2") ? +Q.get("tr2") : null, F3 = Q.has("tr3") ? +Q.get("tr3") : null;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x)), seg = (p, a, b) => clamp((p - a) / (b - a));
+const io = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const EL = {}, $ = (id) => EL[id] || (EL[id] = document.getElementById(id));
+const A = (el, k, v) => { const m = el.__a || (el.__a = {}); if (m[k] !== v) { m[k] = v; el.setAttribute(k, v); } };
+const T = (el, v) => { if (el.__t !== v) { el.__t = v; el.textContent = v; } };
+const learn = [...document.querySelectorAll("#tr-learn i")], checks = [...document.querySelectorAll("#tr-checks li")];
+let halfW = 75; // half the offer pill's width, set by adaptDay
+function seek2(p) {
+  const n = Math.max(1, Math.min(7, 1 + Math.floor(seg(p, .05, .6) * 7)));
+  learn.forEach((el, i) => el.classList.toggle("on", i < n));
+  T($("tr-lt"), n < 7 ? `Still learning your usual sleep · ${n} of 7 nights` : "Learned your usual sleep · 7 of 7 nights");
+  const m = io(seg(p, .45, .85)), land = m > .98;
+  A($("tr-offer"), "transform", `translate(${Math.min(80 + 145 * m, 296 - halfW).toFixed(1)} 0)`); // never past the strip's end
+  A($("tr-ofr"), "stroke-dasharray", land ? "none" : "3 3");
+  A($("tr-ofr"), "fill", land ? "rgba(142,214,188,.14)" : "none");
+  T($("tr-oft"), land ? "Talk to someone?" : p < .45 ? "not mid-study" : "next morning");
+}
+function seek3(p) { checks.forEach((li, i) => li.classList.toggle("ok", p > (i + 1) / 5)); }
+const hsty = $("tr-hsty"), ask = $("tr-ask2");
+// when the two cards are taller than the screen (short phones, landscape), don't pin: play as it scrolls past
+const cards = hsty.querySelector(".honest"), root = document.documentElement;
+const loose = () => cards.offsetHeight > innerHeight - 24;
+// reads only (run before any writes in the frame)
+const read = () => {
+  const lo = loose(), r = hsty.getBoundingClientRect(), ra = ask.getBoundingClientRect(), now = root.classList.contains("tr-loose");
+  const p2 = now ? clamp((innerHeight * .95 - r.top) / (innerHeight * 1.25)) : (r.height - innerHeight > 0 ? clamp(-r.top / (r.height - innerHeight)) : 1);
+  return { lo, now, p2: Math.round(p2 * 2000) / 2000, p3: clamp((innerHeight * .85 - ra.top) / (ra.height * .9)) };
+};
+let l2 = -1, l3 = -1;
+const write = (v) => {
+  if (v.lo !== v.now) { root.classList.toggle("tr-loose", v.lo); window.__htAsk(); return; } // layout changes: measure again next frame
+  if (v.p2 !== l2) { l2 = v.p2; seek2(v.p2); }
+  const k3 = Math.floor(v.p3 * 5); if (k3 !== l3) { l3 = k3; seek3(v.p3); }
+};
+const fixed = F2 != null || F3 != null;
+function frame() { if (fixed) { seek2(F2 ?? 1); seek3(F3 ?? 1); return; } if (reduce) { seek2(1); seek3(1); return; } write(read()); }
+if (fixed || reduce) document.documentElement.classList.add("tr-fixed");
+else window.__htJobs.push({ read, write });
+// day strip: keep its words at 12 px or more on screen; the pill and the "studying" block grow to fit
+const daySvg = document.querySelector(".day svg"), dts = [...daySvg.querySelectorAll("text")];
+dts.forEach((el) => { el.dataset.fs = el.getAttribute("font-size"); });
+let lastDS = "";
+function adaptDay(force) {
+  const m = daySvg.getScreenCTM(); if (!m) return; const s = Math.hypot(m.a, m.b); if (!s) return;
+  const key = s.toFixed(3); if (key === lastDS && force !== true) return; lastDS = key;
+  dts.forEach((el) => { const b = +el.dataset.fs; el.setAttribute("font-size", Math.max(b, 12.3 / s).toFixed(2)); });
+  const ot = $("tr-oft"), or = $("tr-ofr"), ofs = +ot.getAttribute("font-size");
+  // the pill fits the longest of its three labels (it was measured on whichever label showed, so Safari's wider mono overflowed)
+  const shown = ot.textContent; let tw = 0;
+  for (const l of ["Talk to someone?", "next morning", "not mid-study"]) { ot.textContent = l; tw = Math.max(tw, ot.getBBox().width); }
+  ot.textContent = shown;
+  const ow = Math.max(150, tw + 28), oh = Math.max(29, ofs * 1.75);
+  halfW = ow / 2;
+  or.setAttribute("width", ow.toFixed(1)); or.setAttribute("x", (-ow / 2).toFixed(1)); or.setAttribute("height", oh.toFixed(1)); or.setAttribute("rx", (oh / 2).toFixed(1));
+  ot.setAttribute("y", (3 + oh / 2 + ofs * .35).toFixed(1));
+  const bt = $("tr-blkt"), br = $("tr-blk"), bfs = +bt.getAttribute("font-size");
+  const bw = Math.max(110, bt.getBBox().width + 20), bh = Math.max(22, bfs * 1.6);
+  br.setAttribute("width", bw.toFixed(1)); br.setAttribute("height", bh.toFixed(1)); br.setAttribute("y", (50 - bh / 2).toFixed(1)); br.setAttribute("rx", (bh / 2).toFixed(1));
+  bt.setAttribute("x", (8 + bw / 2).toFixed(1)); bt.setAttribute("y", (50 + bfs * .35).toFixed(1));
+  l2 = -1; frame(); // the pill's width changed: place it again
+}
+addEventListener("resize", () => adaptDay()); (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => adaptDay(true)); adaptDay(true);
+if ("ResizeObserver" in window) new ResizeObserver(() => requestAnimationFrame(() => adaptDay())).observe(daySvg);
+frame();
+})();
+</script>
+</body>
+</html>

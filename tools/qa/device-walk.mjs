@@ -4,6 +4,7 @@
 //
 //   node tools/qa/device-walk.mjs --url=<path or http(s) url> [--out=<dir>] [--root=<folder to serve>]
 //        [--devices=iphone,iphone-se,iphone-max,laptop,laptop-small] [--steps=<steps.json>] [--port=8841] [--block=<url pattern>,...]
+//        [--reduce=1]  emulate prefers-reduced-motion: reduce
 //
 // --url   a path ("/", "/card.html?state=nodata") is served from --root (default: the repo root) on 127.0.0.1;
 //         a full http(s) url is opened as is. Use local pages and synthetic data only.
@@ -16,6 +17,8 @@
 //   iphone-max    430×932 @3x, touch, iOS UA (Pro Max / Plus)         — the large end
 //   laptop        1440×900                                            ICP_1 Maya, ICP_3 Anika
 //   laptop-small  1366×768                                            ICP_4 Jordan
+//   also: iphone-landscape 844×390 · phone-320 320×568 · fold-cover 344×882 · fold-narrow 280×653 · fold-open 882×1104 ·
+//         pixel-fold-open 841×701 · ipad 768×1024 · desktop 1920×1080 (Android UA on the foldables)
 // THIS IS CHROME, NOT SAFARI. It emulates iPhone sizes, touch and the iOS user agent, but WebKit-only behaviour
 // (100vh vs the URL bar, input zoom, safe areas, sticky hover, rubber-banding) only shows in Safari: before calling a
 // screen done, open it in Safari on the iOS Simulator (the page is reachable at localhost) or on a real iPhone.
@@ -27,6 +30,7 @@
 //   {"tap": [0.5, 0.8]}                                    a tap at a point (fractions of the screen, or pixels)
 //   {"repeat": {"click": "text:Next", "until": "css:#done", "max": 20, "gap": 800}}
 //   {"key": "Enter"} · {"scroll": 600} (≤ 5 means screens) · {"scrollTo": "text:Sources"} · {"go": "/other.html"}
+//   {"resize": [882, 1104]}                                 change the viewport mid-walk (a fold opening, a phone rotating)
 // UI checks (heuristics, not a full audit; a real screen reader and real phones still need a human):
 //   blank page · bad text (NaN, undefined, null, [object …]) · sideways page overflow · clipped text · tap targets < 44 px on touch
 //   devices (< 24 px is a fail) · text contrast below WCAG AA (solid backgrounds only) · images without alt ·
@@ -60,12 +64,24 @@ const CHROME = process.env.CHROME_BIN || '/Applications/Google Chrome.app/Conten
 if (!existsSync(CHROME)) { console.error(`Chrome not found at ${CHROME} (set CHROME_BIN)`); process.exit(1); }
 
 const IOS = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1';
+const ANDROID = 'Mozilla/5.0 (Linux; Android 14; SM-F946B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36';
+const IPAD = 'Mozilla/5.0 (iPad; CPU OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1';
 const DEVICES = {
   iphone: { who: 'ICP_1 Maya · ICP_2 Diego · ICP_3 Anika · ICP_5 Sam', size: [390, 844], dpr: 3, ua: IOS, platform: 'iPhone' },
   'iphone-se': { who: 'ICP_4 Jordan (iPhone SE)', size: [375, 667], dpr: 2, ua: IOS, platform: 'iPhone' },
   'iphone-max': { who: 'the large end (Pro Max / Plus)', size: [430, 932], dpr: 3, ua: IOS, platform: 'iPhone' },
   laptop: { who: 'ICP_1 Maya · ICP_3 Anika', size: [1440, 900], dpr: 1 },
   'laptop-small': { who: 'ICP_4 Jordan (shared Windows laptop)', size: [1366, 768], dpr: 1 },
+  // added 2026-11-06 for the landing build: foldables, landscape, tablet, wide desktop, the narrowest phones
+  'iphone-landscape': { who: 'iPhone turned sideways', size: [844, 390], dpr: 3, ua: IOS, platform: 'iPhone' },
+  'phone-320': { who: 'the narrowest phones (iPhone SE 1st gen, zoomed display)', size: [320, 568], dpr: 2, ua: IOS, platform: 'iPhone' },
+  'fold-cover': { who: 'Galaxy Z Fold cover screen', size: [344, 882], dpr: 3, ua: ANDROID, platform: 'Linux armv8l' },
+  'fold-narrow': { who: 'first Galaxy Fold cover screen (the narrowest)', size: [280, 653], dpr: 3, ua: ANDROID, platform: 'Linux armv8l' },
+  'fold-open': { who: 'Galaxy Z Fold inner screen, unfolded', size: [882, 1104], dpr: 2.6, ua: ANDROID, platform: 'Linux armv8l' },
+  'pixel-fold-open': { who: 'Pixel Fold inner screen, unfolded (wide and short)', size: [841, 701], dpr: 2.6, ua: ANDROID, platform: 'Linux armv8l' },
+  ipad: { who: 'iPad mini, portrait', size: [768, 1024], dpr: 2, ua: IPAD, platform: 'iPad' },
+  desktop: { who: 'a wide desktop monitor', size: [1920, 1080], dpr: 1 },
+  og: { who: 'a 1200×630 link-preview card (for rendering og images)', size: [1200, 630], dpr: 1 },
 };
 const WANT = opt('devices', 'iphone,laptop').split(',');
 for (const d of WANT) if (!DEVICES[d]) { console.error(`unknown device ${d} (have ${Object.keys(DEVICES).join(', ')})`); process.exit(1); }
@@ -159,7 +175,7 @@ const CHECKS = (touch) => `(() => {
   const add = (k, v) => { (out[k] = out[k] || []).push(v); };
   const vis = (el) => { const r = el.getBoundingClientRect(), s = getComputedStyle(el);
     return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none' && +s.opacity > 0 && r.bottom > 0 && r.top < vh; };
-  const label = (el) => (el.getAttribute('aria-label') || el.innerText || el.getAttribute('title') || el.value || el.getAttribute('alt') || el.tagName.toLowerCase()).replace(/\\s+/g, ' ').trim().slice(0, 40);
+  const label = (el) => (el.getAttribute('aria-label') || el.innerText || (el.ownerSVGElement ? el.textContent : '') || el.getAttribute('title') || el.value || el.getAttribute('alt') || el.tagName.toLowerCase()).replace(/\\s+/g, ' ').trim().slice(0, 40);
   const ownText = (el) => [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim());
   // blank page (e.g. a script error rendered nothing)
   if ((document.body.innerText || '').trim().length < 3 && !document.querySelector('img,svg,canvas,video')) add('page looks blank', 'no visible text or images');
@@ -171,18 +187,23 @@ const CHECKS = (touch) => `(() => {
   const all = [...document.querySelectorAll('body *')].filter(vis);
   for (const el of all) {
     const s = getComputedStyle(el);
+    // screen-reader-only text (1 px boxes) is clipped on purpose: skip it
+    { const rr = el.getBoundingClientRect(); if (rr.width <= 1 || rr.height <= 1) continue; }
     // clipped text: its own text is cut by overflow or an ellipsis
     if (ownText(el) && el.scrollWidth > el.clientWidth + 1 && (/(hidden|clip)/.test(s.overflowX) || s.textOverflow === 'ellipsis'))
       add('clipped text', '"' + label(el) + '"');
     if (ownText(el)) {
-      const fs = parseFloat(s.fontSize);
+      // SVG text: the rendered size is the font size times the drawing's scale on screen
+      let fs = parseFloat(s.fontSize);
+      if (el.ownerSVGElement && el.getScreenCTM) { const m = el.getScreenCTM(); if (m) fs = +(fs * Math.hypot(m.a, m.b)).toFixed(1); }
       if (fs < 12) add('text under 12 px', '"' + label(el) + '" ' + fs + 'px');
       // contrast against the first solid background up the tree
       const rgb = (c) => { const m = c.match(/rgba?\\(([^)]+)\\)/); if (!m) return null; const p = m[1].split(/[ ,/]+/).filter(Boolean).map(Number); return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; };
       const fg = rgb(s.color); let bg = null, img = false;
       for (let a = el; a; a = a.parentElement) { const st = getComputedStyle(a); if (st.backgroundImage !== 'none') { img = true; break; } const b = rgb(st.backgroundColor); if (b && b[3] > 0.95) { bg = b; break; } }
       if (!bg && !img) bg = [255, 255, 255, 1];
-      if (fg && bg) {
+      // fully transparent text is meant to be invisible (e.g. redacted words drawn as bars): no contrast to judge
+      if (fg && bg && fg[3] > 0) {
         const mix = fg.map((v, i) => (i < 3 ? v * fg[3] + bg[i] * (1 - fg[3]) : 1));
         const L = (c) => { const [r, g, b] = c.slice(0, 3).map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
         const l1 = L(mix), l2 = L(bg), ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
@@ -257,9 +278,10 @@ for (const name of WANT) {
   log = { errors: [], bytes: 0, requests: 0 };
   const [w, h] = dev.size, mobile = !!dev.ua;
   await send('Emulation.setDeviceMetricsOverride', { width: w, height: h, deviceScaleFactor: dev.dpr, mobile, screenWidth: w, screenHeight: h,
-    ...(mobile ? { screenOrientation: { type: 'portraitPrimary', angle: 0 } } : {}) });
+    ...(mobile ? { screenOrientation: w > h ? { type: 'landscapePrimary', angle: 90 } : { type: 'portraitPrimary', angle: 0 } } : {}) });
   await send('Emulation.setUserAgentOverride', mobile ? { userAgent: dev.ua, platform: dev.platform } : { userAgent: DESK_UA, platform: 'MacIntel' });
   await send('Emulation.setTouchEmulationEnabled', mobile ? { enabled: true, maxTouchPoints: 5 } : { enabled: false });
+  if (opt('reduce', '')) await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
   touchy = mobile;
   await send('Emulation.setCPUThrottlingRate', { rate: dev.cpu || 1 });
   await send('Network.emulateNetworkConditions', { offline: false, ...(dev.net || { latency: 0, downloadThroughput: -1, uploadThroughput: -1 }) });
@@ -277,6 +299,8 @@ for (const name of WANT) {
     try {
       if (s.wait) await sleep(s.wait);
       else if (s.go) await send('Page.navigate', { url: full(s.go) });
+      else if (s.resize) { const [rw, rh] = s.resize; await send('Emulation.setDeviceMetricsOverride', { width: rw, height: rh, deviceScaleFactor: dev.dpr, mobile, screenWidth: rw, screenHeight: rh,
+        ...(mobile ? { screenOrientation: rw > rh ? { type: 'landscapePrimary', angle: 90 } : { type: 'portraitPrimary', angle: 0 } } : {}) }); await sleep(400); }
       else if (s.scroll) await js(`scrollBy({ top: ${+s.scroll <= 5 ? `${+s.scroll} * innerHeight` : +s.scroll}, behavior: "instant" }); true`);
       else if (s.scrollTo) { if (!(await js(scrollToEl(s.scrollTo)))) throw new Error(`not on the page: ${s.scrollTo}`); }
       else if (s.key) { for (const type of ['keyDown', 'keyUp']) await send('Input.dispatchKeyEvent', { type, key: s.key, code: s.key, windowsVirtualKeyCode: { ArrowRight: 39, ArrowLeft: 37, ArrowDown: 40, ArrowUp: 38, Enter: 13, ' ': 32, Escape: 27, Tab: 9 }[s.key] || 0 }); }

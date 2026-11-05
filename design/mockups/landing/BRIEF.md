@@ -141,3 +141,112 @@ Why: Heramb asked for a step that says how we understand data from fitness weara
 - **Not checked:** real iPhone Safari, screen readers on the switch, and the ICP panel.
 - **Still the team's:** 7 vs 14 learning nights; the counselor's name (Columbia Health).
 
+## Round 9: built for laptops, iPhones and foldables (2026-11-06). Goal set by Heramb. Artifact v10.
+
+**How it was checked.** `tools/qa/device-walk.mjs` gained new presets:
+- `iphone-landscape` 844×390
+- `phone-320` 320×568 (SE with Display Zoom)
+- `fold-cover` 344×882 and `fold-narrow` 280×653 (Galaxy Fold cover screens)
+- `fold-open` 882×1104 and `pixel-fold-open` 841×701
+- `ipad` 768×1024
+- `desktop` 1920×1080
+
+It also gained three abilities:
+- a `resize` step, for a fold opening or a phone rotating;
+- `--reduce=1`, for reduced motion;
+- landscape orientation for wide screens.
+
+Its checker now measures SVG text at its real on-screen size, names it, and skips intentionally invisible or screen-reader-only text. The full-page audit (the demo taps, a whole-page scroll, the laptop switch) ran on all 13 sizes, plus a fold open, close and rotate walk.
+
+**Found and fixed**
+- **"How it works" drawing:** its labels rendered at 8–10 px on phones. The drawing now runs edge to edge on phones (≤600 px), with trimmed margins (viewBox 14..386) and text at 14 units. Short phones get a tighter caption so the drawing gets more height.
+- **"How it works" layout:** it stacked the drawing over the caption up to 900 px, starving wide, short screens (the open folds, landscape, iPad). It now stays side by side down to 601 px, with tighter spacing on short landscape screens.
+- **Day strip:** it scaled up to about 26 px text on single-column tablets and folds. It now has a maximum width of 400 px and has been relaid so labels can't collide: "studying" sits inside the block, the labels are 15 units, the pill is wider and moves to 8 am.
+- **Honesty cards:** taller than the screen on short phones and landscape, so the pinned section hid the end of the second card. When they don't fit, they no longer pin and play as they scroll past instead (timed so the bar visibly fills). In short landscape the two cards sit side by side.
+- **Laptop switch:** the buttons were 40 px tall and are now 44 px. In Halftime's view the hidden words are hidden from screen readers too (`aria-hidden`), with a spoken summary instead.
+- **Browsers without `svh`:** every `svh` height now has a `vh` fallback.
+- **The page:** the title is now "Halftime", and there's a meta description.
+
+**Result** (`.crits/2026-11-06-final/`):
+- 0 console errors and 0 likely defects on all 13 sizes and in the fold/rotate walk.
+- About 0.11 MB, loading in 0.1–0.5 s locally.
+- Reduced motion shows every end state.
+
+**Known limits**
+- On the 320 px phone, in landscape and on the 2019 Fold's 280 px cover screen, the "How it works" drawing's smallest labels render at about 10–11.6 px, limited by the screen. Everything else is at least 12 px.
+- **Not checked in Safari on iOS.** Xcode has no iOS simulator runtime installed (`xcrun simctl list runtimes` is empty). The fix is `xcodebuild -downloadPlatform iOS`, a download of about 8 GB. Code-level WebKit risks were reviewed:
+  - no hover styles (so nothing can stick after a tap);
+  - `svh` fallbacks;
+  - `-webkit-box-decoration-break`;
+  - safe-area insets.
+
+
+## Round 10: small text solved, ready for Vercel (2026-11-06)
+Heramb: "we will be hosting it on vercel". From this round on, the shipped page is **`site/index.html`**. This mockup stays as the design record; the two differ only in their head tags.
+
+**Small text, solved rather than listed**
+- The "How it works" drawing and the day strip now measure their on-screen scale (`getScreenCTM`). Each label is set to at least 12.3 px on screen, whatever the screen.
+- Where a label grows, the layout makes room:
+  - the caption under the laptop shortens to "2 h 40 min · 14 switches in 20 min";
+  - the legend and the "sleep" note move;
+  - the second-step note splits over two lines;
+  - the "Fairly sure" chip widens to fit its text;
+  - the day strip's pill and "studying" block widen to fit.
+- A ResizeObserver re-runs the fit when a fold opens or a phone rotates.
+- Result (`.crits/2026-11-06-final3/`): no text under 12 px on any of the 13 sizes, including the 280 px Fold cover screen and the 320 px phone. 0 console errors, 0 defects and 0 warnings, in the fold/rotate walk and with reduced motion too.
+
+**Hosting (`site/`, see `tools/site/README.md`)**
+- `vercel.json` sets a strict Content-Security-Policy (only this site and Google Fonts), nosniff, a referrer policy, a permissions policy, HSTS and cache headers.
+- Indexing is off until the team approves the claims: `X-Robots-Tag: noindex` and `robots.txt` disallow.
+- Favicon, Apple touch icon and a 1200×630 link-preview card (`og.jpg`, made from `tools/site/og-card.html`) for iMessage and group chats. After the first deploy, `og:image` needs the absolute URL.
+- `tools/site/serve.mjs` serves `site/` locally with the same headers. Under the CSP: 0 errors, 0 defects, 5 requests on iPhone, laptop and fold cover (`.crits/2026-11-06-site/`).
+
+**Before it goes public (team)**
+Claims the boardroom found false or unconfirmed are still on the page:
+- the "school" in "never tells your coach, team or school";
+- "Works with a Fitbit, Oura or WHOOP";
+- the 7-night learning bar;
+- the night and after-practice modes.
+
+**Live (2026-11-05):** https://halftime-study.vercel.app/ (Heramb: "host it on vercel", then "Yes, use the CLI").
+- Every response carries the security headers and `noindex`.
+- `og.jpg`, the icons and `robots.txt` return 200. `vercel.json`, `.env*` and `.vercel/` return 404.
+- The live URL audited clean on all 13 sizes (`.crits/2026-11-06-live/`): 0 console errors and 0 defects.
+- Walked at phone width in the built-in browser: demo taps, "How it works", the laptop switch, the honesty cards and the joining ticks all work, with no sideways scroll.
+- Not yet seen in real iPhone Safari. The iOS 26.5 simulator installed, but Safari stalled on its first launch.
+
+## Round 11: smooth (2026-11-05)
+Heramb: "the landing page is too heavy/laggy, make it smooth". Measured with the new `tools/qa/perf-scroll.mjs`, which scrolls the whole page and taps the demo on a CPU slowed 4×, using Chrome's own counters and trace.
+
+**Causes**
+- **A forced layout on every scroll frame.** "How it works" wrote about 40 SVG attributes on every frame, whether or not they changed. The trust-section script then read positions straight after, which forced a layout. Both scripts also queued their own animation frames on every scroll event.
+- **Every tap reflowed the whole page for 0.5 s.** The demo card animated its height under a large blurred shadow, and each tap also rebuilt every option button.
+- **iPhone URL-bar resizes redid all the work.** The bar showing or hiding fires `resize`, which re-ran both drawing fits and the demo fit, even though only the height changed.
+
+**Fixes** (same look, words and motion)
+- **One scroll scheduler for every scroll-played section:** at most one frame per scroll, with all reads before any writes.
+- **Writes only when something changes:** attributes and text are written only when their rounded value changes. Each section's progress is quantised, so an off-screen section does no work.
+- **The card's size animates only on its first opening.** After that, new words fade in on the compositor (WAAPI), with no extra layout. Option buttons are built once; a tap only flips `aria-pressed`.
+- **Resizes do work only when needed:** the demo re-fits only when the width changes, and the drawings re-fit only when their on-screen scale changes.
+- **Contained layout:** `contain` on the "How it works" stage and on the session track. The card's shadow is a little smaller.
+
+**Result**
+
+| Scrolling the whole page (iPhone size, CPU 4× slower) | Before | After |
+|---|---|---|
+| Layouts | ~700 | ~104 (−85%) |
+| Paints | 1,047 (~350 ms) | 196 (~67 ms) (−81%) |
+| Style recalcs | ~700 | ~117 |
+| Script time | ~160–270 ms | ~75–130 ms |
+
+- Taps: about 40 ms from touch to paint, with the handler taking about 5 ms (unchanged, already fine).
+- Live page in the built-in browser (real GPU, 120 Hz), full scroll: 358 frames, median 8.3 ms, worst 15.1 ms, 0 frames over 20 ms.
+- Audit (`.crits/2026-11-06-smooth*`): all 13 sizes, the fold open/close walk and reduced motion all have 0 console errors and 0 defects. iPhone taps were re-checked with the buttons in view.
+- Redeployed to https://halftime-study.vercel.app/.
+
+**iPhone Safari** (iOS 26.5 simulator, WebKit)
+- Full scroll, three rounds each, timed inside Safari. Time in the page's frame code: old 216 / 334 / 360 ms, new 122 / 105 / 126 ms (−61%). Frame callbacks: ~660 (two per frame) → ~330 (one per frame).
+- Frame timing alone doesn't separate the two versions here: the simulator runs on the Mac's processor, and both hold 60 fps.
+- Live site with real touch swipes: the address bar collapses and expands, and the pinned "How it works" drawing and the honesty cards play correctly. The demo tap works ("Late night" → "Stop for tonight?").
+- **Safari-only bug found and fixed:** the "Talk to someone?" pill was sized on whichever label was showing, so Safari's wider monospace overflowed it. It now fits the longest of its three labels and never lands past the end of the strip. Re-audited on all 13 sizes and in reduced motion: 0 errors, 0 defects.
+- Still not done: a physical iPhone.
