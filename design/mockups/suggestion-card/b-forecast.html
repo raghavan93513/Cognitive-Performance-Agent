@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="theme-color" content="#F2F5F7">
+<title>B · Forecast · suggestion card mockup</title>
+
+<style>
+:root{ --bg:#F2F5F7;--card:#FFFFFF;--ink:#0F1A24;--ink2:#34424F;--muted:#5D6B78;--line:#E1E7EC;--line2:#CBD5DD;--accent:#1B5E96;--accent-ink:#174F80;--on-accent:#FFFFFF;--accent-soft:#DCE9F5;--sec:#EAF0F4;--chip:#E6EDF2;--dot-on:#1B5E96;--dot-off:#D3DCE3;--track:#E6EDF2;--band:#B9CFE2;--scrim:rgba(10,20,30,.28);--shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(15,26,36,.05); --r:20px; --ease:cubic-bezier(.23,1,.32,1); }
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;overscroll-behavior:none;background:var(--bg)}
+body{min-height:100dvh;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"SF Pro Text","Segoe UI",Roboto,sans-serif;font-variant-numeric:tabular-nums}
+button{touch-action:manipulation;-webkit-user-select:none;user-select:none;font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+::selection{background:var(--accent-soft)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:10px}
+.app{min-height:100dvh;max-width:560px;margin:0 auto;display:flex;flex-direction:column;
+  padding:calc(env(safe-area-inset-top,0px) + 12px) 20px calc(env(safe-area-inset-bottom,0px) + 12px)}
+.top{display:flex;align-items:baseline;justify-content:space-between;min-height:44px;align-items:center}
+.mark{font-weight:680;letter-spacing:-.015em;font-size:18px}
+.sample{font-size:13px;color:var(--muted)}
+.grow{flex:1}
+/* hero: what the top half is for */
+.hero{padding:28px 0 8px}
+.subject{font-size:15px;color:var(--muted)}
+.clock{font-size:76px;line-height:1;font-weight:250;letter-spacing:-.04em;margin:6px 0 6px;font-variant-numeric:tabular-nums}
+.clock small{font-size:17px;letter-spacing:0;font-weight:500;color:var(--muted);margin-left:8px}
+.since{font-size:15px;color:var(--ink2)}
+.card{background:var(--card);border-radius:var(--r);padding:22px 20px 14px;box-shadow:var(--shadow);border:1px solid var(--line);animation:rise .22s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}}
+@media (prefers-reduced-motion:reduce){.card,.sheet,.now-dot{animation:fade .2s ease both!important}@keyframes fade{from{opacity:0}}}
+h1{font-size:28px;line-height:1.15;letter-spacing:-.022em;font-weight:690;text-wrap:balance}
+.reason{margin-top:10px;font-size:17px;line-height:1.45;color:var(--ink)}
+.context{margin-top:6px;font-size:15px;line-height:1.45;color:var(--ink2)}
+.src{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;padding:0 6px;margin:0 1px 0 4px;
+  border-radius:7px;font-size:12px;font-weight:650;vertical-align:1px;background:var(--chip);color:var(--ink2);position:relative}
+.src::after{content:"";position:absolute;inset:-10px -4px}
+.sure{display:flex;align-items:flex-start;gap:10px;margin-top:14px;font-size:15px;line-height:1.4;color:var(--ink2)}
+.dots{display:inline-flex;gap:4px;padding-top:6px;flex:none}.dots i{width:8px;height:8px;border-radius:50%;background:var(--dot-off)}.dots i.on{background:var(--dot-on)}
+.sure b{font-weight:640;color:var(--ink)}
+.actions{display:grid;grid-template-columns:1fr;gap:10px;margin-top:18px}
+@media (min-width:500px){.actions.two{grid-template-columns:1fr 1fr}}
+.btn{min-height:52px;border-radius:14px;font-weight:630;font-size:17px;padding:0 14px;transition:transform .12s var(--ease),background .15s ease}
+.btn:active{transform:scale(.97)}
+.btn.pri{background:var(--accent);color:var(--on-accent)}
+.btn.sec{background:var(--sec);color:var(--ink)}
+.tert{display:flex;justify-content:space-between;flex-wrap:wrap;margin-top:4px}
+.link{min-height:44px;padding:0 4px;color:var(--ink2);font-size:15px;font-weight:560;display:inline-flex;align-items:center}
+.link.accent{color:var(--accent-ink)}
+.note{font-size:14px;line-height:1.45;color:var(--muted);margin-top:8px}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.foot .link{font-size:14px;color:var(--muted)}
+/* why sheet */
+.scrim{position:fixed;inset:0;background:var(--scrim)}
+.sheet{position:fixed;left:0;right:0;bottom:0;max-width:560px;margin:0 auto;background:var(--card);border-radius:22px 22px 0 0;
+  padding:10px 20px calc(env(safe-area-inset-bottom,0px) + 14px);box-shadow:0 -10px 30px rgba(0,0,0,.12);animation:up .26s var(--ease) both;max-height:90dvh;overflow:auto;overscroll-behavior:contain}
+@keyframes up{from{transform:translateY(24px);opacity:0}}
+.grab{width:36px;height:5px;border-radius:3px;background:var(--line2);margin:0 auto 12px}
+.sheet h2{font-size:21px;letter-spacing:-.01em;font-weight:670}
+.row{padding:13px 0;border-bottom:1px solid var(--line)}
+.rowtop{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.rowlabel{font-weight:600;font-size:15px}.rowval{font-weight:640}
+.meta{font-size:13px;color:var(--muted);margin-top:2px}
+.range{position:relative;height:8px;border-radius:4px;background:var(--track);margin:11px 0 5px}
+.band{position:absolute;top:0;bottom:0;border-radius:4px;background:var(--band)}
+.mk{position:absolute;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--ink);border:3px solid var(--card)}
+.rangewords{font-size:13px;color:var(--ink2)}
+/* B: session line (the signature) */
+.line{padding:30px 0 6px}
+.line .lbl{font-size:15px;color:var(--muted);margin-bottom:16px}
+.track{position:relative;height:12px;border-radius:6px;background:var(--track)}
+.done{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:var(--band)}
+.gap{position:absolute;top:-7px;bottom:-7px;border-radius:7px;background:var(--accent-soft);outline:2px dashed var(--accent);outline-offset:-2px}
+.now-dot{position:absolute;top:50%;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;background:var(--accent);border:4px solid var(--bg);animation:pop .3s var(--ease) both .1s}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+.stop{position:absolute;right:0;top:50%;width:4px;height:22px;margin-top:-11px;border-radius:2px;background:var(--ink)}
+.ticks{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-top:12px;font-family:ui-monospace,"SF Mono",Menlo,monospace}
+.ticks b{color:var(--accent-ink);font-weight:650}
+.bignow{font-size:44px;font-weight:300;letter-spacing:-.03em;line-height:1;margin:2px 0 4px}
+/* timer */
+.timer{font-size:84px;font-weight:250;letter-spacing:-.04em;line-height:1;margin:8px 0 2px}
+.breath{width:132px;height:132px;border-radius:50%;background:var(--accent-soft);margin:6px auto 14px;animation:breathe 8s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(.8)}50%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.breath{animation:none}}
+.ladder{display:grid;gap:10px;margin-top:16px}
+.rung{text-align:left;min-height:62px;border-radius:14px;padding:12px 16px;background:var(--sec)}
+.rung b{display:block;font-weight:640}.rung span{font-size:14px;color:var(--ink2)}
+.rung.first{background:var(--accent);color:var(--on-accent)}.rung.first span{color:var(--on-accent)}
+.progress{display:flex;gap:6px;margin:16px 0 6px}.progress i{flex:1;height:6px;border-radius:3px;background:var(--dot-off)}.progress i.on{background:var(--dot-on)}
+.preview{transform:scale(.92);transform-origin:top center;pointer-events:none;margin-top:14px}
+.firstline{font-size:24px;line-height:1.25;letter-spacing:-.015em;font-weight:650;margin-top:22px;text-wrap:balance}
+@media (max-height:700px){.hero{padding:8px 0 2px}.clock{font-size:52px;margin:2px 0}.line{padding:10px 0 2px}.bignow{font-size:32px}.card{padding:18px 18px 10px}h1{font-size:25px}.reason{font-size:16px}.context,.sure{font-size:14px}.btn{min-height:48px}.actions{margin-top:14px}.foot{margin-top:6px}}
+.promises{list-style:none;margin:22px 4px 0;display:grid;gap:12px}.promises li{position:relative;padding-left:22px;font-size:15px;color:var(--ink2)}.promises li::before{content:"";position:absolute;left:2px;top:.55em;width:8px;height:8px;border-radius:50%;background:var(--dot-on)}
+h1{font-size:26px}.reason{font-size:16px}
+</style>
+</head>
+<body>
+<main class="app" id="app" aria-live="polite"></main>
+<script>
+const DIR = "B";
+// All numbers are synthetic sample data. Copy: CMO seat, voice A (see COPY.md).
+const C = {
+ "name": "Halftime",
+ "nameNote": "name not final",
+ "sample": "Sample data",
+ "talk": "Talk to someone",
+ "pause": "Pause suggestions",
+ "session": {
+  "subject": "Organic chemistry",
+  "clock": "2:40",
+  "clockLabel": "studying",
+  "lastBreak": "No break since 1:05 pm",
+  "started": "1:05 pm",
+  "now": "3:45",
+  "next": "Chem lab 4:30"
+ },
+ "walk": {
+  "head": "Try a 5-minute walk",
+  "forecast": "A short walk now is likely to help.",
+  "reason": "You've been at it 2 h 40 min{1}, with 14 app switches in the last 20 min{2}.",
+  "context": "Last night: 5 h 10 min of sleep{3}. Your usual is about 7 h.",
+  "srcs": [
+   "session time, laptop",
+   "app switches, laptop",
+   "last night's sleep, watch"
+  ],
+  "sure": {
+   "n": 4,
+   "of": 6,
+   "word": "Fairly sure",
+   "count": "a walk helped in 4 of your last 6 afternoons like this"
+  },
+  "buttons": [
+   {
+    "t": "Take a 5-min walk",
+    "pri": true
+   },
+   {
+    "t": "Keep going"
+   }
+  ],
+  "tert": [
+   "Snooze 20 min",
+   "See why"
+  ],
+  "note": "Your study timer pauses while you walk."
+ },
+ "keep": {
+  "head": "Keep going. Nothing to change right now.",
+  "forecast": "You're in a steady stretch. Keep going.",
+  "reason": "You're 35 min in{1}, with 2 app switches in the last 20 min{2}.",
+  "context": "You slept 7 h 05 min{3}, about your usual.",
+  "srcs": [
+   "session time, laptop",
+   "app switches, laptop",
+   "last night's sleep, watch"
+  ],
+  "sure": {
+   "n": 6,
+   "of": 8,
+   "word": "Fairly sure",
+   "count": "your practice scores held steady past the hour in 6 of your last 8 sessions like this"
+  },
+  "buttons": [
+   {
+    "t": "Keep going",
+    "pri": true
+   },
+   {
+    "t": "Start a break"
+   }
+  ],
+  "tert": [
+   "See why"
+  ],
+  "note": "Next check in about 25 min. You can take a break any time.",
+  "session": {
+   "subject": "Statistics",
+   "clock": "0:35",
+   "clockLabel": "studying",
+   "lastBreak": "Started 3:10 pm",
+   "started": "3:10 pm",
+   "now": "3:45",
+   "next": "Dinner 6:00"
+  },
+  "gap": false
+ },
+ "brk": {
+  "head": "Try a 15-minute break",
+  "forecast": "A proper break now is likely to help.",
+  "reason": "You've been at it 3 h 10 min{1}. You got 6 of 10 on the last practice round, down from 9 of 10{2}.",
+  "context": "Your sleep was about usual{3}, so this is about the long session.",
+  "srcs": [
+   "session time, laptop",
+   "practice set results",
+   "last night's sleep, watch"
+  ],
+  "sure": {
+   "n": 5,
+   "of": 7,
+   "word": "Fairly sure",
+   "count": "after a break, your next round went up in 5 of your last 7 long sessions"
+  },
+  "buttons": [
+   {
+    "t": "Take a 15-min break",
+    "pri": true
+   },
+   {
+    "t": "Keep going"
+   }
+  ],
+  "tert": [
+   "Snooze 20 min",
+   "See why"
+  ],
+  "note": "Your practice set will be right here when you're back.",
+  "session": {
+   "subject": "Problem set 4",
+   "clock": "3:10",
+   "clockLabel": "studying",
+   "lastBreak": "No break since 12:35 pm",
+   "started": "12:35 pm",
+   "now": "3:45",
+   "next": "Practice 5:00"
+  }
+ },
+ "laptop": {
+  "head": "Try a 5-minute walk",
+  "forecast": "A short walk now is likely to help.",
+  "reason": "You've been at it 2 h 40 min{1}, with 14 app switches in the last 20 min{2}.",
+  "context": "No watch connected, so this uses your laptop only.",
+  "srcs": [
+   "session time, laptop",
+   "app switches, laptop"
+  ],
+  "sure": {
+   "n": 3,
+   "of": 5,
+   "word": "Not sure",
+   "count": "a walk helped in 3 of your last 5 sessions like this"
+  },
+  "buttons": [
+   {
+    "t": "Take a 5-min walk",
+    "pri": true
+   },
+   {
+    "t": "Keep going"
+   }
+  ],
+  "tert": [
+   "Snooze 20 min",
+   "Connect a watch"
+  ],
+  "note": "It works without a watch. Add one any time if you want sleep included."
+ },
+ "why": {
+  "title": "Why we suggested a walk",
+  "sub": "Ranked by how much each one counted.",
+  "rows": [
+   {
+    "label": "Session time · laptop",
+    "value": "2 h 40 min",
+    "meta": "Updated 1 min ago",
+    "band": [
+     25,
+     25
+    ],
+    "at": 89,
+    "words": "Longer than your usual 45–90 min"
+   },
+   {
+    "label": "App switches · laptop",
+    "value": "14 in 20 min",
+    "meta": "Updated 1 min ago",
+    "band": [
+     25,
+     15
+    ],
+    "at": 70,
+    "words": "More than your usual 5–8"
+   },
+   {
+    "label": "Last night's sleep · watch",
+    "value": "5 h 10 min",
+    "meta": "Synced 38 min ago",
+    "band": [
+     53,
+     17
+    ],
+    "at": 23,
+    "words": "Shorter than your usual, about 7 h"
+   },
+   {
+    "label": "Afternoons like this · your answers",
+    "value": "4 of 6",
+    "meta": "A walk helped 4 of 6 times · Show the 6 afternoons"
+   }
+  ],
+  "cantsee": "We only see the type of app you're in. Never what you type, read or browse.",
+  "wrong": "This looks wrong",
+  "close": "Back to suggestion"
+ },
+ "nodata": {
+  "head": "Still learning your usual sleep",
+  "count": "4 of 7 nights so far",
+  "body": "We need 3 more nights of sleep to know your usual.",
+  "known": "What we can say: you've been studying 1 h 50 min.",
+  "sure": "Not sure · too few nights to compare yet",
+  "b1": "Keep going",
+  "b2": "Start a 5-min walk",
+  "b3": "Start a break",
+  "note": "Suggestions start after 3 more nights, around Sunday. You can take a walk or break any time.",
+  "session": {
+   "subject": "Organic chemistry",
+   "clock": "1:50",
+   "clockLabel": "studying",
+   "lastBreak": "Started 1:55 pm",
+   "started": "1:55 pm",
+   "now": "3:45",
+   "next": "Chem lab 4:30"
+  }
+ },
+ "running": {
+  "head": "On a walk",
+  "clock": "4:12",
+  "left": "left",
+  "note": "Your study timer is paused. We'll show a note here at 3:50 pm.",
+  "end": "End break",
+  "add": "Add 5 min"
+ },
+ "snoozed": {
+  "head": "Snoozed until 3:40 pm",
+  "body": "We'll show this again then. You can take a break any time.",
+  "b1": "Show it now",
+  "b2": "Cancel snooze",
+  "note": "Said keep going? No more suggestions until at least 4:05 pm, and only if something changes."
+ },
+ "esc": {
+  "head": "12 of your last 14 nights were under 6 hours",
+  "body": "That's a long stretch. Talking it over with someone can help.",
+  "source": "Based on 14 nights from your watch · synced 38 min ago",
+  "rungs": [
+   [
+    "Talk to someone now",
+    "[Campus counseling, 24/7: confirm with Columbia Health]"
+   ],
+   [
+    "Book a time",
+    "[Counseling booking: confirm]"
+   ],
+   [
+    "Something for right now",
+    "Start 2 quiet minutes"
+   ]
+  ],
+  "later": "Not now",
+  "laterNote": "This card won't come back for 7 days. \"Talk to someone\" is always in the menu.",
+  "safety": "This is an app, not a counselor. If you're in danger, call [emergency line: confirm].",
+  "privacy": "Only you see this card. We never contact anyone for you."
+ },
+ "first": {
+  "line": "Tells you when to keep going, take a walk, or take a break, and why.",
+  "label": "Sample data · made-up numbers to show how it works. Not yours.",
+  "body": "Your first real suggestion comes during your first study session.",
+  "b1": "Start a study session",
+  "promises": [
+   "Uses your laptop, and your watch if you have one.",
+   "Never sees what you type, read or browse.",
+   "Every suggestion is yours to take or skip."
+  ]
+ }
+};
+const q = new URLSearchParams(location.search);
+const state = q.get("state") || "walk";
+const dots = (n, of) => `<span class="dots" role="img" aria-label="${n} of ${of}">${Array.from({length: of}, (_, i) => `<i class="${i < n ? "on" : ""}"></i>`).join("")}</span>`;
+const srcBtn = (k, label) => `<button class="src" aria-label="Source ${k}: ${label}">${k}</button>`;
+const nb = (txt) => (txt || "").replace(/(\d) (h|min|of)\b/g, "$1\u00a0$2").replace(/(\d+) (\d+ min)/g, "$1\u00a0$2");
+const marks = (s, txt, live = true) => nb(txt).replace(/\{(\d)\}([.,]?)/g, (m, k, p) => `<span style="white-space:nowrap">${live ? srcBtn(k, (s.srcs || [])[k - 1] || "record") : `<span class="src" aria-hidden="true">${k}</span>`}${p}</span>`);
+const topBar = () => `<header class="top"><span class="mark">${C.name}</span><span class="sample">${C.sample}</span></header>`;
+const foot = () => `<nav class="foot"><button class="link">${C.talk}</button><button class="link">${C.pause}</button></nav>`;
+const sureLine = (s) => DIR === "C" ? `<p class="sure"><span><b>${s.word}</b> · ${s.count}</span></p>` : `<p class="sure">${dots(s.n, s.of)}<span><b>${s.word}</b> · ${s.count}</span></p>`;
+const range = (r) => r.band ? `<div class="range" aria-hidden="true"><span class="band" style="left:${r.band[0]}%;width:${r.band[1]}%"></span><span class="mk" style="left:${r.at}%"></span></div><p class="rangewords">${r.words}</p>` : "";
+
+function hero(ss, gap = true) {
+  ss = ss || C.session;
+  if (DIR === "A") return `<section class="hero" aria-label="This session"><p class="subject">${ss.subject}</p><p class="clock">${ss.clock}<small>${ss.clockLabel}</small></p><p class="since">${ss.lastBreak}</p></section>`;
+  if (DIR === "B") return `<section class="line" role="img" aria-label="This session: started ${ss.started}, now ${ss.now}, next ${ss.next}">
+    <p class="lbl">${ss.subject} · started ${ss.started}</p><p class="bignow">${ss.clock}<span style="font-size:17px;color:var(--muted);margin-left:8px;font-weight:500;letter-spacing:0">${ss.clockLabel}</span></p>
+    <div style="height:18px"></div><div class="track"><span class="done" style="width:76%"></span>${gap ? `<span class="gap" style="left:77.5%;width:4.5%"></span>` : ""}<span class="now-dot" style="left:76%"></span><span class="stop"></span></div>
+    <div class="ticks"><span>${ss.started}</span><b>now ${ss.now}</b><span>${ss.next}</span></div></section>`;
+  return `<p class="subject" style="margin-top:14px">${ss.subject} · ${ss.clock.replace(":", " h ")} min</p>`;
+}
+
+function suggestion(s) {
+  const head = DIR === "B" ? s.forecast : s.head;
+  const two = s.buttons.length === 2 ? "two" : "";
+  return `${topBar()}${hero(s.session, s.gap !== false)}<div class="grow"></div>
+  <section class="card" aria-labelledby="h">
+    <h1 id="h">${head}</h1>
+    <p class="reason">${marks(s, s.reason)}</p>
+    ${s.context ? `<p class="context">${marks(s, s.context)}</p>` : ""}
+    ${sureLine(s.sure)}
+    <div class="actions ${two}">${s.buttons.map((b) => `<button class="btn ${b.pri ? "pri" : "sec"}">${b.t}</button>`).join("")}</div>
+    <div class="tert">${s.tert.map((t, i) => `<button class="link ${i === s.tert.length - 1 ? "accent" : ""}">${t}</button>`).join("")}</div>
+    ${s.note ? `<p class="note">${s.note}</p>` : ""}
+  </section>${foot()}`;
+}
+
+const R = {
+  walk: () => suggestion(C.walk),
+  keep: () => suggestion(C.keep),
+  break: () => suggestion(C.brk),
+  laptoponly: () => suggestion(C.laptop),
+  why: () => suggestion(C.walk) + `<div class="scrim"></div><section class="sheet" role="dialog" aria-label="${C.why.title}">
+    <div class="grab"></div><h2>${C.why.title}</h2><p class="meta">${C.why.sub}</p>
+    ${C.why.rows.map((r, i) => `<div class="row"><div class="rowtop"><span class="rowlabel"><span class="src" style="margin:0 8px 0 0" aria-hidden="true">${i + 1}</span>${r.label}</span><span class="rowval">${r.value}</span></div>
+      <p class="meta">${r.meta}</p>${range(r)}</div>`).join("")}
+    <p class="note">${C.why.cantsee}</p>
+    <div class="tert"><button class="link">${C.why.wrong}</button><button class="link accent">${C.why.close}</button></div></section>`,
+  nodata: () => `${topBar()}${hero(C.nodata.session, false)}<div class="grow"></div><section class="card">
+    <h1>${C.nodata.head}</h1><div class="progress" role="img" aria-label="${C.nodata.count}">${Array.from({length: 7}, (_, i) => `<i class="${i < 4 ? "on" : ""}"></i>`).join("")}</div>
+    <p class="meta">${C.nodata.count}</p><p class="reason">${nb(C.nodata.body)}</p><p class="context">${nb(C.nodata.known)}</p>
+    <p class="sure"><span><b>${C.nodata.sure.split(" · ")[0]}</b> · ${C.nodata.sure.split(" · ")[1]}</span></p>
+    <div class="actions"><button class="btn pri">${C.nodata.b1}</button><button class="btn sec">${C.nodata.b2}</button><button class="btn sec">${C.nodata.b3}</button></div>
+    <p class="note">${C.nodata.note}</p></section>${foot()}`,
+  running: () => `${topBar()}<div class="grow"></div><section class="card" style="text-align:center">
+    ${DIR === "C" ? `<div class="breath" aria-hidden="true"></div>` : ""}<h1 style="font-size:20px;font-weight:620">${C.running.head}</h1>
+    <p class="timer" aria-label="4 minutes 12 seconds left">${C.running.clock}</p><p class="meta">${C.running.left}</p>
+    <div class="actions two"><button class="btn sec">${C.running.end}</button><button class="btn sec">${C.running.add}</button></div>
+    <p class="note">${C.running.note}</p></section><div class="grow"></div>${foot()}`,
+  snoozed: () => `${topBar()}${hero()}<div class="grow"></div><section class="card">
+    <h1>${C.snoozed.head}</h1><p class="reason">${C.snoozed.body}</p>
+    <div class="actions two"><button class="btn sec">${C.snoozed.b1}</button><button class="btn sec">${C.snoozed.b2}</button></div>
+    <p class="note">${C.snoozed.note}</p></section>${foot()}`,
+  escalate: () => `${topBar()}<div class="grow"></div><section class="card">
+    <h1>${C.esc.head}</h1><p class="reason">${C.esc.body}</p><p class="meta" style="margin-top:6px">${C.esc.source}</p>
+    <div class="ladder">${C.esc.rungs.map((r, i) => `<button class="rung ${i === 0 ? "first" : ""}"><b>${r[0]}</b><span>${r[1]}</span></button>`).join("")}</div>
+    <p class="note">${C.esc.safety}</p><p class="note" style="margin-top:4px">${C.esc.privacy}</p>
+    <div class="tert"><button class="link">${C.esc.later}</button></div><p class="note" style="margin-top:0">${C.esc.laterNote}</p></section>${foot()}`,
+  firstrun: () => `${topBar()}<p class="firstline">${C.first.line}</p>
+    <div class="preview">${(() => { const s = C.walk; return `<section class="card"><h1>${DIR === "B" ? s.forecast : s.head}</h1><p class="reason">${marks(s, s.reason, false)}</p>${sureLine(s.sure)}</section>`; })()}</div>
+    <p class="note" style="text-align:center;margin-top:0">${C.first.label}</p><ul class="promises">${C.first.promises.map((x) => `<li>${x}</li>`).join("")}</ul><div class="grow"></div>
+    <p class="context" style="text-align:center">${C.first.body}</p>
+    <div class="actions"><button class="btn pri">${C.first.b1}</button></div>`,
+};
+document.getElementById("app").innerHTML = (R[state] || R.walk)();
+document.title = `${C.name} · ${state}`;
+</script>
+</body>
+</html>

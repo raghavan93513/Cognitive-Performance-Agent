@@ -1,0 +1,123 @@
+<title>Halftime Card Directions</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: a decision board. Three bold concepts as live phones, then where each idea came from, then the pick. */
+:root{
+  --bg:#EEF1F3; --surface:#FFFFFF; --ink:#121417; --ink2:#454B53; --muted:#5D636B; --line:#D9DEE2; --accent:#FFD60A; --accent-ink:#121417;
+  --display:"Bricolage Grotesque", system-ui, sans-serif; --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111316;--surface:#1A1D21;--ink:#F1F3F5;--ink2:#C3C8CE;--muted:#98A0A8;--line:#2B3036;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111316;--surface:#1A1D21;--ink:#F1F3F5;--ink2:#C3C8CE;--muted:#98A0A8;--line:#2B3036;color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:400 15px/1.5 var(--display)}
+.wrap{max-width:1260px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:30px 60px}
+h1{font:800 clamp(38px,6.4vw,76px)/.95 var(--display);letter-spacing:-.045em;max-width:16ch;text-wrap:balance}
+h1 mark{background:var(--accent);color:var(--accent-ink);padding:0 .12em}
+.lede{max-width:70ch;color:var(--ink2);margin-top:14px;font-size:17px}
+.meta{font:400 12.5px/1.4 var(--mono);color:var(--muted);margin-top:10px}
+.picker{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 20px}
+.picker button{font:600 14px var(--display);color:var(--ink2);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:10px 15px;min-height:44px;cursor:pointer}
+.picker button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.picker button:focus-visible,.open:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:start}
+@media (max-width:1000px){.board{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:min(340px,86vw);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px}.dir{scroll-snap-align:start}}
+.dir{min-width:0;display:flex;flex-direction:column;gap:12px}
+.dir h2{font:800 34px/1 var(--display);letter-spacing:-.035em}
+.idea{font:600 16px/1.35 var(--display);min-height:44px}
+.phone{position:relative;width:100%;aspect-ratio:390/844;border-radius:40px;overflow:hidden;background:#000;border:8px solid #0B0C0E;box-shadow:0 1px 2px rgba(0,0,0,.08),0 22px 44px rgba(0,0,0,.14)}
+.phone iframe{position:absolute;left:0;top:0;width:390px;height:844px;border:0;transform-origin:0 0;background:#fff}
+.try{font:400 12.5px/1.4 var(--mono);color:var(--muted)}
+.open{font:600 14px var(--display);color:var(--ink);text-decoration:underline;text-underline-offset:3px;align-self:flex-start;padding:4px 0}
+dl{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:14px}
+dt{font:600 12px/1.6 var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+dd{color:var(--ink2)}
+h3{font:800 clamp(28px,4vw,40px)/1 var(--display);letter-spacing:-.035em;margin:56px 0 16px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 12px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+td:first-child{font-weight:600;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.rec{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:24px}
+@media (max-width:880px){.rec{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px}
+.panel h4{font:800 26px/1.05 var(--display);letter-spacing:-.025em;margin-bottom:10px}
+.panel p,.panel li{color:var(--ink2);max-width:68ch}
+.panel p+p{margin-top:8px}
+.panel ol,.panel ul{padding-left:18px;display:grid;gap:6px}
+.fine{font:400 12.5px/1.5 var(--mono);color:var(--muted);margin-top:30px;max-width:100ch}
+.fine a{color:var(--ink2)}
+</style>
+
+<div class="wrap">
+  <h1>Halftime, round two: <mark>out of the box</mark></h1>
+  <p class="lede">Round one was too safe. These three come straight from what the design studies found the best products do, and each one owns a single bold move: a game clock, a living island, a card you flip for the receipts. They're live: tap the buttons, flip the card, swipe it, tap the island.</p>
+  <p class="meta">UIUX seat (design) · CMO seat (voice) · 5 Nov 2026 · iPhone 390×844 · sample data only</p>
+
+  <div class="picker" role="group" aria-label="Choose a state to compare" id="picker"></div>
+  <div class="board" id="board"></div>
+
+  <h3>Where each idea comes from</h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Concept</th><th>Borrowed mechanism</th><th>From</th><th>Why it's right for us</th></tr></thead>
+    <tbody>
+      <tr><td>Halftime</td><td>A big game clock, a lower-third that slides in once, "today vs your usual" mirrored stat bars, a 4–2 record for how sure it is</td><td>Sports broadcast graphics; Strava's "against your own history"; Gentler Streak's "rest counts"</td><td>It reframes the break: every game has a halftime, so resting is part of playing. It also speaks to athletes (persona Diego) without a separate app.</td></tr>
+      <tr><td>Island</td><td>A small black pill that springs open at a natural pause, grows to show its evidence, and shrinks into a live countdown</td><td>Apple's Dynamic Island and Live Activities; Transit GO (silent until you need to act); Apple's spring motion</td><td>iPhone users already trust and like this pattern, and it's calm by design: it lives at the edge until it matters. It becomes a real Live Activity once we ship a native app.</td></tr>
+      <tr><td>Flip</td><td>One giant word on a colour field, swipe up or down to decide, flip the card for "the receipts"</td><td>Spotify Wrapped's full-colour story cards; Perplexity's numbered sources; Google Flights' usual-range bar; one sec's easy way out</td><td>It makes "show your work" the signature. No wellness app lets you flip a suggestion and check every number, its source and its time.</td></tr>
+    </tbody></table></div>
+
+  <h3>The pick, and what to decide</h3>
+  <section class="rec">
+    <div class="panel">
+      <h4>Recommendation: Flip, living inside the Island</h4>
+      <p>One system, not three screens. While you study, Halftime is a quiet pill at the top of the screen showing your session time. At a natural pause it springs open into the Flip card: one big word ("Walk."), the reason with numbered sources, and "4/6, fairly sure". Swipe or tap to decide. Flip it over for the receipts. Accept, and it shrinks into a countdown pill.</p>
+      <p>From Halftime we keep the line "every game has one" and the "today vs your usual" bars, used inside the receipts. We leave out the full sports costume: it's brilliant for athletes but may feel intense to the 1 am student.</p>
+      <p><strong>Strongest argument against:</strong> the Island on the web imitates a native feature. If that feels fake in Safari, launch with the Flip card on its own and add the island with the native app.</p>
+    </div>
+    <div class="panel">
+      <h4>Decide as a team</h4>
+      <ol>
+        <li>Which concept, or the combined system?</li>
+        <li>The name: Halftime, Pace, Breather, Seam or Steady. Trademarks need checking first.</li>
+        <li>What "a walk helped" counts. The CTO and CSO seats decide.</li>
+        <li>Colour fields for each suggestion (sky, sand, dusk): keep or drop?</li>
+      </ol>
+      <p style="margin-top:10px">Checked: every state on iPhone SE and standard iPhone with no failed UI checks or console errors, and the flip tested by tapping. Not checked: real Safari on a phone, VoiceOver, and real classmates.</p>
+    </div>
+  </section>
+
+  <p class="fine">Proposals for the Nov 6 proposal. Every number is synthetic. Nothing here is medical advice, and the app never contacts anyone for the student. Crisis numbers are placeholders until confirmed with Columbia Health. Round one (too safe) is still available: <a href="a-clear-card.html" target="_blank" rel="noopener">A</a> · <a href="b-forecast.html" target="_blank" rel="noopener">B</a> · <a href="c-quiet.html" target="_blank" rel="noopener">C</a>.</p>
+</div>
+
+<script>
+const STATES = [["walk", "Short walk"], ["why", "See why"], ["keep", "Keep going"], ["running", "Break running"], ["nodata", "Not enough data"], ["escalate", "Talk to someone"]];
+const DIRS = [
+  { file: "v2/halftime.html", name: "Halftime", idea: "Your session is a game. Every game has a halftime.", try: "try: tap HALFTIME, then END HALFTIME",
+    move: "The game clock and the yellow HALFTIME? lower-third", risk: "The sports costume may feel intense to non-athletes" },
+  { file: "v2/island.html", name: "Island", idea: "Lives in a black pill. Springs open once, at the pause.", try: "try: Keep going, then tap the pill",
+    move: "The pill morphing open, then into a countdown", risk: "On the web it imitates a native feature" },
+  { file: "v2/flip.html", name: "Flip", idea: "One word you can't miss. Flip it for the receipts.", try: "try: flip the card, or swipe it up or down",
+    move: "The giant word and the flip to the receipts", risk: "A colour per suggestion must never read as a verdict" },
+];
+let current = "walk";
+try { const s = localStorage.getItem("halftime-v2-state"); if (s && STATES.some((x) => x[0] === s)) current = s; } catch (e) {}
+const picker = document.getElementById("picker"), board = document.getElementById("board");
+picker.innerHTML = STATES.map(([k, l]) => `<button type="button" data-k="${k}" aria-pressed="${k === current}">${l}</button>`).join("");
+const src = (d, k) => `${d.file}?state=${d.name === "Halftime" && k === "why" ? "walk" : k}`;
+board.innerHTML = DIRS.map((d, i) => `<article class="dir">
+    <h2>${d.name}</h2><p class="idea">${d.idea}</p>
+    <div class="phone" id="ph${i}"><iframe title="${d.name}, live prototype" src="${src(d, current)}"></iframe></div>
+    <p class="try">${d.try}</p>
+    <a class="open" id="op${i}" href="${src(d, current)}" target="_blank" rel="noopener">Open full size</a>
+    <dl><dt>Bold move</dt><dd>${d.move}</dd><dt>Risk</dt><dd>${d.risk}</dd></dl></article>`).join("");
+function fit() { DIRS.forEach((d, i) => { const ph = document.getElementById("ph" + i); ph.querySelector("iframe").style.transform = `scale(${ph.clientWidth / 390})`; }); }
+function show(k) {
+  current = k; try { localStorage.setItem("halftime-v2-state", k); } catch (e) {}
+  picker.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.k === k)));
+  DIRS.forEach((d, i) => { document.querySelector(`#ph${i} iframe`).src = src(d, k); document.getElementById("op" + i).href = src(d, k); });
+}
+picker.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) show(b.dataset.k); });
+addEventListener("resize", fit); fit(); if (window.ResizeObserver) new ResizeObserver(fit).observe(board);
+</script>

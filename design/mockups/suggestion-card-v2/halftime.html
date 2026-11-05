@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#E8ECEF">
+<title>Halftime · game clock concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Concept: your study session is a game, and every game has a halftime.
+   Language borrowed from sports broadcast graphics: the game clock, the lower-third, the
+   "today vs usual" mirrored stat bars. One signal colour (scoreboard yellow) means "halftime". */
+:root{
+  --concrete:#E8ECEF; --ink:#0E1116; --ink2:#3B424C; --muted:#5E6873; --chalk:#FFFFFF; --rule:#C9D0D6;
+  --signal:#FFD60A; --signal-ink:#0E1116; --bar-you:#0E1116; --bar-usual:#9AA4AE;
+  --display:"Big Shoulders Display", "Arial Narrow", Impact, sans-serif; --text:"Barlow", system-ui, sans-serif;
+  --ease:cubic-bezier(.23,1,.32,1); --drawer:cubic-bezier(.32,.72,0,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;overscroll-behavior:none;background:var(--concrete)}
+body{min-height:100dvh;background:var(--concrete);color:var(--ink);font:500 16px/1.4 var(--text);font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.app{position:relative;min-height:100dvh;max-width:520px;margin:0 auto;display:flex;flex-direction:column;
+  padding:calc(env(safe-area-inset-top,0px) + 10px) 18px calc(env(safe-area-inset-bottom,0px) + 12px);overflow:hidden}
+.top{display:flex;justify-content:space-between;align-items:center;min-height:40px}
+.word{font:900 22px/1 var(--display);letter-spacing:.02em;text-transform:uppercase}
+.sample{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+/* the scoreboard */
+.board{margin-top:8px;border-top:3px solid var(--ink);padding-top:10px}
+.period{display:flex;justify-content:space-between;align-items:baseline;font:800 15px/1 var(--display);letter-spacing:.12em;text-transform:uppercase}
+.period b{background:var(--ink);color:var(--concrete);padding:4px 8px 3px}
+.clock{font:900 clamp(96px,30vw,132px)/.82 var(--display);letter-spacing:-.01em;margin:10px 0 4px}
+.clock .colon{animation:tick 1s steps(1) infinite}
+@keyframes tick{50%{opacity:.25}}
+.subject{font:600 17px/1.2 var(--text);color:var(--ink2)}
+.shot{position:relative;height:14px;margin:16px 0 4px;background:repeating-linear-gradient(90deg,var(--rule) 0 2px,transparent 2px 100%);background-size:calc(100%/18) 100%}
+.shot i{position:absolute;inset:0 auto 0 0;background:var(--ink)}
+.shot em{position:absolute;top:-6px;bottom:-6px;width:3px;background:var(--signal);box-shadow:0 0 0 2px var(--ink)}
+.legend{position:relative;display:flex;justify-content:space-between;font:700 12px/1 var(--text);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+/* the lower third: arrives once */
+.lower{margin-top:auto;transform:translateY(0);animation:enter .55s var(--drawer) both .25s}
+@keyframes enter{from{transform:translateY(110%)}}
+.tab{display:inline-block;background:var(--signal);color:var(--signal-ink);font:900 30px/1 var(--display);letter-spacing:.04em;text-transform:uppercase;padding:10px 14px 8px}
+.panel{background:var(--chalk);border:3px solid var(--ink);border-top-width:6px;padding:16px 16px 12px}
+.headline{font:800 26px/1.08 var(--text);letter-spacing:-.01em}
+.because{font:500 16px/1.4 var(--text);color:var(--ink2);margin-top:6px}
+/* today vs usual: broadcast stat comparison */
+.stats{margin-top:12px;display:grid;gap:6px}
+.stat{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
+.stat .lbl{grid-column:1/-1;text-align:center;font:800 12px/1 var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:-4px}
+.v{font:900 24px/1 var(--display)}
+.v.you{text-align:right}.v.usual{color:var(--muted)}
+.bars{display:grid;grid-template-columns:1fr 1fr;gap:3px;width:120px}
+.bars span{height:10px;background:var(--rule);position:relative}
+.bars .l i{position:absolute;right:0;top:0;bottom:0;background:var(--bar-you)}
+.bars .r i{position:absolute;left:0;top:0;bottom:0;background:var(--bar-usual)}
+.src{display:inline-flex;min-width:24px;height:24px;align-items:center;justify-content:center;font:800 12px/1 var(--text);border:2px solid var(--ink);margin-left:6px;vertical-align:3px;position:relative}
+.src::after{content:"";position:absolute;inset:-10px -6px}
+.colhead{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;font:800 12px/1 var(--display);letter-spacing:.14em;text-transform:uppercase}
+.colhead span:first-child{text-align:right}.colhead span:last-child{color:var(--muted)}
+.record{display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:12px;border-top:2px solid var(--ink)}
+.record .wl{font:900 30px/1 var(--display);letter-spacing:.02em;white-space:nowrap;flex:none}
+.record p{font:500 14px/1.35 var(--text);color:var(--ink2)}
+.record b{color:var(--ink)}
+.calls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.call{min-height:58px;font:900 21px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;border:3px solid var(--ink);transition:transform .12s var(--ease)}
+.call:active{transform:scale(.97)}
+.call.go{background:var(--signal);color:var(--signal-ink)}
+.call.play{background:var(--chalk)}
+.call small{display:block;font:600 12px/1.2 var(--text);letter-spacing:.02em;text-transform:none;margin-top:4px}
+.minor{display:flex;justify-content:space-between;margin-top:4px}
+.minor button{min-height:44px;font:700 14px/1 var(--text);color:var(--ink2);padding:0 2px}
+.foot{display:flex;justify-content:space-between;margin-top:6px}
+.foot button{min-height:44px;font:600 13px/1 var(--text);color:var(--muted)}
+/* halftime running: the shot clock */
+.ht{position:absolute;inset:0;background:var(--signal);color:var(--signal-ink);display:flex;flex-direction:column;justify-content:space-between;
+  padding:calc(env(safe-area-inset-top,0px) + 18px) 18px calc(env(safe-area-inset-bottom,0px) + 18px);animation:wipe .6s var(--drawer) both}
+@keyframes wipe{from{clip-path:inset(100% 0 0 0)}to{clip-path:inset(0 0 0 0)}}
+.ht .big{font:900 clamp(150px,52vw,230px)/.8 var(--display)}
+.ht .label{font:900 34px/1 var(--display);letter-spacing:.06em;text-transform:uppercase}
+.ht p{font:600 17px/1.4 var(--text);max-width:30ch}
+.ht .calls .call{background:transparent;border-color:var(--ink)}
+.ht .calls .call.go{background:var(--ink);color:var(--signal)}
+/* plain states: no sports metaphor where it would be wrong */
+.plain{margin-top:auto;background:var(--chalk);border:3px solid var(--ink);padding:18px 16px 12px;animation:enter .55s var(--drawer) both .1s}
+.plain h2{font:800 25px/1.12 var(--text);letter-spacing:-.01em}
+.plain p{font:500 16px/1.45 var(--text);color:var(--ink2);margin-top:8px}
+.ladder{display:grid;gap:8px;margin-top:14px}
+.rung{text-align:left;border:3px solid var(--ink);padding:12px 14px;min-height:60px;background:var(--chalk)}
+.rung b{display:block;font:800 17px/1.2 var(--text)}.rung span{font:500 14px/1.3 var(--text);color:var(--ink2)}
+.rung.first{background:var(--ink);color:var(--chalk)}.rung.first span{color:#D9DEE3}
+.learn{display:flex;gap:6px;margin:14px 0 6px}.learn i{flex:1;height:10px;background:var(--rule)}.learn i.on{background:var(--ink)}
+.note{font:500 13px/1.4 var(--text);color:var(--muted);margin-top:10px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important}.ht{clip-path:none}}
+@media (max-height:700px){.clock{font-size:80px}.subject{display:none}.shot{margin-top:8px}.because{display:none}.record{margin-top:8px;padding-top:8px}.board{margin-top:6px}.headline{font-size:22px}.v{font-size:22px}.stats{gap:6px}.call{min-height:52px}}
+</style>
+</head>
+<body>
+<main class="app" id="app"></main>
+<script>
+// Sample data only. Copy: UIUX proposal built on the CMO seat's voice A (COPY.md); the CMO locks the words.
+const q = new URLSearchParams(location.search);
+let state = q.get("state") || "walk";
+const app = document.getElementById("app");
+const hdr = (s) => `<header class="top"><span class="word">Halftime</span><span class="sample">Sample data</span></header>`;
+const board = (clock = "2:40", subj = "Organic chemistry", pct = 89, mark = 42) => `
+  <section class="board" aria-label="This session">
+    <div class="period"><b>1st half</b><span>${subj}</span></div>
+    <p class="clock" aria-label="${clock} studying">${clock.replace(":", '<span class="colon">:</span>')}</p>
+    <div class="shot" aria-hidden="true"><i style="width:${pct}%"></i><em style="left:${mark}%"></em></div>
+    <div class="legend"><span>1:05 pm</span><span>Usual stretch · 1:15</span><span>3 h</span></div>
+  </section>`;
+const foot = `<nav class="foot"><button>Talk to someone</button><button>Pause suggestions</button></nav>`;
+const stat = (lbl, you, usual, l, r, src) => `<div class="stat"><span class="lbl">${lbl}</span>
+  <span class="v you">${you}<button class="src" aria-label="Source ${src}">${src}</button></span>
+  <span class="bars" aria-hidden="true"><span class="l"><i style="width:${l}%"></i></span><span class="r"><i style="width:${r}%"></i></span></span>
+  <span class="v usual">${usual}</span></div>`;
+
+const views = {
+  walk: () => `${hdr()}${board()}
+    <section class="lower" aria-labelledby="h">
+      <span class="tab">Halftime?</span>
+      <div class="panel">
+        <h1 class="headline" id="h">Take 5 minutes. Every game has one.</h1>
+        <p class="because">You're past your usual stretch, and switching apps a lot.</p>
+        <div class="stats">
+          <div class="colhead"><span>Today</span><span style="width:120px"></span><span>Your usual</span></div>
+          ${stat("Minutes in", "2:40", "1:15", 95, 45, 1)}
+          ${stat("Switches · 20 min", "14", "6", 90, 40, 2)}
+          ${stat("Sleep last night", "5:10", "7:00", 55, 75, 3)}
+        </div>
+        <div class="record"><span class="wl">4–2</span><p><b>Fairly sure.</b> A walk helped in 4 of your last 6 afternoons like this.</p></div>
+        <div class="calls"><button class="call go" data-go="running">Halftime<small>5-minute walk</small></button><button class="call play" data-go="keep">Play on<small>Keep going</small></button></div>
+        <div class="minor"><button>Snooze 20 min</button><button>See why</button></div>
+      </div>
+    </section>${foot}`,
+  keep: () => `${hdr()}${board("0:35", "Statistics", 20, 50)}
+    <section class="lower"><span class="tab" style="background:var(--chalk);border:3px solid var(--ink);border-bottom:0">Play on</span>
+      <div class="panel"><h1 class="headline">You're in a good stretch. Keep going.</h1>
+        <p class="because">35 minutes in, steady, and you slept about as usual.</p>
+        <div class="record"><span class="wl">6–2</span><p><b>Fairly sure.</b> Your practice scores held up past the hour in 6 of your last 8 sessions like this.</p></div>
+        <div class="calls"><button class="call play">Play on<small>Keep going</small></button><button class="call play" data-go="running">Halftime<small>Break anyway</small></button></div>
+        <div class="minor"><button>Next check in about 25 min</button></div></div></section>${foot}`,
+  running: () => `${hdr()}${board()}<section class="ht" aria-label="Halftime break">
+      <div><p class="label">Halftime</p><p style="margin-top:8px">Walk. Water. Window. Your study clock is paused.</p></div>
+      <p class="big" aria-label="4 minutes 12 seconds left">4:12</p>
+      <div><p>Back at 3:50 pm. We'll pick up the second half where you left off.</p>
+        <div class="calls" style="margin-top:14px"><button class="call go" data-go="walk">End halftime</button><button class="call">+5 min</button></div></div></section>`,
+  nodata: () => `${hdr()}${board("1:50", "Organic chemistry", 61, 50)}<section class="plain">
+      <h2>Pre-season: still learning your usual sleep.</h2>
+      <div class="learn" role="img" aria-label="4 of 7 nights">${[1,1,1,1,0,0,0].map((x) => `<i class="${x ? "on" : ""}"></i>`).join("")}</div>
+      <p style="margin-top:0">4 of 7 nights so far. Suggestions start around Sunday. What we can say: you've been at it 1 h 50 min.</p>
+      <div class="calls"><button class="call play">Play on</button><button class="call go" data-go="running">Halftime</button></div>
+      <p class="note">Not sure yet: too few nights to compare. A break is always up to you.</p></section>${foot}`,
+  escalate: () => `${hdr()}<section class="plain" style="margin-top:30px">
+      <h2>12 of your last 14 nights were under 6 hours.</h2>
+      <p>That's a long stretch. Talking it over with someone can help. This isn't a game thing, and you choose if and when.</p>
+      <div class="ladder"><button class="rung first"><b>Talk to someone now</b><span>[Campus counseling, 24/7: confirm with Columbia Health]</span></button>
+        <button class="rung"><b>Book a time</b><span>[Counseling booking: confirm]</span></button>
+        <button class="rung"><b>Something for right now</b><span>Start 2 quiet minutes</span></button></div>
+      <p class="note">Only you see this card. We never contact anyone for you. If you're in danger, call [emergency line: confirm].</p>
+      <div class="minor"><button>Not now</button><button>Why am I seeing this?</button></div></section>${foot}`,
+};
+views.why = views.walk;
+function render(s) { state = views[s] ? s : "walk"; app.innerHTML = views[state](); }
+app.addEventListener("click", (e) => { const b = e.target.closest("[data-go]"); if (b) render(b.dataset.go); });
+render(state);
+</script>
+</body>
+</html>

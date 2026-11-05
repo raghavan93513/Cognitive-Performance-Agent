@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-11-04
 tier: supporting
 created: 2026-11-04T23:00:00Z
-updated: 2026-11-04T23:00:00Z
+updated: 2026-11-05T04:30:00Z
 ---
 
 # Design Crit Log
@@ -20,7 +20,9 @@ One row each time the team picks or rejects a design direction. **Team-stated** 
 
 | Date | What | Picked or rejected | Source |
 |---|---|---|---|
-| *none yet* | | | |
+| 2026-11-05 | Round 1 suggestion card (three calm, plain directions: white card, serif night mode, timeline) | Rejected | Team-stated (Heramb: "very boring", "very basic"; wants something out of the box, built on what competitors do best) |
+| 2026-11-05 | Round 2: bold concepts, each with one signature move (Halftime game clock, morphing Island, Flip for the receipts) | Island picked | Team-stated (Heramb: "dynamic island + the previous B design was good") |
+| 2026-11-05 | Round 1 B "Forecast": the session drawn as a line (started, now, a walk slot, the next class) | Picked, to combine with the Island | Team-stated (same message) |
 
 ## Crit log
 

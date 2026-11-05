@@ -1,0 +1,114 @@
+<title>Halftime Card Directions</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: one live phone as the hero beside the design story, then every state in a row. */
+:root{
+  --bg:#F4F3EF; --surface:#FFFFFF; --ink:#141414; --ink2:#46453F; --muted:#64625C; --line:#E3E1DB; --refill:#8ED6BC; --refill-ink:#0F5E46; --now:#B42318;
+  --ui:"Geist", system-ui, sans-serif; --mono:"Geist Mono", ui-monospace, Menlo, monospace; color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121211;--surface:#1B1B19;--ink:#F2F1EC;--ink2:#C9C7C0;--muted:#9C9A93;--line:#2C2B28;--refill-ink:#8ED6BC;--now:#FF7A6E;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121211;--surface:#1B1B19;--ink:#F2F1EC;--ink2:#C9C7C0;--muted:#9C9A93;--line:#2C2B28;--refill-ink:#8ED6BC;--now:#FF7A6E;color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:400 15.5px/1.55 var(--ui)}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 64px}
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:44px;align-items:center}
+@media (max-width:860px){.hero{grid-template-columns:minmax(0,1fr)}}
+.kick{font:500 12.5px/1 var(--mono);color:var(--muted);letter-spacing:.04em}
+h1{font:600 clamp(40px,6vw,70px)/.98 var(--ui);letter-spacing:-.045em;margin-top:14px;text-wrap:balance}
+h1 .pill{display:inline-block;background:#000;color:#fff;border-radius:999px;padding:0 .32em .06em;font-weight:500}
+h1 .line{text-decoration:underline;text-decoration-color:var(--refill);text-decoration-thickness:.14em;text-underline-offset:.08em}
+.lede{color:var(--ink2);font-size:17px;max-width:56ch;margin-top:16px}
+.beats{list-style:none;margin-top:22px;display:grid;gap:14px;max-width:58ch}
+.beats li{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start}
+.beats i{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font:500 13px/1 var(--mono);font-style:normal;background:var(--surface);border:1px solid var(--line)}
+.beats b{font-weight:600}
+.beats span{color:var(--ink2)}
+.stage{display:flex;flex-direction:column;align-items:center;gap:12px}
+.phone{position:relative;width:min(390px,100%);aspect-ratio:390/844;border-radius:46px;overflow:hidden;background:#000;border:9px solid #0B0B0C;box-shadow:0 2px 4px rgba(0,0,0,.08),0 30px 60px rgba(0,0,0,.18)}
+.phone iframe{position:absolute;left:0;top:0;width:390px;height:844px;border:0;transform-origin:0 0;background:#F4F3EF}
+.hint{font:400 12.5px/1.4 var(--mono);color:var(--muted);text-align:center}
+.replay{font:600 14px var(--ui);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;min-height:44px;padding:0 18px;cursor:pointer}
+.replay:focus-visible,.open:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+h2{font:600 clamp(26px,3.6vw,38px)/1.05 var(--ui);letter-spacing:-.035em;margin:64px 0 18px}
+.states{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+@media (max-width:980px){.states{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:min(230px,70vw);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px}.st{scroll-snap-align:start}}
+.st{min-width:0;display:flex;flex-direction:column;gap:8px}
+.st .phone{border-width:6px;border-radius:30px}
+.st h3{font:600 15px/1.25 var(--ui)}
+.st p{font:400 13px/1.45 var(--ui);color:var(--ink2)}
+.open{font:500 12.5px var(--mono);color:var(--ink2)}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+@media (max-width:800px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px}
+.panel h4{font:600 20px/1.2 var(--ui);letter-spacing:-.02em;margin-bottom:8px}
+.panel p,.panel li{color:var(--ink2)}
+.panel ul,.panel ol{padding-left:18px;display:grid;gap:6px}
+.fine{font:400 12.5px/1.5 var(--mono);color:var(--muted);margin-top:30px;max-width:100ch}
+.fine a{color:var(--ink2)}
+</style>
+
+<div class="wrap">
+  <section class="hero">
+    <div>
+      <p class="kick">UIUX seat · round 3 · the team's pick</p>
+      <h1>The <span class="pill">island</span> speaks. The <span class="line">line</span> shows where it fits.</h1>
+      <p class="lede">Your two favourites, joined into one design. The Island from round two is the voice: small while you study, it springs open once at a natural pause. B's session line from round one is the page underneath: when you started, where you are now, and your next stop.</p>
+      <ol class="beats">
+        <li><i>1</i><p><b>It stays out of the way.</b> <span>A black pill at the top shows your session time. The page shows your clock, today's study blocks, and the line to Chem lab.</span></p></li>
+        <li><i>2</i><p><b>It speaks once, and shows where the walk fits.</b> <span>The island opens, the page slides down to make room, and a dashed walk slot lights up on the line before your next class.</span></p></li>
+        <li><i>3</i><p><b>The break lives in the island.</b> <span>Tap Walk: the island shrinks into a live countdown, and the slot on the line fills in as a refill. Tap the pill to end the break early or add time.</span></p></li>
+      </ol>
+    </div>
+    <div class="stage">
+      <div class="phone" id="hero"><iframe id="heroframe" title="Halftime live prototype" src="v3/island-forecast.html?state=walk"></iframe></div>
+      <button class="replay" type="button" id="replay">Replay from the start</button>
+      <p class="hint">Live: tap Walk 5 min, then tap the pill · See why · Keep going</p>
+    </div>
+  </section>
+
+  <h2>Every state</h2>
+  <div class="states" id="states"></div>
+
+  <h2>Design notes</h2>
+  <div class="grid2">
+    <div class="panel">
+      <h4>Why this works</h4>
+      <ul>
+        <li><b>Familiar and native:</b> iPhone users already read the Dynamic Island as "something live, glance at it". In a native app it becomes a real Live Activity on the Lock Screen.</li>
+        <li><b>The line answers "when", not just "what":</b> the suggestion is tied to your real next stop ("you'll be back by 3:50, well before lab"), the way a transit app shows your next departure.</li>
+        <li><b>Calm by design:</b> it arrives once, stays at the edge, never pulses or repeats, and "Keep going" is as big as the walk.</li>
+        <li><b>Shows its work:</b> numbered sources on every reason, and "See why" opens each one with its time and your usual range.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h4>Next steps</h4>
+      <ol>
+        <li>The CMO locks the words; this uses the calm-friend voice from COPY.md.</li>
+        <li>Run <code>/icp</code> (the five student testers) and <code>/crit</code> (blind second reviewer) on this design.</li>
+        <li>The CTO confirms the model can honestly say "a walk helped 4 of 6", and where "your next stop" comes from: calendar access, which needs consent.</li>
+        <li>Check it in Safari on a real iPhone: the web version imitates the island; the real one needs the native app.</li>
+      </ol>
+    </div>
+  </div>
+
+  <p class="fine">Proposals for the Nov 6 proposal. Every number is synthetic. Not medical advice; the app never contacts anyone for the student. Crisis numbers are placeholders until confirmed with Columbia Health. Earlier rounds: <a href="v2/island.html" target="_blank" rel="noopener">Island</a> · <a href="b-forecast.html" target="_blank" rel="noopener">B Forecast</a> · <a href="v2/flip.html" target="_blank" rel="noopener">Flip</a> · <a href="v2/halftime.html" target="_blank" rel="noopener">Halftime</a>.</p>
+</div>
+
+<script>
+const STATES = [
+  ["walk", "Suggests a walk", "The island opens; the walk slot lights up before lab."],
+  ["why", "See why", "Each reason with its source, time and your usual range."],
+  ["running", "Walking", "A live countdown pill; the slot fills in as a refill."],
+  ["runopen", "Break, expanded", "Tap the pill: end early or add 5 minutes."],
+  ["keep", "Keep going", "A real answer, not an ad for breaks. Next check marked."],
+  ["nodata", "Still learning", "4 of 7 nights. Says what it knows, nothing more."],
+  ["escalate", "Talk to someone", "After 12 of 14 short nights: a kind three-step ladder."],
+];
+document.getElementById("states").innerHTML = STATES.map(([k, t, d], i) => `<article class="st">
+  <div class="phone" id="s${i}"><iframe title="${t}" loading="lazy" src="v3/island-forecast.html?state=${k}"></iframe></div>
+  <h3>${t}</h3><p>${d}</p><a class="open" href="v3/island-forecast.html?state=${k}" target="_blank" rel="noopener">open full size</a></article>`).join("");
+function fit() { document.querySelectorAll(".phone").forEach((ph) => { const f = ph.querySelector("iframe"); if (f) f.style.transform = `scale(${ph.clientWidth / 390})`; }); }
+addEventListener("resize", fit); fit(); if (window.ResizeObserver) new ResizeObserver(fit).observe(document.body);
+document.getElementById("replay").addEventListener("click", () => { const f = document.getElementById("heroframe"); f.src = "v3/island-forecast.html?state=walk&r=" + Date.now(); });
+</script>

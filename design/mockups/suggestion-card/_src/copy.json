@@ -1,0 +1,273 @@
+{
+ "name": "Halftime",
+ "nameNote": "name not final",
+ "sample": "Sample data",
+ "talk": "Talk to someone",
+ "pause": "Pause suggestions",
+ "session": {
+  "subject": "Organic chemistry",
+  "clock": "2:40",
+  "clockLabel": "studying",
+  "lastBreak": "No break since 1:05 pm",
+  "started": "1:05 pm",
+  "now": "3:45",
+  "next": "Chem lab 4:30"
+ },
+ "walk": {
+  "head": "Try a 5-minute walk",
+  "forecast": "A short walk now is likely to help.",
+  "reason": "You've been at it 2 h 40 min{1}, with 14 app switches in the last 20 min{2}.",
+  "context": "Last night: 5 h 10 min of sleep{3}. Your usual is about 7 h.",
+  "srcs": [
+   "session time, laptop",
+   "app switches, laptop",
+   "last night's sleep, watch"
+  ],
+  "sure": {
+   "n": 4,
+   "of": 6,
+   "word": "Fairly sure",
+   "count": "a walk helped in 4 of your last 6 afternoons like this"
+  },
+  "buttons": [
+   {
+    "t": "Take a 5-min walk",
+    "pri": true
+   },
+   {
+    "t": "Keep going"
+   }
+  ],
+  "tert": [
+   "Snooze 20 min",
+   "See why"
+  ],
+  "note": "Your study timer pauses while you walk."
+ },
+ "keep": {
+  "head": "Keep going. Nothing to change right now.",
+  "forecast": "You're in a steady stretch. Keep going.",
+  "reason": "You're 35 min in{1}, with 2 app switches in the last 20 min{2}.",
+  "context": "You slept 7 h 05 min{3}, about your usual.",
+  "srcs": [
+   "session time, laptop",
+   "app switches, laptop",
+   "last night's sleep, watch"
+  ],
+  "sure": {
+   "n": 6,
+   "of": 8,
+   "word": "Fairly sure",
+   "count": "your practice scores held steady past the hour in 6 of your last 8 sessions like this"
+  },
+  "buttons": [
+   {
+    "t": "Keep going",
+    "pri": true
+   },
+   {
+    "t": "Start a break"
+   }
+  ],
+  "tert": [
+   "See why"
+  ],
+  "note": "Next check in about 25 min. You can take a break any time.",
+  "session": {
+   "subject": "Statistics",
+   "clock": "0:35",
+   "clockLabel": "studying",
+   "lastBreak": "Started 3:10 pm",
+   "started": "3:10 pm",
+   "now": "3:45",
+   "next": "Dinner 6:00"
+  },
+  "gap": false
+ },
+ "brk": {
+  "head": "Try a 15-minute break",
+  "forecast": "A proper break now is likely to help.",
+  "reason": "You've been at it 3 h 10 min{1}. You got 6 of 10 on the last practice round, down from 9 of 10{2}.",
+  "context": "Your sleep was about usual{3}, so this is about the long session.",
+  "srcs": [
+   "session time, laptop",
+   "practice set results",
+   "last night's sleep, watch"
+  ],
+  "sure": {
+   "n": 5,
+   "of": 7,
+   "word": "Fairly sure",
+   "count": "after a break, your next round went up in 5 of your last 7 long sessions"
+  },
+  "buttons": [
+   {
+    "t": "Take a 15-min break",
+    "pri": true
+   },
+   {
+    "t": "Keep going"
+   }
+  ],
+  "tert": [
+   "Snooze 20 min",
+   "See why"
+  ],
+  "note": "Your practice set will be right here when you're back.",
+  "session": {
+   "subject": "Problem set 4",
+   "clock": "3:10",
+   "clockLabel": "studying",
+   "lastBreak": "No break since 12:35 pm",
+   "started": "12:35 pm",
+   "now": "3:45",
+   "next": "Practice 5:00"
+  }
+ },
+ "laptop": {
+  "head": "Try a 5-minute walk",
+  "forecast": "A short walk now is likely to help.",
+  "reason": "You've been at it 2 h 40 min{1}, with 14 app switches in the last 20 min{2}.",
+  "context": "No watch connected, so this uses your laptop only.",
+  "srcs": [
+   "session time, laptop",
+   "app switches, laptop"
+  ],
+  "sure": {
+   "n": 3,
+   "of": 5,
+   "word": "Not sure",
+   "count": "a walk helped in 3 of your last 5 sessions like this"
+  },
+  "buttons": [
+   {
+    "t": "Take a 5-min walk",
+    "pri": true
+   },
+   {
+    "t": "Keep going"
+   }
+  ],
+  "tert": [
+   "Snooze 20 min",
+   "Connect a watch"
+  ],
+  "note": "It works without a watch. Add one any time if you want sleep included."
+ },
+ "why": {
+  "title": "Why we suggested a walk",
+  "sub": "Ranked by how much each one counted.",
+  "rows": [
+   {
+    "label": "Session time · laptop",
+    "value": "2 h 40 min",
+    "meta": "Updated 1 min ago",
+    "band": [
+     25,
+     25
+    ],
+    "at": 89,
+    "words": "Longer than your usual 45–90 min"
+   },
+   {
+    "label": "App switches · laptop",
+    "value": "14 in 20 min",
+    "meta": "Updated 1 min ago",
+    "band": [
+     25,
+     15
+    ],
+    "at": 70,
+    "words": "More than your usual 5–8"
+   },
+   {
+    "label": "Last night's sleep · watch",
+    "value": "5 h 10 min",
+    "meta": "Synced 38 min ago",
+    "band": [
+     53,
+     17
+    ],
+    "at": 23,
+    "words": "Shorter than your usual, about 7 h"
+   },
+   {
+    "label": "Afternoons like this · your answers",
+    "value": "4 of 6",
+    "meta": "A walk helped 4 of 6 times · Show the 6 afternoons"
+   }
+  ],
+  "cantsee": "We only see the type of app you're in. Never what you type, read or browse.",
+  "wrong": "This looks wrong",
+  "close": "Back to suggestion"
+ },
+ "nodata": {
+  "head": "Still learning your usual sleep",
+  "count": "4 of 7 nights so far",
+  "body": "We need 3 more nights of sleep to know your usual.",
+  "known": "What we can say: you've been studying 1 h 50 min.",
+  "sure": "Not sure · too few nights to compare yet",
+  "b1": "Keep going",
+  "b2": "Start a 5-min walk",
+  "b3": "Start a break",
+  "note": "Suggestions start after 3 more nights, around Sunday. You can take a walk or break any time.",
+  "session": {
+   "subject": "Organic chemistry",
+   "clock": "1:50",
+   "clockLabel": "studying",
+   "lastBreak": "Started 1:55 pm",
+   "started": "1:55 pm",
+   "now": "3:45",
+   "next": "Chem lab 4:30"
+  }
+ },
+ "running": {
+  "head": "On a walk",
+  "clock": "4:12",
+  "left": "left",
+  "note": "Your study timer is paused. We'll show a note here at 3:50 pm.",
+  "end": "End break",
+  "add": "Add 5 min"
+ },
+ "snoozed": {
+  "head": "Snoozed until 3:40 pm",
+  "body": "We'll show this again then. You can take a break any time.",
+  "b1": "Show it now",
+  "b2": "Cancel snooze",
+  "note": "Said keep going? No more suggestions until at least 4:05 pm, and only if something changes."
+ },
+ "esc": {
+  "head": "12 of your last 14 nights were under 6 hours",
+  "body": "That's a long stretch. Talking it over with someone can help.",
+  "source": "Based on 14 nights from your watch · synced 38 min ago",
+  "rungs": [
+   [
+    "Talk to someone now",
+    "[Campus counseling, 24/7: confirm with Columbia Health]"
+   ],
+   [
+    "Book a time",
+    "[Counseling booking: confirm]"
+   ],
+   [
+    "Something for right now",
+    "Start 2 quiet minutes"
+   ]
+  ],
+  "later": "Not now",
+  "laterNote": "This card won't come back for 7 days. \"Talk to someone\" is always in the menu.",
+  "safety": "This is an app, not a counselor. If you're in danger, call [emergency line: confirm].",
+  "privacy": "Only you see this card. We never contact anyone for you."
+ },
+ "first": {
+  "line": "Tells you when to keep going, take a walk, or take a break, and why.",
+  "label": "Sample data · made-up numbers to show how it works. Not yours.",
+  "body": "Your first real suggestion comes during your first study session.",
+  "b1": "Start a study session",
+  "promises": [
+   "Uses your laptop, and your watch if you have one.",
+   "Never sees what you type, read or browse.",
+   "Every suggestion is yours to take or skip."
+  ]
+ }
+}

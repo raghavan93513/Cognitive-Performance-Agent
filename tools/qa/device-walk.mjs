@@ -28,7 +28,7 @@
 //   {"repeat": {"click": "text:Next", "until": "css:#done", "max": 20, "gap": 800}}
 //   {"key": "Enter"} · {"scroll": 600} (≤ 5 means screens) · {"scrollTo": "text:Sources"} · {"go": "/other.html"}
 // UI checks (heuristics, not a full audit; a real screen reader and real phones still need a human):
-//   bad text (NaN, undefined, null, [object …]) · sideways page overflow · clipped text · tap targets < 44 px on touch
+//   blank page · bad text (NaN, undefined, null, [object …]) · sideways page overflow · clipped text · tap targets < 44 px on touch
 //   devices (< 24 px is a fail) · text contrast below WCAG AA (solid backgrounds only) · images without alt ·
 //   buttons and links with no accessible name · visible text under 12 px · iPhone: no mobile viewport meta, zoom
 //   disabled (user-scalable=no / maximum-scale=1), inputs under 16 px (iOS Safari zooms into them).
@@ -161,6 +161,8 @@ const CHECKS = (touch) => `(() => {
     return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none' && +s.opacity > 0 && r.bottom > 0 && r.top < vh; };
   const label = (el) => (el.getAttribute('aria-label') || el.innerText || el.getAttribute('title') || el.value || el.getAttribute('alt') || el.tagName.toLowerCase()).replace(/\\s+/g, ' ').trim().slice(0, 40);
   const ownText = (el) => [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim());
+  // blank page (e.g. a script error rendered nothing)
+  if ((document.body.innerText || '').trim().length < 3 && !document.querySelector('img,svg,canvas,video')) add('page looks blank', 'no visible text or images');
   // bad text
   const bad = (document.body.innerText.match(/\\b(NaN|undefined|Infinity|null)\\b|\\[object [A-Za-z]+\\]/g) || []);
   if (bad.length) add('bad text', [...new Set(bad)].join(', '));
@@ -211,7 +213,7 @@ const CHECKS = (touch) => `(() => {
   const res = {}; for (const [k, v] of Object.entries(out)) res[k] = { n: v.length, eg: [...new Set(v)].slice(0, 5) };
   return res;
 })()`;
-const FAILS = new Set(['bad text', 'page overflows sideways', 'clipped text', 'tap target under 24 px', 'contrast below AA', 'control with no name', 'image without alt', 'no mobile viewport meta', 'zoom disabled', 'input under 16 px (iOS zooms)']);
+const FAILS = new Set(['page looks blank', 'bad text', 'page overflows sideways', 'clipped text', 'tap target under 24 px', 'contrast below AA', 'control with no name', 'image without alt', 'no mobile viewport meta', 'zoom disabled', 'input under 16 px (iOS zooms)']);
 const scrollToEl = (sel) => `(() => {
   const want = ${JSON.stringify(sel)}, t = want.replace(/^text:/, '').toLowerCase();
   const el = want.startsWith('css:') ? document.querySelector(want.slice(4))

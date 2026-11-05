@@ -1,0 +1,147 @@
+<title>Halftime Card Directions</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: a decision board. One state picker, three live phones side by side, the recommendation under them. */
+:root{
+  --bg:#F3F2EE; --surface:#FFFFFF; --ink:#18181A; --ink2:#4A4A4F; --muted:#6C6B67; --line:#E2E0D9;
+  --accent:#0E6B63; --accent-soft:#DCEEEA; --pick:#0E6B63;
+  --display:"Instrument Serif", Georgia, serif; --ui:"Inter Tight", system-ui, -apple-system, sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141413; --surface:#1D1D1B; --ink:#F1F0EC; --ink2:#C9C7C0; --muted:#9A988F; --line:#2E2D2A;
+  --accent:#5FC2B6; --accent-soft:#1E3633; --pick:#5FC2B6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141413; --surface:#1D1D1B; --ink:#F1F0EC; --ink2:#C9C7C0; --muted:#9A988F; --line:#2E2D2A;
+  --accent:#5FC2B6; --accent-soft:#1E3633; --pick:#5FC2B6; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--ui);font-variant-numeric:tabular-nums}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
+h1{font:400 clamp(34px,5vw,52px)/1.05 var(--display);letter-spacing:-.01em;text-wrap:balance}
+.lede{max-width:68ch;color:var(--ink2);margin-top:10px;font-size:16px}
+.meta{color:var(--muted);font-size:13px;margin-top:8px}
+.picker{display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 18px}
+.picker button{font:600 14px var(--ui);color:var(--ink2);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:9px 14px;min-height:44px;cursor:pointer}
+.picker button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.picker button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:start}
+@media (max-width:980px){.board{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:min(340px,86vw);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px}.dir{scroll-snap-align:start}}
+.dir{min-width:0;display:flex;flex-direction:column;gap:12px}
+.dirhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.dirhead h2{font:400 28px/1.1 var(--display)}
+.tag{font-size:12px;font-weight:600;color:var(--pick);background:var(--accent-soft);border-radius:999px;padding:3px 10px;white-space:nowrap}
+.concept{color:var(--ink2);font-size:14px;min-height:42px}
+.phone{position:relative;width:100%;aspect-ratio:390/844;border-radius:38px;overflow:hidden;background:#000;border:8px solid #0B0B0C;box-shadow:0 1px 2px rgba(0,0,0,.08),0 18px 40px rgba(0,0,0,.10)}
+.phone iframe{position:absolute;left:0;top:0;width:390px;height:844px;border:0;transform-origin:0 0;background:#fff}
+.open{font-size:13px;color:var(--accent);font-weight:600;text-decoration:none;align-self:flex-start;padding:6px 0}
+.open:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13.5px}
+dt{color:var(--muted)} dd{color:var(--ink2)}
+.score{display:flex;flex-wrap:wrap;gap:6px;font-size:12px}
+.score span{border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--ink2)}
+.score span.low{border-color:var(--ink2);color:var(--ink)}
+section.rec{margin-top:40px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px}
+@media (max-width:860px){section.rec{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px}
+.panel h3{font:400 30px/1.1 var(--display);margin-bottom:10px}
+.panel h4{font:600 13px var(--ui);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px}
+.panel p,.panel li{color:var(--ink2);max-width:66ch}
+.panel ul,.panel ol{padding-left:18px;display:grid;gap:6px}
+.fine{font-size:12.5px;color:var(--muted);margin-top:28px;max-width:90ch}
+@media (prefers-reduced-motion:no-preference){.phone iframe{transition:opacity .18s ease}}
+</style>
+
+<div class="wrap">
+  <h1>Halftime: three directions for the suggestion card</h1>
+  <p class="lede">The card that tells a student, mid-study, whether to keep going, take a short walk or take a break, and shows why and how sure it is. Pick a state, compare the three live phones, then choose a direction. The name "Halftime" is the CMO seat's working pick, not final.</p>
+  <p class="meta">UIUX seat (design) and CMO seat (words) · 5 Nov 2026 · iPhone 390×844 · sample data only, no real person's numbers</p>
+
+  <div class="picker" role="group" aria-label="Choose a state to compare" id="picker"></div>
+
+  <div class="board" id="board"></div>
+
+  <section class="rec" aria-labelledby="pick">
+    <div class="panel">
+      <h3 id="pick">The designer's pick: A, with C as its night mode</h3>
+      <p><strong>A "Clear Card"</strong> is the fastest one-glance read: the suggestion as a verb, the reason in the student's own units with a source marker on every clause, and "how sure" as a word plus a count. It's also the most iPhone-native of the three. Keep going is as big and easy as the break, because in the one sec study (PNAS 2023) an easy way out did more than any persuasive wording.</p>
+      <p style="margin-top:8px"><strong>C "Quiet"</strong> becomes A's appearance after dark: same words, same buttons, on a calm near-black ground with a serif headline. That's the 1 am student (persona Sam) without a second product to build.</p>
+      <p style="margin-top:8px"><strong>B's session line</strong> is too good to lose but too busy for the card face. Move it into "See why" and the history screen, where the student has asked for detail.</p>
+      <h4>Strongest argument against</h4>
+      <p>A's big session clock could read as pressure ("you've been at it 2:40"). If the classmate tests show that, shrink it to one line and let the card carry the time.</p>
+    </div>
+    <div class="panel">
+      <h3>To decide as a team</h3>
+      <ol>
+        <li>Which direction: A, B, C, or A with C at night?</li>
+        <li>Voice: the CMO recommends the calm-friend voice A, short on the card face (copy in COPY.md).</li>
+        <li>Name: Halftime, Pace, Breather, Seam or Steady. Trademarks need checking before anything public.</li>
+        <li>What "a walk helped" counts: the student's own "It helped" answer after a break, or their practice score afterwards. The CTO and CSO decide.</li>
+        <li>Crisis numbers: placeholders until confirmed with Columbia Health.</li>
+      </ol>
+      <h4>Checked so far</h4>
+      <ul>
+        <li>All 10 states × 3 directions shot on iPhone SE, standard iPhone and Pro Max: no failed UI checks, no console errors.</li>
+        <li>Not checked yet: real Safari on an iPhone, VoiceOver, how the motion feels, and real classmates.</li>
+      </ul>
+    </div>
+  </section>
+
+  <p class="fine">These are proposals for the Nov 6 proposal, not final designs. Every number is synthetic. No suggestion here is medical advice, and the app never contacts anyone for the student. Built from the team's design studies and steal library (Google Flights' usual-range bar, Perplexity-style source markers, Citymapper's one next step with equal alternatives, Apple Vitals' speak-only-when-signals-agree).</p>
+</div>
+
+<script>
+const STATES = [
+  ["walk", "Short walk"], ["keep", "Keep going"], ["break", "Longer break"], ["why", "See why"],
+  ["nodata", "Not enough data"], ["laptoponly", "No watch"], ["running", "Break running"],
+  ["snoozed", "Snoozed"], ["escalate", "Talk to someone"], ["firstrun", "First run"],
+];
+const DIRS = [
+  { file: "a-clear-card.html", name: "A · Clear Card", tag: "Designer's pick", concept: "One calm card that shows its work. The top half is your session clock.",
+    sig: "Source markers on every reason, dots for how sure", for: "Fastest to read; most iPhone-native", against: "The big clock could feel like pressure",
+    score: { U1: 5, U2: 5, U3: 5, U4: 4, U5: 5, U6: 4, U7: 4, U8: 5 } },
+  { file: "b-forecast.html", name: "B · Forecast", tag: "Wrong-genre idea", concept: "Your session as a line you're travelling on: now, the walk, the next class.",
+    sig: "The session line with a dashed slot for the walk", for: "Shows time and your day's shape at a glance", against: "Two focal points; forecast wording may overclaim",
+    score: { U1: 4, U2: 5, U3: 4, U4: 4, U5: 5, U6: 4, U7: 4, U8: 4 } },
+  { file: "c-quiet.html", name: "C · Quiet", tag: "Night mode", concept: "One sentence, said kindly. Dark and warm for a dim library at 1 am.",
+    sig: "A serif headline alone on a calm dark ground", for: "Calmest; kindest at night", against: "A serif on dark can read as a 'premium' trope",
+    score: { U1: 5, U2: 5, U3: 4, U4: 5, U5: 5, U6: 4, U7: 4, U8: 5 } },
+];
+const LABELS = { U1: "Clarity", U2: "Grounded", U3: "Uncertainty", U4: "Calm", U5: "Wellness", U6: "Craft", U7: "Access", U8: "Fit" };
+let current = "walk";
+try { const s = localStorage.getItem("halftime-state"); if (s && STATES.some((x) => x[0] === s)) current = s; } catch (e) {}
+
+const picker = document.getElementById("picker");
+picker.innerHTML = STATES.map(([k, l]) => `<button type="button" data-k="${k}" aria-pressed="${k === current}">${l}</button>`).join("");
+const board = document.getElementById("board");
+board.innerHTML = DIRS.map((d, i) => {
+  const low = Math.min(...Object.values(d.score));
+  return `<article class="dir">
+    <div class="dirhead"><h2>${d.name}</h2><span class="tag">${d.tag}</span></div>
+    <p class="concept">${d.concept}</p>
+    <div class="phone" id="ph${i}"><iframe title="${d.name}, live mockup" loading="lazy" src="${d.file}?state=${current}"></iframe></div>
+    <a class="open" href="${d.file}?state=${current}" target="_blank" rel="noopener" id="op${i}">Open this direction full size</a>
+    <dl><dt>Signature</dt><dd>${d.sig}</dd><dt>For</dt><dd>${d.for}</dd><dt>Against</dt><dd>${d.against}</dd></dl>
+    <div class="score" aria-label="Self-score, 1 to 5, overall is the lowest">${Object.entries(d.score).map(([k, v]) => `<span class="${v === low ? "low" : ""}">${LABELS[k]} ${v}</span>`).join("")}<span>Overall ${low}</span></div>
+  </article>`;
+}).join("");
+
+function fit() {
+  DIRS.forEach((d, i) => {
+    const ph = document.getElementById("ph" + i); const fr = ph.querySelector("iframe");
+    const w = ph.clientWidth; fr.style.transform = `scale(${w / 390})`;
+  });
+}
+function show(k) {
+  current = k;
+  try { localStorage.setItem("halftime-state", k); } catch (e) {}
+  picker.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.k === k)));
+  DIRS.forEach((d, i) => {
+    document.querySelector(`#ph${i} iframe`).src = `${d.file}?state=${k}`;
+    document.getElementById("op" + i).href = `${d.file}?state=${k}`;
+  });
+}
+picker.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) show(b.dataset.k); });
+addEventListener("resize", fit); fit();
+if (window.ResizeObserver) new ResizeObserver(fit).observe(board);
+</script>

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F4F3EF">
+<title>Island · morphing pill concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Concept: the whole product lives in one black island at the top of the screen, like the
+   iPhone's own Dynamic Island. It sits small while you study, springs open once at a natural
+   pause, grows to show its evidence, and shrinks into a live countdown during the break.
+   The page underneath is your day: study blocks, with breaks drawn as refills. */
+:root{
+  --paper:#F4F3EF; --ink:#141414; --ink2:#4A4A47; --muted:#64625C; --line:#E2E0DA;
+  --island:#000; --on:#FFFFFF; --on2:rgba(255,255,255,.72); --on3:rgba(255,255,255,.48); --well:#1C1C1E; --well2:#2C2C2E;
+  --study:#141414; --refill:#9FD9C4; --now:#141414;
+  --ui:"Geist", system-ui, -apple-system, sans-serif; --mono:"Geist Mono", ui-monospace, Menlo, monospace;
+  --spring:cubic-bezier(.32,.72,0,1); --ease:cubic-bezier(.23,1,.32,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;overscroll-behavior:none;background:var(--paper)}
+body{min-height:100dvh;background:var(--paper);color:var(--ink);font:400 16px/1.45 var(--ui);font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+:focus-visible{outline:3px solid #6CB8FF;outline-offset:3px;border-radius:12px}
+.page{max-width:520px;margin:0 auto;min-height:100dvh;padding:calc(env(safe-area-inset-top,0px) + 74px) 20px calc(env(safe-area-inset-bottom,0px) + 16px);display:flex;flex-direction:column}
+.hello{font:300 34px/1.1 var(--ui);letter-spacing:-.025em;margin-top:120px;transition:opacity .3s ease}
+.hello b{font-weight:600}
+.dim .hello,.dim .day{opacity:.14;filter:blur(3px)}
+.day{margin-top:26px;transition:opacity .3s ease}
+.dayhead{display:flex;justify-content:space-between;font:500 13px/1 var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.lane{position:relative;height:56px;margin-top:12px;border-radius:14px;background:var(--line);overflow:hidden}
+.blk{position:absolute;top:0;bottom:0;border-radius:10px}
+.blk.s{background:var(--study)}.blk.r{background:var(--refill)}
+.blk.r::after{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px;border-radius:50%;background:var(--ink)}
+.nowline{position:absolute;top:-6px;bottom:-6px;width:2px;background:#E5484D}
+.ticks{display:flex;justify-content:space-between;font:400 12px/1 var(--mono);color:var(--muted);margin-top:8px}
+.keyrow{display:flex;gap:16px;margin-top:14px;font-size:13px;color:var(--ink2)}
+.keyrow i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.foot{margin-top:auto;display:flex;justify-content:space-between}
+.foot button{min-height:44px;font-size:13px;color:var(--muted)}
+.sample{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 54px);font:500 12px/1 var(--mono);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+
+/* the island */
+.island{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:5;
+  background:var(--island);color:var(--on);border-radius:22px;overflow:hidden;width:168px;height:40px;
+  transition:width .5s var(--spring),height .5s var(--spring),border-radius .5s var(--spring);box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.island.open{border-radius:38px}
+.compact{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 14px 0 12px;font:500 15px/1 var(--mono);transition:opacity .2s ease}
+.compact .ring{width:20px;height:20px}
+.compact .dot{width:8px;height:8px;border-radius:50%;background:var(--refill);margin-right:8px;display:inline-block}
+.island.open .compact{opacity:0;pointer-events:none}
+.full{padding:22px 22px 18px;opacity:0;transform:translateY(-6px) scale(.98);transform-origin:top center;transition:opacity .25s ease .12s,transform .45s var(--spring) .08s}
+.island.open .full{opacity:1;transform:none}
+.eyebrowless{display:flex;justify-content:space-between;align-items:center;font:500 13px/1 var(--mono);color:var(--on3)}
+.q{font:600 34px/1.05 var(--ui);letter-spacing:-.03em;margin-top:14px}
+.why{font:400 16px/1.45 var(--ui);color:var(--on2);margin-top:8px}
+.why b{color:var(--on);font-weight:500}
+.chip{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;border-radius:7px;background:var(--well2);color:var(--on2);font:500 12px/1 var(--mono);margin-left:4px;vertical-align:1px;position:relative}
+.chip::after{content:"";position:absolute;inset:-10px -4px}
+.sure{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:14px;color:var(--on2)}
+.sure .d{display:flex;gap:4px}.sure .d i{width:8px;height:8px;border-radius:50%;background:var(--well2)}.sure .d i.on{background:var(--on)}
+.sure b{color:var(--on);font-weight:600}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.a{min-height:54px;border-radius:27px;font:600 17px/1 var(--ui);transition:transform .12s var(--ease),background .15s ease}
+.a:active{transform:scale(.96)}
+.a.yes{background:var(--on);color:#000}.a.no{background:var(--well2);color:var(--on)}
+.links{display:flex;justify-content:space-between;margin-top:6px}
+.links button{min-height:44px;font:500 14px/1 var(--ui);color:var(--on2)}
+.ev{margin-top:16px;display:grid;gap:12px;border-top:1px solid var(--well2);padding-top:14px}
+.row{display:grid;grid-template-columns:1fr auto;gap:2px 10px}
+.row .k{font:500 14px/1.3 var(--ui)}.row .val{font:500 14px/1.3 var(--mono)}
+.row .m{grid-column:1/-1;font:400 12px/1.3 var(--mono);color:var(--on3)}
+.rng{grid-column:1/-1;position:relative;height:6px;border-radius:3px;background:var(--well2);margin-top:6px}
+.rng span{position:absolute;top:0;bottom:0;border-radius:3px;background:#4A4A4E}
+.rng em{position:absolute;top:50%;width:12px;height:12px;margin:-6px;border-radius:50%;background:var(--on);border:2px solid #000}
+.countdown{display:flex;align-items:center;gap:18px;margin-top:12px}
+.countdown svg{flex:none}
+.cd{font:300 64px/1 var(--ui);letter-spacing:-.04em}
+.ladder{display:grid;gap:8px;margin-top:16px}
+.rung{text-align:left;background:var(--well);border-radius:18px;padding:12px 16px;min-height:58px}
+.rung b{display:block;font:600 16px/1.25 var(--ui)}.rung span{font:400 13px/1.3 var(--ui);color:var(--on2)}
+.rung.first{background:var(--on);color:#000}.rung.first span{color:#333}
+.learn{display:flex;gap:5px;margin-top:14px}.learn i{flex:1;height:6px;border-radius:3px;background:var(--well2)}.learn i.on{background:var(--refill)}
+.tap{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 58px);transform:translateX(-50%);font:500 12px/1 var(--mono);color:var(--muted);transition:opacity .2s}
+.island.open ~ .tap{opacity:0}
+@media (prefers-reduced-motion:reduce){.island,.full,.compact{transition:opacity .2s ease!important}.full{transform:none}}
+@media (max-height:700px){.hello{margin-top:40px;font-size:28px}.q{font-size:28px}.full{padding:18px 18px 12px}}
+</style>
+</head>
+<body>
+<div class="page" id="page">
+  <p class="hello">Organic chemistry<br><b>2 h 40 min</b> in, since 1:05 pm</p>
+  <section class="day" aria-label="Today">
+    <div class="dayhead"><span>Today</span><span>4 h 05 min studied · 1 refill</span></div>
+    <div class="lane" role="img" aria-label="Today's study blocks: 9 to 10:25 am, a 10-minute break, 10:35 to 11:20, then 1:05 pm to now">
+      <span class="blk s" style="left:0%;width:16%"></span><span class="blk r" style="left:16.6%;width:2.4%"></span>
+      <span class="blk s" style="left:19.5%;width:9%"></span><span class="blk s" style="left:46%;width:30%"></span>
+      <span class="nowline" style="left:76.2%"></span>
+    </div>
+    <div class="ticks"><span>9 am</span><span>12</span><span>3 pm</span><span>6</span></div>
+    <div class="keyrow"><span><i style="background:var(--study)"></i>Study</span><span><i style="background:var(--refill)"></i>Break (a refill)</span><span><i style="background:#E5484D;width:2px;border-radius:0"></i>Now</span></div>
+  </section>
+  <nav class="foot"><button>Talk to someone</button><button>Pause suggestions</button></nav>
+</div>
+<span class="sample">Sample data</span>
+<div class="island" id="island" role="region" aria-label="Halftime">
+  <button class="compact" id="compact" aria-label="Open suggestion"><span><span class="dot"></span><span id="cmini">2:40</span></span>
+    <svg class="ring" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="#2C2C2E" stroke-width="3"/><circle cx="10" cy="10" r="8" fill="none" stroke="#9FD9C4" stroke-width="3" stroke-dasharray="50.3" stroke-dashoffset="8" transform="rotate(-90 10 10)" stroke-linecap="round"/></svg></button>
+  <div class="full" id="full"></div>
+</div>
+<span class="tap" id="tap">tap the island</span>
+<script>
+// Sample data only. Words: UIUX proposal on the CMO seat's voice A (COPY.md); the CMO locks them.
+const island = document.getElementById("island"), full = document.getElementById("full"), page = document.getElementById("page");
+const dots = (n, of) => `<span class="d" role="img" aria-label="${n} of ${of}">${Array.from({length: of}, (_, i) => `<i class="${i < n ? "on" : ""}"></i>`).join("")}</span>`;
+const chip = (k, l) => `<button class="chip" aria-label="Source ${k}: ${l}">${k}</button>`;
+const V = {
+  walk: () => `<div class="eyebrowless"><span>Halftime · now</span><span>2:40 in</span></div>
+    <h1 class="q">Short walk?</h1>
+    <p class="why"><b>2 h 40 min</b> in${chip(1, "session time, laptop")}, <b>14 app switches</b> in 20 min${chip(2, "app switches, laptop")}, and <b>5 h 10 min</b> of sleep${chip(3, "sleep, watch")}.</p>
+    <p class="sure">${dots(4, 6)}<span><b>Fairly sure</b> · helped 4 of your last 6 afternoons like this</span></p>
+    <div class="acts"><button class="a yes" data-go="running">Walk 5 min</button><button class="a no" data-go="idle">Keep going</button></div>
+    <div class="links"><button data-go="idle">Snooze 20 min</button><button data-go="why">See why</button></div>`,
+  why: () => V.walk().replace('<div class="links">', `<div class="ev" aria-label="Why">
+      <div class="row"><span class="k">1 · Session time</span><span class="val">2 h 40 min</span><span class="m">laptop · 1 min ago · usual 45–90 min</span><span class="rng"><span style="left:25%;width:25%"></span><em style="left:89%"></em></span></div>
+      <div class="row"><span class="k">2 · App switches</span><span class="val">14 / 20 min</span><span class="m">laptop · 1 min ago · usual 5–8</span><span class="rng"><span style="left:25%;width:15%"></span><em style="left:70%"></em></span></div>
+      <div class="row"><span class="k">3 · Sleep last night</span><span class="val">5 h 10 min</span><span class="m">watch · synced 38 min ago · usual about 7 h</span><span class="rng"><span style="left:53%;width:17%"></span><em style="left:23%"></em></span></div>
+      <p class="m" style="color:var(--on3);font:400 12px/1.4 var(--mono)">We only see which kind of app you're in, never what you type, read or browse.</p></div><div class="links">`).replace('data-go="why">See why', 'data-go="walk">Hide why').replace('<button data-go="idle">Snooze 20 min</button>', '<button>This looks wrong</button>'),
+  running: () => `<div class="eyebrowless"><span>Halftime · walking</span><span>back 3:50 pm</span></div>
+    <div class="countdown"><svg width="78" height="78" viewBox="0 0 78 78" aria-hidden="true"><circle cx="39" cy="39" r="33" fill="none" stroke="#2C2C2E" stroke-width="8"/><circle cx="39" cy="39" r="33" fill="none" stroke="#9FD9C4" stroke-width="8" stroke-linecap="round" stroke-dasharray="207.3" stroke-dashoffset="33" transform="rotate(-90 39 39)"/></svg>
+      <p class="cd" aria-label="4 minutes 12 seconds left">4:12</p></div>
+    <p class="why">Your study clock is paused. Walk, water, window.</p>
+    <div class="acts"><button class="a no" data-go="idle">End break</button><button class="a no">+5 min</button></div>`,
+  keep: () => `<div class="eyebrowless"><span>Halftime · check-in</span><span>0:35 in</span></div>
+    <h1 class="q">Keep going.</h1>
+    <p class="why">Steady so far: <b>35 min</b> in${chip(1, "session time")}, <b>2 switches</b> in 20 min${chip(2, "app switches")}, usual sleep${chip(3, "sleep")}.</p>
+    <p class="sure">${dots(6, 8)}<span><b>Fairly sure</b> · scores held up in 6 of your last 8 like this</span></p>
+    <div class="acts"><button class="a yes" data-go="idle">Keep going</button><button class="a no" data-go="running">Break anyway</button></div>`,
+  nodata: () => `<div class="eyebrowless"><span>Halftime · learning</span><span>4 of 7 nights</span></div>
+    <h1 class="q" style="font-size:28px">Still learning your usual sleep.</h1>
+    <div class="learn" role="img" aria-label="4 of 7 nights">${[1,1,1,1,0,0,0].map((x) => `<i class="${x ? "on" : ""}"></i>`).join("")}</div>
+    <p class="why">Suggestions start around Sunday. What we can say: you've been at it <b>1 h 50 min</b>.</p>
+    <div class="acts"><button class="a no" data-go="idle">Keep going</button><button class="a no" data-go="running">Walk 5 min</button></div>`,
+  escalate: () => `<div class="eyebrowless"><span>Halftime</span><span>only you see this</span></div>
+    <h1 class="q" style="font-size:27px;line-height:1.12">12 of your last 14 nights were under 6 hours.</h1>
+    <p class="why">That's a long stretch. Talking it over with someone can help. You choose if and when.</p>
+    <div class="ladder"><button class="rung first"><b>Talk to someone now</b><span>[Campus counseling, 24/7: confirm]</span></button>
+      <button class="rung"><b>Book a time</b><span>[Counseling booking: confirm]</span></button>
+      <button class="rung"><b>Something for right now</b><span>2 quiet minutes</span></button></div>
+    <div class="links"><button data-go="idle">Not now</button><button>Why am I seeing this?</button></div>`,
+};
+let state = new URLSearchParams(location.search).get("state") || "walk";
+function size(open) {
+  if (!open) { island.style.width = (state === "running-mini" ? 210 : 168) + "px"; island.style.height = "40px"; return; }
+  const w = Math.min(innerWidth - 24, 480); island.style.width = w + "px";
+  full.style.width = w + "px"; island.style.height = (full.scrollHeight) + "px";
+}
+function go(s) {
+  state = s;
+  if (s === "idle") { island.classList.remove("open"); page.classList.remove("dim"); size(false); document.getElementById("cmini").textContent = "2:40"; return; }
+  full.innerHTML = (V[s] || V.walk)();
+  island.classList.add("open"); page.classList.add("dim"); requestAnimationFrame(() => size(true));
+}
+island.addEventListener("click", (e) => { const b = e.target.closest("[data-go]"); if (b) go(b.dataset.go); });
+document.getElementById("compact").addEventListener("click", () => go("walk"));
+addEventListener("resize", () => island.classList.contains("open") && size(true));
+// arrive once: sit small, then spring open at the pause
+size(false);
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+setTimeout(() => go(state), reduce ? 0 : 450);
+</script>
+</body>
+</html>
