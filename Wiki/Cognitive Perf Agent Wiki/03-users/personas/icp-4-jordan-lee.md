@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-11-04
 tier: supporting
 created: 2026-11-04T22:40:00Z
-updated: 2026-11-05T00:10:00Z
+updated: 2026-11-05T10:00:00Z
 ---
 
 # ICP_4 — Jordan Lee (they/them)
@@ -31,10 +31,25 @@ The score line from each `/icp` session, newest last. Scale 1–10: Clarity · T
 
 | Date | What was tested | Verdict | Scores | Overall | Week P · Recommend P · Consent P | One fix |
 |---|---|---|---|---|---|---|
+| 2026-11-05 | [[25-journal/2026-11-05-icp-island-forecast]] Island + Forecast card, round 3 (iPhone SE + small laptop) | MEH | 6 · 4 · 6 · 5 · 6 · 7 · 3 | 5 | 0.25 · 0.15 · 0.45 | Show the no-watch path first (laptop-only reasons; first week not gated on sleep) |
+| 2026-11-05 | [[25-journal/2026-11-05-icp-island-forecast-retest]] Island + Forecast re-test after top-four fixes (iPhone SE + small laptop) | MEH | 7 · 5 · 6 · 5 · 7 · 7 · 3 | 5 (=) | 0.25 · 0.20 · 0.50 | Suggestions start without a watch (laptop + calendar from day 1) |
+| 2026-11-05 | [[25-journal/2026-11-05-icp-island-forecast-retest2]] Island + Forecast re-test 2 after next-three fixes (iPhone SE + small laptop) | MEH | 7 · 6 · 6 · 5 · 7 · 7 · 3 | 5 (=) | 0.25 · 0.20 · 0.50 | Suggestions start without a watch (laptop + calendar from day 1) |
 
 ## Open asks
 
-*None yet. Each review adds the asks; later reviews mark them fixed / not fixed / worse.*
+Marked at re-test 2 (2026-11-05). ✅ fixed · ◐ partly fixed · ⬜ not fixed · 🆕 new at re-test 2.
+
+- ⬜ not fixed: A no-watch path, shown first (third time asked)
+- ✅ fixed: Source and consent for calendar and location
+- ✅ fixed: Numbers that agree (first week now 2 h 40)
+- ⬜ not fixed: Shared-laptop handling ('not me' / pause)
+- ✅ fixed: Define 'helped'
+- ✅ fixed: Cut the Today / refill tally
+- ⬜ not fixed: 'Is this you?' on the pill when the laptop wakes
+- 🆕 new: See why covers the class card on the small laptop
+- 🆕 new: Keep Snooze visible when See why is open
+- 🆕 new: Drop the sleep line from Keep going for people with no sleep data
+- 🆕 new: 'Lab's still 40 min away' vs '45 min'
 
 ## Related
 
