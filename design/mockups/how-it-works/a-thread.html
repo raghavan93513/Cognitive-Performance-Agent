@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F4F3EF">
+<title>How it works · A · The thread</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Direction A, "The thread": one line becomes the whole story. The session line draws, last night's bar fills,
+   the "now" dot opens into the card with its reasons rising into it, and after Walk it folds back to a quiet line.
+   Every frame is seek(p) of scroll progress; ?p=0.6 freezes a frame; reduced motion snaps to beat ends. */
+:root{--paper:#F4F3EF;--paper2:#EAE8E1;--ink:#141414;--ink2:#46453F;--muted:#5E5C56;--line:#DCD9D1;--mint:#8ED6BC;--mint-ink:#0F5E46;--now:#B42318;
+  --ui:"Geist",system-ui,-apple-system,sans-serif;--mono:"Geist Mono",ui-monospace,Menlo,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--ui);-webkit-tap-highlight-color:transparent}
+::selection{background:var(--mint)}
+.intro{max-width:1120px;margin:0 auto;padding:56px 20px 0}
+.intro h2{font:650 clamp(2rem,4.6vw,3.4rem)/1.02 var(--ui);letter-spacing:-.035em}
+.intro p{font:400 1.0625rem/1.5 var(--ui);color:var(--ink2);margin-top:10px}
+.scrolly{height:460svh;position:relative}
+.fixed .scrolly{height:100svh}
+.fixed .intro{display:none}
+.caps li{opacity:.34}.caps li.on{opacity:1}
+.pin{position:sticky;top:0;height:100svh;max-width:1120px;margin:0 auto;padding:20px;display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1fr);gap:48px;align-items:center}
+.stage{min-height:0;height:100%;display:flex;align-items:center;justify-content:center}
+.stage svg{width:100%;height:100%;max-height:calc(100svh - 40px);display:block}
+.caps{list-style:none;display:grid;gap:22px}
+.caps li{display:grid;grid-template-columns:34px 1fr;gap:4px 14px;cursor:pointer}
+.caps .n{grid-row:span 2;width:34px;height:34px;border-radius:50%;box-shadow:inset 0 0 0 2.5px var(--ink);display:flex;align-items:center;justify-content:center;font:600 .9375rem/1 var(--mono)}
+.caps li.on .n{background:var(--ink);color:var(--paper)}
+.caps li:nth-child(3).on .n{background:var(--mint);color:#0B3D2E;box-shadow:inset 0 0 0 2.5px var(--mint-ink)}
+.caps h3{font:650 1.375rem/1.15 var(--ui);letter-spacing:-.02em;padding-top:5px}
+.caps p{font:400 1rem/1.5 var(--ui);color:var(--ink2);max-width:38ch}
+.note{max-width:1120px;margin:0 auto;padding:0 20px 56px;font:500 .8125rem/1.4 var(--ui);color:var(--muted)}
+svg text{font-family:var(--ui)}
+svg .mono{font-family:var(--mono)}
+@media (max-width:900px){
+  .pin{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:8px;align-items:stretch;padding:12px 16px calc(16px + env(safe-area-inset-bottom))}
+  .caps{order:2}.stage{order:1}
+  .caps li{display:none}.caps li.on{display:grid}
+  .caps p{font-size:.9375rem}
+}
+</style>
+</head>
+<body>
+<section class="intro" aria-labelledby="h"><h2 id="h">How it works, in four steps.</h2><p>Scroll through one afternoon. Sample data.</p></section>
+<div class="scrolly">
+  <div class="pin">
+    <ol class="caps">
+      <li><span class="n">1</span><h3>It notices.</h3><p>A small app on your laptop counts how long you've studied and how often you switch apps.</p></li>
+      <li><span class="n">2</span><h3>It reads your watch, carefully.</h3><p>By default it takes one thing: how long you slept, compared with your own usual. Plain code does the math, not an AI. No watch? It skips this step.</p></li>
+      <li><span class="n">3</span><h3>It suggests, and shows why.</h3><p>A small card opens: keep going, a 5-minute walk, or a longer break. Each reason shows where it came from and how sure it is.</p></li>
+      <li><span class="n">4</span><h3>You decide.</h3><p>Walk, keep going or snooze. It asks once, then stays quiet.</p></li>
+    </ol>
+    <div class="stage" aria-hidden="true">
+      <svg viewBox="0 0 400 520" preserveAspectRatio="xMidYMid meet">
+        <!-- step 1: the session line -->
+        <text id="cap1" x="40" y="292" font-size="14" font-weight="600" fill="#141414">2 h 40 min · 14 switches in the last 20 min</text>
+        <line x1="40" y1="330" x2="360" y2="330" stroke="#DCD9D1" stroke-width="6" stroke-linecap="round"/>
+        <line id="sess" x1="40" y1="330" x2="40" y2="330" stroke="#141414" stroke-width="6" stroke-linecap="round"/>
+        <g id="ticks"></g>
+        <text id="lstart" class="mono" x="40" y="358" font-size="12" fill="#5E5C56">Started 12:30</text>
+        <text id="lnow" class="mono" x="253" y="358" font-size="12" fill="#B42318" text-anchor="middle">now 3:10</text>
+        <text id="lend" class="mono" x="360" y="358" font-size="12" fill="#5E5C56" text-anchor="end">lab 4:30</text>
+        <rect id="slot" x="253" y="324" width="0" height="12" rx="3" fill="#8ED6BC"/>
+        <line id="quiet" x1="266" y1="330" x2="360" y2="330" stroke="#141414" stroke-width="2" stroke-dasharray="3 6" opacity="0"/>
+        <text id="lquiet" class="mono" x="360" y="312" font-size="12" fill="#5E5C56" text-anchor="end" opacity="0">quiet until the next check</text>
+        <!-- step 2: last night -->
+        <text id="s2a" x="40" y="414" font-size="13" font-weight="600" fill="#141414">Last night</text>
+        <rect id="usual" x="40" y="424" width="210" height="18" rx="9" fill="none" stroke="#141414" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <rect id="slept" x="40" y="424" width="0" height="18" rx="9" fill="#141414" stroke="#141414" stroke-width="1.5"/>
+        <text id="s2b" class="mono" x="206" y="460" font-size="12" fill="#141414">slept 5 h</text>
+        <text id="s2c" class="mono" x="260" y="438" font-size="12" fill="#5E5C56">your usual 7 h</text>
+        <text id="s2d" x="40" y="494" font-size="13" fill="#46453F">Plain code: 2 h under your usual. Not an AI.</text>
+        <!-- step 3: reasons rise into the card -->
+        <line id="r1" x1="240" y1="316" x2="240" y2="316" stroke="#0F5E46" stroke-width="2"/>
+        <line id="r2" x1="190" y1="424" x2="190" y2="424" stroke="#0F5E46" stroke-width="2"/>
+        <g id="o1"><rect x="231" y="300" width="18" height="18" rx="5" fill="#0F5E46"/><text class="mono" x="240" y="313" font-size="11" fill="#fff" text-anchor="middle">1</text></g>
+        <g id="o2"><rect x="181" y="446" width="18" height="18" rx="5" fill="#0F5E46"/><text class="mono" x="190" y="459" font-size="11" fill="#fff" text-anchor="middle">2</text></g>
+        <!-- the card -->
+        <rect id="card" x="246" y="323" width="14" height="14" rx="7" fill="#0A0A0A" opacity="0"/>
+        <g id="cc" opacity="0">
+          <text class="mono" x="44" y="50" font-size="12" fill="rgba(255,255,255,.56)">Halftime · now 3:10</text>
+          <text x="44" y="86" font-size="25" font-weight="650" fill="#fff" letter-spacing="-.5">Short walk now?</text>
+          <text x="44" y="112" font-size="14" font-weight="500" fill="#8ED6BC">5 minutes fits. Back by 3:15, before lab.</text>
+          <rect id="ch1" x="44" y="126" width="18" height="18" rx="5" fill="#2C2C2E"/><text class="mono" x="53" y="139" font-size="11" fill="#fff" text-anchor="middle">1</text>
+          <text x="70" y="140" font-size="13" fill="rgba(255,255,255,.8)">2 h 40 min, 14 switches in 20 min</text>
+          <rect id="ch2" x="44" y="152" width="18" height="18" rx="5" fill="#2C2C2E"/><text class="mono" x="53" y="165" font-size="11" fill="#fff" text-anchor="middle">2</text>
+          <text x="70" y="166" font-size="13" fill="rgba(255,255,255,.8)">slept 5 h, 2 h under your usual</text>
+          <rect x="44" y="180" width="86" height="22" rx="11" fill="none" stroke="rgba(255,255,255,.56)"/>
+          <text class="mono" x="87" y="195" font-size="11" fill="#fff" text-anchor="middle">Fairly sure</text>
+        </g>
+        <g id="btns" opacity="0">
+          <rect id="b1" x="44" y="216" width="116" height="34" rx="17" fill="#fff"/><text id="b1t" x="102" y="238" font-size="14" font-weight="600" fill="#141414" text-anchor="middle">Walk 5 min</text>
+          <rect x="168" y="216" width="108" height="34" rx="17" fill="#2C2C2E"/><text x="222" y="238" font-size="14" font-weight="600" fill="#fff" text-anchor="middle">Keep going</text>
+          <text x="318" y="238" font-size="13" fill="rgba(255,255,255,.76)" text-anchor="middle" text-decoration="underline">Snooze</text>
+        </g>
+        <text id="pill" class="mono" x="200" y="43" font-size="13" fill="#fff" text-anchor="middle" opacity="0">walk · back 3:15</text>
+        <text id="fin" x="200" y="512" font-size="16" font-weight="650" fill="#141414" text-anchor="middle" opacity="0">It asks once. Then it stays quiet.</text>
+      </svg>
+    </div>
+  </div>
+</div>
+<p class="note">Direction A · "The thread". Sample data, simple rules. One shape carries the whole story.</p>
+<script>
+const Q = new URLSearchParams(location.search), fixed = Q.has("p") ? +Q.get("p") : null;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const seg = (p, a, b) => clamp((p - a) / (b - a));
+const out = (x) => 1 - Math.pow(1 - x, 3);
+const io = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const lerp = (a, b, t) => a + (b - a) * t;
+const $ = (id) => document.getElementById(id);
+const set = (el, o) => { for (const k in o) el.setAttribute(k, o[k]); };
+
+// session: 12:30 to 4:30 across x 40..360, now = 160 min
+const K = 320 / 240, X = (m) => 40 + m * K, XN = X(160);
+// seeded switch marks: a few early, 14 in the last 20 minutes
+let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+const marks = [18, 41, 63, 88, 112, 131].concat(Array.from({ length: 14 }, (_, i) => 140 + (i + .2 + rnd() * .6) * (20 / 14)));
+$("ticks").innerHTML = marks.map((m, i) => `<line data-i="${i}" x1="${X(m)}" x2="${X(m)}" y1="${318 - (m > 139 ? rnd() * 4 : 0)}" y2="326" stroke="#141414" stroke-width="1.4" opacity="0"/>`).join("");
+const tickEls = [...document.querySelectorAll("#ticks line")];
+const caps = [...document.querySelectorAll(".caps li")];
+
+function seek(p) {
+  // beat 1: the line draws, then the marks comb in
+  const b1 = out(seg(p, .02, .17));
+  $("sess").setAttribute("x2", lerp(40, XN, b1));
+  $("lnow").setAttribute("opacity", seg(p, .12, .17));
+  $("lend").setAttribute("opacity", seg(p, .02, .08));
+  const t = seg(p, .09, .22);
+  tickEls.forEach((el, i) => el.setAttribute("opacity", clamp(t * tickEls.length - i)));
+  $("cap1").setAttribute("opacity", seg(p, .18, .23) * (1 - seg(p, .5, .54)));
+  // beat 2: last night against your usual
+  ["s2a", "usual"].forEach((id) => $(id).setAttribute("opacity", seg(p, .27, .32)));
+  $("slept").setAttribute("width", 150 * out(seg(p, .31, .42)));
+  $("s2b").setAttribute("opacity", seg(p, .40, .44));
+  $("s2c").setAttribute("opacity", seg(p, .33, .37));
+  $("s2d").setAttribute("opacity", seg(p, .43, .48) * (1 - seg(p, .92, .95)));
+  // beat 3 (signature): the now dot opens into the card; its reasons rise into it
+  const dot = seg(p, .50, .54), open = io(seg(p, .54, .64)), grow = io(seg(p, .76, .80)), fold = io(seg(p, .86, .93));
+  let x = lerp(XN - 7, 20, open), y = lerp(323, 16, open), w = lerp(14, 360, open), h = lerp(14, 200, open) + 50 * grow, rx = lerp(7, 28, open);
+  x = lerp(x, 112, fold); w = lerp(w, 176, fold); h = lerp(h, 40, fold); rx = lerp(rx, 20, fold); y = lerp(y, 18, fold);
+  set($("card"), { x, y, width: w, height: h, rx, opacity: dot });
+  $("cc").setAttribute("opacity", seg(p, .62, .67) * (1 - seg(p, .86, .88)));
+  const r = out(seg(p, .66, .74));
+  $("r1").setAttribute("y2", lerp(316, 216, r)); $("r2").setAttribute("y2", lerp(424, 216, r));
+  const rf = 1 - seg(p, .86, .89);
+  ["r1", "r2"].forEach((id) => $(id).setAttribute("opacity", rf));
+  $("o1").setAttribute("opacity", seg(p, .64, .67) * rf); $("o2").setAttribute("opacity", seg(p, .64, .67) * rf);
+  const lit = seg(p, .72, .74) * rf;
+  ["ch1", "ch2"].forEach((id) => $(id).setAttribute("fill", lit > .5 ? "#0F5E46" : "#2C2C2E"));
+  // beat 4: choose, fold back to a pill, the walk slot, then quiet
+  $("btns").setAttribute("opacity", seg(p, .78, .81) * (1 - seg(p, .86, .88)));
+  const press = seg(p, .82, .84) > .5;
+  $("b1").setAttribute("fill", press ? "#8ED6BC" : "#fff");
+  $("pill").setAttribute("opacity", seg(p, .90, .93));
+  $("slot").setAttribute("width", 10 * out(seg(p, .88, .93)));
+  $("quiet").setAttribute("opacity", seg(p, .93, .97)); $("lquiet").setAttribute("opacity", seg(p, .93, .97));
+  $("fin").setAttribute("opacity", seg(p, .95, 1));
+  // captions
+  const a = Math.min(3, Math.floor(p * 4));
+  caps.forEach((li, i) => li.classList.toggle("on", i === a));
+}
+const scrolly = document.querySelector(".scrolly");
+const progress = () => { const r = scrolly.getBoundingClientRect(), tot = scrolly.offsetHeight - innerHeight; return tot > 0 ? clamp(-r.top / tot) : 1; };
+function frame() { let p = fixed != null ? fixed : progress(); if (reduce && fixed == null) p = [.24, .49, .745, 1][Math.min(3, Math.floor(p * 4))]; seek(p); }
+caps.forEach((li, i) => li.addEventListener("click", () => { const tot = scrolly.offsetHeight - innerHeight; scrollTo({ top: scrolly.offsetTop + tot * (i / 4 + .22) }); }));
+if (fixed != null) document.documentElement.classList.add("fixed");
+else { addEventListener("scroll", () => requestAnimationFrame(frame), { passive: true }); addEventListener("resize", frame); }
+frame();
+</script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F4F3EF">
+<title>Lower sections · D · The sorter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Direction D, "The sorter": the landing page's own cards and words, played by scroll. Raw sample data arrives and is
+   cut down to what Halftime keeps (or blanked and refused); the learning bar fills night by night; the person offer
+   skips the study block and lands in the morning; the joining lines tick in. Every frame is seek(p); ?p1=&p2= freeze. */
+:root{
+  --paper:#F4F3EF; --paper2:#EAE8E1; --ink:#141414; --ink2:#46453F; --muted:#5E5C56; --line:#DCD9D1;
+  --island:#0A0A0A; --on:#FFFFFF; --on2:rgba(255,255,255,.76); --on3:rgba(255,255,255,.56); --well:#1C1C1E; --well2:#2C2C2E;
+  --mint:#8ED6BC; --mint-ink:#0F5E46;
+  --ui:"Geist", system-ui, -apple-system, "Segoe UI", sans-serif; --mono:"Geist Mono", ui-monospace, Menlo, monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font:400 1.0625rem/1.5 var(--ui);font-variant-numeric:tabular-nums;-webkit-tap-highlight-color:transparent}
+::selection{background:var(--mint)}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(20px, env(safe-area-inset-left, 0px));padding-right:max(20px, env(safe-area-inset-right, 0px))}
+.mono{font-family:var(--mono)}
+section.band{padding-block:72px;border-top:1px solid var(--line)}
+h2{font:650 clamp(1.9rem,3.6vw,2.75rem)/1.04 var(--ui);letter-spacing:-.035em;text-wrap:balance;max-width:20ch}
+.h2sub{font:400 1.125rem/1.5 var(--ui);color:var(--ink2);margin-top:12px;max-width:44ch}
+/* the landing page's cards, unchanged */
+.trust{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.list{background:#FFFFFF;border-radius:24px;padding:24px 24px 22px}
+.list h3{font:650 1.25rem/1.2 var(--ui);letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
+.list h3 i{width:12px;height:12px;border-radius:50%;flex:none}
+.list.yes h3 i{background:var(--mint-ink)}.list.no h3 i{background:transparent;box-shadow:inset 0 0 0 2px var(--ink)}
+.list ul{list-style:none;display:grid;gap:10px;margin-top:14px}
+.list li{font:400 1.0625rem/1.4 var(--ui);color:var(--ink2);padding-left:22px;position:relative}
+.list.yes li::before{content:"";position:absolute;left:2px;top:.5em;width:9px;height:5px;border-left:2px solid var(--mint-ink);border-bottom:2px solid var(--mint-ink);transform:rotate(-45deg)}
+.list.no li::before{content:"";position:absolute;left:3px;top:.62em;width:10px;height:2px;background:var(--ink2)}
+.honest{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.hcard{border-radius:24px;padding:24px;background:var(--island);color:var(--on)}
+.hcard h3{font:650 1.25rem/1.2 var(--ui);letter-spacing:-.02em;text-wrap:balance}
+.hcard p{font:400 1rem/1.5 var(--ui);color:var(--on2);margin-top:8px}
+.hcard .med{font-size:.9375rem;margin-top:10px;color:var(--on3)}
+.learn{display:flex;gap:5px;margin-top:16px}.learn i{flex:1;height:6px;border-radius:3px;background:var(--well2)}.learn i.on{background:var(--mint)}
+.hcard .mono{font-size:.8125rem;color:var(--on3);margin-top:8px;display:block}
+.ask2{background:var(--island);color:var(--on);border-radius:36px;padding:48px 40px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:32px;align-items:end}
+.ask2 h2{color:var(--on)}
+.ask2 p{font:400 1.125rem/1.5 var(--ui);color:var(--on2);margin-top:12px;max-width:40ch}
+.ask2 .lead{color:var(--on);font-weight:600;margin-top:22px}
+.ask2 .later{font-size:.9375rem;color:var(--on3);margin-top:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 24px;border-radius:26px;font:600 1.0625rem/1 var(--ui);text-decoration:none;background:var(--mint);color:#0B3D2E;justify-self:end}
+
+/* D additions */
+.sorty{height:360svh;position:relative;margin-top:28px}
+.spin{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;justify-content:center;gap:18px;padding-block:16px}
+.feed{position:relative;height:116px;border-radius:24px;background:var(--paper2);display:flex;align-items:center;justify-content:center}
+.feed .lab{position:absolute;top:12px;left:18px;font:500 .75rem/1 var(--mono);color:var(--muted)}
+.feed .lab2{position:absolute;top:12px;right:18px;font:500 .75rem/1 var(--mono);color:var(--muted)}
+.item{position:relative;max-width:calc(100% - 36px);background:#141414;color:#F4F3EF;border-radius:16px;padding:10px 14px 12px;font:500 .9375rem/1.35 var(--mono);will-change:transform}
+.item .src{display:block;font:500 .6875rem/1 var(--mono);color:rgba(255,255,255,.56);margin-bottom:6px}
+.item .w{display:inline;border-radius:3px;transition:none}
+.item .w.bar{background:rgba(255,255,255,.34);color:transparent}
+.item.kept{background:var(--mint);color:#0B3D2E}
+.item.kept .src{color:rgba(11,61,46,.7)}
+.list li{transition:none}
+.list li.dim{opacity:.28}
+.list li.hit{color:var(--ink)}
+.list.yes li .k{display:block;font:500 .8125rem/1.3 var(--mono);color:var(--mint-ink);margin-top:2px}
+.list.no li.hit::before{background:var(--ink)}
+.sample{font:500 .75rem/1.3 var(--ui);color:var(--muted);text-align:center}
+
+.hsty{height:240svh;position:relative;margin-top:16px}
+.hpin{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;justify-content:center}
+.day{margin-top:16px}
+.day svg{width:100%;height:auto;display:block}
+.day text{font-family:var(--mono)}
+
+.checks{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:10px;max-width:44ch}
+.checks li{font:400 1.0625rem/1.45 var(--ui);color:var(--on2);padding-left:30px;position:relative}
+.checks li::before{content:"";position:absolute;left:0;top:.18em;width:20px;height:20px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--on3)}
+.checks li.ok{color:var(--on)}
+.checks li.ok::before{background:var(--mint);box-shadow:none}
+.checks li.ok::after{content:"";position:absolute;left:6px;top:.5em;width:8px;height:4px;border-left:2px solid #0B3D2E;border-bottom:2px solid #0B3D2E;transform:rotate(-45deg)}
+.tbd{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin-top:18px;font:500 .9375rem/1.4 var(--ui);color:var(--on2)}
+.tbd b{font-weight:500}.tbd span{font:500 .9375rem/1.4 var(--mono);color:var(--on3)}
+.fixed .sorty,.fixed .hsty{height:auto}.fixed .spin,.fixed .hpin{position:relative;height:auto}
+@media (max-width:900px){
+  .trust,.honest{grid-template-columns:minmax(0,1fr)}
+  .list{padding:18px 18px 16px}.list ul{gap:7px;margin-top:10px}.list li{font-size:.9375rem}
+  .list.yes li .k{font-size:.75rem}
+  .feed{height:104px}
+  .spin{gap:10px}
+  .ask2{grid-template-columns:minmax(0,1fr);padding:34px 24px;border-radius:30px}
+  .btn{justify-self:start}
+  section.band{padding-block:56px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="band" aria-labelledby="trust">
+    <h2 id="trust">Clear about what it reads.</h2>
+    <p class="h2sub">You choose each source, and you can turn any of them off or delete everything.</p>
+    <div class="sorty" id="sorty"><div class="spin">
+      <div class="feed" aria-hidden="true"><span class="lab">your devices make</span><span class="lab2">Halftime keeps</span><div class="item" id="item"><span class="src" id="isrc"></span><span id="itx"></span></div></div>
+      <div class="trust">
+        <div class="list yes"><h3><i aria-hidden="true"></i>What it reads</h3><ul id="yes">
+          <li>How long you've been studying, and your breaks<span class="k"></span></li>
+          <li>How often you switch apps, and which kind (like notes, reading, video or chat), not the app's name<span class="k"></span></li>
+          <li>How long you slept, if you connect a watch or ring<span class="k"></span></li>
+          <li>Your next class, if you turn on your calendar<span class="k"></span></li></ul></div>
+        <div class="list no"><h3><i aria-hidden="true"></i>What it never reads</h3><ul id="no">
+          <li>What you type, read or browse</li>
+          <li>Your messages or your screen</li>
+          <li>Your location</li>
+          <li>Your watch's own scores, like Readiness or Recovery</li></ul></div>
+      </div>
+      <p class="sample">Sample data. Nothing on this page reads your devices.</p>
+    </div></div>
+
+    <div class="hsty" id="hsty"><div class="hpin">
+      <div class="honest">
+        <div class="hcard"><h3>When it doesn't know, it says so.</h3><p>For the first week it's still learning what's normal for you, and it tells you that instead of guessing.</p><div class="learn" id="learn" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="mono" id="lt">Still learning your usual sleep · 1 of 7 nights</span></div>
+        <div class="hcard"><h3>Some things need a person.</h3><p>If your sleep has been short for weeks, it offers someone to talk to, in the morning, never mid-study. It never tells your coach, team or school.</p>
+          <div class="day" aria-hidden="true"><svg viewBox="0 0 320 74">
+            <line x1="8" y1="40" x2="312" y2="40" stroke="#2C2C2E" stroke-width="4" stroke-linecap="round"/>
+            <rect x="8" y="34" width="96" height="12" rx="6" fill="#46453F"/>
+            <text x="8" y="66" font-size="11" fill="rgba(255,255,255,.56)">10 pm</text>
+            <text x="104" y="66" font-size="11" fill="rgba(255,255,255,.56)" text-anchor="end">studying</text>
+            <text x="250" y="66" font-size="11" fill="rgba(255,255,255,.56)" text-anchor="middle">8 am</text>
+            
+            <line x1="250" y1="30" x2="250" y2="50" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+            <g id="offer"><rect id="ofr" x="-56" y="2" width="112" height="24" rx="12" fill="none" stroke="#8ED6BC" stroke-width="1.5" stroke-dasharray="3 3"/><text id="oft" x="0" y="18" font-size="10.5" fill="#8ED6BC" text-anchor="middle">not now</text></g>
+          </svg></div>
+          <p class="med">Halftime is a wellness tool, not medical advice.</p></div>
+      </div>
+    </div></div>
+  </section>
+
+  <section class="band" id="pilot" aria-labelledby="ask">
+    <div class="ask2" id="ask2">
+      <div><h2 id="ask">Sign-up isn't open yet.</h2><p>We're a student team. Our course staff have to OK the study before anyone's real data goes in, so for now everything here is a demo with made-up data.</p>
+        <p class="lead">If it opens, joining means:</p>
+        <ul class="checks" id="checks">
+          <li>Installing a small app on your laptop, and adding Halftime to your iPhone.</li>
+          <li>Connecting a watch, ring or calendar, only if you want to.</li>
+          <li>A slow start: at first it mostly says "not enough data yet" while it learns what's usual for you.</li>
+          <li>No cost, and you can stop whenever you want.</li>
+        </ul>
+        <div class="tbd"><b>How long it runs</b><span>—</span><b>Who can join</b><span>—</span></div>
+        <p class="later">We'll put these here before sign-up opens.</p></div>
+      <a class="btn" href="#trust">Try the demo again</a>
+    </div>
+  </section>
+</div>
+<script>
+(() => {
+const Q = new URLSearchParams(location.search), F1 = Q.has("p1") ? +Q.get("p1") : null, F2 = Q.has("p2") ? +Q.get("p2") : null, F3 = Q.has("p3") ? +Q.get("p3") : null;
+const fixed = F1 != null || F2 != null || F3 != null;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const seg = (p, a, b) => clamp((p - a) / (b - a));
+const io = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const $ = (id) => document.getElementById(id);
+// what devices make (sample) and what Halftime keeps
+const ITEMS = [
+  { src: "laptop", raw: "Study session · 2 h 40 min · 1 break", keep: "2 h 40 min · 1 break", to: "yes", row: 0 },
+  { src: "keyboard", raw: '"dear prof, could I get an extension on the lab report"', to: "no", row: 0 },
+  { src: "laptop", raw: "Notes → Safari → Messages → Notes", keep: "3 switches · notes, reading, chat", to: "yes", row: 1 },
+  { src: "phone", raw: 'Messages: "are you still at the library?"', to: "no", row: 1 },
+  { src: "ring", raw: "Sleep · 11:58 pm → 5:02 am", keep: "slept 5 h", to: "yes", row: 2 },
+  { src: "phone", raw: "Location · Butler Library, floor 3", to: "no", row: 2 },
+  { src: "calendar", raw: "CHEM 3443 Lab · 4:30 pm · room 309", keep: "next class at 4:30", to: "yes", row: 3 },
+  { src: "watch", raw: "Readiness score 62 · Recovery 48%", to: "no", row: 3 },
+];
+const item = $("item"), itx = $("itx"), isrc = $("isrc");
+const rows = { yes: [...document.querySelectorAll("#yes li")], no: [...document.querySelectorAll("#no li")] };
+function seek1(p) {
+  const P = seg(p, .03, .97) * ITEMS.length, k = Math.min(ITEMS.length - 1, Math.floor(P)), u = P - k;
+  // rows: dim until their item has landed
+  ITEMS.forEach((it, i) => {
+    const li = rows[it.to][it.row], landed = i < k || (i === k && u >= .9) || p >= .97;
+    li.classList.toggle("dim", !landed); li.classList.toggle("hit", landed);
+    if (it.keep) li.querySelector(".k").textContent = landed ? it.keep : "";
+  });
+  if (p >= .97) { item.style.opacity = 0; return; }
+  const it = ITEMS[k], appear = seg(u, 0, .14), cut = seg(u, .22, .5), swap = !!it.keep && u >= .55, fly = io(seg(u, .6, .9));
+  isrc.textContent = it.src;
+  item.classList.toggle("kept", swap);
+  if (swap) itx.textContent = it.keep;
+  else {
+    // the signature: words blank out one by one at the gate
+    const ws = it.raw.split(" ");
+    itx.innerHTML = ws.map((w, i) => `<span class="w${cut * ws.length > i + .2 ? " bar" : ""}">${w}</span>`).join(" ");
+  }
+  // fly to its row
+  item.style.transform = "none";
+  const ir = item.getBoundingClientRect(), rr = rows[it.to][it.row].getBoundingClientRect();
+  const dx = (rr.left + 22 + Math.min(120, rr.width / 3)) - (ir.left + ir.width / 2), dy = (rr.bottom - 8) - (ir.top + ir.height / 2);
+  item.style.transform = `translate(${(dx * fly).toFixed(1)}px, ${(dy * fly).toFixed(1)}px) scale(${(1 - .35 * fly).toFixed(3)})`;
+  item.style.opacity = (appear * (1 - seg(u, .84, .92))).toFixed(3);
+}
+// honesty: nights fill; the offer skips the study block and lands at 8 am
+const learn = [...document.querySelectorAll("#learn i")];
+function seek2(p) {
+  const n = Math.max(1, Math.min(7, 1 + Math.floor(seg(p, .05, .6) * 7)));
+  learn.forEach((el, i) => el.classList.toggle("on", i < n));
+  $("lt").textContent = n < 7 ? `Still learning your usual sleep · ${n} of 7 nights` : "Learned your usual sleep · 7 of 7 nights";
+  const m = io(seg(p, .45, .85)), x = 64 + (250 - 64) * m;
+  $("offer").setAttribute("transform", `translate(${x.toFixed(1)} 0)`);
+  const land = m > .98;
+  $("ofr").setAttribute("stroke-dasharray", land ? "none" : "3 3");
+  $("ofr").setAttribute("fill", land ? "rgba(142,214,188,.14)" : "none");
+  $("oft").textContent = land ? "Talk to someone?" : p < .45 ? "not mid-study" : "next morning";
+}
+// joining: the lines tick in as you read them
+const checks = [...document.querySelectorAll("#checks li")];
+function seek3(p) { checks.forEach((li, i) => li.classList.toggle("ok", p > (i + 1) / 5)); }
+
+const sorty = $("sorty"), hsty = $("hsty"), ask = $("ask2");
+const prog = (el) => { const r = el.getBoundingClientRect(), tot = el.offsetHeight - innerHeight; return tot > 0 ? clamp(-r.top / tot) : 1; };
+const prog3 = () => { const r = ask.getBoundingClientRect(); return clamp((innerHeight * .85 - r.top) / (r.height * .9)); };
+function frame() {
+  if (fixed) { seek1(F1 ?? 1); seek2(F2 ?? 1); seek3(F3 ?? 1); return; }
+  if (reduce) { seek1(1); seek2(1); seek3(1); return; }
+  seek1(prog(sorty)); seek2(prog(hsty)); seek3(prog3());
+}
+if (fixed) document.documentElement.classList.add("fixed");
+if (!fixed) { addEventListener("scroll", () => requestAnimationFrame(frame), { passive: true }); addEventListener("resize", frame); }
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(frame); frame();
+})();
+</script>
+</body>
+</html>

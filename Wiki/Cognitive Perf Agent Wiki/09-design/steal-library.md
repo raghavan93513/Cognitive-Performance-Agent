@@ -110,6 +110,46 @@ Cards S-01 to S-12 were written from general knowledge on 2026-11-05. The same d
 - **Our translation:** a private recap built only from the student's own records; test weekly against monthly, since rarity is part of the pull. The share version carries no health values (Wordle-style: share the pattern, not the data).
 - **Where:** recap; showcase demo. · **Cost:** M · **Score:** fit 4 · surprise 4 · buildable 4 · **Seen:** researched → [[09-design/studies/student-social-and-recaps|Student apps study]] · [[09-design/studies/calm-mind-and-games|calm study]]
 
+### S-13 Apple product pages — the product's own interface is the hero
+Source:        apple.com product pages (iPhone, AirPods), retail / product marketing, seen 2026-11-05
+Mechanism:     shows the real interface doing its job instead of a slogan or a photo
+Why it works:  people believe what they can see working; no metaphor to decode
+Our translation: the landing hero is the island itself, answering the visitor's two taps.
+Where:         landing page hero
+Cost:          M
+Score:         fit 5 · surprise 3 · buildable 4
+Seen:          described
+
+### S-14 NYT Wordle — the whole idea in one sentence
+Source:        nytimes.com/games/wordle, games, seen 2026-11-05
+Mechanism:     states the entire rule in one line before you play
+Why it works:  nothing to learn before trying; the sentence is the onboarding
+Our translation: one headline carries the idea ("Every long study session needs a halftime"), then you try it.
+Where:         landing headline, proposal slide 1
+Cost:          S
+Score:         fit 5 · surprise 2 · buildable 5
+Seen:          described
+
+### S-15 GOV.UK service start pages — what you'll need, what happens, plainly
+Source:        gov.uk service start pages, government services, seen 2026-11-05
+Mechanism:     lists what it needs and what happens next in short plain bullets, then one start button
+Why it works:  removes the fear of the unknown before the click; reading age is kept low
+Our translation: a short "What it reads / What it never reads" pair right before the pilot button.
+Where:         landing trust section, onboarding step 1
+Cost:          S
+Score:         fit 5 · surprise 2 · buildable 5
+Seen:          described
+
+### S-16 DuckDuckGo — say what you don't do
+Source:        duckduckgo.com, consumer privacy, seen 2026-11-05
+Mechanism:     leads with the thing it refuses to collect, in one plain line
+Why it works:  a refusal is easier to believe than a promise, and it's checkable
+Our translation: "Never what you type, read or browse. Never your location." stated as plainly as the features.
+Where:         landing trust section, Data sources
+Cost:          S
+Score:         fit 4 · surprise 2 · buildable 5
+Seen:          described
+
 ## Study list (2026-11-05)
 
 Every product below was studied in depth on 2026-11-05. See the [[09-design/studies/design-studies|design studies]] for screens, mechanisms, style, tone, user sentiment, what to steal and what to avoid, with sources. Promote the ones that earn it to cards. ^[inferred]

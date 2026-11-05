@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F4F3EF">
+<title>How it works · B · The halftime board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Direction B, "The halftime board": the wrong genre on purpose. A split-flap scoreboard flips in your study,
+   your night, then calls halftime, with the reason rows bracketed as its sources. Every letter is a pure function
+   of scroll progress (seek(p)); ?p=0.6 freezes a frame; reduced motion snaps to beat ends. */
+:root{--paper:#F4F3EF;--ink:#141414;--ink2:#46453F;--muted:#5E5C56;--mint:#8ED6BC;--mint-ink:#0F5E46;
+  --ui:"Geist",system-ui,-apple-system,sans-serif;--mono:"Geist Mono",ui-monospace,Menlo,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--ui);-webkit-tap-highlight-color:transparent}
+::selection{background:var(--mint)}
+.intro{max-width:1120px;margin:0 auto;padding:56px 20px 0}
+.intro h2{font:650 clamp(2rem,4.6vw,3.4rem)/1.02 var(--ui);letter-spacing:-.035em}
+.intro p{font:400 1.0625rem/1.5 var(--ui);color:var(--ink2);margin-top:10px}
+.scrolly{height:460svh;position:relative}
+.fixed .scrolly{height:100svh}.fixed .intro{display:none}
+.pin{position:sticky;top:0;height:100svh;max-width:1120px;margin:0 auto;padding:20px;display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1fr);gap:48px;align-items:center}
+.caps{list-style:none;display:grid;gap:22px}
+.caps li{display:grid;grid-template-columns:34px 1fr;gap:4px 14px;cursor:pointer;opacity:.34}
+.caps li.on{opacity:1}
+.caps .n{grid-row:span 2;width:34px;height:34px;border-radius:50%;box-shadow:inset 0 0 0 2.5px var(--ink);display:flex;align-items:center;justify-content:center;font:600 .9375rem/1 var(--mono)}
+.caps li.on .n{background:var(--ink);color:var(--paper)}
+.caps li:nth-child(3).on .n{background:var(--mint);color:#0B3D2E;box-shadow:inset 0 0 0 2.5px var(--mint-ink)}
+.caps h3{font:650 1.375rem/1.15 var(--ui);letter-spacing:-.02em;padding-top:5px}
+.caps p{font:400 1rem/1.5 var(--ui);color:var(--ink2);max-width:38ch}
+.note{max-width:1120px;margin:0 auto;padding:0 20px 56px;font:500 .8125rem/1.4 var(--ui);color:var(--muted)}
+
+/* the board */
+.stage{min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.board{--c:min(30px,calc((100vw - 80px) / 16.6));width:calc(var(--c) * 16 + 15 * 3px + 40px);background:#0E0E0E;border-radius:28px;padding:18px 20px 22px;position:relative}
+@media (min-width:901px){.board{--c:30px}}
+.bh{display:flex;justify-content:space-between;font:500 .8125rem/1 var(--mono);color:rgba(255,255,255,.56);margin-bottom:14px}
+.row{position:relative;margin-top:10px}
+.lab{font:500 .75rem/1 var(--ui);color:rgba(255,255,255,.56);height:14px;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.lab i{font:600 .6875rem/1 var(--mono);font-style:normal;background:#2C2C2E;color:#fff;border-radius:4px;padding:2px 5px}
+.lab.lit i{background:var(--mint-ink)}
+.cells{display:grid;grid-template-columns:repeat(16,var(--c));gap:3px}
+.cell{height:calc(var(--c) * 1.32);background:#1C1C1E;border-radius:4px;display:flex;align-items:center;justify-content:center;font:600 calc(var(--c) * .72)/1 var(--mono);color:#F4F3EF;position:relative;overflow:hidden}
+.cell::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:#0E0E0E}
+.dim .cell{color:rgba(255,255,255,.42)}
+.call .cell{color:var(--mint)}
+.sub{font:500 .875rem/1.35 var(--ui);color:rgba(255,255,255,.76);margin-top:8px;min-height:1.35em}
+.picks{display:flex;gap:8px;margin-top:12px;align-items:center}
+.pk{height:36px;border-radius:18px;padding:0 14px;display:flex;align-items:center;font:600 .875rem/1 var(--ui)}
+.pk.w{background:#fff;color:var(--ink)}.pk.w.on{background:var(--mint);color:#0B3D2E}
+.pk.k{background:#2C2C2E;color:#fff}.pk.s{color:rgba(255,255,255,.76);text-decoration:underline;text-underline-offset:3px}
+.bracket{position:absolute;left:8px;width:3px;border-radius:2px;background:var(--mint);transform-origin:bottom}
+.fin{font:650 1.0625rem/1.3 var(--ui);color:var(--ink);text-align:center;margin-top:14px}
+@media (max-width:900px){
+  .pin{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:8px;align-items:stretch;padding:12px 16px calc(16px + env(safe-area-inset-bottom))}
+  .caps{order:2}.stage{order:1;flex-direction:column}
+  .caps li{display:none;opacity:1}.caps li.on{display:grid}
+  .caps p{font-size:.9375rem}
+  .board{border-radius:22px;padding:14px 14px 16px}
+  .board .row{margin-top:6px}
+}
+</style>
+</head>
+<body>
+<section class="intro" aria-labelledby="h"><h2 id="h">How it works, in four steps.</h2><p>Halftime keeps the score. Scroll to play one afternoon. Sample data.</p></section>
+<div class="scrolly">
+  <div class="pin">
+    <ol class="caps">
+      <li><span class="n">1</span><h3>It notices.</h3><p>A small app on your laptop counts how long you've studied and how often you switch apps.</p></li>
+      <li><span class="n">2</span><h3>It reads your watch, carefully.</h3><p>By default it takes one thing: how long you slept, compared with your own usual. Plain code does the math, not an AI. No watch? It skips this step.</p></li>
+      <li><span class="n">3</span><h3>It suggests, and shows why.</h3><p>It calls halftime only when one fits, and every call shows its reasons and how sure it is.</p></li>
+      <li><span class="n">4</span><h3>You decide.</h3><p>Walk, keep going or snooze. It asks once, then stays quiet.</p></li>
+    </ol>
+    <div class="stage" aria-hidden="true">
+      <div class="board" id="board">
+        <div class="bh"><span>Halftime</span><span id="clock">now 3:10</span></div>
+        <div class="bracket" id="br"></div>
+        <div class="row" data-r="0"><div class="lab" id="l0"><i>1</i>your laptop</div><div class="cells"></div></div>
+        <div class="row" data-r="1"><div class="cells"></div></div>
+        <div class="row" data-r="2"><div class="lab" id="l2"><i>2</i>your watch or ring</div><div class="cells"></div></div>
+        <div class="row dim" data-r="3"><div class="cells"></div></div>
+        <div class="row call" data-r="4" style="margin-top:16px"><div class="lab" id="l4">the call</div><div class="cells"></div><p class="sub" id="sub"></p></div>
+        <div class="picks" id="picks"><span class="pk w" id="pw">Walk 5 min</span><span class="pk k">Keep going</span><span class="pk s">Snooze</span></div>
+        <div class="row" data-r="5"><div class="cells"></div></div>
+      </div>
+      <p class="fin" id="fin">It asks once. Then it stays quiet.</p>
+    </div>
+  </div>
+</div>
+<p class="note">Direction B · "The halftime board". Sample data, simple rules. A scoreboard, because it's called halftime.</p>
+<script>
+const Q = new URLSearchParams(location.search), fixed = Q.has("p") ? +Q.get("p") : null;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const seg = (p, a, b) => clamp((p - a) / (b - a));
+const $ = (id) => document.getElementById(id);
+const G = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789·/:?.,'";
+const pad = (s) => (s + " ".repeat(16)).slice(0, 16);
+// each row: a list of states it flips to, with the scroll window of the flip
+const ROWS = [
+  [["Studying 2 h 40m", .03, .12]],
+  [["Switches 14/20 m", .10, .20]],
+  [["Slept        5 h", .28, .37]],
+  [["Usual        7 h", .35, .44]],
+  [["Short walk now? ", .52, .64], ["Enjoy the walk. ", .86, .93]],
+  [["Back by 3:15    ", .88, .95]],
+];
+const rows = [...document.querySelectorAll(".row")];
+rows.forEach((r) => { r.querySelector(".cells").innerHTML = Array.from({ length: 16 }, () => '<span class="cell"></span>').join(""); });
+const cellsOf = rows.map((r) => [...r.querySelectorAll(".cell")]);
+const caps = [...document.querySelectorAll(".caps li")];
+
+function rowText(states, p, cells) {
+  let prev = pad(""), cur = null;
+  for (const [txt, a, b] of states) { if (p >= a) { cur = [pad(txt), a, b, prev]; prev = pad(txt); } }
+  if (!cur) { cells.forEach((c) => { c.textContent = ""; c.style.transform = ""; }); return; }
+  const [txt, a, b, from] = cur, n = 16, w = b - a;
+  cells.forEach((c, i) => {
+    const s = a + w * (.4 + .6 * (i / (n - 1))), d = w * .4, f = seg(p, s - d, s);
+    const ti = Math.max(0, G.indexOf(txt[i])), fi = Math.max(0, G.indexOf(from[i]));
+    let steps = (ti - fi + G.length) % G.length; let start = fi;
+    if (steps > 10) { start = (ti - 10 + G.length) % G.length; steps = 10; }
+    const k = f >= 1 ? steps : Math.floor(f * steps);
+    c.textContent = G[(start + k) % G.length];
+    const ph = f > 0 && f < 1 ? (f * steps) % 1 : 0;
+    c.style.transform = ph ? `scaleY(${(.78 + .22 * Math.abs(Math.cos(Math.PI * ph))).toFixed(3)})` : "";
+  });
+}
+
+function seek(p) {
+  ROWS.forEach((st, i) => rowText(st, p, cellsOf[i]));
+  // labels appear with their rows
+  $("l0").style.opacity = seg(p, .02, .06); $("l2").style.opacity = seg(p, .27, .31); $("l4").style.opacity = seg(p, .50, .54);
+  // the call's line, then the bracket that ties the reason rows to it (signature)
+  const s1 = p >= .62 && p < .86 ? "Back by 3:15, before lab · Fairly sure" : p >= .91 ? "Your study clock is paused." : "";
+  $("sub").textContent = s1;
+  const lit = seg(p, .64, .72);
+  const b0 = rows[0].offsetTop, b4 = rows[4].offsetTop + 18;
+  $("br").style.top = b0 + "px"; $("br").style.height = (b4 - b0) + "px";
+  $("br").style.transform = `scaleY(${(lit * (1 - seg(p, .86, .9))).toFixed(3)})`;
+  ["l0", "l2"].forEach((id) => $(id).classList.toggle("lit", lit > .5 && p < .86));
+  // the choice
+  $("picks").style.opacity = seg(p, .76, .80) * (1 - seg(p, .86, .88));
+  $("picks").style.display = p < .88 ? "flex" : "none";
+  $("pw").classList.toggle("on", p >= .82);
+  $("fin").style.opacity = seg(p, .95, 1);
+  const a = Math.min(3, Math.floor(p * 4));
+  caps.forEach((li, i) => li.classList.toggle("on", i === a));
+}
+const scrolly = document.querySelector(".scrolly");
+const progress = () => { const r = scrolly.getBoundingClientRect(), tot = scrolly.offsetHeight - innerHeight; return tot > 0 ? clamp(-r.top / tot) : 1; };
+function frame() { let p = fixed != null ? fixed : progress(); if (reduce && fixed == null) p = [.24, .49, .745, 1][Math.min(3, Math.floor(p * 4))]; seek(p); }
+caps.forEach((li, i) => li.addEventListener("click", () => { const tot = scrolly.offsetHeight - innerHeight; scrollTo({ top: scrolly.offsetTop + tot * (i / 4 + .22) }); }));
+if (fixed != null) document.documentElement.classList.add("fixed");
+else { addEventListener("scroll", () => requestAnimationFrame(frame), { passive: true }); addEventListener("resize", frame); }
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(frame); frame();
+</script>
+</body>
+</html>
