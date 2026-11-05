@@ -103,6 +103,21 @@ h2{font:600 clamp(26px,3.6vw,38px)/1.05 var(--ui);letter-spacing:-.035em;margin:
         <li><b>Gentler sleep card:</b> booking first, the 24/7 line second, away games already left out of the count, and "at most once a week" instead of "gently".</li>
         <li><b>Small honesty fixes:</b> one lab time, "watch or ring", the calendar's reach stated, Snooze kept in See why, and no grade-like dot on sleep.</li>
       </ul>
+      <p>Wearables (Fitbit, Oura, WHOOP):</p>
+      <ul style="margin:8px 0 14px">
+        <li><b>The real device is named everywhere</b> ("Oura Ring · synced 38 min ago"), with plain glyphs, never the makers' logos or their own scores.</li>
+        <li><b>Connect flow:</b> choose a source or none, a heads-up before Google's "unverified app" screen, then the 7-night learning period. Suggestions start on day one from the laptop and calendar.</li>
+        <li><b>Honest when data is missing:</b> a weekly Fitbit reconnect, an out-of-date state, and a full no-wearable path.</li>
+        <li><b>Data sources page:</b> what each source reads, where it goes, and delete. Storage and retention stay placeholders until the CTO and CSO confirm them.</li>
+      </ul>
+      <p>After the wearables test (overall 5.6), the design fixes:</p>
+      <ul style="margin:8px 0 14px">
+        <li><b>Disconnect and Delete say what they do,</b> then ask: access removed at Google or Oura, saved nights deleted unless you keep them, and you leave the pilot on Delete.</li>
+        <li><b>Calendar starts at "Class only".</b> Away games, and the nights they explain, only show for someone on a team.</li>
+        <li><b>Real devices and laptops:</b> No wearable first, every Fitbit model named, a Garmin row ("not in the class pilot yet") with a team-watch note, and Mac or Windows (not Linux yet) instead of "this MacBook".</li>
+        <li><b>HRV is off by default</b> and explained in one line, because no reason uses it yet. Team call: confirm with the CTO.</li>
+        <li><b>Smaller fixes:</b> the learning card has no walk buttons, long cards fade at the bottom instead of clipping, "only you see this" became exact wording, and the out-of-date card says "Open the Oura app to sync".</li>
+      </ul>
       <h4>Next steps</h4>
       <ol>
         <li>The CMO locks the words; this uses the calm-friend voice from COPY.md.</li>
@@ -124,9 +139,20 @@ const STATES = [
   ["runopen", "Break, expanded", "Tap the pill: end early or add 5 minutes."],
   ["keep", "Keep going", "Your call, and the reasons stay the same. Next check marked."],
   ["nodata", "Still learning", "4 of 7 nights. Says what it knows, nothing more."],
-  ["escalate", "Talk to someone", "Mornings only, never mid-session. The offer first, the count second."],
-  ["escctx", "Which nights were they?", "Pick a reason, tap the nights. Calendar games start marked; it still says if it's a lot."],
+  ["escalate&team=1", "Talk to someone", "Mornings only, never mid-session. The offer first, the count second."],
+  ["escctx&team=1", "Which nights were they?", "Pick a reason, tap the nights. Calendar games start marked; it still says if it's a lot."],
   ["wrong", "This looks wrong", "Say it was one task, the sleep is off, or it wasn't you, and it adjusts."],
+  ["connect", "Where should sleep come from?", "Fitbit, Oura, WHOOP, Apple Watch (later), or no wearable. Says what we read and never read."],
+  ["connectwarn", "Before Google's screen", "Fitbit goes through Google Health: warns about \"unverified app\" and the 7-day reconnect first."],
+  ["connected&device=oura", "Connected", "Names the real device and starts the 7-night learning period. Suggestions run from day one."],
+  ["reconnect", "Reconnect Fitbit?", "Google asks every 7 days. Until then sleep is left out; everything else carries on."],
+  ["stale", "Sleep out of date", "If the device hasn't synced, sleep leaves the reasons instead of being guessed."],
+  ["nowearwhy", "No wearable", "Laptop and calendar only: sources renumber, sleep shows as not connected."],
+  ["why&device=whoop", "See why, with WHOOP", "Every sleep row and source chip names the device the student actually wears."],
+  ["sources", "Settings: Data sources", "Per-source switches, what each reads, where data goes (CTO and CSO to confirm), delete."],
+  ["sourcesdisc", "Disconnect Fitbit?", "Says exactly what happens: access removed at Google, saved nights deleted unless you keep them."],
+  ["sourcesdel", "Delete all your data?", "Lists everything that goes, and that you leave the pilot. Can't be undone, so it asks first."],
+  ["escalate", "Talk to someone, not on a team", "No away games: the count is simply 12 of 14 nights."],
   ["escwhy", "Why am I seeing this?", "The one number behind it, when it shows up, and that it's not a diagnosis."],
 ];
 document.getElementById("states").innerHTML = STATES.map(([k, t, d], i) => `<article class="st">

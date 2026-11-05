@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-11-04
 tier: supporting
 created: 2026-11-04T22:40:00Z
-updated: 2026-11-05T10:00:00Z
+updated: 2026-11-05T13:00:00Z
 ---
 
 # ICP_2 — Diego Ramírez (he/him)
@@ -34,24 +34,23 @@ The score line from each `/icp` session, newest last. Scale 1–10: Clarity · T
 | 2026-11-05 | [[25-journal/2026-11-05-icp-island-forecast]] Island + Forecast card, round 3 (iPhone) | MEH | 7 · 4 · 5 · 4 · 5 · 7 · 4 | 4 | 0.20 · 0.10 · 0.40 | Training-aware: practice, lift and travel days change the options (sit, nap, not walk) |
 | 2026-11-05 | [[25-journal/2026-11-05-icp-island-forecast-retest]] Island + Forecast re-test after top-four fixes (iPhone) | MEH | 8 · 6 · 6 · 4 · 6 · 7 · 4 | 5 (+1) | 0.25 · 0.15 · 0.45 | Training-aware options (lift/practice/travel days: sit or nap, not walk) |
 | 2026-11-05 | [[25-journal/2026-11-05-icp-island-forecast-retest2]] Island + Forecast re-test 2 after next-three fixes (iPhone) | MEH | 8 · 7 · 6 · 4 · 7 · 7 · 4 | 5 (=) | 0.25 · 0.15 · 0.50 | Training-aware main card (practice/lift/travel days: sit or nap, not walk) |
+| 2026-11-05 | [[25-journal/2026-11-05-icp-wearables]] Wearables: setup, sync states, Data sources (no wearable (Garmin not offered), iPhone) | MEH | 8 · 7 · 6 · 4 · 8 · 7 · 4 | 5 (=) | 0.25 · 0.15 · 0.55 | Calendar reads practice/lift/travel blocks so the card offers sit or nap, not walk |
 
 ## Open asks
 
-Marked at re-test 2 (2026-11-05). ✅ fixed · ◐ partly fixed · ⬜ not fixed · 🆕 new at re-test 2.
+Marked at the wearables test (2026-11-05). ✅ fixed · ◐ partly fixed · ⬜ not fixed · ❔ couldn't tell (not in this walk) · 🆕 new.
 
-- ⬜ not fixed: Knows training load and travel days (games read on the morning card only)
-- ⬜ not fixed: 'Only you see this' plus where watch data goes on every card
-- ✅ fixed: Keep going contradicts the suggestion's sleep
+- ⬜ not fixed: Knows training load and travel days
+- ◐ partly fixed: 'Only you see this' plus where data goes ('Never your coach, team or school' exists, only in Data sources, with a placeholder)
 - ⬜ not fixed: Options for a bus or study hall, including a nap
-- ✅ fixed: Define 'helped'
-- ⬜ not fixed: Short-nights card asks about travel before counseling (still 4th)
-- ✅ fixed: Cut the six-dot meter
-- ⬜ not fixed: Read practice/lift/game blocks from the calendar for the main card
-- ✅ fixed: Pick which nights the travel option drops
-- ✅ fixed: Cut the Today bar
-- 🆕 new: Morning headline subtracts known away games ('9 of 11 non-game nights')
-- 🆕 new: Say how often 'gently' means
-- 🆕 new: 'Lab's still 40 min away' vs '45 min'
+- ❔ couldn't tell: Short-nights card asks about travel first
+- ⬜ not fixed: Read practice/lift blocks from the calendar ('Practice + lifts' option)
+- ❔ couldn't tell: Morning headline subtracts away games
+- ❔ couldn't tell: Say how often 'gently' means
+- ✅ fixed: '40 min' vs '45 min'
+- 🆕 new: A Garmin row, or an honest 'not supported' plus a team-issued warning
+- 🆕 new: Fill Stored / Kept for; name 'the project team'
+- 🆕 new: Remove the buttons on the learning card
 
 ## Related
 

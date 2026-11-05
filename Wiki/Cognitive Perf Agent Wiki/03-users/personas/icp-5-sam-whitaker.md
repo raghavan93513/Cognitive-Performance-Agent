@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-11-04
 tier: supporting
 created: 2026-11-04T22:40:00Z
-updated: 2026-11-05T10:00:00Z
+updated: 2026-11-05T13:00:00Z
 ---
 
 # ICP_5 — Sam Whitaker (he/him)
@@ -34,23 +34,24 @@ The score line from each `/icp` session, newest last. Scale 1–10: Clarity · T
 | 2026-11-05 | [[25-journal/2026-11-05-icp-island-forecast]] Island + Forecast card, round 3 (iPhone) | MEH | 7 · 4 · 5 · 5 · 7 · 6 · 4 | 5 | 0.30 · 0.20 · 0.55 | Keep going must not contradict the sleep it just showed |
 | 2026-11-05 | [[25-journal/2026-11-05-icp-island-forecast-retest]] Island + Forecast re-test after top-four fixes (iPhone) | MEH (closer to I'D USE IT) | 7 · 6 · 5 · 6 · 8 · 7 · 5 | 6 (+1) | 0.40 · 0.30 · 0.65 | A late-night 'stop for tonight?' card, with short-nights help reachable then |
 | 2026-11-05 | [[25-journal/2026-11-05-icp-island-forecast-retest2]] Island + Forecast re-test 2 after next-three fixes (iPhone) | MEH (closer to I'D USE IT) | 7 · 7 · 5 · 6 · 8 · 7 · 5 | 6 (=) | 0.40 · 0.30 · 0.65 | A 1 am 'stop for tonight?' screen with short-nights help reachable then |
+| 2026-11-05 | [[25-journal/2026-11-05-icp-wearables]] Wearables: setup, sync states, Data sources (Oura, iPhone) | MEH (closer to I'D USE IT) | 7 · 6 · 5 · 6 · 8 · 7 · 5 | 6 (=) | 0.40 · 0.30 · 0.70 | Replace every [confirm] on the short-nights card and 'Where your data goes' with real answers |
 
 ## Open asks
 
-Marked at re-test 2 (2026-11-05). ✅ fixed · ◐ partly fixed · ⬜ not fixed · 🆕 new at re-test 2.
+Marked at the wearables test (2026-11-05). ✅ fixed · ◐ partly fixed · ⬜ not fixed · ❔ couldn't tell (not in this walk) · 🆕 new.
 
-- ✅ fixed: Keep going contradicts the suggestion's sleep
-- ⬜ not fixed: A night version with no next class (third time asked)
-- ◐ partly fixed: Name every source (location named; sleep still 'watch', not ring)
-- ✅ fixed: Rename 'refill' to 'break'
-- ✅ fixed: Wire up 'Why am I seeing this?'
-- ✅ fixed: 'Not now' doesn't drop back into walk prompts forever
-- ⬜ not fixed: Cut the sleep dot on the See-why slider (third time asked)
-- ✅ fixed: Travel/shifts shows the nights and lets him pick
-- ⬜ not fixed: Real counseling name and number, no brackets
-- 🆕 new: SAFETY: marking 'exams or deadlines' must not switch the short-nights card off
-- 🆕 new: The chip breaks 'in [1]' mid-sentence
-- 🆕 new: Legend dot is blue, marks on nights are dark
+- ✅ fixed: Name every source: ring, not 'watch'
+- ✅ fixed: Cut the sleep dot on the See-why slider
+- ✅ fixed: The chip breaking 'in [1]'
+- ⬜ not fixed: Real counseling name and number (fourth time)
+- ⬜ not fixed: A night version with no next class (fourth time)
+- ✅ fixed: SAFETY: exam nights don't silence the short-nights card (in page words)
+- ❔ couldn't tell: Legend dot colour
+- 🆕 new: Fill Stored / Kept for; say what the study is, with an opt-out
+- 🆕 new: Out-of-date state says what to do ('Open the Oura app to sync')
+- 🆕 new: Explain HRV in one sentence, or stop reading it
+- 🆕 new: Don't show 'away-game nights' to non-athletes
+- 🆕 new: Switch vs Disconnect: say the difference
 
 ## Related
 

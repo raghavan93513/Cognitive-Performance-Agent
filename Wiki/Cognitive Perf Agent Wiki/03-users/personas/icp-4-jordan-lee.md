@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-11-04
 tier: supporting
 created: 2026-11-04T22:40:00Z
-updated: 2026-11-05T10:00:00Z
+updated: 2026-11-05T13:00:00Z
 ---
 
 # ICP_4 — Jordan Lee (they/them)
@@ -34,22 +34,22 @@ The score line from each `/icp` session, newest last. Scale 1–10: Clarity · T
 | 2026-11-05 | [[25-journal/2026-11-05-icp-island-forecast]] Island + Forecast card, round 3 (iPhone SE + small laptop) | MEH | 6 · 4 · 6 · 5 · 6 · 7 · 3 | 5 | 0.25 · 0.15 · 0.45 | Show the no-watch path first (laptop-only reasons; first week not gated on sleep) |
 | 2026-11-05 | [[25-journal/2026-11-05-icp-island-forecast-retest]] Island + Forecast re-test after top-four fixes (iPhone SE + small laptop) | MEH | 7 · 5 · 6 · 5 · 7 · 7 · 3 | 5 (=) | 0.25 · 0.20 · 0.50 | Suggestions start without a watch (laptop + calendar from day 1) |
 | 2026-11-05 | [[25-journal/2026-11-05-icp-island-forecast-retest2]] Island + Forecast re-test 2 after next-three fixes (iPhone SE + small laptop) | MEH | 7 · 6 · 6 · 5 · 7 · 7 · 3 | 5 (=) | 0.25 · 0.20 · 0.50 | Suggestions start without a watch (laptop + calendar from day 1) |
+| 2026-11-05 | [[25-journal/2026-11-05-icp-wearables]] Wearables: setup, sync states, Data sources (no wearable, iPhone SE + small laptop) | MEH | 7 · 6 · 6 · 6 · 7 · 6 · 4 | 6 (+1) | 0.30 · 0.20 · 0.50 | Say Windows works on the first setup screen; no-wearable option first |
 
 ## Open asks
 
-Marked at re-test 2 (2026-11-05). ✅ fixed · ◐ partly fixed · ⬜ not fixed · 🆕 new at re-test 2.
+Marked at the wearables test (2026-11-05). ✅ fixed · ◐ partly fixed · ⬜ not fixed · ❔ couldn't tell (not in this walk) · 🆕 new.
 
-- ⬜ not fixed: A no-watch path, shown first (third time asked)
-- ✅ fixed: Source and consent for calendar and location
-- ✅ fixed: Numbers that agree (first week now 2 h 40)
-- ⬜ not fixed: Shared-laptop handling ('not me' / pause)
-- ✅ fixed: Define 'helped'
-- ✅ fixed: Cut the Today / refill tally
-- ⬜ not fixed: 'Is this you?' on the pill when the laptop wakes
-- 🆕 new: See why covers the class card on the small laptop
-- 🆕 new: Keep Snooze visible when See why is open
-- 🆕 new: Drop the sleep line from Keep going for people with no sleep data
-- 🆕 new: 'Lab's still 40 min away' vs '45 min'
+- ◐ partly fixed: No-watch path (right in words; listed last and cut off on SE)
+- ◐ partly fixed: Shared-laptop handling ('That wasn't me' exists, buried)
+- ◐ partly fixed: 'Is this you?' on wake (only after reporting)
+- ⬜ not fixed: See why covers the class card on the small laptop
+- ⬜ not fixed: Keep Snooze visible in See why (clipped on SE and laptop)
+- ✅ fixed: Drop the sleep line from Keep going without sleep data
+- 🆕 new: Say Windows (and install size) at setup and in Data sources, not 'this MacBook'
+- 🆕 new: 'No wearable' first in the list
+- 🆕 new: Default calendar to 'Class only'
+- 🆕 new: Fill Stored / Kept for; say what Delete does
 
 ## Related
 

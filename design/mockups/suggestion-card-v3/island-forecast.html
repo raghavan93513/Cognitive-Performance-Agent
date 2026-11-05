@@ -54,6 +54,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;touch-
 .suggesting .t-slot,.walking .t-slot{opacity:1}
 .ticks .t-check{opacity:0}.keeping .t-check{opacity:1}
 .next{display:flex;align-items:center;gap:12px;margin-top:auto;padding:14px 16px;border-radius:18px;background:#FFFFFF;border:1px solid var(--line)}
+.next.tuck{visibility:hidden}
 .next .sq{width:14px;height:14px;border-radius:4px;border:3px solid var(--ink);flex:none}
 .next b{font-weight:600}.next span{color:var(--ink2);font-size:15px}
 .foot{display:flex;justify-content:space-between;margin-top:10px}
@@ -67,7 +68,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;touch-
 .compact .l{display:flex;align-items:center;gap:8px}
 .compact .dot{width:8px;height:8px;border-radius:50%;background:var(--refill)}
 .island.open .compact{opacity:0;pointer-events:none}
-.full{padding:20px 22px 16px;opacity:0;transform:translateY(-6px) scale(.98);transform-origin:top center;transition:opacity .25s ease .12s,transform .45s var(--spring) .08s}
+.full{padding:20px 22px 28px;opacity:0;transform:translateY(-6px) scale(.98);transform-origin:top center;transition:opacity .25s ease .12s,transform .45s var(--spring) .08s}
 .island.open .full{opacity:1;transform:none}
 .status{display:flex;justify-content:space-between;align-items:center;font:500 12.5px/1 var(--mono);color:var(--on3)}
 .q{font:600 32px/1.05 var(--ui);letter-spacing:-.03em;margin-top:14px;text-wrap:balance}
@@ -95,10 +96,54 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;touch-
 .tally b{color:var(--on);font-weight:600}
 .tally.note{color:var(--refill)}
 .morning .forecast,.morning .next{visibility:hidden}
+[hidden]{display:none!important}
+/* wearable sources (connect flow) */
+.srcs{display:grid;gap:8px;margin-top:14px}
+.src{display:grid;grid-template-columns:24px 1fr auto;align-items:center;gap:12px;text-align:left;background:var(--well);border-radius:18px;padding:12px 14px;min-height:62px;color:var(--on);width:100%}
+.src b{display:block;font:600 16px/1.25 var(--ui)}.src span{display:block;font:400 13px/1.35 var(--ui);color:var(--on2)}
+.src i{font:500 13px/1 var(--ui);font-style:normal;color:var(--refill)}
+.src .gl{color:var(--on2)}
+.src.off b{color:var(--on2)}.src.off i{color:var(--on3)}
+.fine{font:400 12px/1.5 var(--mono);color:var(--on3);margin-top:12px}
+.note{display:flex;gap:8px;align-items:flex-start;margin-top:10px;font:400 14px/1.4 var(--ui);color:var(--on2)}
+.note .gl{flex:none;margin-top:1px;color:var(--on3)}
+.inl{display:block;min-height:44px;font:500 14px/1 var(--ui);color:var(--refill);text-align:left}
+.qg{display:inline-flex;align-items:center;gap:10px}
+/* settings: data sources */
+.settings{max-width:520px;margin:0 auto;min-height:100dvh;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px calc(env(safe-area-inset-bottom,0px) + 28px);background:var(--paper)}
+.sh{display:flex;justify-content:space-between;align-items:center}
+.back{min-height:44px;font:500 16px/1 var(--ui);color:var(--ink)}
+.sh .smp{font:500 12px/1 var(--mono);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.st{font:600 32px/1.05 var(--ui);letter-spacing:-.03em;margin-top:6px}
+.sl{font:400 15px/1.4 var(--ui);color:var(--ink2);margin-top:6px}
+.card{background:#FFFFFF;border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-top:12px}
+.ch{display:grid;grid-template-columns:24px 1fr auto;gap:12px;align-items:center}
+.ch .gl{color:var(--ink)}
+.ch b{display:block;font:600 16px/1.25 var(--ui)}.ch small{display:block;font:500 12.5px/1.35 var(--mono);color:var(--muted);margin-top:2px}
+.cd{font:400 14px/1.45 var(--ui);color:var(--ink2);margin-top:8px;padding-left:36px}
+.sw{width:51px;height:44px;position:relative;flex:none}
+.sw::before{content:"";position:absolute;left:0;right:0;top:6.5px;height:31px;border-radius:16px;background:#D9D7D0;transition:background .2s ease}
+.sw::after{content:"";position:absolute;top:8.5px;left:2px;width:27px;height:27px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s var(--ease)}
+.sw[aria-checked="true"]::before{background:var(--refill-ink)}
+.sw[aria-checked="true"]::after{transform:translateX(20px)}
+.cbtns{display:flex;gap:8px;margin-top:10px;padding-left:36px;flex-wrap:wrap}
+.pill{min-height:44px;padding:0 14px;border-radius:22px;border:1px solid var(--line);font:500 14px/1 var(--ui);color:var(--ink);background:#FFFFFF}
+.pill[aria-pressed="true"]{background:var(--ink);color:#FFFFFF;border-color:var(--ink)}
+.dl{display:grid;gap:12px;margin-top:10px}
+.dl dt{font:500 12px/1.3 var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.dl dd{font:400 14px/1.45 var(--ui);color:var(--ink);margin-top:2px}
+.danger{min-height:44px;margin-top:10px;font:600 15px/1 var(--ui);color:#B42318}
+.sub2{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+.sub2 b{display:block;font:600 14px/1.3 var(--ui);color:var(--ink)}.sub2 small{display:block;font:500 12.5px/1.35 var(--mono);color:var(--muted)}
+.cd2{display:block;font:400 13px/1.45 var(--ui);color:var(--muted);margin-top:4px}
+.acts.lt{margin-top:18px}
+.a.dz{background:#B42318;color:#FFF}.a.lo{background:#FFFFFF;color:var(--ink);border:1px solid var(--line)}
 /* never taller than the screen: the open island scrolls inside itself */
-.island{max-height:calc(100dvh - env(safe-area-inset-top,0px) - 20px)}
-.island.open .full{max-height:calc(100dvh - env(safe-area-inset-top,0px) - 20px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+.island{max-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 76px)}
+.island.open .full{max-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 76px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
 .acts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+/* more below: fade the bottom edge so a cut row reads as "scroll", not as clipped */
+.island.open .full.more{-webkit-mask-image:linear-gradient(#000 calc(100% - 56px),transparent);mask-image:linear-gradient(#000 calc(100% - 56px),transparent)}
 .a{min-height:54px;border-radius:27px;font:600 17px/1 var(--ui);transition:transform .12s var(--ease)}
 .a:active{transform:scale(.96)}
 .a.yes{background:var(--on);color:#000}.a.no{background:var(--well2);color:var(--on)}
@@ -127,7 +172,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;touch-
 .foot .smp{font:500 12px/1 var(--mono);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
 .foot button:last-child{justify-self:end}
 @media (prefers-reduced-motion:reduce){.island,.full,.compact,.slot,.fill,.hero{transition:opacity .2s ease!important}.full,.slot{transform:none}}
-@media (max-height:700px){.clock{font-size:68px;margin-top:10px}.q{font-size:27px}.full{padding:16px 18px 12px}.next{padding:10px 14px}.forecast{margin-top:18px}}
+@media (max-height:700px){.clock{font-size:68px;margin-top:10px}.q{font-size:27px}.full{padding:16px 18px 24px}.next{padding:10px 14px}.forecast{margin-top:18px}}
 </style>
 </head>
 <body>
@@ -161,6 +206,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;touch-
   <nav class="foot"><button>Talk to someone</button><span class="smp">Sample data</span><button>Pause suggestions</button></nav>
 </div>
 
+<main class="settings" id="settings" hidden aria-label="Data sources">
+  <header class="sh"><button class="back" data-go="idle">‹ Back</button><span class="smp">Sample data</span></header>
+  <h1 class="st">Data sources</h1>
+  <p class="sl">What Halftime reads, and what it never does.</p>
+  <div id="srclist"></div>
+  <nav class="foot" style="margin-top:18px"><button>Talk to someone</button><span class="smp">Sample data</span><button>Pause suggestions</button></nav>
+</main>
+
 <div class="island" id="island" role="region" aria-label="Halftime">
   <button class="compact" id="compact" aria-label="Open Halftime"><span class="l"><span class="dot"></span><span id="ctime">2:40</span></span>
     <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="#2C2C2E" stroke-width="3"/><circle cx="10" cy="10" r="8" fill="none" stroke="#8ED6BC" stroke-width="3" stroke-dasharray="50.3" stroke-dashoffset="11" transform="rotate(-90 10 10)" stroke-linecap="round"/></svg></button>
@@ -172,20 +225,59 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;touch-
 <script>
 // Sample data only. Words: UIUX proposal on the CMO seat's voice A (COPY.md); the CMO locks them.
 const island = document.getElementById("island"), full = document.getElementById("full"), page = document.getElementById("page");
+const Q = new URLSearchParams(location.search);
+// Wearable sources. We read how long and when you slept. Overnight HRV is off unless the person turns it on
+// (default-deny: no reason uses it yet). Never the device's own scores (Readiness, Recovery).
+// name = the model the device reports after connecting (?model= to change it in a capture).
+const DEVICES = {
+  fitbit: { name: Q.get("model") || "Fitbit Charge 6", short: "Fitbit", glyph: "band", via: "through Google Health", app: "Fitbit", acct: "your Google account" },
+  oura: { name: "Oura Ring", short: "Oura", glyph: "ring", via: "uses your Oura membership", app: "Oura", acct: "your Oura account" },
+  whoop: { name: "WHOOP", short: "WHOOP", glyph: "band", via: "uses your WHOOP membership", app: "WHOOP", acct: "your WHOOP account" },
+  apple: { name: "Apple Watch", short: "Apple Watch", glyph: "watch", via: "through Apple Health", app: "Health", acct: "Apple Health" },
+};
+// ?team=1: on a sports team (away games from the calendar can explain short nights). Everyone else: class times only.
+const TEAM = Q.get("team") === "1";
+// ?os=mac|windows: which laptop the collector runs on. Linux isn't supported yet, and the screens say so.
+const OS = Q.get("os") === "windows" ? "this Windows laptop" : "this MacBook";
+let devKey = Q.get("device") || "fitbit";
+const dev = () => DEVICES[devKey] || null; // null = no wearable, laptop and calendar only
+const GLYPH = {
+  band: '<rect x="8.5" y="2" width="7" height="20" rx="3.5"/><rect x="10" y="8.5" width="4" height="7" rx="1.2"/>',
+  ring: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.6"/>',
+  watch: '<rect x="6" y="6" width="12" height="12" rx="3.2"/><path d="M9 6V2.5h6V6M9 18v3.5h6V18"/>',
+  laptop: '<rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19.5h20"/>',
+  calendar: '<rect x="4" y="5" width="16" height="15" rx="2.2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+  pin: '<path d="M12 21s-6-5.6-6-10.5a6 6 0 0 1 12 0C18 15.4 12 21 12 21z"/><circle cx="12" cy="10.5" r="2"/>',
+};
+const glyph = (k, s = 22) => `<svg class="gl" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${GLYPH[k]}</svg>`;
+const sleepChip = () => chip(3, "sleep, " + (dev() ? dev().name : "not connected"));
 const chip = (k, l) => `<button class="chip" aria-label="Source ${k}: ${l}">${k}</button>`;
-const walkBody = (withWhy) => `<div class="status"><span>Halftime · now 3:45</span><span>45 min to Chem lab</span></div>
+// mode: "ok" (sleep in), "stale" (device hasn't synced), "none" (no wearable)
+const walkBody = (withWhy, mode = dev() ? "ok" : "none") => {
+  const D = dev(), calN = mode === "none" ? 3 : 4;
+  const sleepPart = mode === "ok" ? `, and slept <b class="nw">5 h 10 min</b>${sleepChip()}.` : ".";
+  const sleepRow = mode === "ok"
+    ? `<div class="row"><span class="k">3 · Sleep last night</span><span class="val">5 h 10 min</span><span class="m">${D.name} · synced 38 min ago · usual about 7 h</span></div>`
+    : mode === "stale"
+    ? `<div class="row"><span class="k">3 · Sleep last night</span><span class="val">not synced</span><span class="m">${D.name} · last sync yesterday 7:42 am · left out today</span></div>`
+    : `<div class="row"><span class="k">Sleep</span><span class="val">not connected</span><span class="m">no wearable · suggestions use your laptop and calendar</span></div>`;
+  return `<div class="status"><span>Halftime · now 3:45</span><span>45 min to Chem lab</span></div>
   <h1 class="q">Short walk now?</h1>
-  <p class="sub">5 minutes fits. You'll be back by 3:50, well before lab${chip(4, "next class, calendar")}.</p>
-  <p class="why">You've been at it <b class="nw">2 h 40 min</b>${chip(1, "session time, laptop")}, with <b class="nw">14 app switches</b> in 20 min${chip(2, "app switches, laptop")}, and slept <b class="nw">5 h 10 min</b>${chip(3, "sleep, watch or ring")}.</p>
+  <p class="sub">5 minutes fits. You'll be back by 3:50, well before lab${chip(calN, "next class, calendar")}.</p>
+  <p class="why">You've been at it <b class="nw">2 h 40 min</b>${chip(1, "session time, laptop")}, with <b class="nw">14 app switches</b> in 20 min${chip(2, "app switches, laptop")}${sleepPart}</p>
+  ${mode === "stale" ? `<p class="note">${glyph(D.glyph, 16)}<span>Sleep is left out today: your ${D.name} hasn't synced since yesterday 7:42 am. Open the ${D.app} app to sync.</span></p>` : ""}
   <p class="sure"><span class="tag">Early read</span><span>In 4 of your last 6 afternoons like this, your app switching settled back to usual after a walk.</span></p>
   ${withWhy ? `<div class="ev">
     <div class="row"><span class="k">1 · Session time</span><span class="val">2 h 40 min</span><span class="m">laptop · 1 min ago · usual 45–90 min</span><span class="rng"><span style="left:25%;width:25%"></span><em style="left:89%"></em></span></div>
     <div class="row"><span class="k">2 · App switches</span><span class="val">14 / 20 min</span><span class="m">laptop · 1 min ago · usual 5–8</span><span class="rng"><span style="left:25%;width:15%"></span><em style="left:70%"></em></span></div>
-    <div class="row"><span class="k">3 · Sleep last night</span><span class="val">5 h 10 min</span><span class="m">watch or ring · synced 38 min ago · usual about 7 h</span></div>
-    <div class="row"><span class="k">4 · Next class</span><span class="val">Chem lab 4:30</span><span class="m">calendar · you turned this on · next class and away games · we never use your location</span></div>
-    <p class="m" style="font:400 12px/1.4 var(--mono);color:var(--on3)">"Early read" means under 10 afternoons like this so far. On the laptop we only see which kind of app you're in, never what you type, read or browse.</p></div>` : ""}
+    ${mode === "none" ? "" : sleepRow}
+    <div class="row"><span class="k">${calN} · Next class</span><span class="val">Chem lab 4:30</span><span class="m">calendar · you turned this on · ${TEAM ? "next class and away games" : "next class only"} · we never use your location</span></div>
+    ${mode === "none" ? sleepRow : ""}
+    <p class="m" style="font:400 12px/1.4 var(--mono);color:var(--on3)">"Early read" means under 10 afternoons like this so far. On the laptop we only see which kind of app you're in, never what you type, read or browse.</p>
+    ${mode === "ok" ? "" : `<button class="inl" data-go="sources">Data sources</button>`}</div>` : ""}
   <div class="acts"><button class="a yes" data-go="running">Walk 5 min</button><button class="a no" data-go="keep">Keep going</button></div>
   <div class="links">${withWhy ? `<button data-go="snooze">Snooze 20 min</button><button data-go="wrong">This looks wrong</button><button data-go="walk">Hide why</button>` : `<button data-go="snooze">Snooze 20 min</button><button data-go="why">See why</button>`}</div>`;
+};
 const V = {
   walk: () => walkBody(false),
   why: () => walkBody(true),
@@ -197,72 +289,171 @@ const V = {
   keep: () => `<div class="status"><span>Halftime · check-in</span><span>45 min to Chem lab</span></div>
     <h1 class="q">OK, keep going.</h1>
     <p class="sub">Your call. I'll check in again around 4:05.</p>
-    <p class="why">The reasons haven't changed: you've been at it <b class="nw">2 h 40 min</b>${chip(1, "session time, laptop")} and slept <b class="nw">5 h 10 min</b>${chip(3, "sleep, watch or ring")}, under your usual 7 h. The walk still fits before lab if you want it later.</p>
+    <p class="why">The reasons haven't changed: you've been at it <b class="nw">2 h 40 min</b>${chip(1, "session time, laptop")}${dev() ? ` and slept <b class="nw">5 h 10 min</b>${sleepChip()}, under your usual 7 h` : `, with <b class="nw">14 app switches</b> in 20 min${chip(2, "app switches, laptop")}`}. The walk still fits before lab if you want it later.</p>
     <div class="acts"><button class="a yes" data-go="idle">Got it</button><button class="a no" data-go="running">Walk now</button></div>`,
-  nodata: () => `<div class="status"><span>Halftime · learning</span><span>4 of 7 nights</span></div>
+  nodata: () => dev() ? `<div class="status"><span>Halftime · learning</span><span>4 of 7 nights</span></div>
     <h1 class="q" style="font-size:27px">Still learning your usual sleep.</h1>
     <div class="learn" role="img" aria-label="4 of 7 nights">${[1,1,1,1,0,0,0].map((x) => `<i class="${x ? "on" : ""}"></i>`).join("")}</div>
-    <p class="why">Suggestions start around Sunday. For now the line below is what we know: <b>2 h 40 min</b> in, lab at 4:30.</p>
-    <div class="acts"><button class="a no" data-go="idle">Keep going</button><button class="a no" data-go="running">Walk 5 min</button></div>`,
-  escalate: () => `<div class="status"><span>Halftime · morning</span><span>only you see this</span></div>
+    <p class="why">Sleep joins your reasons around Sunday. Until then, suggestions use your laptop and calendar: right now, <b>2 h 40 min</b> in, lab at 4:30.</p>
+    <div class="acts" style="grid-template-columns:1fr"><button class="a no" data-go="idle">Got it</button></div>`
+  : `<div class="status"><span>Halftime · learning</span><span>2 of 3 sessions</span></div>
+    <h1 class="q" style="font-size:27px">Getting to know your study rhythm.</h1>
+    <div class="learn" role="img" aria-label="2 of 3 sessions">${[1,1,0].map((x) => `<i class="${x ? "on" : ""}"></i>`).join("")}</div>
+    <p class="why">Suggestions start after your third study session, from your laptop and calendar. No wearable needed. Right now: <b>2 h 40 min</b> in, lab at 4:30.</p>
+    <div class="acts" style="grid-template-columns:1fr"><button class="a no" data-go="idle">Got it</button></div>`,
+  escalate: () => { const { left, short } = counted(); return `<div class="status"><span>Halftime · morning</span><span>you choose</span></div>
     <h1 class="q" style="font-size:26px;line-height:1.12">Sleep's been short for a while. Want to talk it over with someone?</h1>
-    <p class="why">Leaving out the 3 away-game nights on your calendar, 9 of your last 11 nights were under 6 hours${chip(3, "sleep, watch or ring")}. You choose if and when. Nothing is shared.</p>
+    <p class="why">${AWAY ? `Leaving out the ${AWAY} away-game nights on your calendar, ${short} of your last ${left.length}` : `${short} of your last ${left.length}`} nights were under 6 hours${sleepChip()}. You choose if and when. Halftime never tells your coach, team or school, and never contacts anyone for you.</p>
     <div class="ladder"><button class="rung first"><b>Book a time to talk</b><span>[Counseling booking: confirm]</span></button>
       <button class="rung"><b>Talk to someone now</b><span>[Campus counseling, 24/7: confirm]</span></button>
       <button class="rung"><b>Something for right now</b><span>2 quiet minutes</span></button></div>
     <button class="ctx" data-go="escctx">Some were travel, games, shifts or exams?</button>
-    <div class="links"><button data-go="escnot">Not now</button><button data-go="escwhy">Why am I seeing this?</button></div>`,
-  escwhy: () => `<div class="status"><span>Halftime · morning</span><span>only you see this</span></div>
+    <div class="links"><button data-go="escnot">Not now</button><button data-go="escwhy">Why am I seeing this?</button></div>`; },
+  escwhy: () => { const { left, short } = counted(); return `<div class="status"><span>Halftime · morning</span><span>you choose</span></div>
     <h1 class="q" style="font-size:24px;line-height:1.15">Why you're seeing this</h1>
-    <div class="ev"><div class="row"><span class="k">3 · Sleep, last 14 nights</span><span class="val">9 of 11 under 6 h</span><span class="m">watch or ring · usual about 7 h · 3 away-game nights left out</span></div></div>
+    <div class="ev"><div class="row"><span class="k">3 · Sleep, last 14 nights</span><span class="val">${short} of ${left.length} under 6 h</span><span class="m">${dev() ? dev().name : "sleep source"} · usual about 7 h${AWAY ? ` · ${AWAY} away-game nights left out` : ""}</span></div></div>
     <p class="why">We bring this up after two weeks of mostly short nights, and only in the morning, never while you're studying. It's not a diagnosis. It's a nudge to talk to a person, if you want to.</p>
-    <div class="acts"><button class="a no" data-go="escalate">Back</button><button class="a no" data-go="escnot">Not now</button></div>`,
+    <div class="acts"><button class="a no" data-go="escalate">Back</button><button class="a no" data-go="escnot">Not now</button></div>`; },
   escctx: () => {
     const left = NIGHTS.filter((_, i) => !excused(i)), short = left.filter((n) => n.h < 6).length;
-    return `<div class="status"><span>Halftime · morning</span><span>only you see this</span></div>
+    return `<div class="status"><span>Halftime · morning</span><span>you choose</span></div>
     <h1 class="q" style="font-size:24px;line-height:1.15">Which nights were they?</h1>
     <p class="tally" style="margin-top:6px">Pick a reason, then tap the nights it explains.</p>
     <div class="reasons" role="group" aria-label="What were they">${REASONS.map((r) => `<button class="reason" data-reason="${r}" aria-pressed="${r === reason}">${r}</button>`).join("")}</div>
     <div class="nights" role="group" aria-label="Last 14 nights. Tap to mark.">${NIGHTS.map((n, i) => `<button class="night${n.h < 6 ? " short" : ""}${marked.has(i) ? " on" : ""}" data-night="${i}" aria-pressed="${marked.has(i)}" aria-label="${n.d}, ${n.h} hours${n.cal ? ", " + n.cal + " on your calendar" : ""}">${n.cal ? '<span class="cal"></span>' : ""}<span>${n.d}</span><b>${n.h.toFixed(1)}</b></button>`).join("")}</div>
-    <p class="tally"><span style="color:#5AA9FF">●</span> your calendar's last 14 days show ${NIGHTS.filter((n) => n.cal).length} away games, so those start marked. Tap any night to change it.</p>
+    ${AWAY ? `<p class="tally"><span style="color:#5AA9FF">●</span> your calendar's last 14 days show ${AWAY} away games, so those start marked. Tap any night to change it.</p>` : ""}
     ${reason === EXAMS || [...marked.values()].includes(EXAMS) ? `<p class="tally note">Exam and deadline nights still count. Crunch weeks are a good time to talk to someone too.</p>` : ""}
     <p class="tally">Marked: <b>${marked.size ? byReason() : "none"}</b>. Of the ${left.length} nights that count, <b>${short}</b> were under 6 hours.</p>
     <div class="acts"><button class="a yes" data-go="escdone">Done</button><button class="a no" data-go="escalate">Back</button></div>`;
   },
   escdone: () => {
     const left = NIGHTS.filter((_, i) => !excused(i)), short = left.filter((n) => n.h < 6).length, keep = short >= 5 && short * 2 >= left.length;
-    return `<div class="status"><span>Halftime · morning</span><span>only you see this</span></div>
+    return `<div class="status"><span>Halftime · morning</span><span>you choose</span></div>
     <h1 class="q" style="font-size:24px;line-height:1.15">${keep ? "Thanks. That still looks like a lot." : "Thanks, that explains it."}</h1>
     <p class="why">${keep ? `Counting everything except the travel, game and shift nights you marked, <b>${short} of ${left.length}</b> nights were still under 6 hours. So this card stays: in the morning, at most once a week. You choose if and when.` : `Counting everything except the travel, game and shift nights you marked, ${short} of ${left.length} nights were short. That's too few nights to call it a pattern, so we'll check again next week.`} <b>Talk to someone</b> is always at the bottom of the screen.</p>
     <div class="acts"><button class="a yes" data-go="idle">Got it</button><button class="a no" data-go="escalate">Back</button></div>`;
   },
-  wrong: () => `<div class="status"><span>Halftime · now 3:45</span><span>only you see this</span></div>
+  wrong: () => `<div class="status"><span>Halftime · now 3:45</span><span>your feedback</span></div>
     <h1 class="q" style="font-size:24px;line-height:1.15">What looks wrong?</h1>
     <div class="ladder"><button class="rung" data-go="wrongtask"><b>That was one task</b><span>Like switching between Anki, a PDF and notes, or an editor and docs</span></button>
-      <button class="rung" data-go="wrongsleep"><b>My sleep number is off</b><span>It came from your watch or ring</span></button>
+      <button class="rung" data-go="wrongsleep"><b>My sleep number is off</b><span>${dev() ? `It came from your ${dev().name}` : "No sleep source is connected"}</span></button>
       <button class="rung" data-go="wrongme"><b>That wasn't me</b><span>Someone else was on this laptop</span></button></div>
     <div class="links"><button data-go="why">Back</button></div>`,
   wrongtask: () => wrongOk("The apps you were switching between now count as one task. Reason 2 is gone for this session, so this suggestion rests on your time and sleep only. It'll learn from this next time too."),
-  wrongsleep: () => wrongOk("Sleep is out of today's reasons, and we'll re-check the sync with your watch or ring. If it keeps looking off, you can turn sleep off in Settings."),
+  wrongsleep: () => wrongOk(`Sleep is out of today's reasons, and we'll re-check the sync with your ${dev() ? dev().name : "sleep source"}. If it keeps looking off, you can turn sleep off in Data sources.`),
   wrongme: () => wrongOk("This laptop's last session is out of your numbers. Next time the laptop wakes, the pill will ask \"Is this you?\" first."),
-  escnot: () => `<div class="status"><span>Halftime · morning</span><span>only you see this</span></div>
+  stale: () => walkBody(false, dev() ? "stale" : "none"),
+  stalewhy: () => walkBody(true, dev() ? "stale" : "none"),
+  nowear: () => { devKey = "none"; return walkBody(false, "none"); },
+  nowearwhy: () => { devKey = "none"; return walkBody(true, "none"); },
+  connect: () => `<div class="status"><span>Halftime · setup</span><span>step 2 of 3</span></div>
+    <h1 class="q" style="font-size:26px;line-height:1.12">Where should sleep come from?</h1>
+    <p class="why">Optional. Halftime works without it, using just your laptop (Mac or Windows) and calendar.</p>
+    <div class="srcs">
+      <button class="src" data-dev="none" data-go="connected">${glyph("laptop")}<span><b>No wearable</b><span>Laptop and calendar only. Add one any time.</span></span><i>Choose</i></button>
+      <button class="src" data-dev="fitbit" data-go="connectwarn">${glyph("band")}<span><b>Fitbit</b><span>Any Fitbit: Charge, Inspire, Versa, Sense, Air · through Google Health</span></span><i>Connect</i></button>
+      <button class="src" data-dev="oura" data-go="connected">${glyph("ring")}<span><b>Oura Ring</b><span>Uses your Oura membership</span></span><i>Connect</i></button>
+      <button class="src" data-dev="whoop" data-go="connected">${glyph("band")}<span><b>WHOOP</b><span>Uses your WHOOP membership</span></span><i>Connect</i></button>
+      <div class="src off" aria-disabled="true">${glyph("watch")}<span><b>Apple Watch</b><span>Needs the Halftime iPhone app · coming later</span></span><i>Later</i></div>
+      <div class="src off" aria-disabled="true">${glyph("watch")}<span><b>Garmin</b><span>Not in the class pilot yet</span></span><i>Not yet</i></div>
+    </div>
+    <p class="fine">We read how long and when you slept. Nothing else unless you turn it on. Never your location, your messages, or the device's own scores like Readiness or Recovery.</p>
+    <p class="fine">Team-issued watch? Your team's staff may already see its data in their own system. Halftime never sends them anything.</p>`,
+  connectwarn: () => `<div class="status"><span>Halftime · setup</span><span>Fitbit</span></div>
+    <h1 class="q" style="font-size:24px;line-height:1.15">Next, Google asks. It will say "unverified app".</h1>
+    <p class="why">That's expected for a class pilot with fewer than 100 testers. Halftime asks to read your sleep, nothing else, and can't change anything in your Fitbit.</p>
+    <div class="ev">
+      <div class="row"><span class="k">What we ask for</span><span class="val">read only</span><span class="m">how long and when you slept</span></div>
+      <div class="row"><span class="k">Every 7 days</span><span class="val">reconnect</span><span class="m">Google asks again; we remind you with one tap</span></div>
+      <div class="row"><span class="k">Any time</span><span class="val">disconnect</span><span class="m">Settings → Data sources</span></div>
+    </div>
+    <div class="acts"><button class="a yes" data-dev="fitbit" data-go="connected">Go to Google</button><button class="a no" data-go="connect">Back</button></div>`,
+  connected: () => dev() ? `<div class="status"><span>Halftime · setup</span><span>step 3 of 3</span></div>
+    <h1 class="q" style="font-size:26px;line-height:1.12"><span class="qg">${glyph(dev().glyph, 26)}${dev().name} connected.</span></h1>
+    <p class="sub">Last night synced at 7:42 am.</p>
+    <div class="learn" role="img" aria-label="1 of 7 nights">${[1,0,0,0,0,0,0].map((x) => `<i class="${x ? "on" : ""}"></i>`).join("")}</div>
+    <p class="why">Learning your usual sleep: night 1 of 7. Until then, suggestions use your laptop and calendar, starting today.${devKey === "fitbit" ? " Google asks you to reconnect every 7 days; we'll remind you." : ""}</p>
+    <div class="acts"><button class="a yes" data-go="idle">Done</button><button class="a no" data-go="sources">Data sources</button></div>`
+  : `<div class="status"><span>Halftime · setup</span><span>step 3 of 3</span></div>
+    <h1 class="q" style="font-size:26px;line-height:1.12"><span class="qg">${glyph("laptop", 26)}Laptop and calendar only.</span></h1>
+    <p class="sub">No wearable needed.</p>
+    <p class="why">Suggestions start after your third study session. You can add a sleep source any time in Data sources.</p>
+    <div class="acts"><button class="a yes" data-go="idle">Done</button><button class="a no" data-go="sources">Data sources</button></div>`,
+  reconnect: () => { const D = dev() || DEVICES.fitbit; return `<div class="status"><span>Halftime · morning</span><span>${D.short}</span></div>
+    <h1 class="q" style="font-size:26px;line-height:1.12"><span class="qg">${glyph(D.glyph, 26)}Reconnect ${D.short}?</span></h1>
+    <p class="why">${devKey === "fitbit" ? "Google asks every 7 days." : `${D.short} asked you to sign in again.`} Until you do, sleep is left out of your reasons. Everything else carries on.</p>
+    <div class="acts"><button class="a yes" data-go="connected">Reconnect</button><button class="a no" data-go="idle">Later</button></div>`; },
+  escnot: () => `<div class="status"><span>Halftime · morning</span><span>you choose</span></div>
     <h1 class="q" style="font-size:24px;line-height:1.15">OK. Not now.</h1>
     <p class="why">We won't bring this up again for 7 days, and your walk suggestions carry on as usual. <b>Talk to someone</b> is always at the bottom of the screen.</p>
     <div class="acts"><button class="a yes" data-go="idle">Got it</button><button class="a no" data-go="escalate">Back</button></div>`,
 };
-const wrongOk = (msg) => `<div class="status"><span>Halftime · now 3:45</span><span>only you see this</span></div>
+// Settings sub-views: "" (the list) · "disc" (disconnect a sleep source) · "del" (delete everything) · "deleted"
+let keepSleep = false; // on Disconnect: delete the saved nights unless the person chooses to keep them
+function renderSources(view = "") {
+  const D = dev(), sw = (on, label) => `<button class="sw" role="switch" aria-checked="${on}" aria-label="${label}" data-toggle></button>`;
+  const card = (g, title, small, desc, ctl, btns = "") => `<section class="card"><div class="ch">${glyph(g)}<span><b>${title}</b><small>${small}</small></span>${ctl}</div><p class="cd">${desc}</p>${btns ? `<div class="cbtns">${btns}</div>` : ""}</section>`;
+  const head = document.querySelector("#settings .st"), lede = document.querySelector("#settings .sl"), back = document.querySelector("#settings .back");
+  const what = (rows) => `<section class="card"><dl class="dl">${rows.map(([t, d]) => `<div><dt>${t}</dt><dd>${d}</dd></div>`).join("")}</dl></section>`;
+  back.dataset.go = view && view !== "deleted" ? "sources" : "idle";
+  if (view === "disc" && D) {
+    head.textContent = `Disconnect ${D.short}?`;
+    lede.textContent = "Here's exactly what happens.";
+    document.getElementById("srclist").innerHTML = what([
+      ["Right away", `Halftime stops reading your sleep and removes its access in ${D.acct}. Nothing changes on your ${D.short} itself.`],
+      ["Sleep already saved", `14 nights. <span class="cbtns" style="padding:0;margin-top:8px"><button class="pill" aria-pressed="${!keepSleep}" data-keep="0">Delete them</button><button class="pill" aria-pressed="${keepSleep}" data-keep="1">Keep them</button></span>`],
+      ["Your suggestions", "Carry on from your laptop and calendar. Sleep shows as not connected."],
+    ]) + `<div class="acts lt"><button class="a dz" data-dev="none" data-go="sources">Disconnect</button><button class="a lo" data-go="sources">Cancel</button></div>`;
+    return;
+  }
+  if (view === "del") {
+    head.textContent = "Delete all your data?";
+    lede.textContent = "Everything Halftime has stored about you. This can't be undone.";
+    document.getElementById("srclist").innerHTML = what([
+      ["From your laptop", "Every study session: times, breaks, and app-switch counts."],
+      ["From your sleep", D ? `Every night from your ${D.short}. Halftime's access in ${D.acct} is removed too.` : "Nothing, no sleep source is connected."],
+      ["From your calendar", "The class times Halftime saved. Your calendar itself isn't touched."],
+      ["Your answers", "Walk or keep going, \"This looks wrong\", and any nights you marked."],
+      ["The study", "You leave the class pilot. [Study data already de-identified: confirm with CSO]"],
+    ]) + `<div class="acts lt"><button class="a dz" data-go="sourcesdeleted">Delete everything</button><button class="a lo" data-go="sources">Cancel</button></div>`;
+    return;
+  }
+  if (view === "deleted") {
+    head.textContent = "Deleted.";
+    lede.textContent = `Everything Halftime stored about you is gone${D ? `, and your ${D.short} is disconnected` : ""}. The laptop app stops collecting until you sign in again.`;
+    document.getElementById("srclist").innerHTML = `<div class="acts lt" style="grid-template-columns:1fr"><button class="a lo" data-go="idle">Done</button></div>`;
+    return;
+  }
+  head.textContent = "Data sources"; lede.textContent = "What Halftime reads, and what it never does.";
+  const hrv = `<span class="sub2"><span><b>Overnight HRV</b><small>Off · not used in suggestions yet</small></span>${sw(false, "Overnight HRV")}</span><span class="cd2">How much the time between heartbeats varies while you sleep. It often dips after short or stressful nights.</span>`;
+  document.getElementById("srclist").innerHTML =
+    card("laptop", "Laptop", `on · ${OS}`, "Session time, idle time, and which kind of app you're in. Never what you type, read or browse. Mac and Windows; not Linux yet.", sw(true, "Laptop"))
+    + (D ? card(D.glyph, `Sleep · ${D.name}`, `synced 7:42 am${devKey === "fitbit" ? " · reconnect in 3 days" : ""}`, `How long and when you slept, read only. Never the device's own scores. ${hrv}`, sw(true, "Sleep from " + D.name), `<button class="pill" data-go="connect">Change source</button><button class="pill" data-go="sourcesdisc">Disconnect</button>`)
+         : card("band", "Sleep", "not connected", "Suggestions use your laptop and calendar. Sleep is optional.", "", `<button class="pill" data-go="connect">Add a sleep source</button>`))
+    + card("calendar", "Calendar", "on", TEAM ? "Your next class, plus away games from the last 14 days so travel nights can be left out." : "Your next class only. On a team? Add games, and nights away can be left out of your sleep.", sw(true, "Calendar"), `<button class="pill" aria-pressed="${!TEAM}" data-seg="cal">Class only</button><button class="pill" aria-pressed="${TEAM}" data-seg="cal">Class + games</button>`)
+    + card("pin", "Location", "never used", "Halftime has no location permission and never asks for one.", "")
+    + `<section class="card"><b style="font:600 16px/1.25 var(--ui)">Where your data goes</b><dl class="dl">
+        <div><dt>Stored</dt><dd>[Server and region: confirm with CTO]</dd></div>
+        <div><dt>The AI writer sees</dt><dd>Short summaries only, like "slept 5 h 10 min, usual 7 h". Never raw data or app names.</dd></div>
+        <div><dt>Kept for</dt><dd>[How long: confirm with CTO]</dd></div>
+        <div><dt>Who else sees it</dt><dd>Never your coach, team or school. The project team sees de-identified study data [confirm with CSO].</dd></div>
+      </dl><button class="danger" data-go="sourcesdel">Delete all my data…</button></section>`;
+}
+const wrongOk = (msg) => `<div class="status"><span>Halftime · now 3:45</span><span>your feedback</span></div>
   <h1 class="q" style="font-size:24px;line-height:1.15">Thanks, noted.</h1>
   <p class="why">${msg}</p>
   <div class="acts"><button class="a yes" data-go="idle">Got it</button><button class="a no" data-go="walk">Back</button></div>`;
 // 14 sample nights, Thu Oct 22 to Wed Nov 4 (hours of sleep). 12 are under 6 h; 3 are away games on the calendar.
 const NIGHTS = [["Th 22",5.2],["Fr 23",4.8],["Sa 24",4.2,"away game"],["Su 25",3.9,"away game"],["Mo 26",5.6],["Tu 27",6.4],["We 28",5.1],
-  ["Th 29",5.5],["Fr 30",5.0],["Sa 31",5.8],["Su 1",4.6,"away game"],["Mo 2",7.1],["Tu 3",5.3],["We 4",5.1]].map(([d, h, cal]) => ({d, h, cal}));
+  ["Th 29",5.5],["Fr 30",5.0],["Sa 31",5.8],["Su 1",4.6,"away game"],["Mo 2",7.1],["Tu 3",5.3],["We 4",5.1]].map(([d, h, cal]) => ({d, h, cal: TEAM ? cal : undefined})); // games only show for someone on a team
+const AWAY = NIGHTS.filter((n) => n.cal).length;
+const counted = () => { const left = NIGHTS.filter((_, i) => !excused(i)); return { left, short: left.filter((n) => n.h < 6).length }; };
 const REASONS = ["Travel or games", "Work shifts", "Exams or deadlines"];
 let marked = new Map(NIGHTS.flatMap((n, i) => (n.cal ? [[i, "Travel or games"]] : []))), reason = "Travel or games";
 const EXAMS = "Exams or deadlines";
 const excused = (i) => marked.has(i) && marked.get(i) !== EXAMS; // travel, games, shifts can explain short sleep; exams and deadlines stay counted
 const byReason = () => REASONS.map((r) => [r, [...marked.values()].filter((x) => x === r).length]).filter(([, c]) => c).map(([r, c]) => `${c} ${r.toLowerCase()}`).join(", ");
-const morning = new URLSearchParams(location.search).get("state")?.startsWith("esc");
+const morning = /^(esc|connect|reconnect)/.test(Q.get("state") || "");
 function setPage(mode) {
   page.className = "page " + mode + (morning ? " morning" : "");
   const walking = mode.includes("walking");
@@ -279,23 +470,37 @@ function setPage(mode) {
 }
 const stack = document.getElementById("stack");
 function push(on) { // make room: slide the page so the session line sits just below the open island
-  if (!on) { stack.style.transform = ""; return; }
+  if (!on) { stack.style.transform = ""; document.querySelector(".next").classList.remove("tuck"); return; }
   const f = document.querySelector(".forecast"), base = f.getBoundingClientRect().top - (new DOMMatrix(getComputedStyle(stack).transform).m42 || 0);
   const islandBottom = parseFloat(getComputedStyle(island).top) + parseFloat(island.style.height);
-  stack.style.transform = `translateY(${Math.max(0, islandBottom + 20 - base)}px)`;
+  const dy = Math.max(0, islandBottom + 20 - base);
+  stack.style.transform = `translateY(${dy}px)`;
+  // short screens: if the pushed line would land on the next-class card, hide the card (the island already says "45 min to Chem lab")
+  const nx = document.querySelector(".next"), fb = f.getBoundingClientRect().bottom - (new DOMMatrix(getComputedStyle(stack).transform).m42 || 0) + dy;
+  nx.classList.toggle("tuck", fb + 8 > nx.getBoundingClientRect().top);
 }
-function size(pushOn) { const w = Math.min(innerWidth - 24, 480); island.style.width = w + "px"; full.style.width = w + "px"; island.style.height = full.scrollHeight + "px"; push(pushOn); }
+function size(pushOn) { const w = Math.min(innerWidth - 24, 480); island.style.width = w + "px"; full.style.width = w + "px"; island.style.height = full.scrollHeight + "px"; push(pushOn); setTimeout(more, 520); }
+function more() { full.classList.toggle("more", full.scrollHeight - full.scrollTop - full.clientHeight > 4); }
+full.addEventListener("scroll", more, { passive: true });
 function closeFull() { full.inert = true; setTimeout(() => { if (!island.classList.contains("open")) full.innerHTML = ""; }, 520); }
+const settings = document.getElementById("settings");
+function showApp(on) { settings.hidden = on; page.hidden = !on; island.style.display = on ? "" : "none"; }
 function go(s) {
+  if (s.startsWith("sources")) { showApp(false); renderSources(s.slice(7)); scrollTo(0, 0); return; }
+  showApp(true);
   island.classList.remove("live");
   if (s === "idle" || s === "snooze") { island.classList.remove("open"); closeFull(); push(false); island.style.width = "170px"; island.style.height = "40px"; setPage(""); return; }
   if (s === "running") { island.classList.remove("open"); closeFull(); push(false); island.classList.add("live"); island.style.width = ""; island.style.height = "44px"; setPage("walking"); return; }
   full.innerHTML = V[s](); full.inert = false;
   island.classList.add("open");
-  setPage(s === "walk" || s === "why" ? "speaking suggesting" : s === "runopen" ? "speaking walking" : s === "keep" ? "speaking keeping" : "speaking");
-  requestAnimationFrame(() => size(["walk", "keep", "nodata", "runopen", "wrong", "wrongtask", "wrongsleep", "wrongme"].includes(s)));
+  setPage(["walk", "why", "stale", "stalewhy", "nowear", "nowearwhy"].includes(s) ? "speaking suggesting" : s === "runopen" ? "speaking walking" : s === "keep" ? "speaking keeping" : "speaking");
+  requestAnimationFrame(() => size(["walk", "stale", "nowear", "keep", "nodata", "runopen", "wrong", "wrongtask", "wrongsleep", "wrongme"].includes(s)));
 }
-island.addEventListener("click", (e) => {
+document.addEventListener("click", (e) => {
+  const tg = e.target.closest("[data-toggle]"); if (tg) { tg.setAttribute("aria-checked", tg.getAttribute("aria-checked") !== "true"); return; }
+  const kp = e.target.closest("[data-keep]"); if (kp) { keepSleep = kp.dataset.keep === "1"; return renderSources("disc"); }
+  const sg = e.target.closest("[data-seg]"); if (sg) { sg.parentElement.querySelectorAll(`[data-seg="${sg.dataset.seg}"]`).forEach((b) => b.setAttribute("aria-pressed", b === sg)); return; }
+  const dv = e.target.closest("[data-dev]"); if (dv) devKey = dv.dataset.dev;
   const n = e.target.closest("[data-night]"), r = e.target.closest("[data-reason]");
   if (n) { const i = +n.dataset.night; marked.has(i) ? marked.delete(i) : marked.set(i, reason); return redraw(); }
   if (r) { reason = r.dataset.reason; return redraw(); }
@@ -305,10 +510,10 @@ function redraw() { const y = full.scrollTop; full.innerHTML = V.escctx(); full.
 document.getElementById("compact").addEventListener("click", () => go("walk"));
 document.getElementById("liveview").addEventListener("click", () => go("runopen"));
 addEventListener("resize", () => island.classList.contains("open") && size(page.classList.contains("suggesting") || page.classList.contains("keeping")));
-const start = new URLSearchParams(location.search).get("state") || "walk";
+const start = Q.get("state") || "walk";
 if (new URLSearchParams(location.search).get("pick") === "exams") { reason = EXAMS; [0, 1, 4, 6, 7, 8].forEach((i) => marked.set(i, EXAMS)); } // capture helper: the exam-nights example
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-if (start === "running" || start === "idle") go(start); else setTimeout(() => go(V[start] ? start : "walk"), reduce ? 0 : 450);
+if (start === "running" || start === "idle" || start.startsWith("sources")) go(start); else setTimeout(() => go(V[start] ? start : "walk"), reduce ? 0 : 450);
 </script>
 </body>
 </html>
