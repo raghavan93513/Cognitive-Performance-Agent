@@ -102,7 +102,7 @@ So privacy from coaches and staff is a barrier to getting help, not a nice-to-ha
   - WHOOP started from a college squash captain's overtraining, then grew through conference and department deals with athlete opt-in dashboards.
   - Rise Science started in Northwestern football, then launched a consumer "energy" app ($60 a year; users opened it 14 of 28 days in beta).
   - Both sell an **outcome** (recovery, energy), not raw data.
-- **Organic plus retail.** Oura's marketing lead credits mostly organic celebrity wear and word of mouth, then 4,000+ retail stores. US awareness grew from ~5% (2022) to 30%.
+- **Retail plus partnerships.** Oura sold direct-to-consumer, then Best Buy (Apr 2023), Amazon and Target (2024) and Costco: 4,000+ stores. Its marketing lead says retail "helped spur the growth". It also ran partnerships (Dexcom, Natural Cycles, sports teams) and campaigns. US awareness grew from ~5% (2022) to 30%. *(Corrected 2026-11-05: an earlier line credited "organic celebrity wear and word of mouth", which the article doesn't say. Caught by the CMO.)*
 - **Campus ambassadors only after product-market fit.** a16z: "There is no marketing strategy that will fix a product that its core audience won't use!" Start with one campus, one lead and 2–3 ambassadors, recruited through clubs and athletes. Published outcomes are anecdotal.
 - **University deals:** slow and annual, often reached faster by plugging into an incumbent vendor (as Headspace did through Uwill).
 - **App stores convert poorly.** Akili's over-the-counter app got 126K downloads but only 4.2K active users, about 3%.

@@ -1,6 +1,6 @@
 ---
 title: Hot Cache
-updated: 2026-11-05T01:00:00Z
+updated: 2026-11-05T06:30:00Z
 ---
 
 # Hot Cache
@@ -8,6 +8,16 @@ updated: 2026-11-05T01:00:00Z
 *A ~500-word semantic snapshot of recent activity. Updated after every major write operation.*
 
 ## Recent Activity
+
+- [2026-11-05] **Suggestion card, round 3: Island + Forecast.** Round 1 (calm cards) was rejected as too plain; from round 2 the team picked the Island, and from round 1 the B Forecast line. The UIUX seat combined them: a Dynamic-Island pill speaks once, the session line shows where a 5-minute walk fits before the next class, and accepting turns the pill into a live countdown. Seven states on three iPhone sizes, all checks pass. Files in `design/mockups/suggestion-card-v3/`. Next: `/icp` and `/crit`, then the CMO locks the words.
+- [2026-11-05] **Pre-build study by the CEO, CTO, CMO and CSO, in parallel.** Each wrote a steal file from the steal library plus live research; the synthesis is [[13-team/pre-build-briefing]]. Top unknowns:
+  - **IRB:** Columbia's policy exempts only *anonymous*, non-internet course exercises, so ask course staff by Nov 7.
+  - **Study task and outcome:** PVT-B is the lead option; decide by Nov 11.
+  - **Wearable route:** does Google Health work in Testing mode, and which HRV metric does it return? Spike by Nov 9–11.
+  - **Scope:** lean vs production (ADR-002) by Nov 11.
+  - **Audience:** students only for Nov 6.
+
+  Corrected Kaur 2020 (the 77% is from a 3-day deployment) and Oura's growth claim.
 
 - [2026-11-05] **The UIUX seat studied every Steal Library product**: about 60 products in 9 parallel studies with about 400 sources. All 12 Steal Cards were corrected and are now `researched`. Headline rules: an easy "keep going" beats persuasion (one sec, PNAS 2023); confidence is a word plus a count; a band of your own range, not a score or gauge (FDA's 2025 letter to WHOOP); consent built as GOV.UK question pages; Live Activities need a native app. See [[09-design/studies/design-studies]].
 - [2026-11-05] **Steal library filled.** It has 12 Steal Cards and a study list of about 50 products across wearables, student apps, finance, weather, navigation, games, government and luxury. None has been opened yet; open each before relying on it. See [[09-design/steal-library]].

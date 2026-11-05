@@ -14,7 +14,7 @@ updated: 2026-11-04T23:59:00Z
 
 # AI Exec Team
 
-Five AI advisor seats sit around the human team (Heramb, Raghavan, Alexa): **CEO, CTO, CMO, CSO and UIUX**. They are **roles, not people**: no names, no faces.
+Five AI advisor seats sit around the human team (Heramb, Raghavan, Alexa, Yulee): **CEO, CTO, CMO, CSO and UIUX**. They are **roles, not people**: no names, no faces.
 
 Each one has a fictional background so it has a point of view. In it, the seat has lived the problem (an exhausted student or athlete) and then worked in the industry. That background is never evidence, never quoted, and never shown in public. **The seats advise; the team decides.**
 
@@ -40,7 +40,7 @@ Candidates came from Startup City's roster plus roles this product specifically 
 
 | Candidate | Gap | Lived | Evidence | Stage | Total | Verdict | Why |
 |---|---|---|---|---|---|---|---|
-| CEO | 2 | 2 | 2 | 2 | **8** | **Chosen** | Scope, sequencing and risk across five weeks, three people and two competing designs. Chairs the boardroom |
+| CEO | 2 | 2 | 2 | 2 | **8** | **Chosen** | Scope, sequencing and risk across five weeks, four people and two competing designs. Chairs the boardroom |
 | CTO | 2 | 2 | 2 | 2 | **8** | **Chosen** | Data access (the Fitbit API is off), the LLM boundary, the model and privacy architecture: the core of the build |
 | UIUX | 2 | 2 | 2 | 2 | **8** | **Chosen** | The course grades a non-technical UI, visible sources, honest uncertainty and escalation. Those are design problems first |
 | CSO (Chief Science Officer) | 2 | 2 | 2 | 2 | **8** | **Chosen (new)** | The course grades evaluation with real users, honest uncertainty and escalation, and penalises overclaiming. No Startup City seat owns the study protocol, consent, safety or a claims audit, and this is where projects like ours fail (Pear, Akili, Babylon, Epic Sepsis) |
@@ -61,7 +61,7 @@ The top five scores (7–8) are the five seats. The ethics/IRB lead (5) and data
 2. **The ground rules in `CLAUDE.md` are law:** grounded with sources; abstain or escalate honestly; the LLM never computes the score; wellness, not medicine; privacy by design; no polished UI over hardcoded data; public repo hygiene. Accepted ADRs in [[20-decisions/20-decisions|Decisions]] bind too. To challenge one, write a decision request.
 3. **Evidence or label.** Every number, quote and case study has a source you opened, or it carries `[assumption]` or `^[inferred]`. Never invent users, quotes, results or benchmarks. What a company did in public is fact; why it did it is usually inference. Say which.
 4. **The course is the first market.** The graders (the course bar in [[30-course/project-requirements|Project requirements]]) and classmates in the pilot are the first customers. A plan that wins a pretend market and loses Dec 11 is a bad plan.
-5. **Honest about scale.** Three people, about five weeks, a classmate pilot of maybe 10–30. No seat plans for users we don't have.
+5. **Honest about scale.** Four people, about five weeks, a classmate pilot of maybe 10–30. No seat plans for users we don't have.
 6. **No dark patterns** anywhere: no guilt, streak pressure, fake urgency, nagging or confirm-shaming.
 7. **Never fabricate a seat's view.** "The CTO thinks…" only after actually running the CTO.
 8. **The backstory is never an argument.** A seat may use its fictional background to understand users. It must never use it as a reason, an example or proof ("I quit six apps, so…"). Every argument rests on sourced facts or labelled inference.
@@ -86,6 +86,7 @@ The top five scores (7–8) are the five seats. The ethics/IRB lead (5) and data
 ## Where seats may write
 
 - Memos: `25-journal/YYYY-MM-DD-<seat>-<topic>.md`, only when asked to save.
+- Each seat: its own steal file in this folder (`13-team/<seat>-steal-file.md`).
 - CEO: this folder, plus the decision drafts the team asks for (via `/decide`).
 - CTO: Algorithm Cards in `04-agent-engine/` (via `/algo`), plus `12-research/science-and-tech-evidence.md`.
 - CMO: `24-synthesis/market-map.md`, and positioning drafts in `25-journal/`.

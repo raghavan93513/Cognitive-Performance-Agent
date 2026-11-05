@@ -13,11 +13,11 @@ updated: 2026-10-26T20:00:00Z
 > *"Should I keep going or take a break?"*. It suggests continue, a short walk, or a break, always with its reasons
 > and sources, and says "not enough data" when it doesn't know.
 
-**Status (2026-10-26):** design stage. Two system designs exist, no code yet. Being built as the
+**Status (2026-11-05):** design stage, no code yet. Two system designs exist, and scope is still open. Audience: students and athletes. Before building, read the [[13-team/pre-build-briefing|pre-build briefing]]. Being built as the
 final project of Columbia's [[30-course/30-course|BINF 4070]].
 
 > [!important] Next deadline
-> **Fri Oct 30** design studio, then **Fri Nov 6** proposal presentation (15%). See the
+> **Fri Nov 6** proposal presentation (15%), then the **Wed Nov 11** written draft. See the
 > [[30-course/deliverables/part-2-proposal-presentation|proposal prep checklist]].
 
 **New here?** Read [[_meta/how-to-use-this-vault|How to use this vault]], then

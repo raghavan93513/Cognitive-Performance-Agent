@@ -27,6 +27,16 @@ The CTO seat's knowledge base. It covers what the science actually supports, wha
 
 ## 0. Time-sensitive (re-check before relying on it)
 
+> **Update 2026-11-05 (CTO follow-up, checked against Google's setup page):**
+> - Testing mode works **without review for up to 100 hand-listed users**: "a cap of 100 users for both testing and production purposes". Only more than 100 users needs the security review.
+> - Testing tokens "expire after 7 days".
+> - Daily HRV is **RMSSD (ms)**, from the longest sleep over 3 h.
+> - The loaner Fitbit Air reports HRV.
+> - Users must link a personal Google account in the Google Health app first, because Workspace and LionMail accounts can't link.
+> - The legacy Fitbit HRV page gives 30 Oct 2026 as the turn-off date; Google's Health page says 2 Nov.
+>
+> Details: [[13-team/cto-steal-file|CTO steal file]] §H.
+
 - **The Fitbit Web API was turned off on 2 Nov 2026** (support ended 30 Sep). Old endpoints return `410 Gone`. Every user must re-consent on the **Google Health API**.
 - **Gating on the Google Health API** (Google's pages, opened 2026-11-04):
   - "Most scopes … are restricted".
@@ -92,7 +102,7 @@ The CTO seat's knowledge base. It covers what the science actually supports, wha
   - Breakpoint delivery cuts frustration (Iqbal & Bailey 2008).
   - Interrupted people work faster but report more stress (Mark 2008).
   - Receptivity models deployed in the wild improved response by **up to 40%** over random timing (Mishra 2021).
-- **Closest prior art: Kaur et al., CHI 2020 (Microsoft).** A 3-week field study (n = 25) predicted **continue / transition / break** from affect, workstation and task data. Users rated break timing **77%** well-timed.
+- **Closest prior art: Kaur et al., CHI 2020 (Microsoft).** Three weeks of workstation, affect and task data from 25 workers built models that predict **continue / transition / break**. In a **three-day** deployment in week four, users rated the timing of break suggestions **77%** well-timed (transitions 86%). The heuristic control condition was there to rule out novelty, not to compare: the authors say "our goal was not to compare the two conditions". So treat 77% as a feasibility benchmark from a short deployment, not a bar to beat. *(Corrected 2026-11-05 after the CSO checked the paper.)*
 - **Adaptive vs fixed breaks:** no RCT shows adaptive timing beats a fixed schedule on cognitive performance. Fixed microbreaks even reduced discomfort more (McLean 2001). JITAI effects on wellbeing are small (g = 0.15, 23 studies). **Our pilot tests an open question.** Frame it as better-timed and more acted-on without hurting output, not as "smarter".
 
 ## 4. LLM health agents
@@ -177,7 +187,7 @@ The CTO seat's knowledge base. It covers what the science actually supports, wha
   - **micro-randomisation** (suggest vs don't at each eligible moment), for proximal effects.
 - **Practice effects dominate repeated tasks** (d = 0.36–1.19, Bartels 2010). Use 2–3 familiarisation sessions, counterbalance order, and model the session number. The 3-minute PVT-B stays sensitive to sleep loss.
 - **Pre-register** the primary outcome, analysis and stopping rule (Nosek 2018). Report effect sizes with confidence intervals and call it **feasibility and estimation**.
-- **It can show:** sync uptime, the share of suggestions delivered, the abstention rate, perceived timing (benchmark: Kaur's 77%), safety, the false-alarm rate, and within-person effect sizes and spread.
+- **It can show:** sync uptime, the share of suggestions delivered, the abstention rate, perceived timing (Kaur's 77% from a 3-day deployment is a feasibility benchmark, not a bar), safety, the false-alarm rate, and within-person effect sizes and spread.
 - **It can't show:** better learning or grades, generalisation beyond Columbia classmates, or anything about athletes unless athletes enrol.
 
 ## Sources (accessed 2026-11-04)

@@ -42,6 +42,7 @@ updated: 2026-10-26T20:00:00Z
 ## For us ^[inferred]
 
 - Lightning-pitch hook candidate: "It noticed I'd been switching apps every 40 seconds for 20 minutes after a 5-hour night, and suggested a walk. My next quiz score went back up."
+  - **⚠ Overclaim, flagged 2026-11-05 by the CEO, CMO and CSO seats.** "Score went back up" implies a performance gain. Our evidence shows breaks reduce fatigue, but the effect on demanding cognitive tasks is null (d = −.09; [[12-research/science-and-tech-evidence|Science and tech evidence]] §1), and a pilot can't show it. Suggested replacement, for the team to lock: "It noticed I'd been switching apps every 40 seconds for 20 minutes after a 5-hour night, and suggested a walk, with its reasons and how sure it was. When it didn't have enough data, it said so." Results are quoted only with their n, after the CSO's claims audit.
 - Demo path: a live study session, then a suggestion with its reason and sources, then a follow-up task. Fallback: a screen recording of the same path on synthetic data.
 - Poster: the 5-stage diagram from [[07-backend/system-architecture|System architecture]] and the results from the [[12-research/evaluation-plan|evaluation plan]].
 
