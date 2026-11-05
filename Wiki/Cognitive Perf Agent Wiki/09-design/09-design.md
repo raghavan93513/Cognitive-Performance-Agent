@@ -9,17 +9,18 @@ lifecycle: draft
 lifecycle_changed: 2026-10-26
 tier: core
 created: 2026-10-26T20:00:00Z
-updated: 2026-11-05T02:10:00Z
+updated: 2026-11-05T21:00:00Z
 ---
 
 # 09 · Design
 
 > **Answers:** How it looks, feels and earns trust.
 
-**Status (2026-11-04):** No screens yet. The design toolkit is ready: a quality bar with the U1–U8 rubric, `/uiux`, `/mockup`, `/crit`, `/teardown` and `tools/qa/device-walk.mjs`.
+**Status (2026-11-05):** The landing page is live at https://halftime-study.vercel.app/ (a demo with sample data, not indexed). The suggestion card is at round 3 (Island + Forecast). The design toolkit is ready: a quality bar with the U1–U8 rubric, `/uiux`, `/mockup`, `/crit`, `/teardown`, `tools/qa/device-walk.mjs` and `tools/qa/perf-scroll.mjs`.
 
 ## Pages
 
+- [[09-design/landing-page|Landing page (Halftime)]] — live on Vercel: its sections, the team's picks, rounds 1–11, hosting, performance, and the claims still to fix
 - [[09-design/ui-ux-quality-bar|UI and UX quality bar]] — the checklist and U1–U8 rubric every screen passes
 - [[09-design/design-stack-and-resources|Design stack and resources]] — which libraries, AI design skills and inspiration sites we use or skip, and why
 - `design/PRODUCT.md` (in the repo, outside the wiki) — the one-page design brief every design skill reads first

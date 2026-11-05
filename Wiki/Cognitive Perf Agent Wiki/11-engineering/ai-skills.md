@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-11-04
 tier: supporting
 created: 2026-11-04T22:40:00Z
-updated: 2026-11-05T00:10:00Z
+updated: 2026-11-05T21:00:00Z
 ---
 
 # AI Skills Toolkit
@@ -48,6 +48,22 @@ The method comes from Garry Tan's gstack (MIT) for decide, plan-review, checkpoi
 ## Design QA tool
 
 `node tools/qa/device-walk.mjs --url=<path> [--root=<folder>] [--devices=iphone,iphone-se,iphone-max,laptop,laptop-small] [--steps=<json>]` walks a local page per device and saves screenshots plus visible text. It runs automatic UI checks on every shot: bad text (NaN/undefined), sideways overflow, clipped text, tap targets, AA contrast, alt text, unnamed controls and tiny text. On iPhone sizes it also checks the viewport meta, disabled zoom, and inputs under 16 px. It's **Chrome emulating iPhones**, so check WebKit-only behaviour in Safari on the iOS Simulator. It needs Node 22+ and Chrome. See `tools/qa/steps-example.json`. `/crit`, `/mockup` and `/icp test` use it. Tested 2026-11-04 on a page with planted defects (all seven caught) and a clean page (no false alarms). ^[inferred]
+
+**Added 2026-11-05/06 for the landing build:**
+- more presets: `phone-320`, `iphone-landscape`, `fold-narrow`, `fold-cover`, `fold-open`, `pixel-fold-open`, `ipad`, `desktop`, and `og` for link-preview cards;
+- a `{"resize": [w, h]}` step for a fold opening or a phone rotating;
+- `--reduce=1` for reduced motion;
+- SVG text measured at its real on-screen size.
+
+One limit: clicks only find elements already on screen, so add a `scrollTo` before clicking a button below the fold.
+
+**Smoothness profiler.** `node tools/qa/perf-scroll.mjs --url=<path> --root=<folder> --device=iphone|laptop [--cpu=4] [--runs=2]` scrolls the whole page and taps the demo on a slowed CPU. It reports:
+- frame times;
+- long tasks;
+- layouts, style recalcs, paints and script time (from Chrome's counters and trace);
+- tap latency (Event Timing).
+
+Compare before and after a change; headless numbers are relative, not a real phone. Used on [[09-design/landing-page]].
 
 ## AI advisor seats (CEO, CTO, CMO, CSO, UIUX)
 

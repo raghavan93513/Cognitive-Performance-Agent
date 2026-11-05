@@ -1,6 +1,6 @@
 ---
 title: Hot Cache
-updated: 2026-11-05T06:30:00Z
+updated: 2026-11-05T21:00:00Z
 ---
 
 # Hot Cache
@@ -9,6 +9,20 @@ updated: 2026-11-05T06:30:00Z
 
 ## Recent Activity
 
+- [2026-11-05] **The Halftime landing page is live** at https://halftime-study.vercel.app/. It's a demo with sample data, not indexed. See [[09-design/landing-page]].
+  - **Words:** rebuilt over 11 rounds from five ICP tests (teach-back ×2, the "Three steps" section with the CMO, moments, hero) and two boardrooms (privacy blanks; leading with late night).
+  - **Team picks:**
+    - Heramb chose "How it works" direction A, "The thread", played by scroll.
+    - Heramb chose the trust sections as "Mix: E then D": a laptop X-ray switch, then scroll-played honesty cards and joining ticks.
+  - **Built for every screen:** 13 sizes from a 280 px Fold to desktop. Labels stay at least 12.3 px on screen.
+  - **Hosted on Vercel**, with a strict CSP.
+  - **Made smooth:**
+    - Scroll layouts fell from ~700 to ~104, and paints from 1,047 to 196.
+    - In Safari's engine (iOS 26.5 simulator), the page's frame code fell by 61%.
+    - A Safari-only pill overflow was fixed.
+    - Not checked on a physical iPhone.
+
+  Session: [[25-journal/2026-11-05-landing-build-host-smooth]].
 - [2026-11-05] **Suggestion card, round 3: Island + Forecast.** Round 1 (calm cards) was rejected as too plain; from round 2 the team picked the Island, and from round 1 the B Forecast line. The UIUX seat combined them: a Dynamic-Island pill speaks once, the session line shows where a 5-minute walk fits before the next class, and accepting turns the pill into a live countdown. Seven states on three iPhone sizes, all checks pass. Files in `design/mockups/suggestion-card-v3/`. Next: `/icp` and `/crit`, then the CMO locks the words.
 - [2026-11-05] **Pre-build study by the CEO, CTO, CMO and CSO, in parallel.** Each wrote a steal file from the steal library plus live research; the synthesis is [[13-team/pre-build-briefing]]. Top unknowns:
   - **IRB:** Columbia's policy exempts only *anonymous*, non-internet course exercises, so ask course staff by Nov 7.
@@ -39,6 +53,14 @@ updated: 2026-11-05T06:30:00Z
 
 ## Active Threads
 
+- **Fix the landing page's false or unconfirmed claims before sharing the link:**
+  - "never tells your … school";
+  - "Fitbit, Oura or WHOOP" (only Fitbit is confirmed);
+  - 7 vs 14 learning nights;
+  - the unscoped Late night and After practice modes;
+  - the unnamed counselor.
+
+  Then lift `noindex`. Also try the page on a real iPhone. See [[09-design/landing-page]].
 - **Build the synthetic-data generator.** First milestone is one sample day for the Nov 6 proposal slide. See [[05-data/synthetic-data-generator]].
 - **Proposal prep, due Nov 6** (design studio Oct 30). Checklist on [[30-course/deliverables/part-2-proposal-presentation]].
 - **Decide scope.** Lean desktop pilot or production plan. The course readings lean towards the lean choices: Postgres first, SQL retrieval before pgvector. See [[24-synthesis/design-comparison]].

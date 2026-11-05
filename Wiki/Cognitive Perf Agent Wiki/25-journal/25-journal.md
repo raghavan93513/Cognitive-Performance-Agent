@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-10-26
 tier: core
 created: 2026-10-26T20:00:00Z
-updated: 2026-10-26T20:00:00Z
+updated: 2026-11-05T21:00:00Z
 ---
 
 # 25 · Journal
@@ -35,4 +35,5 @@ updated: 2026-10-26T20:00:00Z
 - [[25-journal/2026-11-05-icp-cmo-three-steps]]: ICP + CMO on the 'Three steps' section (clear not amazing: simple 7.8, amazing 5.2, 5 MEH; step 3 contradicts itself; CMO: not sufficient, recommends option B)
 - [[25-journal/2026-11-05-icp-moments]]: 'When is it?' moments demo (1 I'D USE IT, Sam's first; 4 MEH, 0 QUIT; overall 5.4→6.0, useful 4.6→6.0; 4 of 5 chose Late night, nobody chose Afternoon)
 - [[25-journal/2026-11-05-boardroom-late-night-lead]]: CEO, CMO, CTO, CSO on leading with late night (all four yes, on the sleep evidence; typed commitment, no-watch card, T8 escalation, outcome re-aimed; chair: night only, P = 0.70 by Dec 4, After practice gated on Dec 1; 3 team decisions)
+- [[25-journal/2026-11-05-landing-build-host-smooth]]: landing rounds 9–11 (13-size audit and fixes, readable labels everywhere, live on Vercel at halftime-study.vercel.app, scroll layouts ~700→~104, Safari frame code −61%, Safari pill overflow fixed; physical iPhone not checked)
 - [[25-journal/2026-11-05-icp-hero]]: the landing hero (4 MEH, 1 I'D USE IT; clarity 8.0; headline landed for 1 of 5, 3 rewrote it as 'Push on, or stop?'; 5 of 5 lost at '50 min to 1:30' and '80 min to close'; 3 bugs fixed in v7)

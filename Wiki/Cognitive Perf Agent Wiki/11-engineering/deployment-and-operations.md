@@ -19,12 +19,21 @@ lifecycle: draft
 lifecycle_changed: 2026-10-26
 tier: peripheral
 created: 2026-10-26T19:30:00Z
-updated: 2026-10-26T19:30:00Z
+updated: 2026-11-05T21:00:00Z
 ---
 
 # Deployment and Operations
 
 This page comes only from [[31-decks/alexa-kafka-system-design|Alexa's design doc]] (§5.1, §12–14). Raghavan's deck stops at the pilot and does not cover operations.
+
+## What's live now (2026-11-05)
+
+- **The landing page** is on Vercel at https://halftime-study.vercel.app/ (project `halftime-study`). It's static: `site/` with no build step, deployed with the Vercel CLI (Heramb, "Yes, use the CLI").
+- **Headers** (`site/vercel.json`): a strict CSP, HSTS, nosniff, a referrer policy and a permissions policy. `noindex` stays on until the team approves the page's claims.
+- **Secrets:** `vercel link` writes a sign-in token to `site/.env.local`. Delete it; `site/.vercelignore` and `site/.gitignore` keep `.env*` and `.vercel` out of uploads and git.
+- **Runbook:** `tools/site/README.md` covers deploying, local checks with the same headers (`tools/site/serve.mjs`), the 13-size audit and the smoothness check.
+
+Everything below is Alexa's plan for the product itself, which isn't built yet. See also [[09-design/landing-page]]. ^[inferred]
 
 ## Environments
 
