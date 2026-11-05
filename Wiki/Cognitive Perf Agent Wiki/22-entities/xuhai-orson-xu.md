@@ -23,5 +23,5 @@ Co-instructor of [[30-course/30-course|BINF 4070]].
 
 - **Area:** HCI, human-AI interaction and health.
 - **Affiliation:** Department of Biomedical Informatics, Columbia University Irving Medical Center.
-- **Contact:** xx2489@columbia.edu · homepage: <https://orsonxu.com>
+- **Homepage:** <https://orsonxu.com>
 - Likely leads the HCI, trust and evaluation material, e.g. [[30-course/weeks/week-08-hci-interface-trust-uncertainty|week 8]]. Expect sharp questions on our interface and on user evaluation. ^[inferred]
