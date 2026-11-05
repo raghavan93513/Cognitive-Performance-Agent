@@ -7,102 +7,96 @@ This project is mainly for Students and Athletes, answering questions like "Shou
 ```mermaid
 flowchart TD
 
-    subgraph DATA["1. Inputs"]
+    subgraph INPUTS["1. Inputs"]
         CAL["Calendar"]
         WATCH["Watch"]
         LAP["Laptop"]
-        TASK["Tasks"]
-        FEED["Feedback"]
+        TASK["Study Tasks"]
+        FEEDBACK["Feedback"]
     end
 
     subgraph APPS["2. Apps"]
-        MOB["Mobile App"]
+        MOBILE["Mobile App"]
         WEB["Web App"]
-        DESK["Desktop App"]
+        DESKTOP["Desktop App"]
     end
 
-    subgraph CORE["3. Backend"]
+    subgraph BACKEND["3. Backend"]
         API["FastAPI"]
-        AUTH["Auth"]
-        DB["Supabase"]
-        Q["Queue"]
-        WORK["Workers"]
-        FEAT["Features"]
+        AUTH["Supabase Auth"]
+        DB[("Supabase Database")]
+        QUEUE["Job Queue"]
+        WORKER["Workers"]
+        FEATURES["Features"]
     end
 
-    subgraph AGENTS["4. Multi-Agent Layer"]
-        ORCH["Orchestrator"]
-        SIG["Signal Agent"]
-        PERF["Performance Agent"]
-        EVD["Evidence Agent"]
-        PLAN["Planning Agent"]
+    subgraph AGENTS["4. Multi-Agent Reasoning"]
+        SIGNAL["Signal Agent"]
+        EVIDENCE["Evidence Agent"]
+        PLANNER["Planning Agent"]
     end
 
     subgraph DECISION["5. Decision Layer"]
-        EVAL["Evaluation"]
         POLICY["Policy Engine"]
-        REC["Recommendation"]
-        EXPLAIN["Explanation"]
+        EVAL["Evaluation"]
+        ADVICE["Advice + Reason"]
     end
 
-    subgraph LOOP["6. Closed Loop"]
-        SHOW["Show Advice"]
-        CHOICE["User Choice"]
-        ACT["Action Log"]
-        OUT["Outcome Check"]
-        LEARN["Learning Loop"]
+    subgraph LOOP["6. Feedback Loop"]
+        DISPLAY["Show Advice"]
+        CHOICE["Student Choice"]
+        ACTION["Action Log"]
+        OUTCOME["Outcome Check"]
+        LEARN["Evidence Update"]
     end
 
-    subgraph EXTRA["7. Optional Extensions"]
-        COMM["Community"]
+    subgraph EXT["7. Optional Extensions"]
+        OPTIONAL["Opt-in Features"]
+        COMMUNITY["Peer Community"]
         HUMAN["Human Support"]
-        POINTS["Points / Leaderboard"]
+        POINTS["Points + Leaderboard"]
+        OPTIONAL --> COMMUNITY
+        OPTIONAL --> HUMAN
+        OPTIONAL --> POINTS
     end
 
     CAL --> API
-    WATCH --> MOB
-    LAP --> DESK
+    WATCH --> MOBILE
+    LAP --> DESKTOP
+    TASK --> MOBILE
     TASK --> WEB
-    FEED --> MOB
-    FEED --> WEB
+    FEEDBACK --> MOBILE
+    FEEDBACK --> WEB
 
-    MOB --> API
-    WEB --> API
-    DESK --> API
+    DESKTOP --> API
+    MOBILE <--> API
+    WEB <--> API
 
-    AUTH --> API
+    AUTH -.-> API
     API --> DB
-    API --> Q
-    Q --> WORK
-    DB --> WORK
-    WORK --> FEAT
-    FEAT --> DB
+    API --> QUEUE
+    QUEUE --> WORKER
+    WORKER --> FEATURES
+    FEATURES --> DB
 
-    API --> ORCH
-    FEAT --> ORCH
-    DB --> EVD
+    API -->|Study checkpoint| SIGNAL
+    API -->|Study checkpoint| EVIDENCE
+    DB -.-> SIGNAL
+    DB -.-> EVIDENCE
+    SIGNAL --> PLANNER
+    EVIDENCE --> PLANNER
 
-    ORCH --> SIG
-    SIG --> PERF
-    PERF --> EVD
-    EVD --> PLAN
+    PLANNER --> POLICY
+    DB -.-> POLICY
+    POLICY --> EVAL
+    EVAL --> ADVICE
 
-    PLAN --> EVAL
-    EVAL --> POLICY
-    POLICY --> REC
-    REC --> EXPLAIN
-
-    EXPLAIN --> SHOW
-    SHOW --> CHOICE
-    CHOICE --> ACT
-    ACT --> OUT
-    OUT --> LEARN
+    ADVICE --> DISPLAY
+    DISPLAY --> CHOICE
+    CHOICE --> ACTION
+    ACTION --> OUTCOME
+    OUTCOME --> LEARN
     LEARN --> DB
 
-    WEB -.-> COMM
-    WEB -.-> HUMAN
-    WEB -.-> POINTS
-    MOB -.-> COMM
-    MOB -.-> HUMAN
-    MOB -.-> POINTS
+    DISPLAY -.-> OPTIONAL
 ```
