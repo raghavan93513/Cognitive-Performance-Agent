@@ -2,10 +2,18 @@
    screens, time on each, taps, scrolls, what was on screen and for how long, pointer and touch movement, idle and
    tab switches, device, speed and errors. The server adds the IP address and approximate location. The footer says
    so, and the You tab has an off switch: nothing is sent once someone opts out.
-   Events are batched and sent in the background (sendBeacon), so the app never waits on analytics.
+   Events are batched and sent in the background, so the app never waits on analytics: one small request about every
+   15 s per visitor (50 people at once ≈ 3 requests a second), retried with backoff if the sheet is busy, and handed
+   to sendBeacon when the page goes away.
    Every visitor gets an id (this browser) and every tab a session id, so many people at once stay separate. */
 (() => {
   "use strict";
+  // ?preview=1 is the admin dashboard showing a screen under its tap heat map: record nothing
+  if (/[?&]preview=1(&|$)/.test(location.search)) {
+    const no = () => {};
+    window.HT = { screen: no, event: no, identify: no, optOut: no, optIn: no, isRecording: () => false, watch: no, flush: no };
+    return;
+  }
   const ENDPOINT = "/api/collect";
   const store = {
     get(k) { try { return localStorage.getItem(k); } catch { return null; } },
@@ -20,7 +28,7 @@
   const consent = () => true; // recording is on by default; opting out (HT.optOut) is the only way to stop it
   const page = location.pathname.replace(/\.html$/, "").replace(/\/$/, "/") || "/";
   let seq = +(store.sget("ht-seq") || 0);
-  let screen = "", screenStart = performance.now(), queue = [], maxScroll = 0;
+  let screen = "", screenStart = performance.now(), queue = [], maxScroll = 0, lastEv = 0;
 
   // ---------- device
   const ua = navigator.userAgent;
@@ -36,23 +44,59 @@
   // ---------- queue and send
   function ev(type, data = {}) {
     if (optedOut()) return;
-    seq++; store.sset("ht-seq", String(seq));
+    seq++; store.sset("ht-seq", String(seq)); lastEv = performance.now();
     queue.push({
       t: new Date().toISOString(), seq, visitor, session, name: name(), device, os, browser, screen: scr, viewport: vp(),
       event: type, page, state: screen, target: data.target || "", x: data.x ?? "", y: data.y ?? "",
       scroll: data.scroll ?? "", dwell: data.dwell ?? "", value: data.value ?? "", ref: document.referrer ? new URL(document.referrer).host : "",
       extra: data.extra ? JSON.stringify(data.extra).slice(0, 1500) : "",
     });
-    if (queue.length >= 40) flush();
+    if (queue.length >= 60) flush();
   }
+  // a batch of whole events under ~56 KB (fetch keepalive and sendBeacon both cap a body at 64 KB)
+  // a batch of whole events under ~56 KB (a page may only have 64 KB of "send even after the tab closes" requests
+  // open at once, and sendBeacon and keepalive fetches share that allowance)
+  function take(list) {
+    const batch = []; let size = 20;
+    while (list.length && batch.length < 150) {
+      const n = JSON.stringify(list[0]).length + 1;
+      if (batch.length && size + n > 56000) break;
+      size += n; batch.push(list.shift());
+    }
+    return batch;
+  }
+  const send = (body, keepalive) => fetch(ENDPOINT, { method: "POST", body, headers: { "content-type": "application/json" }, keepalive });
+  let inflight = null, backoff = 0, tick = 0;
   function flush(final) {
-    if (!queue.length || optedOut() || !consent()) return;
-    const batch = queue.splice(0, 200), body = JSON.stringify({ events: batch });
-    let sent = false;
-    if (final || navigator.sendBeacon) { try { sent = navigator.sendBeacon(ENDPOINT, new Blob([body], { type: "application/json" })); } catch {} }
-    if (!sent) { fetch(ENDPOINT, { method: "POST", body, headers: { "content-type": "application/json" }, keepalive: true }).catch(() => { queue.unshift(...batch); }); }
+    if (optedOut() || !consent()) return;
+    if (final) {
+      // the page is going away: hand everything not yet saved to the browser, including a batch still on its way.
+      // The database stores each event once (session + seq), so sending one twice is harmless.
+      const all = (inflight || []).concat(queue); queue = [];
+      while (all.length) {
+        const body = JSON.stringify({ events: take(all) }); let ok = false;
+        try { ok = !!navigator.sendBeacon && navigator.sendBeacon(ENDPOINT, new Blob([body], { type: "application/json" })); } catch {}
+        if (!ok) { try { send(body, true).catch(() => {}); } catch {} }
+      }
+      return;
+    }
+    if (!queue.length || inflight) return;
+    const batch = take(queue); inflight = batch;
+    // an ordinary request while the page is open, so the "after close" allowance stays free for the final send
+    send(JSON.stringify({ events: batch }), false)
+      .then((r) => { if (!r.ok && r.status !== 400) throw new Error(String(r.status)); backoff = 0; })
+      .catch(() => { // the database was busy or the network dropped: keep the events and try again later
+        queue.unshift(...batch);
+        if (queue.length > 1500) queue.splice(0, queue.length - 1500);
+        backoff = Math.min(3, backoff + 1);
+      })
+      .finally(() => { if (inflight === batch) inflight = null; });
   }
-  setInterval(() => flush(), 5000);
+  setInterval(() => {
+    // a heartbeat while the page is open, so "live now" counts people reading without tapping
+    if (document.visibilityState === "visible" && performance.now() - lastEv > 45000) ev("hb");
+    if (++tick % (1 << backoff) === 0) flush();
+  }, 15000); // 15 s, then 30, 60, 120 s while failing
 
   // ---------- screens (the app calls HT.screen("walk") on every state change) and time on each
   function setScreen(name, extra) {
@@ -87,14 +131,29 @@
   }, { capture: true, passive: true });
 
   // ---------- scroll depth (milestones) and scroll speed
+  // The page's height is cached, not read per scroll event: reading scrollHeight there can force a layout in the middle
+  // of a scroll. It's re-measured when the page or window changes size (a ResizeObserver runs right after layout, so
+  // its read is free), and once more if the page has grown past the cached height.
   let lastScrollY = scrollY, lastScrollT = performance.now(), milestones = new Set();
+  let scrollH = 0, measuredAt = 0;
+  const measureScroll = () => { scrollH = document.documentElement.scrollHeight - innerHeight; measuredAt = performance.now(); };
+  measureScroll();
+  addEventListener("resize", measureScroll, { passive: true });
+  addEventListener("load", measureScroll);
+  if ("ResizeObserver" in window) {
+    const ro = new ResizeObserver(measureScroll); ro.observe(document.documentElement);
+    const body = () => { if (document.body) ro.observe(document.body); };
+    if (document.body) body(); else document.addEventListener("DOMContentLoaded", body);
+  }
   addEventListener("scroll", () => {
-    const h = document.documentElement.scrollHeight - innerHeight;
-    const pct = h > 0 ? Math.round((scrollY / h) * 100) : 100;
+    const y = scrollY;
+    if (y > scrollH && performance.now() - measuredAt > 500) measureScroll(); // grown since (rubber-banding past the end doesn't re-measure every frame)
+    const h = scrollH;
+    const pct = h > 0 ? Math.round((y / h) * 100) : 100;
     if (pct > maxScroll) maxScroll = pct;
     for (const m of [25, 50, 75, 90, 100]) if (pct >= m && !milestones.has(screen + m)) { milestones.add(screen + m); ev("scroll_depth", { scroll: m }); }
     const now = performance.now();
-    if (now - lastScrollT > 1000) { ev("scroll", { scroll: pct, value: Math.round(Math.abs(scrollY - lastScrollY) / ((now - lastScrollT) / 1000)) + "px/s" }); lastScrollY = scrollY; lastScrollT = now; }
+    if (now - lastScrollT > 1000) { ev("scroll", { scroll: pct, value: Math.round(Math.abs(y - lastScrollY) / ((now - lastScrollT) / 1000)) + "px/s" }); lastScrollY = y; lastScrollT = now; }
   }, { passive: true });
 
   // ---------- attention: which tracked parts were on screen (at least half visible), and for how long

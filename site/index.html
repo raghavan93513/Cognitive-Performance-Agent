@@ -126,7 +126,9 @@ h2{font:650 clamp(1.9rem,3.6vw,2.75rem)/1.04 var(--ui);letter-spacing:-.035em;te
 /* how it works: direction A, "The thread" (team pick, Heramb 2026-11-05). One line becomes the whole story;
    scroll plays it (seek(p) of the section's scroll), ?hw=0.72 freezes a frame, reduced motion snaps per step. */
 .hw-sub{font:400 1.0625rem/1.5 var(--ui);color:var(--ink2);margin-top:10px}
-.hw-scrolly{height:420vh;height:420svh;position:relative;margin-top:8px}
+/* pin lengths: on touch a flick travels 1-3 screens, so the old 420svh / 230svh pins held the page still for several flicks
+   and felt stuck; 300svh / 170svh play each step in about half a screen of finger travel. Mouse wheels get shorter ones. */
+.hw-scrolly{height:300vh;height:300svh;position:relative;margin-top:8px}
 .hw-fixed .hw-scrolly{height:100vh;height:100svh}
 @media (hover:hover) and (pointer:fine){.hw-scrolly{height:260vh;height:260svh}.hsty{height:160vh;height:160svh}}
 .hw-pin{position:sticky;top:0;height:100vh;height:100svh;display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1fr);gap:48px;align-items:center;padding-block:20px}
@@ -197,7 +199,7 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
 .sees .counter{opacity:1;transform:none}
 .sees .list.yes li[data-r]{background:rgba(142,214,188,.22);color:var(--ink)}
 .sees .list.no li[data-r]{background:var(--paper2);color:var(--ink)}
-.hsty{height:230vh;height:230svh;position:relative;margin-top:16px}
+.hsty{height:170vh;height:170svh;position:relative;margin-top:16px}
 .hpin{position:sticky;top:0;height:100vh;height:100svh;display:flex;flex-direction:column;justify-content:center}
 .hsty .honest{margin-top:0}
 .day{margin-top:16px;max-width:400px}.day svg{width:100%;height:auto;display:block;overflow:visible}.day text{font-family:var(--mono)}
@@ -670,8 +672,11 @@ function seek(p) {
   const a = Math.min(3, Math.floor(p * 4));
   caps.forEach((li, i) => li.classList.toggle("on", i === a));
 }
-const scrolly = document.querySelector(".hw-scrolly");
-const progress = () => { const r = scrolly.getBoundingClientRect(), tot = r.height - innerHeight; return tot > 0 ? clamp(-r.top / tot) : 1; };
+const scrolly = document.querySelector(".hw-scrolly"), pin = scrolly.querySelector(".hw-pin");
+// the pinned stretch is the section's height minus the pin's (100svh). innerHeight would be wrong on iPhones: it grows and
+// shrinks as Safari's address bar slides, and every slide made the drawing jump a few percent mid-scroll.
+const pinH = () => pin.offsetHeight || innerHeight;
+const progress = () => { const r = scrolly.getBoundingClientRect(), tot = r.height - pinH(); return tot > 0 ? clamp(-r.top / tot) : 1; };
 let lastP = -1;
 // mouse wheels move the page in 100 px jumps: on fine pointers the drawing eases toward the scroll position
 // (time constant 90 ms) instead of snapping a step per notch. Touch and reduced motion follow the scroll exactly.
@@ -691,7 +696,7 @@ function frame(q) {
   shown = target = p;
   p = Math.round(p * 4000) / 4000; if (p === lastP) return; lastP = p; seek(p);
 }
-caps.forEach((li, i) => li.addEventListener("click", () => { const tot = scrolly.offsetHeight - innerHeight; scrollTo({ top: scrolly.offsetTop + tot * (i / 4 + .22) }); }));
+caps.forEach((li, i) => li.addEventListener("click", () => { const tot = scrolly.offsetHeight - pinH(); scrollTo({ top: scrolly.offsetTop + tot * (i / 4 + .22) }); }));
 if (fixed != null) document.documentElement.classList.add("hw-fixed");
 else jobs.push({ read: progress, write: frame });
 // keep every label at 12 px or more on screen: measure the drawing's scale, enlarge small text, then re-fit
@@ -755,13 +760,15 @@ function seek2(p) {
 function seek3(p) { checks.forEach((li, i) => li.classList.toggle("ok", p > (i + 1) / 5)); }
 const hsty = $("tr-hsty"), ask = $("tr-ask2");
 // when the two cards are taller than the screen (short phones, landscape), don't pin: play as it scrolls past
-const cards = hsty.querySelector(".honest"), root = document.documentElement;
-const loose = () => cards.offsetHeight > innerHeight - 24;
+const cards = hsty.querySelector(".honest"), root = document.documentElement, hwPin = document.querySelector(".hw-pin");
+// a steady screen height (100svh, the .hw-pin's): innerHeight changes as Safari's address bar slides, which flipped
+// short phones between pinned and loose mid-scroll (the section's height jumped by a screen) and nudged the progress
+const vh = () => (hwPin && hwPin.offsetHeight) || innerHeight;
 // reads only (run before any writes in the frame)
 const read = () => {
-  const lo = loose(), r = hsty.getBoundingClientRect(), ra = ask.getBoundingClientRect(), now = root.classList.contains("tr-loose");
-  const p2 = now ? clamp((innerHeight * .95 - r.top) / (innerHeight * 1.25)) : (r.height - innerHeight > 0 ? clamp(-r.top / (r.height - innerHeight)) : 1);
-  return { lo, now, p2: Math.round(p2 * 2000) / 2000, p3: clamp((innerHeight * .85 - ra.top) / (ra.height * .9)) };
+  const H = vh(), lo = cards.offsetHeight > H - 24, r = hsty.getBoundingClientRect(), ra = ask.getBoundingClientRect(), now = root.classList.contains("tr-loose");
+  const p2 = now ? clamp((H * .95 - r.top) / (H * 1.25)) : (r.height - H > 0 ? clamp(-r.top / (r.height - H)) : 1);
+  return { lo, now, p2: Math.round(p2 * 2000) / 2000, p3: clamp((H * .85 - ra.top) / (ra.height * .9)) };
 };
 let l2 = -1, l3 = -1;
 const FINE2 = matchMedia("(hover: hover) and (pointer: fine)").matches && !reduce;

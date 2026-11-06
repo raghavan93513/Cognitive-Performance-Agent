@@ -122,8 +122,12 @@ h1{font:650 2.125rem/1.05 var(--ui);letter-spacing:-.035em;margin-top:10px;text-
 .agenda li span:not(.at){font-size:.8125rem;color:var(--muted)}
 .agenda li.done b{color:var(--muted);font-weight:500}
 .agenda li.now{background:rgba(142,214,188,.25);border-radius:12px;padding:10px 8px;margin:0 -8px}
-.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 64px);transform:translate(-50%,-10px);opacity:0;background:var(--ink);color:var(--paper);border-radius:16px;padding:12px 16px;font-size:.9375rem;transition:opacity .2s ease,transform .2s var(--ease);pointer-events:none;max-width:calc(100% - 32px)}
+.toast{position:fixed;z-index:5;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);transform:translate(-50%,10px);text-align:center;opacity:0;background:var(--ink);color:var(--paper);border-radius:16px;padding:12px 16px;font-size:.9375rem;transition:opacity .2s ease,transform .2s var(--ease);pointer-events:none;max-width:calc(100% - 32px)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
+/* the sticky Continue never hides a field for good: focus scrolls fields clear of it, and on very short screens it
+   stays in the flow under the content instead of floating over it */
+html{scroll-padding-top:16px;scroll-padding-bottom:calc(env(safe-area-inset-bottom,0px) + 96px)}
+@media (max-height:600px){.cta{position:static;box-shadow:none}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -139,8 +143,11 @@ h1{font:650 2.125rem/1.05 var(--ui);letter-spacing:-.035em;margin-top:10px;text-
 <script>
 // Steps, in order. #login and #account both lead into #about. Demo only: no real account, nothing connected.
 const ORDER = ["account", "about", "reads", "laptop", "wearable", "permission", "syncing", "data", "calendar", "done"];
-const P = (() => { try { return JSON.parse(localStorage.getItem("ht-profile") || "{}"); } catch { return {}; } })();
-const save = () => { try { localStorage.setItem("ht-profile", JSON.stringify(P)); } catch {} };
+// ?preview=1: the admin heat map shows a setup screen with a sample profile; nothing is saved or recorded
+const PREVIEW = /[?&]preview=1(&|$)/.test(location.search);
+const P = PREVIEW ? { name: "Maya", school: "Columbia", role: "student", device: "oura", paired: true, calProvider: "google" }
+  : (() => { try { return JSON.parse(localStorage.getItem("ht-profile") || "{}"); } catch { return {}; } })();
+const save = () => { if (PREVIEW) return; try { localStorage.setItem("ht-profile", JSON.stringify(P)); } catch {} };
 const DEV = {
   none: { name: "No wearable", model: "", acct: "", via: "", glyph: "laptop" },
   fitbit: { name: "Fitbit", model: "Fitbit Air", acct: "Google", via: "Google Health", glyph: "band" },
@@ -205,14 +212,14 @@ const S = {
     <p class="eyebrow">Laptop app · 4 of 9</p><h1>Your laptop is paired.</h1>
     <div class="card paired"><span class="ok" aria-hidden="true"></span><div><b>MacBook Air</b><br><span class="hint">Paired just now · sample data</span></div></div>
     <p class="lede">It counts study time and app switches by kind. You can pause it from the menu bar.</p>
-    <div class="spacer"></div><button class="cta" data-next type="button" data-track="laptop continue">Continue</button></section>`
+    <div class="spacer"></div><button class="cta" data-next type="button" data-track="laptop continue">${P.done ? "Back to Halftime" : "Continue"}</button></section>`
     : `<section class="step" data-attn="laptop">
     <p class="eyebrow">Laptop app · 4 of 9</p><h1>Add the small laptop app.</h1>
     <p class="lede">On your laptop, open <b>halftime.app/pair</b> and type this code.</p>
     <p class="code" aria-label="Pairing code H T 4 8 2 1">HT-4821</p>
     <p class="hint" style="margin-top:10px;text-align:center">Demo: tap below to pretend it’s paired.</p>
     <div class="spacer"></div><button class="cta" id="pair" type="button" data-track="pair laptop">I’ve entered the code</button>
-    <button class="ghost" data-next type="button" data-track="skip laptop">Do this later</button></section>`,
+    <button class="ghost" data-next type="button" data-track="skip laptop">${P.done ? "Back to Halftime" : "Do this later"}</button></section>`,
   wearable: () => `<section class="step" data-attn="wearable">
     <p class="eyebrow">Wearable · 5 of 9</p><h1>Which watch or ring do you wear?</h1>
     <p class="lede">Any of these work in the demo. No wearable works too: Halftime uses your laptop and calendar.</p>
@@ -315,8 +322,11 @@ view.addEventListener("submit", (e) => {
       box.innerHTML = `<p style="font-weight:600">This phone has ${esc(P.name.split(" ")[0])}’s demo account.</p><p class="hint" style="margin-top:4px">Continue as ${esc(name.split(" ")[0])}? That starts a new demo account and replaces it.</p>
         <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button type="button" class="chip" aria-pressed="true" id="swapyes" data-track="replace account">Continue as ${esc(name.split(" ")[0])}</button><button type="button" class="chip" id="swapno" data-track="keep account">Log in as ${esc(P.name.split(" ")[0])}</button></div>`;
       f.appendChild(box);
+      const below = [document.getElementById("go"), view.querySelector("a.ghost")].filter(Boolean);
+      below.forEach((el) => { el.style.display = "none"; });
       box.querySelector("#swapyes").onclick = () => { f.dataset.replace = "1"; f.requestSubmit ? f.requestSubmit() : f.dispatchEvent(new Event("submit", { cancelable: true })); };
-      box.querySelector("#swapno").onclick = () => { f.querySelector("#name").value = P.name; box.remove(); };
+      box.querySelector("#swapno").onclick = () => { f.querySelector("#name").value = P.name; box.remove(); below.forEach((el) => { el.style.display = ""; }); };
+      box.scrollIntoView({ block: "nearest" });
       return;
     }
     if (P.name && !same) { Object.keys(P).forEach((k) => delete P[k]); } // someone new on this browser: start clean
@@ -328,7 +338,10 @@ view.addEventListener("submit", (e) => {
   }
   if (f.id === "fc") { const v = f.querySelector("#other").value.trim(); if (v) { P.next = v; save(); } next(); }
 });
-view.addEventListener("input", (e) => { if (e.target.id === "name") document.getElementById("go").disabled = !e.target.value.trim(); });
+view.addEventListener("input", (e) => {
+  if (e.target.id === "name") document.getElementById("go").disabled = !e.target.value.trim();
+  if (e.target.id === "other" && e.target.value.trim()) view.querySelectorAll("[data-one=next] [data-chip]").forEach((c) => c.setAttribute("aria-pressed", "false"));
+});
 view.addEventListener("click", (e) => {
   const chip = e.target.closest("[data-chip]");
   if (chip) {
@@ -348,12 +361,13 @@ view.addEventListener("click", (e) => {
   if (e.target.closest("#pair")) { P.paired = true; save(); toast("MacBook Air paired (demo)"); show("laptop"); return; }
   const to = e.target.closest("[data-to]"); if (to) { go(to.dataset.to); return; }
   if (e.target.closest("[data-next]")) {
+    if (cur === "laptop" && P.done) { save(); location.href = "/app"; return; } // came from the app to pair
     if (cur === "reads" && P.sleep === false && !P.device) P.device = "none";
     if (cur === "wearable" && !P.device) { toast("Pick one, or No wearable"); return; }
     if (cur === "calendar") { const v = (document.getElementById("other") || {}).value; if (v && v.trim()) P.next = v.trim(); if (!P.next) P.next = DEMO.nextStop(P.role); }
     save(); next(); return;
   }
-  if (e.target.closest("#open")) { P.done = true; P.signedIn = true; P.created = P.created || new Date().toISOString(); save(); if (window.HT) { HT.event("account_created", { value: P.device, extra: { role: P.role, when: P.when, next: P.next, paired: !!P.paired } }); HT.flush(); } try { localStorage.removeItem("ht-tour-done"); } catch {} location.href = "/app"; } // every new setup ends in the tour
+  if (e.target.closest("#open")) { P.done = true; P.signedIn = true; P.created = P.created || new Date().toISOString(); save(); if (window.HT) { HT.event("account_created", { value: P.device, extra: { role: P.role || "student", when: P.when, next: P.next, paired: !!P.paired } }); HT.flush(); } try { localStorage.removeItem("ht-tour-done"); } catch {} location.href = "/app"; } // every new setup ends in the tour
 });
 back.addEventListener("click", () => history.back());
 addEventListener("popstate", () => show(location.hash.slice(1) || "account"));

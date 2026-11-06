@@ -1,6 +1,6 @@
 ---
 title: Hot Cache
-updated: 2026-11-06T08:15:00Z
+updated: 2026-11-06T10:00:00Z
 ---
 
 # Hot Cache
@@ -9,13 +9,19 @@ updated: 2026-11-06T08:15:00Z
 
 ## Recent Activity
 
+- [2026-11-06] **Analytics now go to Supabase, with an admin page** at https://halftime-study.vercel.app/admin, built like Startup City's.
+  - It shows who's on now, the funnel, the tour, a tap heat map on the real screens, and each visitor's timeline.
+  - It held up with 50 people at once (0 lost events).
+  - A phone QA pass fixed 11 defect groups. The biggest was the no-wearable safety card quoting sleep data.
+
+  See [[25-journal/2026-11-06-demo-app-and-analytics]].
+
 - [2026-11-06] **The demo app has heart data, a dummy calendar, a first-run tour, and a landing comparison chart.** All are live at https://halftime-study.vercel.app/.
   - **Heart data:** sleep, heart rate, resting heart rate and HRV, each against your own usual and shown as context. This is Heramb's decision; the team must confirm it.
   - **Calendar:** a student's day or an athlete's day; the next stop comes from it.
   - **Tour:** runs right after every new setup. A welcome card (the tagline plus your wearable vs study apps vs Halftime) comes first, then 8 spotlight steps on springs.
   - **Analytics:** always on by default, with no pop-up and no setup switch; the You tab can turn it off.
   - **Tested:** 7 devices at once, 0 errors.
-  - **Still open:** the sheet setup (the team).
 
   See [[25-journal/2026-11-06-demo-app-and-analytics]].
 

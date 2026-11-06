@@ -6,11 +6,14 @@
   "use strict";
   // 14 sample nights, Thu Oct 22 to Wed Nov 4: sleep (h), resting heart rate (bpm), overnight HRV (RMSSD, ms).
   // Short nights tend to come with a higher resting rate and a lower HRV, as they do in real data.
+  // when the laptop last saw a study session each night ("" = no session). This is what a person with no wearable has:
+  // the laptop, never sleep. A session still running after midnight counts as a late night.
+  const STUDY_END = ["12:50 am", "1:30 am", "", "", "12:20 am", "11:10 pm", "1:00 am", "12:35 am", "12:55 am", "10:40 pm", "", "10:15 pm", "12:45 am", "1:15 am"];
   const NIGHTS = [
     ["Thu 22", 5.2, 60, 41], ["Fri 23", 4.8, 62, 37], ["Sat 24", 4.2, 64, 33], ["Sun 25", 3.9, 65, 31], ["Mon 26", 5.6, 59, 43],
     ["Tue 27", 6.4, 57, 47], ["Wed 28", 5.1, 60, 40], ["Thu 29", 5.5, 59, 42], ["Fri 30", 5.0, 61, 39], ["Sat 31", 5.8, 58, 44],
     ["Sun 1", 4.6, 63, 35], ["Mon 2", 7.1, 55, 51], ["Tue 3", 5.3, 60, 41], ["Wed 4", 5.2, 61, 38],
-  ].map(([d, sleep, rhr, hrv]) => ({ d, sleep, rhr, hrv }));
+  ].map(([d, sleep, rhr, hrv], i) => ({ d, sleep, rhr, hrv, studyEnd: STUDY_END[i] }));
   const USUAL = { sleep: 7.0, rhr: 55, hrv: 49 }; // the person's own 28-night usual (sample)
 
   // what each wearable reports for HRV (they measure it differently, so the label says which)
@@ -47,6 +50,7 @@
 
   window.HALFTIME_DEMO = {
     NIGHTS, USUAL, HRV_KIND,
+    lateNights: () => NIGHTS.filter((n) => / am$/.test(n.studyEnd)).length, // study sessions past midnight, last 14 nights (laptop)
     today, calendar: (role) => CAL[role === "athlete" ? "athlete" : "student"], week: (role) => WEEK[role === "athlete" ? "athlete" : "student"],
     nextStop: (role) => (CAL[role === "athlete" ? "athlete" : "student"].find((e) => e.state === "next") || {}).stop || "Chem lab",
     PROVIDERS: { google: "Google Calendar", apple: "Apple Calendar", outlook: "Outlook" },

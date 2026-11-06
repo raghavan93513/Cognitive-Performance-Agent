@@ -96,6 +96,25 @@ CSS = r"""
 .paused .slot,.paused .t-slot{opacity:.25}
 .quiet{font:300 4rem/1 var(--ui);letter-spacing:-.05em;color:var(--refill);margin-top:8px}
 @media (prefers-reduced-motion:reduce){.dsheet,.scrim,.htoast{transition:none}}
+/* phone QA pass 2: the moved session line takes its room with it; second-line labels stay on screen; footer gaps;
+   a narrower walk pill; the unpaired-laptop line; a chip tap in See why flashes its row */
+.stack{transition:transform .5s var(--spring),margin-bottom .5s var(--spring)}
+.ticks .t-slot{left:min(81%, calc(100% - 62px))!important}
+.ticks .t-check{left:min(87%, calc(100% - 58px))!important}
+.foot{column-gap:12px}
+.foot button{line-height:1.2}
+.foot button:first-child{text-align:left}
+.foot button:last-child{text-align:right}
+.island.live{width:min(260px,calc(100vw - 24px))}
+.unpaired{display:flex;align-items:center;min-height:44px;margin-top:4px;font:500 .875rem/1.3 var(--ui);color:var(--refill-ink);text-decoration:none}
+.morning .unpaired{display:none}
+.ev .row{border-radius:8px}
+.ev .row.hl{animation:hl 2.2s ease-out}
+@keyframes hl{0%,45%{background:rgba(142,214,188,.3)}100%{background:transparent}}
+.hc h2 .smp{font:500 .75rem/1.3 var(--mono);color:var(--muted);text-align:right}
+.sparkx{display:flex;justify-content:space-between;gap:8px;font:500 .75rem/1 var(--mono);color:var(--muted);margin-top:6px}
+.sparkx .u{color:var(--refill-ink)}
+@media (prefers-reduced-motion:reduce){.stack{transition:none}.ev .row.hl{animation:none;background:rgba(142,214,188,.3)}}
 """
 rep("</style>", CSS + "</style>")
 
@@ -120,7 +139,12 @@ rep('<div class="full" id="full"></div>', '<div class="full" id="full" data-attn
 # ---------- the signed-in profile from setup (name, wearable, athlete)
 rep('const Q = new URLSearchParams(location.search);',
     'const Q = new URLSearchParams(location.search);\n'
-    'const PROFILE = (() => { try { return JSON.parse(localStorage.getItem("ht-profile") || "{}"); } catch { return {}; } })();\n'
+    '// ?preview=1: the admin heat map shows a screen with a sample profile; nothing is saved or recorded\n'
+    'const PREVIEW = Q.get("preview") === "1";\n'
+    'const PROFILE = PREVIEW ? { name: "Maya", done: true, signedIn: true, role: "student", device: "oura", cal: true, calProvider: "google", next: "Chem lab", paired: true }\n'
+    '  : (() => { try { return JSON.parse(localStorage.getItem("ht-profile") || "{}"); } catch { return {}; } })();\n'
+    '// the laptop is the one required source; until it is paired (setup: "Do this later"), the study session is sample data\n'
+    'const PAIRED = PROFILE.paired === true;\n'
     'const SUBJ0 = document.getElementById("subj").innerHTML;')
 rep('  apple: { name: "Apple Watch", short: "Apple Watch", glyph: "watch", via: "through Apple Health", app: "Health", acct: "Apple Health" },',
     '  apple: { name: "Apple Watch", short: "Apple Watch", glyph: "watch", via: "through Apple Health", app: "Health", acct: "Apple Health" },\n'
@@ -140,7 +164,7 @@ rep("const V = {", r"""const V = {
     <div class="acts"><button class="a yes" data-go="escdone2">Pick a time (demo)</button><button class="a no" data-go="escalate">Back</button></div>`,
   escdone2: () => `<div class="status"><span>Halftime · morning</span><span>booked (demo)</span></div>
     <h1 class="q q2">Thursday, 2:00 pm. You're booked.</h1>
-    <p class="why">Sample booking. Halftime won't mention sleep again before then. You can cancel any time.</p>
+    <p class="why">Sample booking. Halftime won't ${dev() ? "mention sleep" : "bring this up"} again before then. You can cancel any time.</p>
     <div class="acts"><button class="a yes" data-go="idle">Done</button><button class="a no" data-go="escalate">Back</button></div>`,
   escnow: () => `<div class="status"><span>Halftime · morning</span><span>you choose</span></div>
     <h1 class="q q2">Talk to someone now</h1>
@@ -187,6 +211,51 @@ rep('wrongtask: () => wrongOk("The apps you were switching between now count as 
 # pause also holds the pill
 rep('document.getElementById("compact").addEventListener("click", () => go("walk"));',
     'document.getElementById("compact").addEventListener("click", () => { if (window.APP && APP.paused()) { APP.toast("Suggestions are paused. Tap Resume suggestions to turn them back on."); return; } go("walk"); });')
+
+# ---------- QA fixes, phone pass 2 (2026-11-07)
+# 1. no wearable: the morning check-in never quotes sleep. It rests on what Halftime has, the laptop's late study
+#    sessions (sample nights in demo-data.js), and says that is all it is based on.
+rep("const V = {", r"""const lapSrc = () => (PAIRED ? "laptop · 1 min ago" : "sample · laptop not paired yet");
+const lateChip = () => chip(1, "late study sessions, laptop" + (PAIRED ? "" : ", sample"));
+const lateN = () => ({ late: window.HALFTIME_DEMO.lateNights(), of: window.HALFTIME_DEMO.NIGHTS.length });
+const lateWhy = () => { const { late, of } = lateN(); return `${PAIRED ? "Your laptop shows" : "In this sample, your laptop shows"} study sessions still running after midnight on ${late} of the last ${of} nights<span class="nw">${lateChip()}.</span> With no watch or ring, Halftime can't see your sleep, so that's all this is based on.`; };
+const lateRow = () => { const { late, of } = lateN(); return `<div class="ev"><div class="row"><span class="k">1 · Late study sessions, last ${of} nights</span><span class="val">${late} of ${of} past midnight</span><span class="m">${PAIRED ? "laptop" : "sample · laptop not paired yet"} · study time only, never what you were doing · no wearable, so no sleep data</span></div></div>`; };
+const V = {""")
+rep("<h1 class=\"q q2\">Sleep's been short for a while. Want to talk it over with someone?</h1>",
+    "<h1 class=\"q q2\">${dev() ? \"Sleep's been short for a while.\" : \"Lots of late study nights lately.\"} Want to talk it over with someone?</h1>")
+rep(r"""<p class="why">${AWAY ? `Leaving out the ${AWAY} away-game nights on your calendar, ${short} of your last ${left.length}` : `${short} of your last ${left.length}`} nights were under 6 hours<span class="nw">${sleepChip()}.</span> You choose""",
+    r"""<p class="why">${dev() ? `${AWAY ? `Leaving out the ${AWAY} away-game nights on your calendar, ${short} of your last ${left.length}` : `${short} of your last ${left.length}`} nights were under 6 hours<span class="nw">${sleepChip()}.</span>` : lateWhy()} You choose""")
+rep('<button class="ctx" data-go="escctx">Some were travel, games, shifts or exams?</button>',
+    '${dev() ? `<button class="ctx" data-go="escctx">Some were travel, games, shifts or exams?</button>` : ""}')
+rep(r"""    <div class="ev"><div class="row"><span class="k">3 · Sleep, last 14 nights</span><span class="val">${short} of ${left.length} under 6 h</span><span class="m">${dev() ? dev().name : "sleep source"} · usual about 7 h${AWAY ? ` · ${AWAY} away-game nights left out` : ""}</span></div></div>""",
+    r"""    ${dev() ? `<div class="ev"><div class="row"><span class="k">3 · Sleep, last 14 nights</span><span class="val">${short} of ${left.length} under 6 h</span><span class="m">${dev().name} · usual about 7 h${AWAY ? ` · ${AWAY} away-game nights left out` : ""}</span></div></div>` : lateRow()}""")
+rep("We bring this up after two weeks of mostly short nights,", "We bring this up after two weeks of mostly ${dev() ? \"short\" : \"late\"} nights,")
+# 2. the pushed session line reserves the room it moved into, so the cards and footer flow below it instead of
+#    under it (it used to land on the footer links on small phones); the second-line labels stay inside the screen
+rep('  if (!on) { stack.style.transform = ""; document.querySelector(".next").classList.remove("tuck"); return; }',
+    '  if (!on) { stack.style.transform = ""; stack.style.marginBottom = ""; document.querySelector(".next").classList.remove("tuck"); return; }')
+rep("""  stack.style.transform = `translateY(${dy}px)`;
+  // short screens: if the pushed line would land on the next-class card, hide the card (the island already says "45 min to Chem lab")
+  const nx = document.querySelector(".next"), fb = f.getBoundingClientRect().bottom - (new DOMMatrix(getComputedStyle(stack).transform).m42 || 0) + dy;
+  nx.classList.toggle("tuck", fb + 8 > nx.getBoundingClientRect().top);""",
+    """  stack.style.transform = `translateY(${dy}px)`;
+  stack.style.marginBottom = dy + "px"; // (site build) the next-class card, home cards and footer flow below the moved line""")
+# 4. End break returns to a calm idle with a short welcome-back toast (the "OK, keep going" card is for someone who declined)
+rep('<button class="a no" data-go="keep">End break</button>', '<button class="a no" data-act="endbreak">End break</button>')
+# 5. laptop not paired: the session is labelled sample, and Data sources offers pairing
+rep('<span class="m">laptop · 1 min ago · usual', '<span class="m">${lapSrc()} · usual', 2)
+rep("""card("laptop", "Laptop", `on · ${OS}`, "Session time, idle time, and which kind of app you're in. Never what you type, read or browse. Mac and Windows; not Linux yet.", sw(true, "Laptop"))""",
+    """(PAIRED ? card("laptop", "Laptop", `on · ${OS}`, "Session time, idle time, and which kind of app you're in. Never what you type, read or browse. Mac and Windows; not Linux yet.", sw(true, "Laptop"))
+      : card("laptop", "Laptop", "not paired yet", "Halftime needs your laptop for study time and app switches. Until you pair it, the study session you see is sample data. It never sees what you type, read or browse.", "", `<button class="pill" data-act="pair">Pair your laptop</button>`))""")
+# 11. calendar off: no "Class only / Class + games" choice; Apple Health has no sign-in to expire
+rep("""`<button class="pill" aria-pressed="${!TEAM}" data-seg="cal">Class only</button><button class="pill" aria-pressed="${TEAM}" data-seg="cal">Class + games</button>`)""",
+    """PROFILE.cal === false ? "" : `<button class="pill" aria-pressed="${!TEAM}" data-seg="cal">Class only</button><button class="pill" aria-pressed="${TEAM}" data-seg="cal">Class + games</button>`)""")
+rep("""${devKey === "fitbit" ? "Google asks every 7 days." : `${D.short} asked you to sign in again.`}""",
+    """${D === DEVICES.fitbit ? "Google asks every 7 days." : D === DEVICES.apple ? "Apple Health access was turned off. Turn it back on in Settings → Health → Data Access." : `${D.short} asked you to sign in again.`}""")
+# 11. one set of sample nights: the card, the escalation and History all read demo-data.js (away games: Sat 24, Sun 25, Sun 1)
+rep("""const NIGHTS = [["Th 22",5.2],["Fr 23",4.8],["Sa 24",4.2,"away game"],["Su 25",3.9,"away game"],["Mo 26",5.6],["Tu 27",6.4],["We 28",5.1],
+  ["Th 29",5.5],["Fr 30",5.0],["Sa 31",5.8],["Su 1",4.6,"away game"],["Mo 2",7.1],["Tu 3",5.3],["We 4",5.1]]""",
+    """const NIGHTS = window.HALFTIME_DEMO.NIGHTS.map((n, i) => [n.d.slice(0, 2) + n.d.slice(3), n.sleep, [2, 3, 10].includes(i) ? "away game" : undefined])""")
 
 SHELL = r"""
 <main class="tabview" id="history" hidden aria-label="History">
@@ -238,20 +307,26 @@ APP = r"""
 <script>
 // App shell for the site: tabs, history, you, the demo sheet, toasts, and the buttons the mockup left empty.
 (() => {
-  if (!PROFILE.name || !PROFILE.done) { location.replace(PROFILE.name ? "/start#about" : "/start#account"); return; }
+  if (!PREVIEW && (!PROFILE.name || !PROFILE.done)) { location.replace(PROFILE.name ? "/start#about" : "/start#account"); return; }
   if (PROFILE.signedIn === false) { location.replace("/start#login"); return; }
   const $ = (id) => document.getElementById(id);
   const first = String(PROFILE.name).split(" ")[0];
   const esc = (x) => String(x || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  let toastT, paused = false, tab = "now", quietT, lastState = Q.get("state") || "idle", srcFrom = "", plus = 0;
-  // "+5 min" during a walk: shift the countdown and the back-by time everywhere they show
-  function applyPlus(root) {
-    if (!plus) return;
-    const back = `3:${String(50 + plus).padStart(2, "0")}`, left = `${4 + plus}:12`;
+  let toastT, paused = false, tab = "now", quietT, lastState = Q.get("state") || "idle", srcFrom = "", plus = 0, walked = false;
+  // "+5 min" during a walk shifts the countdown, the back-by time and the minutes left before the next stop (4:30 − back).
+  // It belongs to one walk: ending the walk, or starting a new one, puts every place it shows back to 3:50 / 4:12 / 40 min.
+  const backT = (p) => `3:${String(50 + p).padStart(2, "0")}`, leftT = (p) => `${4 + p}:12`, stillT = (p) => `still ${40 - p} min`;
+  function shiftPlus(root, from, to) {
+    if (from === to || !root) return;
     const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); let n;
-    while ((n = w.nextNode())) { const t = n.nodeValue.replace(/\b3:50\b/g, back).replace(/\b4:12\b/g, left); if (t !== n.nodeValue) n.nodeValue = t; }
+    while ((n = w.nextNode())) { const t = n.nodeValue.split(backT(from)).join(backT(to)).split(leftT(from)).join(leftT(to)).split(stillT(from)).join(stillT(to)); if (t !== n.nodeValue) n.nodeValue = t; }
   }
-  const saveProfile = () => { try { localStorage.setItem("ht-profile", JSON.stringify(PROFILE)); } catch {} };
+  function syncWalk() { // the parts of the page that are never redrawn: the forecast's walk label and the live pill
+    const ts = document.querySelector(".ticks .t-slot"), lv = $("liveview");
+    if (ts) ts.textContent = "walk · back " + backT(plus);
+    if (lv) { lv.querySelector(".t").textContent = leftT(plus); lv.setAttribute("aria-label", `Walk break, ${4 + plus} minutes 12 seconds left. Open.`); }
+  }
+  const saveProfile = () => { if (PREVIEW) return; try { localStorage.setItem("ht-profile", JSON.stringify(PROFILE)); } catch {} };
   // the next commitment people chose in setup names the sample day's 4:30 stop (the sample afternoon keeps its times)
   const NEXT = String(PROFILE.next || "Chem lab").replace(/\s+(at\s+)?\d{1,2}(:\d{2})?\s*(am|pm)?$/i, "").trim() || "Chem lab";
   const nextShort = NEXT === "Chem lab" ? "lab" : NEXT.toLowerCase();
@@ -279,8 +354,13 @@ APP = r"""
     setDevice(k) { if (k === "none" && PROFILE.device && PROFILE.device !== "none") PROFILE.lastDevice = PROFILE.device; PROFILE.device = k; saveProfile(); drawShell(); },
     afterGo(s) {
       rename(full); rename(page);
-      if (s === "running" || s === "runopen") { applyPlus(full); applyPlus(page); applyPlus($("liveview")); } else if (s !== "runopen") plus = 0;
-      if (!s.startsWith("sources")) lastState = s;
+      const walking = s === "running" || s === "runopen", wasWalking = lastState === "running" || lastState === "runopen";
+      if (!(walking && wasWalking)) plus = 0; // a new walk, or the walk is over
+      syncWalk(); if (walking) { shiftPlus(full, 0, plus); shiftPlus($("since"), 0, plus); }
+      if (!walking && walked && s === "idle") $("since").textContent = "One break so far this session.";
+      if (s === "snooze") toast("Snoozed. I'll stay quiet until 4:05.");
+      // the Now tab comes back to the screen, not to a one-off setup or snooze moment
+      if (!s.startsWith("sources")) lastState = /^connect|^snooze$/.test(s) ? "idle" : s;
       if (s === "idle" && srcFrom === "you") { srcFrom = ""; setTab("you"); return; }
       tab = s.startsWith("sources") ? "you" : "now";
       document.querySelectorAll("[data-tab]").forEach((b) => b.dataset.tab === tab ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current"));
@@ -290,7 +370,7 @@ APP = r"""
   document.querySelector(".tabbar").addEventListener("click", (e) => {
     const b = e.target.closest("[data-tab]"); if (!b) return; // the Demo button has its own handler
     const t = b.dataset.tab;
-    if (t === "now") { go(lastState); return; }
+    if (t === "now") { srcFrom = ""; go(lastState); return; }
     setTab(t);
   });
 
@@ -301,12 +381,11 @@ APP = r"""
   function spark(vals, usual, unit, label) { // one series, drawn to scale, with your usual as a dashed line
     const W = 300, H = 64, lo = Math.min(...vals, usual) - 3, hi = Math.max(...vals, usual) + 3, x = (i) => 6 + i * ((W - 12) / (vals.length - 1)), y = (v) => H - 8 - ((v - lo) / (hi - lo)) * (H - 20);
     const pts = vals.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
-    return `<svg class="spark" viewBox="0 0 ${W} ${H + 14}" role="img" aria-label="${label}, last 14 nights: ${vals.join(", ")} ${unit}. Your usual: ${usual} ${unit}.">
+    return `<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="${label}, last 14 nights: ${vals.join(", ")} ${unit}. Your usual: ${usual} ${unit}.">
       <line x1="6" x2="${W - 6}" y1="${y(usual).toFixed(1)}" y2="${y(usual).toFixed(1)}" stroke="#0F5E46" stroke-width="1.5" stroke-dasharray="4 4"/>
       <polyline points="${pts}" fill="none" stroke="#141414" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-      <circle cx="${x(vals.length - 1).toFixed(1)}" cy="${y(vals[vals.length - 1]).toFixed(1)}" r="3.5" fill="#141414"/>
-      <text x="${W - 6}" y="${(y(usual) - 5).toFixed(1)}" text-anchor="end" font-size="11" fill="#0F5E46" font-family="Geist Mono, monospace">usual ${usual}</text>
-      <text x="6" y="${H + 12}" font-size="11" fill="#64625C" font-family="Geist Mono, monospace">${DEMO.NIGHTS[0].d}</text><text x="${W - 6}" y="${H + 12}" text-anchor="end" font-size="11" fill="#64625C" font-family="Geist Mono, monospace">${DEMO.NIGHTS[DEMO.NIGHTS.length - 1].d}</text></svg>`;
+      <circle cx="${x(vals.length - 1).toFixed(1)}" cy="${y(vals[vals.length - 1]).toFixed(1)}" r="3.5" fill="#141414"/></svg>
+      <p class="sparkx" aria-hidden="true"><span>${DEMO.NIGHTS[0].d}</span><span class="u">- - usual ${usual} ${unit}</span><span>${DEMO.NIGHTS[DEMO.NIGHTS.length - 1].d}</span></p>`;
   }
   function drawHome() {
     const D = dev(), T = DEMO.today(role), U = DEMO.USUAL, kind = DEMO.HRV_KIND[devKey] || "RMSSD";
@@ -331,9 +410,9 @@ APP = r"""
   $("h-hello").textContent = `${first}'s week`;
   $("h-sleep-title").innerHTML = none ? `Sleep vs your usual <span class="smp">Sample · no wearable</span>` : `Sleep vs your usual <span class="smp">${esc(D.name)} · sample</span>`;
   const mx = 9, H = 140 - 17;
-  $("h-bars").innerHTML = NIGHTS.map((n, i) => `<div class="b"><i class="${n.h < 6 ? "lo" : ""}" style="height:${Math.round((n.h / mx) * H)}px" title="${n.d}: ${n.h} h"></i><small>${i % 2 ? "" : n.d.split(" ")[1]}</small></div>`).join("")
+  $("h-bars").innerHTML = DEMO.NIGHTS.map((n, i) => `<div class="b"><i class="${n.sleep < 6 ? "lo" : ""}" style="height:${Math.round((n.sleep / mx) * H)}px" title="${n.d}: ${n.sleep} h"></i><small>${i % 2 ? "" : n.d.split(" ")[1]}</small></div>`).join("")
     + `<span class="usual" style="bottom:${Math.round(17 + (7 / mx) * H)}px"><em>usual 7 h</em></span>`;
-  $("h-bars").setAttribute("aria-label", "Sleep, last 14 nights: " + NIGHTS.map((n) => `${n.d} ${n.h} hours`).join(", ") + ". Usual about 7 hours.");
+  $("h-bars").setAttribute("aria-label", "Sleep, last 14 nights: " + DEMO.NIGHTS.map((n) => `${n.d} ${n.sleep} hours`).join(", ") + ". Usual about 7 hours.");
   const LOG = [["Today 3:45", "Short walk now?", "2 h 40 min in, 14 switches", "took it", 1], ["Wed 11:50 pm", "Stop for tonight?", "Class at 9:30 am", "20 more min", 0],
     ["Wed 4:10", "Keep going.", "Steady switching", "kept going", 0], ["Tue 2:30", "Short walk now?", "2 h 10 min in", "took it", 1], ["Mon 9:40 pm", "Take a 15-minute break?", "3 h 20 min in", "snoozed", 0],
     ["Mon 3:05", "Still learning your usual sleep.", "Night 6 of 7", "noted", 0]];
@@ -344,7 +423,7 @@ APP = r"""
   // ---- you
   $("y-av").textContent = first.slice(0, 1).toUpperCase();
   $("y-name").textContent = PROFILE.name;
-  $("y-meta").textContent = [PROFILE.role === "athlete" ? "Student-athlete" : "Student", PROFILE.school, none ? "No wearable" : D.name, calOn ? calName : "Calendar off"].filter(Boolean).join(" · ");
+  $("y-meta").textContent = [PROFILE.role === "athlete" ? "Student-athlete" : "Student", PROFILE.school, PAIRED ? "" : "Laptop not paired", none ? "No wearable" : D.name, calOn ? calName : "Calendar off"].filter(Boolean).join(" · ");
   $("y-rec").setAttribute("aria-checked", window.HT ? HT.isRecording() : false);
   $("dlist").innerHTML = moments(D, none).map(([s, t, d]) => `<button type="button" data-moment="${s}"><b>${esc(t)}</b><span>${esc(d)}</span></button>`).join("");
   }
@@ -364,6 +443,19 @@ APP = r"""
   drawShell(); rename(page);
   // ---- greeting on the Now screen
   const sj = $("subj"); if (sj) { const hi = document.createElement("p"); hi.className = "hello"; hi.textContent = `Hi ${first}`; document.querySelector(".hero").prepend(hi); }
+  // laptop skipped in setup: the session on screen is the sample one, and says so
+  if (!PAIRED && sj) { const a = document.createElement("a"); a.className = "unpaired"; a.href = "/start#laptop"; a.textContent = "Sample session: pair your laptop to see your own ›"; document.querySelector(".hero").append(a); }
+  // a source chip: on a suggestion it opens See why; inside See why it brings its row into view; on the morning card, why it's showing
+  full.addEventListener("click", (e) => {
+    const c = e.target.closest(".chip"); if (!c) return;
+    if (/^esc/.test(lastState)) { e.stopPropagation(); go("escwhy"); return; }
+    if (!/why$/.test(lastState)) return;
+    e.stopPropagation();
+    const n = c.textContent.trim(), row = [...full.querySelectorAll(".ev .row")].find((r) => ((r.querySelector(".k") || {}).textContent || "").startsWith(n + " ·"));
+    if (!row) return;
+    row.scrollIntoView({ block: "nearest", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    row.classList.remove("hl"); void row.offsetWidth; row.classList.add("hl");
+  }, true);
 
   // ---- demo moments
   const sheet = $("dsheet"), scrim = $("scrim"); sheet.inert = true;
@@ -373,8 +465,8 @@ APP = r"""
   scrim.addEventListener("click", () => openSheet(false));
   addEventListener("keydown", (e) => { if (e.key === "Escape" && sheet.classList.contains("on")) openSheet(false); });
   $("dlist").addEventListener("click", (e) => { const b = e.target.closest("[data-moment]"); if (!b) return; openSheet(false); if (window.HT) HT.event("demo_jump", { value: b.dataset.moment });
-    if (b.dataset.moment === "tour") { if (window.HTTour) { HTTour.reset(); go("idle"); setTimeout(() => HTTour.start(), 350); } return; }
-    go(b.dataset.moment); });
+    if (b.dataset.moment === "tour") { if (window.HTTour) { go("idle"); setTimeout(() => HTTour.start(), 350); } return; }
+    plus = 0; walked = false; go(b.dataset.moment); });
 
   // ---- buttons the mockup left empty, and the you tab
   document.addEventListener("click", (e) => {
@@ -382,12 +474,13 @@ APP = r"""
     const k = a.dataset.act;
     if (k === "talk") go("escalate");
     else if (k === "pause") { paused = !paused; page.classList.toggle("paused", paused); document.querySelectorAll(".pausebtn").forEach((b) => b.textContent = paused ? "Resume suggestions" : "Pause suggestions"); toast(paused ? "Suggestions paused for 1 hour" : "Suggestions back on"); if (paused) go("idle"); }
-    else if (k === "plus5") { if (plus >= 9) { toast("That's the longest this walk can go."); return; } const before = plus; plus += 5; if (plus > 9) plus = 9;
-      const back = (p) => `3:${String(50 + p).padStart(2, "0")}`, left = (p) => `${4 + p}:12`;
-      for (const root of [full, page, $("liveview")]) { const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); let n; while ((n = w.nextNode())) { const t = n.nodeValue.replace(new RegExp(`\\b${back(before)}\\b`, "g"), back(plus)).replace(new RegExp(`\\b${left(before)}\\b`, "g"), left(plus)); if (t !== n.nodeValue) n.nodeValue = t; } }
-      toast(`Added ${plus - before} minutes. Back by ${back(plus)} pm.`); }
+    else if (k === "plus5") { if (plus >= 9) { toast("That's the longest this walk can go."); return; } const before = plus; plus = Math.min(9, plus + 5);
+      shiftPlus(full, before, plus); shiftPlus(page, before, plus); syncWalk();
+      toast(`Added ${plus - before} minutes. Back by ${backT(plus)} pm.`); }
     else if (k === "setup") location.href = "/start#wearable";
-    else if (k === "tour") { if (window.HTTour) { HTTour.reset(); go("idle"); setTimeout(() => HTTour.start(), 350); } }
+    else if (k === "tour") { if (window.HTTour) { go("idle"); setTimeout(() => HTTour.start(), 350); } }
+    else if (k === "endbreak") { walked = true; go("idle"); toast("Welcome back. Next check around 4:05."); }
+    else if (k === "pair") location.href = "/start#laptop";
     else if (k === "replay") { try { sessionStorage.removeItem("ht-played"); } catch {} location.href = "/app"; }
     else if (k === "rec") { const on = a.getAttribute("aria-checked") !== "true"; a.setAttribute("aria-checked", on); if (window.HT) { on ? HT.optIn() : HT.optOut(); } toast(on ? "Usage analytics on" : "Usage analytics off on this device"); }
     else if (k === "signout") { if (window.HT) { HT.event("sign_out"); HT.flush(); } PROFILE.signedIn = false; saveProfile(); location.href = "/"; }
@@ -398,8 +491,8 @@ APP = r"""
   let played = false; try { played = sessionStorage.getItem("ht-played") === "1"; } catch {}
   // first visit after setup: the tour (once per person); otherwise the quiet pill, then a fast-forward to the moment Halftime speaks
   const touring = () => !!(window.HTTour && HTTour.isRunning());
-  if (window.HTTour && !HTTour.isDone() && !Q.get("state")) { try { sessionStorage.setItem("ht-played", "1"); } catch {} setTimeout(() => HTTour.start(), 500); }
-  else if (!Q.get("state") && !played) {
+  if (!PREVIEW && window.HTTour && !HTTour.isDone() && !Q.get("state")) { try { sessionStorage.setItem("ht-played", "1"); } catch {} setTimeout(() => HTTour.start(), 500); }
+  else if (!PREVIEW && !Q.get("state") && !played) {
     try { sessionStorage.setItem("ht-played", "1"); } catch {}
     let touched = false; addEventListener("pointerdown", () => { touched = true; }, { once: true });
     setTimeout(() => { if (!touched && !touring() && tab === "now") toast("Fast-forward: 2 h 40 min into Organic chemistry"); }, 1300);

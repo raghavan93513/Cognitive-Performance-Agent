@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-11-06
 tier: supporting
 created: 2026-11-06T03:00:00Z
-updated: 2026-11-06T08:15:00Z
+updated: 2026-11-06T10:00:00Z
 ---
 
 # Demo app with account setup and usage analytics
@@ -158,9 +158,55 @@ A second QA pass confirmed the fixes.
 - **Fix found:** switching analytics off threw away the last few seconds of events recorded while it was on. It now sends them, plus one `opt_out` row, then stops.
 - **Deployed:** the live files match local, and live walks (iPhone tour, laptop full flow) had 0 errors.
 
+## Analytics move to Supabase, with an admin page (2026-11-06)
+
+**Ask (Heramb):** "set up the analytics in the same Vercel link, like we did for Startup City with the admin thing, curated for this", in one of his Supabase projects, ready to hand to about 50 people the next day.
+
+**Why not the Google Sheet:** installing the sheet's script needs the owner signed in to Google, and it can't take 50 people writing at once. The Sheet path was dropped: `tools/site/apps-script.gs` is deleted.
+
+**What's built:**
+- **Storage:** Supabase project **Heramb Stylist proj** (Tokyo region; Heramb restored it from paused). Everything lives in its own `halftime` schema; the project also holds an unrelated `rolodeck` schema, which is untouched. The SQL is `tools/site/supabase.sql` and can be re-run.
+- **Locked down:**
+  - The tables have row-level security and no policies, and the schema isn't exposed.
+  - The site uses only the publishable key, so all it can do is call the `halftime_*` functions.
+  - Admin sign-in is checked in the database: passwords are hashed with bcrypt, and 8 wrong tries lock an IP out for 15 minutes.
+  - Sessions are HttpOnly cookies.
+  - No secrets in Vercel or the repo.
+- **`/admin`:** Pulse (who's on now), Funnel (landing → setup → app → tour → saw the walk → took it, plus the student/athlete and wearable split), Screens, Tour, Taps with a heat map drawn over the real screen (`?preview=1`), Visitors with each one's timeline, Devices & places (QR vs direct), Health (speed and JS errors), and CSV export.
+- **The admin login** for Heramb was generated and saved in `halftime-admin-login.txt`, a file next to the repo that is never committed.
+- **Test traffic:** load tests and anything from 127.0.0.1 are stored with `test = true` and hidden by default.
+
+**Tested:**
+- 50 people at once for 3 minutes: 9,161 of 9,161 events stored, 0 retries, 0 errors.
+- Saving a batch: median 231 ms, p95 327 ms (mostly the trip to Tokyo; phones never wait on it).
+- Every admin view was checked on real data on laptop and iPhone.
+- **Bug found and fixed:** a session lost 184 events when a page closed during a send. Chrome allows a page only 64 KB of after-close requests at once, and a regular batch was using that room. Regular sends no longer use it. The final send also resends any batch still on its way, and the database keeps each event once. A six-device re-run had 0 gaps in 2,012 events.
+- **Live check, 50 people at once on halftime-study.vercel.app:**
+  - 6,271 of 6,271 events stored, 0 errors.
+  - Pages: median 35 ms, p95 65 ms.
+  - A fresh iPhone visitor from the QR link was recorded end to end: place, QR source, setup and tour.
+  - All test rows are marked `test` and hidden, so real data starts at zero.
+- **Landing scroll on phones (Heramb: "scrappy, laggy"):**
+  - Touch pins are shorter: 300 and 170 screen-heights, down from 420 and 230.
+  - Scroll progress now ignores Safari's sliding address bar.
+  - The tracker no longer measures the page on every scroll.
+  - In a test scroll, layouts fell from 101 to 66 and paints from 195 to 138.
+  - Not yet felt on a real iPhone.
+
+**Phone QA in the same pass:**
+- An independent agent ran 20 walks on iPhone, SE, Pro Max and 320 px, and found 11 defect groups. All were fixed and re-walked with 0 errors.
+- The most serious: with no wearable, the "talk to someone" card quoted sleep it didn't have. It now uses the laptop's late study nights only; the new sample number is "8 of 14 nights", labelled as sample.
+- The others:
+  - the session line overlapped the footer on small phones;
+  - +5 min stuck after a walk ended;
+  - End break showed the "keep going" card;
+  - skipping laptop pairing still showed laptop data;
+  - the tour's wording assumed a watch;
+  - the sticky Continue button covered controls.
+
 ## Still open
 
-- **The team must finish the sheet setup.** Paste and deploy the Apps Script, then add `SHEET_SECRET` and `SHEET_WEBHOOK_URL` in Vercel. AI sessions aren't allowed to write secrets. Until then, events only reach the Vercel log.
+- **The old Google Sheet** (now unused) is still set to "anyone with the link can edit". Set it back to Restricted or delete it. Same for the unused public summary sheet.
 - **Same false or unconfirmed claims as before:** the landing page still has the ones listed in [[09-design/landing-page]].
 
 ## Related

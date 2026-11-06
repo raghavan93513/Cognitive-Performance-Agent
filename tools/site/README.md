@@ -77,25 +77,31 @@ The site is now a working phone prototype, all on sample data:
 
 Each browser gets a visitor id and each tab a session id, so many people at once stay separate. Recording is **on by default**, with no pop-up (Heramb, 2026-11-06). Setup doesn't show an analytics switch (Heramb, 2026-11-06). The landing page footer says usage is recorded, and the You tab's switch in the app stops all sending from that device. Turning it off first sends what was already recorded, plus an `opt_out` row.
 
-`site/api/collect.js` adds the IP address and approximate location (from Vercel's headers), then appends the rows to the Google Sheet [Halftime prototype analytics](https://docs.google.com/spreadsheets/d/1MsdjL4UbBzUCA8Pv5CZZy48LrmGEWIZ_PMMBTMkcxQI/edit) through an Apps Script web app.
-
-### One-time setup (the team does this; secrets never go in the repo)
-1. **Choose a secret.** Pick a long random string, for example from `python3 -c "import secrets;print(secrets.token_urlsafe(32))"`.
-2. **Set up the script.** In the sheet, open Extensions → Apps Script. Paste `tools/site/apps-script.gs`, set `SECRET` to your string, and save.
-3. **Deploy the script.** Choose Deploy → New deployment → type **Web app**. Set "Execute as" to **Me** and "Who has access" to **Anyone**. Deploy, approve the permissions, and copy the web app URL.
-4. **Add the values to Vercel.** In Vercel, open the halftime-study project → Settings → Environment Variables. Add `SHEET_SECRET` (your string) and `SHEET_WEBHOOK_URL` (the web app URL) for Production and Preview.
-5. **Redeploy:**
-   ```bash
-   cd site && npx vercel@latest deploy --prod --yes --scope htcs-projects-98674d83
-   ```
-   Rows then appear in the `events` tab. The script also creates a `visitors` tab (one row per visitor) and a `summary` tab with live formulas: the funnel, average time per screen, the most-tapped controls, devices, places, attention and errors.
-
-Until step 4 is done, `/api/collect` returns 202 and writes a summary to the Vercel function log instead.
+### Where it goes, and the admin page
+- **Storage.** `site/api/collect.js` adds the IP address and approximate place (from Vercel's headers). It stores each batch with one call to the Supabase project **Heramb Stylist proj**. Everything sits in its own `halftime` schema: `tools/site/supabase.sql` holds the tables and functions, and it can be re-run safely.
+- **Locked down.** The tables use row-level security and have no policies, and the schema isn't exposed. The site's key is the project's publishable key (`site/api/_db.js`), so all it can do is call the `halftime_*` functions.
+- **Admin page.** **https://halftime-study.vercel.app/admin** is password-protected, in the style of Startup City's admin. Sign-in is checked in the database (bcrypt), and 8 wrong tries lock out that IP for 15 minutes. The session is an HttpOnly cookie that lasts 7 days.
+- **Time ranges.** Live 30 min, today, 24 h, 7 days or all. Load-test rows are hidden unless you tick them.
+- **Its tabs:**
+  - **Pulse:** who's on the site right now and their screen, totals, an activity chart and a feed of milestones.
+  - **Funnel:** landing → set up → name → finished setup → app → tour → saw "Short walk now?" → took the walk, plus the student/athlete and wearable split.
+  - **Screens:** time per screen, where sessions ended, landing attention and scroll depth.
+  - **Tour:** how many reached each step, and where people skipped.
+  - **Taps & heat map:** top taps, rage and dead taps, and a heat map of taps drawn over the real screen (`?preview=1` shows a screen with a sample profile and records nothing).
+  - **Visitors:** one row per person; click a row for their full timeline.
+  - **Devices & places:** devices, places, QR vs direct, and preferences.
+  - **Health:** load speed (LCP, CLS), slow taps and JS errors.
+  - **Export CSV.**
+- **Admins.** Add or reset one in the Supabase SQL editor with `select public.halftime_admin_create('name', 'a long password');`. The website can't call that function. Change your own password on the admin page (Password).
+- **At 50 people at once:** each phone sends one small batch about every 15 s (about 3 requests a second in all), and each batch is a single database insert. A failed send stays on the phone and is retried after 30, 60, then 120 s. When a page closes, everything not yet saved goes out with `sendBeacon`, including a batch still on its way. The database stores each event once (unique on session + seq), so a double send is harmless. Load-test rows land with `test = true`. Run the load test with:
+  ```bash
+  node tools/qa/load-test.mjs --url=https://halftime-study.vercel.app --users=50 --minutes=3
+  ```
 
 ### Testing locally
 ```bash
 LOG_EVENTS=/tmp/events.jsonl node tools/site/serve.mjs 3007
 ```
-This runs the API too and appends every received event to the file you name.
+This runs the API too and appends every received event to the file you name. Add `SUPABASE_KEY=<publishable key> ADMIN_INSECURE_COOKIE=1` to use the real database and sign in to `/admin` over plain http.
 
 To test as a returning visitor (the tour already seen), add `{"eval": "localStorage.setItem('ht-tour-done','1'); true"}` to a walk's steps before it opens `/app`.

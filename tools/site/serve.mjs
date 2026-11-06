@@ -1,7 +1,8 @@
 // Local preview of site/ with the same response headers Vercel will send (read from site/vercel.json),
 // so the Content-Security-Policy is tested before deploying. Never serves outside site/.
-// /api/* runs the matching site/api/<name>.js handler (Vercel's Node function shape). With no SHEET_* env vars set,
-// /api/collect only logs; set LOG_EVENTS=path.jsonl to also append each received row there for testing.
+// /api/* runs the matching site/api/<name>.js handler (Vercel's Node function shape). With no SUPABASE_KEY set,
+// /api/collect only logs and /api/admin says it isn't connected; set LOG_EVENTS=path.jsonl to also append each
+// received event there for testing. ADMIN_INSECURE_COOKIE=1 lets the admin cookie work over plain http locally.
 //   node tools/site/serve.mjs [port]      then open http://127.0.0.1:<port>/
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
