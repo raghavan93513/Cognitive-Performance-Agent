@@ -11,7 +11,6 @@ flowchart TD
         CAL["Calendar"]
         WATCH["Watch"]
         LAP["Laptop"]
-        TASK["Study Tasks"]
         FEEDBACK["Feedback"]
     end
 
@@ -63,8 +62,6 @@ flowchart TD
     CAL --> API
     WATCH --> MOBILE
     LAP --> DESKTOP
-    TASK --> MOBILE
-    TASK --> WEB
     FEEDBACK --> MOBILE
     FEEDBACK --> WEB
 
