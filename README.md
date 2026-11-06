@@ -2,98 +2,120 @@
 
 This project is mainly for Students and Athletes, answering questions like "Should I keep going or take a break?” OR “When am I most ready to perform at my best?"
 
-## System Design
+
+## System Architecture
 
 ```mermaid
 flowchart TD
 
-    subgraph INPUTS["1. Inputs"]
+    %% 1. INPUTS
+    subgraph DATA["1. Inputs"]
         CAL["Calendar"]
         WATCH["Watch"]
         LAP["Laptop"]
-        FEEDBACK["Feedback"]
+        FEED["Feedback"]
     end
 
+    %% 2. APPLICATIONS
     subgraph APPS["2. Apps"]
-        MOBILE["Mobile App"]
+        MOB["Mobile App"]
         WEB["Web App"]
-        DESKTOP["Desktop App"]
+        DESK["Desktop App"]
     end
 
-    subgraph BACKEND["3. Backend"]
+    %% 3. BACKEND
+    subgraph CORE["3. Backend"]
         API["FastAPI"]
         AUTH["Supabase Auth"]
         DB[("Supabase Database")]
-        QUEUE["Job Queue"]
-        WORKER["Workers"]
-        FEATURES["Features"]
+        Q["Task Queue"]
+        WORK["Workers"]
+        FEAT["Feature Processing"]
     end
 
-    subgraph AGENTS["4. Multi-Agent Reasoning"]
-        SIGNAL["Signal Agent"]
-        EVIDENCE["Evidence Agent"]
-        PLANNER["Planning Agent"]
+    %% 4. MULTI-AGENT SYSTEM
+    subgraph AGENTS["4. Multi-Agent Layer"]
+        SIG["Signal Agent"]
+        EVD["Evidence Agent"]
+        PLAN["Planning Agent"]
     end
 
+    %% 5. DECISION LAYER
     subgraph DECISION["5. Decision Layer"]
         POLICY["Policy Engine"]
         EVAL["Evaluation"]
-        ADVICE["Advice + Reason"]
+        REC["Recommendation + Explanation"]
     end
 
+    %% 6. FEEDBACK LOOP
     subgraph LOOP["6. Feedback Loop"]
-        DISPLAY["Show Advice"]
-        CHOICE["Student Choice"]
-        ACTION["Action Log"]
-        OUTCOME["Outcome Check"]
-        LEARN["Evidence Update"]
+        SHOW["Show Advice"]
+        CHOICE["User Choice"]
+        ACT["Action Log"]
+        OUT["Outcome Check"]
+        LEARN["Learning Loop"]
     end
 
-    subgraph EXT["7. Optional Extensions"]
-        OPTIONAL["Opt-in Features"]
-        COMMUNITY["Peer Community"]
+    %% 7. OPTIONAL EXTENSIONS
+    subgraph EXTRA["7. Optional Extensions"]
+        EXT["Student Features"]
+        COMM["Community"]
         HUMAN["Human Support"]
-        POINTS["Points + Leaderboard"]
-        OPTIONAL --> COMMUNITY
-        OPTIONAL --> HUMAN
-        OPTIONAL --> POINTS
+        POINTS["Points / Leaderboard"]
+
+        EXT --> COMM
+        EXT --> HUMAN
+        EXT --> POINTS
     end
 
+    %% INPUTS TO APPLICATIONS
     CAL --> API
-    WATCH --> MOBILE
-    LAP --> DESKTOP
-    FEEDBACK --> MOBILE
-    FEEDBACK --> WEB
+    WATCH --> MOB
+    LAP --> DESK
+    FEED --> MOB
+    FEED --> WEB
 
-    DESKTOP --> API
-    MOBILE <--> API
+    %% APPLICATIONS TO BACKEND
+    MOB <--> API
     WEB <--> API
+    DESK --> API
 
+    %% BACKEND PROCESSING
     AUTH -.-> API
-    API --> DB
-    API --> QUEUE
-    QUEUE --> WORKER
-    WORKER --> FEATURES
-    FEATURES --> DB
+    API <--> DB
+    API --> Q
+    Q --> WORK
+    WORK --> FEAT
+    FEAT --> DB
 
-    API -->|Study checkpoint| SIGNAL
-    API -->|Study checkpoint| EVIDENCE
-    DB -.-> SIGNAL
-    DB -.-> EVIDENCE
-    SIGNAL --> PLANNER
-    EVIDENCE --> PLANNER
+    %% BACKEND TO AGENTS
+    API --> SIG
+    FEAT --> SIG
+    DB --> EVD
 
-    PLANNER --> POLICY
-    DB -.-> POLICY
+    %% MULTI-AGENT REASONING
+    SIG --> PLAN
+    EVD --> PLAN
+
+    %% POLICY AND EVALUATION
+    PLAN --> POLICY
     POLICY --> EVAL
-    EVAL --> ADVICE
+    EVAL --> REC
 
-    ADVICE --> DISPLAY
-    DISPLAY --> CHOICE
-    CHOICE --> ACTION
-    ACTION --> OUTCOME
-    OUTCOME --> LEARN
+    %% RECOMMENDATION AND USER ACTION
+    REC --> SHOW
+    SHOW --> CHOICE
+    CHOICE --> ACT
+    ACT --> OUT
+    OUT --> LEARN
+
+    %% CLOSED FEEDBACK LOOP
     LEARN --> DB
+    LEARN -.->|New feedback cycle| FEED
 
-    DISPLAY -.-> OPTIONAL
+    %% OPTIONAL FEATURES
+    WEB -.-> EXT
+    MOB -.-> EXT
+    LEARN -.->|Habit progress| POINTS
+
 ```
