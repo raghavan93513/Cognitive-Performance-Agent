@@ -2,7 +2,6 @@
 
 This project is mainly for Students and Athletes, answering questions like "Should I keep going or take a break?” OR “When am I most ready to perform at my best?"
 
-
 ## System Architecture
 
 ```mermaid
@@ -19,8 +18,7 @@ flowchart TD
     %% 2. APPLICATIONS
     subgraph APPS["2. Apps"]
         MOB["Mobile App"]
-        WEB["Web App"]
-        DESK["Desktop App"]
+        WEB["Desktop / Web App"]
     end
 
     %% 3. BACKEND
@@ -71,14 +69,13 @@ flowchart TD
     %% INPUTS TO APPLICATIONS
     CAL --> API
     WATCH --> MOB
-    LAP --> DESK
+    LAP --> WEB
     FEED --> MOB
     FEED --> WEB
 
     %% APPLICATIONS TO BACKEND
     MOB <--> API
     WEB <--> API
-    DESK --> API
 
     %% BACKEND PROCESSING
     AUTH -.-> API
