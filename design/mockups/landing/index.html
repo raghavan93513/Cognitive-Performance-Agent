@@ -37,6 +37,7 @@ a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:1px}
 .mark{display:flex;align-items:center;gap:10px;min-height:44px;font:700 1.125rem/1 var(--ui);letter-spacing:-.02em;text-decoration:none}
 .mark i{display:block;width:34px;height:14px;border-radius:7px;background:var(--island);position:relative}
 .mark i::after{content:"";position:absolute;left:5px;top:4.5px;width:5px;height:5px;border-radius:50%;background:var(--mint)}
+.top .login{min-height:44px;display:inline-flex;align-items:center;padding:0 18px;border-radius:22px;background:var(--ink);color:var(--paper);font:600 .9375rem/1 var(--ui);text-decoration:none}
 .top a.lk{font:500 .9375rem/1 var(--ui);color:var(--ink2);min-height:44px;display:inline-flex;align-items:center}
 
 /* hero */
@@ -117,6 +118,7 @@ h2{font:650 clamp(1.9rem,3.6vw,2.75rem)/1.04 var(--ui);letter-spacing:-.035em;te
 .hw-sub{font:400 1.0625rem/1.5 var(--ui);color:var(--ink2);margin-top:10px}
 .hw-scrolly{height:420vh;height:420svh;position:relative;margin-top:8px}
 .hw-fixed .hw-scrolly{height:100vh;height:100svh}
+@media (hover:hover) and (pointer:fine){.hw-scrolly{height:260vh;height:260svh}.hsty{height:160vh;height:160svh}}
 .hw-pin{position:sticky;top:0;height:100vh;height:100svh;display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1fr);gap:48px;align-items:center;padding-block:20px}
 .hw-stage{min-height:0;height:100%;display:flex;align-items:center;justify-content:center;contain:layout paint}
 .hw-stage svg{width:100%;height:100%;max-height:calc(100vh - 40px);max-height:calc(100svh - 40px);display:block}
@@ -204,7 +206,8 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
   .ln.x{display:none}
   .hero{grid-template-columns:minmax(0,1fr);gap:22px;padding-block:8px 52px}
   .lede{max-width:36ch;margin-top:16px}
-  .hero .ctas{display:none}
+  .hero .ctas{margin-top:20px}
+  .hero .ctas .btn{flex:1 1 auto}
   .fineprint{margin-top:12px}
   .joinlink{display:inline}
   .joinlink a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;padding:10px 0}
@@ -245,6 +248,42 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
   .hw-stage svg{max-height:calc(100vh - 16px);max-height:calc(100svh - 16px)}
   .hw-caps{gap:10px}.hw-caps p{font-size:.875rem}
 }
+
+/* comparison: wearables vs productivity apps vs Halftime. Halftime's column is the island; on first view, mint lines
+   draw from the other two columns into it once (it connects them). Laptop: a table. Phone: one card per question. */
+.cmp-lede{font:400 1.125rem/1.5 var(--ui);color:var(--ink2);margin-top:12px;max-width:52ch}
+.cmp{margin-top:52px;position:relative}
+.cmp-grid{display:grid;grid-template-columns:minmax(0,1.15fr) repeat(3,minmax(0,1fr));border-radius:26px;overflow:hidden;background:#fff}
+.cmp-grid .h,.cmp-grid .cmp-row > div{padding:16px 18px;border-top:1px solid var(--line);font:400 .9375rem/1.4 var(--ui);color:var(--ink2);min-width:0}
+.cmp-grid .h{border-top:0;padding-top:20px;padding-bottom:14px;font:650 1.0625rem/1.2 var(--ui);color:var(--ink);letter-spacing:-.01em}
+.cmp-grid .h small{display:block;font:500 .8125rem/1.3 var(--mono);color:var(--muted);margin-top:4px;letter-spacing:0}
+.cmp-grid .cmp-row > .q{font:600 .9375rem/1.35 var(--ui);color:var(--ink)}
+.cmp-grid .ht,.cmp-grid .cmp-row > .ht{background:var(--island);color:var(--on2);border-top-color:#2C2C2E}
+.cmp-grid .ht.h{color:var(--on)}
+.cmp-grid .ht.h small{color:var(--mint)}
+.cmp-grid .ht b{color:var(--on);font-weight:600}
+.cmp-grid .t::before{display:inline-block;width:20px;font-weight:700}
+.cmp-grid .y .t::before{content:"✓";color:var(--mint-ink)}
+.cmp-grid .ht.y .t::before{color:var(--mint)}
+.cmp-grid .n .t::before{content:"—";color:#9A9890}
+.cmp-note{font:400 .8125rem/1.45 var(--ui);color:var(--muted);margin-top:12px;max-width:72ch}
+.cmp-wires{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.cmp-wires path{fill:none;stroke:var(--mint);stroke-width:2.5;stroke-linecap:round}
+.cmp-tag{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font:600 .875rem/1 var(--mono);color:var(--mint-ink)}
+.cmp-tag i{width:8px;height:8px;border-radius:50%;background:var(--mint-ink)}
+@media (max-width:760px){
+  .cmp-grid{display:block;background:none;border-radius:0}
+  .cmp-grid .h,.cmp-wires{display:none}
+  .cmp-row{background:#fff;border-radius:22px;padding:6px 0;margin-top:10px;overflow:hidden}
+  .cmp-grid .cmp-row > div{padding:8px 16px;border-top:0}
+  .cmp-grid .cmp-row > .q{padding-top:12px;padding-bottom:4px}
+  .cmp-grid .cmp-row [data-who]{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:baseline}
+  .cmp-grid .cmp-row [data-who] > .who{font:500 .8125rem/1.3 var(--mono);color:var(--muted);grid-column:1;grid-row:1}
+  .cmp-grid .cmp-row .ht{border-radius:16px;margin:4px 8px 8px;padding:10px 12px}
+  .cmp-grid .cmp-row .ht > .who{color:var(--mint)}
+  .cmp-grid .t::before{width:auto;margin-right:6px}
+}
+@media (min-width:761px){ .cmp-row{display:contents} .cmp-grid .who{display:none} }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation:none!important}}
 </style>
 </head>
@@ -252,18 +291,19 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
 <div class="wrap">
   <header class="top">
     <a class="mark" href="#top" aria-label="Halftime"><i aria-hidden="true"></i>Halftime</a>
+    <a class="login" href="/start#login" data-track="header log in">Log in</a>
   </header>
 
   <main id="top">
-    <div class="hero">
+    <div class="hero" data-attn="landing-hero">
       <div>
         <h1>Every long study session needs a <em>halftime.</em></h1>
         <p class="lede"><strong>Two hours into studying, it's hard to tell if you need a break or should push on.</strong> Halftime suggests a short break when one fits, and always shows you why.</p>
-        <div class="ctas"><a class="btn dark" href="#pilot">What joining involves</a><a class="btn soft" href="#how">How it works</a></div>
+        <div class="ctas"><a class="btn dark" href="/start#account" data-track="hero create account">Create a demo account</a><a class="btn soft" href="/start#login" data-track="hero log in">Log in</a></div>
         <p class="fineprint">For students and athletes. Works with a Fitbit, Oura or WHOOP, or with no watch at all.<span class="joinlink"> <a href="#pilot">It's a class study, not open yet. What joining involves →</a></span></p>
       </div>
 
-      <div class="stage" id="try" aria-label="Try Halftime">
+      <div class="stage" id="try" aria-label="Try Halftime" data-attn="landing-demo">
         <div class="ask">
           <fieldset><legend>When are you studying?</legend><div class="opts" data-q="w"></div></fieldset>
           <fieldset><legend>You've been studying for</legend><div class="opts" data-q="t"></div></fieldset>
@@ -284,14 +324,14 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
       </div>
     </div>
 
-    <section class="band" aria-labelledby="how">
+    <section class="band" aria-labelledby="how" data-attn="landing-how">
       <h2 id="how">How it works, in four steps.</h2>
       <p class="hw-sub">Scroll through one afternoon. Sample data.</p>
       <div class="hw-scrolly">
         <div class="hw-pin">
           <ol class="hw-caps">
       <li><span class="n">1</span><h3>It notices.</h3><p>A small app on your laptop counts how long you've studied and how often you switch apps.</p></li>
-      <li><span class="n">2</span><h3>It reads your watch, carefully.</h3><p>By default it takes one thing: how long you slept, compared with your own usual. Plain code does the math, not an AI. No watch? It skips this step.</p></li>
+      <li><span class="n">2</span><h3>It reads your watch, carefully.</h3><p>Sleep, heart rate, resting heart rate and HRV, each compared with your own usual, never anyone else’s. Plain code does the math, not an AI. No watch? It skips this step.</p></li>
       <li><span class="n">3</span><h3>It suggests, and shows why.</h3><p>A small card opens: keep going, a 5-minute walk, or a longer break. Each reason shows where it came from and how sure it is.</p></li>
       <li><span class="n">4</span><h3>You decide.</h3><p>Walk, keep going or snooze. It asks once, then stays quiet.</p></li>
     </ol>
@@ -346,10 +386,27 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
       </div>
     </section>
 
+    <section class="band" aria-labelledby="cmp" data-attn="landing-compare">
+      <h2 id="cmp">Your watch knows your body. Your study apps know your hours. Halftime connects them to your day.</h2>
+      <p class="cmp-lede">Wearables like WHOOP and Fitbit track sleep and heart data. Productivity apps time your work. Halftime is the layer in between: it reads both, checks your calendar, and suggests a break only when one fits.</p>
+      <div class="cmp" id="cmp-box">
+        <div class="cmp-grid" role="table" aria-label="Wearables, productivity apps and Halftime compared">
+          <div class="h" role="columnheader"></div>
+          <div class="h" role="columnheader" id="cmp-w">Wearables<small>WHOOP, Fitbit, Oura</small></div>
+          <div class="h" role="columnheader" id="cmp-p">Productivity apps<small>focus timers, to-dos, blockers</small></div>
+          <div class="h ht" role="columnheader" id="cmp-h">Halftime<small>health + study + your day</small></div>
+          <div class="cmp-row"><div class="q">Your sleep and heart data</div><div class="y" data-who><span class="who">Wearables</span><span class="t">Tracks it, often with a daily score</span></div><div class="n" data-who><span class="who">Productivity apps</span><span class="t">Not their job</span></div><div class="ht y" data-who><span class="who">Halftime</span><span class="t">Reads it from your wearable, compared with <b>your</b> usual</span></div></div><div class="cmp-row"><div class="q">Your study session</div><div class="n" data-who><span class="who">Wearables</span><span class="t">Doesn’t see your laptop</span></div><div class="y" data-who><span class="who">Productivity apps</span><span class="t">Timers, to-do lists, app blockers</span></div><div class="ht y" data-who><span class="who">Halftime</span><span class="t">Study time and app switching, from a small laptop app</span></div></div><div class="cmp-row"><div class="q">Your day</div><div class="n" data-who><span class="who">Wearables</span><span class="t">Usually not your class schedule</span></div><div class="y" data-who><span class="who">Productivity apps</span><span class="t">Some plan your tasks</span></div><div class="ht y" data-who><span class="who">Halftime</span><span class="t">Your calendar: next class, practice, deadlines</span></div></div><div class="cmp-row"><div class="q">When to take a break</div><div class="n" data-who><span class="who">Wearables</span><span class="t">A morning score, not the moment</span></div><div class="n" data-who><span class="who">Productivity apps</span><span class="t">A fixed timer, every 25 minutes</span></div><div class="ht y" data-who><span class="who">Halftime</span><span class="t">Only when one fits, before your next thing</span></div></div><div class="cmp-row"><div class="q">Why it’s suggesting it</div><div class="n" data-who><span class="who">Wearables</span><span class="t">A score, mostly</span></div><div class="n" data-who><span class="who">Productivity apps</span><span class="t">The timer ran out</span></div><div class="ht y" data-who><span class="who">Halftime</span><span class="t">Every reason, its source, and how sure it is</span></div></div>
+        </div>
+        <svg class="cmp-wires" id="cmp-wires" aria-hidden="true"></svg>
+      </div>
+      <p class="cmp-tag"><i aria-hidden="true"></i>A mix of both, connected to your life</p>
+      <p class="cmp-note">Describes what each kind of app is typically built for; features vary by app and change over time. Halftime is a class prototype on sample data.</p>
+    </section>
+
     <section class="band" aria-labelledby="trust">
       <h2 id="trust">Clear about what it reads.</h2>
       <p class="h2sub">You choose each source, and you can turn any of them off or delete everything.</p>
-      <div id="xr">
+      <div id="xr" data-attn="landing-reads">
         <div class="xray">
           <div class="xhead"><div class="seg" role="group" aria-label="Whose view"><button type="button" aria-pressed="true" data-v="you">What you see</button><button type="button" aria-pressed="false" data-v="it">What Halftime sees</button></div><span class="hint">A sample laptop. Flip it.</span></div>
           <div class="screen" aria-label="Sample laptop screen">
@@ -367,7 +424,7 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
           <div class="list yes"><h3><i aria-hidden="true"></i>What it reads</h3><ul>
             <li data-r>How long you've been studying, and your breaks</li>
             <li data-r>How often you switch apps, and which kind (like notes, reading, video or chat), not the app's name</li>
-            <li>How long you slept, if you connect a watch or ring</li>
+            <li>Sleep, heart rate and HRV, if you connect a watch or ring</li>
             <li>Your next class, if you turn on your calendar</li></ul></div>
           <div class="list no"><h3><i aria-hidden="true"></i>What it never reads</h3><ul>
             <li data-r>What you type, read or browse</li>
@@ -376,7 +433,7 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
             <li>Your watch's own scores, like Readiness or Recovery</li></ul></div>
         </div>
       </div>
-      <div class="hsty" id="tr-hsty"><div class="hpin">
+      <div class="hsty" id="tr-hsty" data-attn="landing-honesty"><div class="hpin">
         <div class="honest">
           <div class="hcard"><h3>When it doesn't know, it says so.</h3><p>For the first week it's still learning what's normal for you, and it tells you that instead of guessing.</p><div class="learn" id="tr-learn" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div><span class="mono" id="tr-lt">Still learning your usual sleep · 4 of 7 nights</span></div>
           <div class="hcard"><h3>Some things need a person.</h3><p>If your sleep has been short for weeks, it offers someone to talk to, in the morning, never mid-study. It never tells your coach, team or school.</p>
@@ -394,7 +451,7 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
       </div></div>
     </section>
 
-    <section class="band" id="pilot" aria-labelledby="ask">
+    <section class="band" id="pilot" aria-labelledby="ask" data-attn="landing-join">
       <div class="ask2" id="tr-ask2">
         <div><h2 id="ask">Sign-up isn't open yet.</h2><p>We're a student team. Our course staff have to OK the study before anyone's real data goes in, so for now everything here is a demo with made-up data.</p>
           <p class="lead">If it opens, joining means:</p>
@@ -406,12 +463,12 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
           </ul>
           <div class="tbd"><b>How long it runs</b><span>—</span><b>Who can join</b><span>—</span></div>
           <p class="later">We'll put these here before sign-up opens.</p></div>
-        <div class="ctas"><a class="btn dark" href="#try">Try the demo again</a></div>
+        <div class="ctas"><a class="btn dark" href="/start#account" data-track="join create account">Create a demo account</a></div>
       </div>
     </section>
   </main>
 
-  <footer><span>Halftime is a BINF 4070 student project at Columbia University. It's a wellness tool, not medical advice.</span><span>Everything on this page is sample data.</span></footer>
+  <footer><span>Halftime is a BINF 4070 student project at Columbia University. It's a wellness tool, not medical advice.</span><span>Everything on this page is sample data. This prototype records how it's used (screens, taps, device, IP address) to improve it.</span></footer>
 </div>
 
 <script>
@@ -606,9 +663,22 @@ function seek(p) {
 const scrolly = document.querySelector(".hw-scrolly");
 const progress = () => { const r = scrolly.getBoundingClientRect(), tot = r.height - innerHeight; return tot > 0 ? clamp(-r.top / tot) : 1; };
 let lastP = -1;
+// mouse wheels move the page in 100 px jumps: on fine pointers the drawing eases toward the scroll position
+// (time constant 90 ms) instead of snapping a step per notch. Touch and reduced motion follow the scroll exactly.
+const FINE = matchMedia("(hover: hover) and (pointer: fine)").matches && !reduce;
+let shown = -1, target = 0, easing = false, lastT = 0;
+function ease(t) {
+  const dt = Math.min(64, t - lastT || 16); lastT = t;
+  shown += (target - shown) * (1 - Math.exp(-dt / 90));
+  if (Math.abs(target - shown) < .0006) { shown = target; easing = false; }
+  const p = Math.round(shown * 4000) / 4000; if (p !== lastP) { lastP = p; seek(p); }
+  if (easing) requestAnimationFrame(ease);
+}
 function frame(q) {
   let p = fixed != null ? fixed : q != null ? q : progress();
   if (reduce && fixed == null) p = [.24, .49, .745, 1][Math.min(3, Math.floor(p * 4))];
+  if (FINE && fixed == null && shown >= 0) { target = p; if (!easing) { easing = true; lastT = performance.now(); requestAnimationFrame(ease); } return; }
+  shown = target = p;
   p = Math.round(p * 4000) / 4000; if (p === lastP) return; lastP = p; seek(p);
 }
 caps.forEach((li, i) => li.addEventListener("click", () => { const tot = scrolly.offsetHeight - innerHeight; scrollTo({ top: scrolly.offsetTop + tot * (i / 4 + .22) }); }));
@@ -684,9 +754,19 @@ const read = () => {
   return { lo, now, p2: Math.round(p2 * 2000) / 2000, p3: clamp((innerHeight * .85 - ra.top) / (ra.height * .9)) };
 };
 let l2 = -1, l3 = -1;
+const FINE2 = matchMedia("(hover: hover) and (pointer: fine)").matches && !reduce;
+let s2 = -1, t2 = 0, e2 = false, lt2 = 0;
+function ease2(t) {
+  const dt = Math.min(64, t - lt2 || 16); lt2 = t;
+  s2 += (t2 - s2) * (1 - Math.exp(-dt / 90));
+  if (Math.abs(t2 - s2) < .0008) { s2 = t2; e2 = false; }
+  const p = Math.round(s2 * 2000) / 2000; if (p !== l2) { l2 = p; seek2(p); }
+  if (e2) requestAnimationFrame(ease2);
+}
 const write = (v) => {
   if (v.lo !== v.now) { root.classList.toggle("tr-loose", v.lo); window.__htAsk(); return; } // layout changes: measure again next frame
-  if (v.p2 !== l2) { l2 = v.p2; seek2(v.p2); }
+  if (FINE2 && s2 >= 0) { t2 = v.p2; if (!e2) { e2 = true; lt2 = performance.now(); requestAnimationFrame(ease2); } }
+  else if (v.p2 !== l2) { s2 = t2 = v.p2; l2 = v.p2; seek2(v.p2); }
   const k3 = Math.floor(v.p3 * 5); if (k3 !== l3) { l3 = k3; seek3(v.p3); }
 };
 const fixed = F2 != null || F3 != null;
@@ -721,5 +801,38 @@ if ("ResizeObserver" in window) new ResizeObserver(() => requestAnimationFrame((
 frame();
 })();
 </script>
+<script>
+// comparison: on first view (laptop table only), mint lines draw once from the Wearables and Productivity headers
+// into the Halftime header, the "connects both" idea. A single ease-out stroke draw; reduced motion shows them drawn.
+(() => {
+  const box = document.getElementById("cmp-box"), svg = document.getElementById("cmp-wires");
+  if (!box || !svg) return;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let drawn = false;
+  function lay() {
+    if (getComputedStyle(svg).display === "none") return null;
+    const b = box.getBoundingClientRect(), r = (id) => document.getElementById(id).getBoundingClientRect();
+    const w = r("cmp-w"), p = r("cmp-p"), h = r("cmp-h"), y = w.top - b.top + 8, hx = h.left - b.left + 40;
+    svg.setAttribute("viewBox", `0 0 ${b.width} ${b.height}`);
+    const curve = (x0, lift) => `M ${x0} ${y} C ${x0} ${y - lift}, ${hx} ${y - lift}, ${hx} ${y}`;
+    svg.innerHTML = `<path d="${curve(w.left - b.left + 40, 34)}"/><path d="${curve(p.left - b.left + 40, 22)}"/><circle cx="${hx}" cy="${y}" r="4" fill="#8ED6BC"/>`;
+    return [...svg.querySelectorAll("path")];
+  }
+  function draw() {
+    const paths = lay(); if (!paths) return;
+    paths.forEach((pa, i) => {
+      const L = pa.getTotalLength(); pa.style.strokeDasharray = L; pa.style.strokeDashoffset = drawn || reduce ? 0 : L;
+      if (!drawn && !reduce && pa.animate) pa.animate([{ strokeDashoffset: L }, { strokeDashoffset: 0 }], { duration: 900, delay: 120 * i, easing: "cubic-bezier(.23,1,.32,1)", fill: "forwards" });
+    });
+    drawn = true;
+  }
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { draw(); io.disconnect(); } }, { threshold: .35 });
+    io.observe(box);
+  } else draw();
+  let t; addEventListener("resize", () => { clearTimeout(t); t = setTimeout(() => { if (drawn) { const ps = lay(); if (ps) ps.forEach((pa) => { pa.style.strokeDasharray = pa.getTotalLength(); pa.style.strokeDashoffset = 0; }); } }, 150); });
+})();
+</script>
+
 </body>
 </html>

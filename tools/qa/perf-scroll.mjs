@@ -3,6 +3,7 @@
 //
 //   node tools/qa/perf-scroll.mjs --url=/index.html --root=site [--device=iphone|laptop] [--cpu=4] [--runs=2]
 //   node tools/qa/perf-scroll.mjs --url=https://halftime-study.vercel.app/ --device=iphone
+//   --setup='<js run on the page first, e.g. seed localStorage>'  --taps='sel1|sel2|…'  (taps run in order; default: the landing demo)
 //
 // Headless Chrome (throwaway profile), CPU slowed --cpu times to stand in for a phone. It scrolls the
 // whole page top to bottom with real compositor scroll gestures, taps the demo buttons, then reports:
@@ -66,6 +67,7 @@ const pct = (a, q) => a.length ? a[Math.min(a.length - 1, Math.floor(q * a.lengt
 const results = [];
 for (let run = 0; run < RUNS; run++) {
   await send('Emulation.setCPUThrottlingRate', { rate: 1 });
+  if (opt('setup', '')) { await send('Page.navigate', { url: TARGET }); await sleep(800); await js(opt('setup', '')); }
   await send('Page.navigate', { url: TARGET }); await sleep(2500);
   await js('document.fonts ? document.fonts.ready.then(() => 1) : 1'); await sleep(800);
   // recorder: rAF deltas and long tasks, from here on
@@ -90,8 +92,9 @@ for (let run = 0; run < RUNS; run++) {
   console.log(`  run ${run + 1}: scroll paint ${Math.round(paintMs)} ms in ${paints} paints · raster ${Math.round(rasterMs)} ms · pre-paint/layers ${Math.round(layerMs)} ms`);
   const mS = await metric(); const fS = await js('window.__f.length'); const ltS = await js('window.__lt.length');
   // back to the demo and tap through it
-  await js('document.getElementById("try").scrollIntoView(); 1'); await sleep(400);
-  for (const sel of ['.opt[data-v=night]', '.opt[data-v="220"]', '.opt[data-v="0"]', '.opt[data-v=gym]', '.opt[data-v=day]', '[data-act=yes]', '[data-act=back]']) {
+  await js('(document.getElementById("try") || document.body).scrollIntoView(); scrollTo(0, 0); 1'); await sleep(400);
+  const TAPS = opt('taps', '') ? opt('taps', '').split('|') : ['.opt[data-v=night]', '.opt[data-v="220"]', '.opt[data-v="0"]', '.opt[data-v=gym]', '.opt[data-v=day]', '[data-act=yes]', '[data-act=back]'];
+  for (const sel of TAPS) {
     await js(`(() => { const b = document.querySelector('${sel}'); if (!b) return 0; const r = b.getBoundingClientRect(); window.__tap = [r.x + r.width / 2, r.y + r.height / 2]; return 1; })()`);
     const [tx, ty] = await js('window.__tap || [0,0]');
     if (mobile) { await send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: tx, y: ty }] }); await send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }); }

@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F4F3EF">
+<title>Halftime</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* UIUX seat, round 3: the team picked the Island and round 1's B "Forecast".
+   The page is the forecast: your session drawn as a line from when you started to your next stop.
+   The island is the voice: it sits small, springs open once at a pause, and when it suggests a walk
+   the slot for that walk lights up on the line below, before Chem lab. Accept, and the island
+   becomes a live countdown while the walk slot fills in. */
+:root{
+  --paper:#F4F3EF; --ink:#141414; --ink2:#46453F; --muted:#64625C; --line:#E3E1DB; --track:#E6E4DE;
+  --island:#000; --on:#FFF; --on2:rgba(255,255,255,.74); --on3:rgba(255,255,255,.5); --well:#1C1C1E; --well2:#2C2C2E;
+  --done:#1C1C1E; --refill:#8ED6BC; --refill-ink:#0F5E46; --slot:#8ED6BC; --now:#E5484D;
+  --ui:"Geist", system-ui, -apple-system, sans-serif; --mono:"Geist Mono", ui-monospace, Menlo, monospace;
+  --spring:cubic-bezier(.32,.72,0,1); --ease:cubic-bezier(.23,1,.32,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;overscroll-behavior:none;background:var(--paper)}
+body{min-height:100dvh;background:var(--paper);color:var(--ink);font:400 1rem/1.45 var(--ui);font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+:focus-visible{outline:3px solid var(--refill-ink);outline-offset:3px;border-radius:12px}
+.island :focus-visible{outline-color:var(--refill)}
+::selection{background:rgba(142,214,188,.55);color:var(--ink)}
+.island ::selection{background:rgba(142,214,188,.4);color:#FFF}
+.page{max-width:520px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 64px) 20px calc(env(safe-area-inset-bottom,0px) + 10px)}
+/* hero: the session clock (dims when the island speaks) */
+.hero{transition:opacity .35s ease,filter .35s ease}
+.speaking .hero{opacity:.12;filter:blur(3px)}
+.subject{display:flex;justify-content:space-between;font:500 0.875rem/1 var(--ui);color:var(--muted)}
+.clock{font:300 6rem/.9 var(--ui);letter-spacing:-.055em;margin-top:18px}
+.clock small{font:500 1.0625rem/1 var(--ui);letter-spacing:0;color:var(--muted);margin-left:10px}
+.since{font:400 1rem/1.3 var(--ui);color:var(--ink2);margin-top:8px}
+/* the forecast line (the signature; stays sharp when the island speaks) */
+.forecast{margin-top:34px;position:relative;z-index:1}
+.stack{transition:transform .5s var(--spring);will-change:transform}
+.flabel{display:flex;justify-content:space-between;font:500 0.875rem/1 var(--ui);color:var(--muted)}
+.track{position:relative;height:18px;border-radius:9px;background:var(--track);margin-top:16px}
+.done{position:absolute;left:0;top:0;bottom:0;border-radius:9px;background:var(--done)}
+.slot{position:absolute;top:-8px;bottom:-8px;border-radius:12px;background:rgba(142,214,188,.35);outline:2px dashed var(--refill-ink);outline-offset:-2px;opacity:0;transform:scaleX(.6);transform-origin:left;transition:opacity .3s ease .25s,transform .5s var(--spring) .25s}
+.suggesting .slot{opacity:1;transform:none}
+.fill{position:absolute;top:0;bottom:0;border-radius:9px;background:var(--refill);width:0;transition:width .6s var(--spring)}
+.walking .fill{width:4.4%}
+.nowmark{position:absolute;top:-12px;bottom:-12px;width:3px;margin-left:-1.5px;border-radius:2px;background:var(--now)}
+.stop{position:absolute;right:0;top:50%;width:22px;height:22px;margin-top:-11px;border-radius:6px;background:var(--paper);border:3px solid var(--ink)}
+.check{position:absolute;top:-6px;bottom:-6px;width:2px;background:var(--muted);opacity:0}
+.keeping .check{opacity:1}
+.ticks{position:relative;height:32px;margin-top:12px;font:500 0.75rem/1.25 var(--mono);color:var(--muted)}
+.ticks span{position:absolute;top:0;white-space:nowrap}
+.ticks .t-now{color:#B42318;font-weight:500}
+.ticks .t-slot{color:var(--refill-ink);opacity:0;transition:opacity .3s ease .4s}
+.suggesting .t-slot,.walking .t-slot{opacity:1}
+.ticks .t-check{opacity:0}.keeping .t-check{opacity:1}
+.next{display:flex;align-items:center;gap:12px;margin-top:auto;padding:14px 16px;border-radius:18px;background:#FFFFFF}
+.next.tuck{visibility:hidden}
+.next .sq{width:14px;height:14px;border-radius:4px;border:3px solid var(--ink);flex:none}
+.next b{font-weight:600}.next span{color:var(--ink2);font-size:0.9375rem}
+.foot{display:flex;justify-content:space-between;margin-top:10px}
+.foot button{min-height:44px;font:500 0.875rem/1 var(--ui);color:var(--muted)}
+.sample{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 54px);font:500 0.75rem/1 var(--ui);color:var(--muted);pointer-events:none}
+/* the island */
+.island{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:5;background:var(--island);color:var(--on);border-radius:22px;overflow:hidden;width:170px;height:44px;
+  transition:width .5s var(--spring),height .5s var(--spring),border-radius .5s var(--spring);box-shadow:0 12px 32px rgba(0,0,0,.2)}
+.island.open{border-radius:38px}
+.compact{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 14px 0 13px;font:500 0.9375rem/1 var(--mono);transition:opacity .2s ease}
+.compact .l{display:flex;align-items:center;gap:8px}
+.compact .dot{width:8px;height:8px;border-radius:50%;background:var(--refill)}
+.island.open .compact{opacity:0;pointer-events:none}
+.full{padding:20px 22px 28px;opacity:0;transform:translateY(-6px) scale(.98);transform-origin:top center;transition:opacity .25s ease .12s,transform .45s var(--spring) .08s}
+.island.open .full{opacity:1;transform:none}
+.status{display:flex;justify-content:space-between;align-items:center;font:500 0.75rem/1 var(--mono);color:var(--on3)}
+.q{font:600 2rem/1.05 var(--ui);letter-spacing:-.03em;margin-top:14px;text-wrap:balance}
+.q.q2{font-size:1.625rem;line-height:1.12}
+.sub{font:500 1rem/1.35 var(--ui);color:var(--refill);margin-top:6px}
+.why{font:400 1rem/1.45 var(--ui);color:var(--on2);margin-top:10px}
+.why b{color:var(--on);font-weight:500}
+.chip{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;border-radius:7px;background:var(--well2);color:var(--on2);font:500 0.75rem/1 var(--mono);margin-left:4px;vertical-align:1px;position:relative}
+.chip::after{content:"";position:absolute;inset:-10px -4px}
+.nw{white-space:nowrap}
+.sure{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:0.875rem;color:var(--on2)}
+.sure{align-items:flex-start}
+.sure .tag{flex:none;font:500 0.75rem/1 var(--mono);color:var(--on);border:1px solid var(--on3);border-radius:999px;padding:5px 9px;margin-top:1px}
+.ctx{display:block;width:100%;min-height:44px;margin-top:8px;border-radius:14px;border:1px dashed var(--well2);font:500 0.875rem/1.2 var(--ui);color:var(--on2)}
+.nights{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:12px}
+.night::after{content:"";position:absolute;inset:0 -2px}
+.night{min-height:50px;border-radius:12px;background:var(--well);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:500 0.75rem/1 var(--mono);color:var(--on3);position:relative}
+.night b{font:600 0.8125rem/1 var(--mono);color:var(--on)}
+.night.short b{color:#F2B8A0}
+.night.on{background:var(--refill);color:#0B3D2E}.night.on b{color:#000}
+.night .cal{position:absolute;top:4px;right:5px;width:6px;height:6px;border-radius:50%;background:#5AA9FF}
+.night.on .cal{background:#1F6FD1}
+.reasons{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.reason{min-height:44px;padding:0 14px;border-radius:22px;background:var(--well2);font:500 0.875rem/1 var(--ui);color:var(--on2)}
+.reason[aria-pressed="true"]{background:var(--on);color:#000}
+.tally{font:400 0.875rem/1.4 var(--ui);color:var(--on2);margin-top:12px}
+.tally b{color:var(--on);font-weight:600}
+.tally.note{color:var(--refill)}
+.morning .forecast,.morning .next{visibility:hidden}
+[hidden]{display:none!important}
+/* wearable sources (connect flow) */
+.srcs{display:grid;gap:8px;margin-top:14px}
+.src{display:grid;grid-template-columns:24px 1fr auto;align-items:center;gap:12px;text-align:left;background:var(--well);border-radius:18px;padding:12px 14px;min-height:62px;color:var(--on);width:100%}
+.src b{display:block;font:600 1rem/1.25 var(--ui)}.src span{display:block;font:400 0.875rem/1.35 var(--ui);color:var(--on2)}
+.src i{font:500 0.8125rem/1 var(--ui);font-style:normal;color:var(--refill)}
+.src .gl{color:var(--on2)}
+.src.off b{color:var(--on2)}.src.off i{color:var(--on3)}
+.fine{font:400 0.875rem/1.45 var(--ui);color:var(--on3);margin-top:12px}
+.note{display:flex;gap:8px;align-items:flex-start;margin-top:10px;font:400 0.875rem/1.4 var(--ui);color:var(--on2)}
+.note .gl{flex:none;margin-top:1px;color:var(--on3)}
+.inl{display:block;min-height:44px;font:500 0.875rem/1 var(--ui);color:var(--refill);text-align:left}
+.qg{display:inline-flex;align-items:center;gap:10px}
+/* settings: data sources */
+.settings{max-width:520px;margin:0 auto;min-height:100dvh;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px calc(env(safe-area-inset-bottom,0px) + 28px);background:var(--paper)}
+.sh{display:flex;justify-content:space-between;align-items:center}
+.back{min-height:44px;font:500 1rem/1 var(--ui);color:var(--ink)}
+.sh .smp{font:500 0.8125rem/1 var(--ui);color:var(--muted)}
+.st{font:600 2rem/1.05 var(--ui);letter-spacing:-.03em;margin-top:6px}
+.sl{font:400 0.9375rem/1.4 var(--ui);color:var(--ink2);margin-top:6px}
+.card{background:#FFFFFF;border-radius:18px;padding:14px 16px;margin-top:12px}
+.ch{display:grid;grid-template-columns:24px 1fr auto;gap:12px;align-items:center}
+.ch .gl{color:var(--ink)}
+.ch b{display:block;font:600 1rem/1.25 var(--ui)}.ch small{display:block;font:500 0.75rem/1.35 var(--mono);color:var(--muted);margin-top:2px}
+.cd{font:400 0.9375rem/1.45 var(--ui);color:var(--ink2);margin-top:8px;padding-left:36px}
+.sw{width:51px;height:44px;position:relative;flex:none}
+.sw::before{content:"";position:absolute;left:0;right:0;top:6.5px;height:31px;border-radius:16px;background:#D9D7D0;transition:background .2s ease}
+.sw::after{content:"";position:absolute;top:8.5px;left:2px;width:27px;height:27px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s var(--ease)}
+.sw[aria-checked="true"]::before{background:var(--refill-ink)}
+.sw[aria-checked="true"]::after{transform:translateX(20px)}
+.cbtns{display:flex;gap:8px;margin-top:10px;padding-left:36px;flex-wrap:wrap}
+.pill{min-height:44px;padding:0 14px;border-radius:22px;border:1px solid var(--line);font:500 0.875rem/1 var(--ui);color:var(--ink);background:#FFFFFF}
+.pill[aria-pressed="true"]{background:var(--ink);color:#FFFFFF;border-color:var(--ink)}
+.dl{display:grid;gap:12px;margin-top:10px}
+.dl dt{font:600 0.875rem/1.3 var(--ui);color:var(--ink)}
+.dl dd{font:400 0.9375rem/1.45 var(--ui);color:var(--ink2);margin-top:2px}
+.danger{min-height:44px;margin-top:10px;font:600 0.9375rem/1 var(--ui);color:#B42318}
+.sub2{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+.sub2 b{display:block;font:600 0.9375rem/1.3 var(--ui);color:var(--ink)}.sub2 small{display:block;font:400 0.875rem/1.35 var(--ui);color:var(--muted)}
+.cd2{display:block;font:400 0.875rem/1.45 var(--ui);color:var(--muted);margin-top:4px}
+.acts.lt{margin-top:18px}
+.a.dz{background:#B42318;color:#FFF}.a.lo{background:#FFFFFF;color:var(--ink);border:1px solid var(--line)}
+/* never taller than the screen: the open island scrolls inside itself */
+.island{max-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 150px)}
+.island.open .full{max-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 150px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+/* more below: fade the bottom edge so a cut row reads as "scroll", not as clipped */
+.island.open .full.more{-webkit-mask-image:linear-gradient(#000 calc(100% - 56px),transparent);mask-image:linear-gradient(#000 calc(100% - 56px),transparent)}
+.a{min-height:54px;border-radius:27px;font:600 1.0625rem/1 var(--ui);transition:transform .12s var(--ease)}
+.a:active{transform:scale(.96)}
+.a.yes{background:var(--on);color:#000}.a.no{background:var(--well2);color:var(--on)}
+.links{display:flex;justify-content:space-between;margin-top:4px}
+.links{gap:12px}
+.links button{min-height:44px;min-width:44px;text-align:left;font:500 0.875rem/1 var(--ui);color:var(--on2)}
+.ev{margin-top:14px;display:grid;gap:12px;border-top:1px solid var(--well2);padding-top:12px}
+.row{display:grid;grid-template-columns:1fr auto;gap:2px 10px}
+.row .k{font:500 0.875rem/1.3 var(--ui)}.row .val{font:500 0.875rem/1.3 var(--mono)}
+.row .m{grid-column:1/-1;font:400 0.75rem/1.3 var(--mono);color:var(--on3)}
+.rng{grid-column:1/-1;position:relative;height:6px;border-radius:3px;background:var(--well2);margin-top:6px}
+.rng span{position:absolute;top:0;bottom:0;border-radius:3px;background:#4A4A4E}
+.rng em{position:absolute;top:50%;width:12px;height:12px;margin:-6px;border-radius:50%;background:var(--on);border:2px solid #000}
+.ladder{display:grid;gap:8px;margin-top:14px}
+.rung{text-align:left;background:var(--well);border-radius:18px;padding:12px 16px;min-height:58px}
+.rung b{display:block;font:600 1rem/1.25 var(--ui)}.rung span{font:400 0.875rem/1.3 var(--ui);color:var(--on2)}
+.rung.first{background:var(--on);color:#000}.rung.first span{color:#333}
+.learn{display:flex;gap:5px;margin-top:14px}.learn i{flex:1;height:6px;border-radius:3px;background:var(--well2)}.learn i.on{background:var(--refill)}
+/* live activity (compact, while walking) */
+.island.live{width:min(340px,calc(100vw - 24px))}
+.liveview{position:absolute;inset:0;display:none;align-items:center;justify-content:space-between;padding:0 18px 0 12px}
+.island.live .liveview{display:flex}.island.live .compact{opacity:0}
+.liveview .l{display:flex;align-items:center;gap:10px;font:500 0.9375rem/1 var(--ui)}
+.liveview .t{font:400 1.625rem/1 var(--ui);letter-spacing:-.03em;color:var(--refill)}
+.foot{display:grid;grid-template-columns:1fr auto 1fr;align-items:center}
+.foot .smp{font:500 0.8125rem/1 var(--ui);color:var(--muted)}
+.foot button:last-child{justify-self:end}
+@media (prefers-reduced-motion:reduce){.island,.full,.compact,.slot,.fill,.hero{transition:opacity .2s ease!important}.full,.slot{transform:none}}
+@media (max-height:700px){.clock{font-size:4.25rem;margin-top:10px}.q{font-size:1.75rem}.q.q2{font-size:1.5rem}.full{padding:16px 18px 24px}.next{padding:10px 14px}.forecast{margin-top:18px}}
+
+/* ---- app shell (site build): tabs, history, you, demo sheet, toast ---- */
+.page,.settings,.tabview{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 92px)!important}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:4;background:var(--paper);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px max(10px, env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 6px) max(10px, env(safe-area-inset-left,0px))}
+.tabbar .in{display:grid;grid-template-columns:repeat(4,1fr);width:100%;max-width:520px}
+.tabbar button{min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font:500 .75rem/1 var(--ui);color:var(--muted)}
+.tabbar button[aria-current="page"]{color:var(--ink)}
+.tabbar svg{width:24px;height:24px}
+.tabview{max-width:520px;margin:0 auto;min-height:100dvh;padding:calc(env(safe-area-inset-top,0px) + 18px) 20px 0;background:var(--paper)}
+.tabview h1{font:650 2rem/1.05 var(--ui);letter-spacing:-.035em}
+.tabview .sub2{color:var(--ink2);margin-top:6px}
+.hc{background:#fff;border-radius:22px;padding:16px 18px;margin-top:14px}
+.hc h2{font:600 1rem/1.2 var(--ui);display:flex;align-items:center;gap:8px}
+.hc .smp{margin-left:auto}
+.stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.stats3 div{background:var(--paper);border-radius:14px;padding:10px 12px}
+.stats3 b{display:block;font:600 1.375rem/1.1 var(--ui);letter-spacing:-.02em}
+.stats3 span{font-size:.75rem;color:var(--muted)}
+.bars{position:relative;display:flex;align-items:flex-end;gap:4px;height:140px;margin-top:14px}
+.bars .b{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;height:100%}
+.bars .b i{display:block;width:100%;border-radius:4px;background:var(--ink)}
+.bars .b i.lo{background:#8B8983}
+.bars .b small{font:500 .75rem/1 var(--mono);color:var(--muted);height:12px;white-space:nowrap}
+.bars .usual{position:absolute;left:0;right:0;border-top:2px dashed var(--refill-ink)}
+.bars .usual em{position:absolute;right:0;top:-19px;font:500 .75rem/1 var(--mono);font-style:normal;color:var(--refill-ink);background:#fff;padding:2px 4px}
+.legend2{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:.8125rem;color:var(--ink2)}
+.legend2 span{display:inline-flex;align-items:center;gap:6px}
+.legend2 i{display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--ink)}
+.log{list-style:none;margin-top:8px}
+.log li{display:grid;grid-template-columns:auto 1fr auto;gap:2px 12px;padding:11px 0;border-top:1px solid var(--line);align-items:baseline}
+.log li:first-child{border-top:0}
+.log .when{font:500 .75rem/1.2 var(--mono);color:var(--muted);grid-row:span 2;min-width:62px}
+.log b{font-weight:600;font-size:.9375rem}
+.log .what{grid-column:2;font-size:.8125rem;color:var(--ink2)}
+.log .res{grid-row:1;grid-column:3;font:500 .75rem/1 var(--mono);border-radius:6px;padding:4px 6px;background:var(--paper)}
+.log .res.took{background:rgba(142,214,188,.35);color:var(--refill-ink)}
+.acct{display:flex;gap:14px;align-items:center}
+.acct .av{width:52px;height:52px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font:600 1.25rem/1 var(--ui)}
+.rowbtn{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:52px;text-align:left;border-top:1px solid var(--line);font-weight:500}
+.rowbtn:first-of-type{border-top:0}
+.rowbtn span{color:var(--muted);font-size:.875rem}
+.rowbtn.danger{color:#B42318}
+.swt{flex:none;width:50px;height:30px;border-radius:15px;background:var(--line);position:relative;transition:background .2s ease}
+.swt::after{content:"";position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .2s var(--ease)}
+[aria-checked="true"] .swt{background:var(--refill-ink)}
+[aria-checked="true"] .swt::after{transform:translateX(20px)}
+.demobtn{position:fixed;left:max(12px, env(safe-area-inset-left,0px));top:calc(env(safe-area-inset-top,0px) + 10px);z-index:4;min-height:44px;padding:0 16px;border-radius:22px;background:var(--ink);color:var(--paper);font:600 .875rem/1 var(--ui);display:inline-flex;align-items:center;gap:8px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.demobtn::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--refill)}
+.scrim{position:fixed;inset:0;z-index:19;background:rgba(20,20,20,.38);opacity:0;pointer-events:none;transition:opacity .2s ease}
+.scrim.on{opacity:1;pointer-events:auto}
+.dsheet{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--paper);border-radius:26px 26px 0 0;max-width:560px;margin:0 auto;max-height:82dvh;overflow:auto;padding:10px 18px calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateY(105%);transition:transform .32s var(--spring)}
+.dsheet.on{transform:none}
+.dsheet .grab{width:40px;height:5px;border-radius:3px;background:var(--line);margin:4px auto 12px}
+.dsheet h2{font:650 1.375rem/1.1 var(--ui);letter-spacing:-.02em}
+.dsheet p.s{color:var(--ink2);font-size:.9375rem;margin-top:4px}
+.dlist{display:grid;gap:8px;margin-top:14px}
+.dlist button{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;min-height:56px;padding:12px 14px;border-radius:16px;background:#fff;width:100%}
+.dlist b{font-weight:600}
+.dlist span{font-size:.8125rem;color:var(--muted)}
+.dclose{min-height:48px;width:100%;margin-top:10px;font-weight:600;color:var(--ink2)}
+.htoast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 80px);transform:translate(-50%,8px);z-index:30;background:var(--ink);color:var(--paper);border-radius:16px;padding:11px 15px;font-size:.9375rem;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s var(--ease);max-width:calc(100% - 32px);text-align:center}
+.htoast.on{opacity:1;transform:translate(-50%,0)}
+.hello{font:500 .875rem/1 var(--ui);color:var(--muted);margin-bottom:10px}
+.paused .slot,.paused .t-slot{opacity:.25}
+.hcard{background:#fff;border-radius:18px;padding:14px 16px;margin-top:10px}
+.hcard h2{display:flex;align-items:center;gap:8px;font:600 .9375rem/1.2 var(--ui)}
+.hcard h2 .src2{margin-left:auto;font:500 .75rem/1 var(--mono);color:var(--muted)}
+.vit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.vit div{background:var(--paper);border-radius:12px;padding:10px 12px;min-width:0}
+.vit .l{display:block;font:500 .75rem/1.2 var(--ui);color:var(--ink2)}
+.vit b{display:block;font:650 1.375rem/1.15 var(--ui);letter-spacing:-.02em;margin-top:2px}
+.vit b small{font:500 .8125rem/1 var(--ui);color:var(--ink2);margin-left:2px}
+.vit .u{display:block;font:500 .75rem/1.3 var(--mono);color:var(--muted);margin-top:2px}
+.hcard .fine2{font-size:.8125rem;color:var(--muted);margin-top:8px}
+.ag{list-style:none;margin-top:8px}
+.ag li{display:grid;grid-template-columns:64px 1fr;gap:8px;padding:8px 0;border-top:1px solid var(--line)}
+.ag li:first-child{border-top:0}
+.ag .at{font:500 .75rem/1.4 var(--mono);color:var(--muted)}
+.ag b{display:block;font-weight:600;font-size:.875rem}
+.ag span.w{font-size:.75rem;color:var(--muted)}
+.ag li.ev-done b{color:var(--muted);font-weight:500}
+.ag li.ev-now{background:rgba(142,214,188,.25);border-radius:10px;padding:8px 6px;margin:0 -6px}
+.ag .tg{font:600 .75rem/1 var(--mono);color:var(--refill-ink);margin-left:4px}
+.speaking .hcard{opacity:.12;filter:blur(3px);transition:opacity .35s ease,filter .35s ease}
+.morning .hcard{visibility:hidden}
+.spark{display:block;width:100%;height:auto;margin-top:8px;overflow:visible}
+.quiet{font:300 4rem/1 var(--ui);letter-spacing:-.05em;color:var(--refill);margin-top:8px}
+@media (prefers-reduced-motion:reduce){.dsheet,.scrim,.htoast{transition:none}}
+</style>
+</head>
+<body>
+<div class="page" id="page">
+  <div class="stack" id="stack">
+  <section class="hero" aria-label="This session" data-attn="now-clock">
+    <p class="subject" id="subj"><span>Organic chemistry</span><span>Started 1:05 pm</span></p>
+    <p class="clock" id="clock">2:40<small>studying</small></p>
+    <p class="since" id="since">No break yet this session.</p>
+  </section>
+  <section class="forecast" data-attn="now-forecast" aria-label="Your session as a line, up to Chem lab at 4:30 pm">
+    <p class="flabel"><span>This session</span><span id="flabel">up to your next stop</span></p>
+    <div class="track" role="img" aria-label="Started 1:05 pm. Now 3:45 pm. A 5-minute walk fits now. Chem lab at 4:30 pm.">
+      <span class="done" style="width:78%"></span>
+      <span class="slot" style="left:78.6%;width:5%"></span>
+      <span class="fill" style="left:78.6%"></span>
+      <span class="check" style="left:87%"></span>
+      <span class="nowmark" id="nowmark" style="left:78%"></span>
+      <span class="stop" aria-hidden="true"></span>
+    </div>
+    <div class="ticks" aria-hidden="true">
+      <span style="left:0">1:05 pm</span>
+      <span class="t-now" id="tnow" style="left:78%;transform:translateX(-50%)">now 3:45</span>
+      <span class="t-slot" style="left:81%;top:16px;transform:translateX(-50%)">walk · back 3:50</span>
+      <span class="t-check" style="left:87%;top:16px;transform:translateX(-50%)">next check 4:05</span>
+      <span style="right:0">4:30</span>
+    </div>
+  </section>
+  </div>
+  <div class="next" data-attn="now-next" id="home-next"><span class="sq" aria-hidden="true"></span><p><b>Chem lab · 4:30 pm</b><br><span>45 min from now · from your calendar</span></p></div>
+  <section class="hcard" id="home-body" data-attn="home-body"></section>
+  <section class="hcard" id="home-cal" data-attn="home-cal"></section>
+  <nav class="foot"><button data-act="talk">Talk to someone</button><span class="smp">Sample data</span><button data-act="pause" class="pausebtn">Pause suggestions</button></nav>
+</div>
+
+<main class="settings" id="settings" hidden aria-label="Data sources">
+  <header class="sh"><button class="back" data-go="idle">‹ Back</button><span class="smp">Sample data</span></header>
+  <h1 class="st">Data sources</h1>
+  <p class="sl">What Halftime reads, and what it never does.</p>
+  <div id="srclist"></div>
+  <nav class="foot" style="margin-top:18px"><button data-act="talk">Talk to someone</button><span class="smp">Sample data</span><button data-act="pause" class="pausebtn">Pause suggestions</button></nav>
+</main>
+
+<div class="island" id="island" role="region" aria-label="Halftime">
+  <button class="compact" id="compact" aria-label="Open Halftime"><span class="l"><span class="dot"></span><span id="ctime">2:40</span></span>
+    <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="#2C2C2E" stroke-width="3"/><circle cx="10" cy="10" r="8" fill="none" stroke="#8ED6BC" stroke-width="3" stroke-dasharray="50.3" stroke-dashoffset="11" transform="rotate(-90 10 10)" stroke-linecap="round"/></svg></button>
+  <button class="liveview" id="liveview" aria-label="Walk break, 4 minutes 12 seconds left. Open."><span class="l">
+    <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="10" fill="none" stroke="#2C2C2E" stroke-width="4"/><circle cx="13" cy="13" r="10" fill="none" stroke="#8ED6BC" stroke-width="4" stroke-dasharray="62.8" stroke-dashoffset="10" transform="rotate(-90 13 13)" stroke-linecap="round"/></svg>Walk</span><span class="t">4:12</span></button>
+  <div class="full" id="full" data-attn="island-card"></div>
+</div>
+
+<main class="tabview" id="history" hidden aria-label="History">
+  <p class="hello" id="h-hello"></p>
+  <h1>This week</h1>
+  <p class="sub2">Sample data, as Halftime would show it after a week.</p>
+  <section class="hc" data-attn="history-stats"><div class="stats3"><div><b>9</b><span>study sessions</span></div><div><b>21 h</b><span>studying</span></div><div><b>6 of 8</b><span>breaks taken</span></div></div></section>
+  <section class="hc" data-attn="history-sleep"><h2 id="h-sleep-title">Sleep vs your usual</h2><div class="bars" id="h-bars" role="img"></div>
+    <div class="legend2"><span><i></i>6 h or more</span><span><i style="background:#8B8983"></i>under 6 h</span><span><i style="background:none;border-top:2px dashed var(--refill-ink);border-radius:0;height:0;width:14px"></i>your usual</span></div></section>
+  <section class="hc" id="h-heart" data-attn="history-heart"></section>
+  <section class="hc" data-attn="history-log"><h2>Suggestions <span class="smp">Sample data</span></h2><ul class="log" id="h-log"></ul></section>
+  <section class="hc" data-attn="history-sessions"><h2>Study sessions</h2><ul class="log" id="h-sessions"></ul></section>
+</main>
+
+<main class="tabview" id="you" hidden aria-label="You">
+  <section class="hc acct" data-attn="you-account" style="margin-top:0"><span class="av" id="y-av">?</span><div><h1 id="y-name" style="font-size:1.5rem">You</h1><p class="sub2" id="y-meta" style="margin-top:2px"></p></div></section>
+  <section class="hc" data-attn="you-sources"><h2>Your data</h2>
+    <button class="rowbtn" data-act="sources-from-you">Data sources <span id="y-src">›</span></button>
+    <button class="rowbtn" data-act="setup">Change setup <span>wearable, next class ›</span></button></section>
+  <section class="hc" data-attn="you-privacy"><h2>This prototype</h2>
+    <button class="rowbtn" role="switch" id="y-rec" aria-checked="true" data-act="rec"><div>Usage analytics<br><span>Screens, taps, time, device, IP address</span></div><i class="swt"></i></button>
+    <button class="rowbtn" data-act="tour">Replay the tour <span>›</span></button>
+    <button class="rowbtn" data-act="replay">Replay the demo day <span>›</span></button>
+    <button class="rowbtn danger" data-act="signout">Sign out</button></section>
+  <p class="smp" style="text-align:center;margin-top:16px">Halftime is a wellness tool, not medical advice. Everything here is sample data.</p>
+</main>
+
+<div class="scrim" id="scrim"></div>
+<section class="dsheet" id="dsheet" role="dialog" aria-modal="true" aria-label="Demo moments" aria-hidden="true">
+  <div class="grab" aria-hidden="true"></div>
+  <h2>Jump to a moment</h2>
+  <p class="s">Real sessions take hours, so the demo lets you skip ahead. Sample data.</p>
+  <div class="dlist" id="dlist"></div>
+  <button class="dclose" type="button" id="dclose">Close</button>
+</section>
+<div class="htoast" id="htoast" role="status" aria-live="polite"></div>
+
+<nav class="tabbar" aria-label="Halftime"><div class="in">
+  <button type="button" data-tab="now" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="9" width="16" height="6" rx="3"/><path d="M8 19h8"/></svg>Now</button>
+  <button type="button" data-tab="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 19V11M10 19V6M15 19v-9M20 19v-5"/></svg>History</button>
+  <button type="button" data-tab="you"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1.2-3.6 4-5.5 7-5.5s5.8 1.9 7 5.5"/></svg>You</button>
+  <button type="button" id="demobtn" aria-haspopup="dialog" aria-controls="dsheet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l9 8-9 8zM15 4l5 8-5 8"/></svg>Demo</button>
+</div></nav>
+<script src="/assets/track.js"></script>
+<script src="/assets/demo-data.js"></script>
+<script src="/assets/tour.js"></script>
+
+<script>
+// Sample data only. Words: UIUX proposal on the CMO seat's voice A (COPY.md); the CMO locks them.
+const island = document.getElementById("island"), full = document.getElementById("full"), page = document.getElementById("page");
+const Q = new URLSearchParams(location.search);
+const PROFILE = (() => { try { return JSON.parse(localStorage.getItem("ht-profile") || "{}"); } catch { return {}; } })();
+const SUBJ0 = document.getElementById("subj").innerHTML;
+// Wearable sources. We read how long and when you slept. Overnight HRV is off unless the person turns it on
+// (default-deny: no reason uses it yet). Never the device's own scores (Readiness, Recovery).
+// name = the model the device reports after connecting (?model= to change it in a capture).
+const DEVICES = {
+  fitbit: { name: Q.get("model") || "Fitbit Air", /* the course loaner; ?model=Fitbit%20Charge%206 for someone's own */ short: "Fitbit", glyph: "band", via: "through Google Health", app: "Fitbit", acct: "your Google account" },
+  oura: { name: "Oura Ring", short: "Oura", glyph: "ring", via: "uses your Oura membership", app: "Oura", acct: "your Oura account" },
+  whoop: { name: "WHOOP", short: "WHOOP", glyph: "band", via: "uses your WHOOP membership", app: "WHOOP", acct: "your WHOOP account" },
+  apple: { name: "Apple Watch", short: "Apple Watch", glyph: "watch", via: "through Apple Health", app: "Health", acct: "Apple Health" },
+  garmin: { name: "Garmin Forerunner", short: "Garmin", glyph: "band", via: "through Garmin Connect", app: "Garmin Connect", acct: "your Garmin account" },
+};
+// ?team=1: on a sports team (away games from the calendar can explain short nights). Everyone else: class times only.
+const TEAM = Q.get("team") === "1" || PROFILE.role === "athlete";
+// ?os=mac|windows: which laptop the collector runs on. Linux isn't supported yet, and the screens say so.
+const OS = Q.get("os") === "windows" ? "this Windows laptop" : "this MacBook";
+let devKey = Q.get("device") || PROFILE.device || "fitbit";
+const dev = () => DEVICES[devKey] || null; // null = no wearable, laptop and calendar only
+const GLYPH = {
+  band: '<rect x="8.5" y="2" width="7" height="20" rx="3.5"/><rect x="10" y="8.5" width="4" height="7" rx="1.2"/>',
+  ring: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.6"/>',
+  watch: '<rect x="6" y="6" width="12" height="12" rx="3.2"/><path d="M9 6V2.5h6V6M9 18v3.5h6V18"/>',
+  laptop: '<rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19.5h20"/>',
+  calendar: '<rect x="4" y="5" width="16" height="15" rx="2.2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+  pin: '<path d="M12 21s-6-5.6-6-10.5a6 6 0 0 1 12 0C18 15.4 12 21 12 21z"/><circle cx="12" cy="10.5" r="2"/>',
+};
+const glyph = (k, s = 22) => `<svg class="gl" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${GLYPH[k]}</svg>`;
+const sleepChip = () => chip(3, "sleep, " + (dev() ? dev().name : "not connected"));
+const chip = (k, l) => `<button class="chip" data-go="why" aria-label="Source ${k}: ${l}. See why">${k}</button>`;
+// mode: "ok" (sleep in), "stale" (device hasn't synced), "none" (no wearable)
+const walkBody = (withWhy, mode = dev() ? "ok" : "none") => {
+  const D = dev(), calN = mode === "none" ? 3 : 4;
+  const heartRow = D && mode === "ok" ? `<div class="row"><span class="k">Heart, last night</span><span class="val">61 bpm · 38 ms</span><span class="m">resting heart rate and HRV (${D.short}) · usual 55 bpm and 49 ms · context only, not used in this suggestion</span></div>` : "";
+  const sleepPart = mode === "ok" ? `, and slept <b class="nw">5 h 10 min</b><span class="nw">${sleepChip()}.</span>` : ".";
+  const sleepRow = mode === "ok"
+    ? `<div class="row"><span class="k">3 · Sleep last night</span><span class="val">5 h 10 min</span><span class="m">${D.name} · synced 38 min ago · usual about 7 h</span></div>`
+    : mode === "stale"
+    ? `<div class="row"><span class="k">3 · Sleep last night</span><span class="val">not synced</span><span class="m">${D.name} · last sync yesterday 7:42 am · left out today</span></div>`
+    : `<div class="row"><span class="k">Sleep</span><span class="val">not connected</span><span class="m">no wearable · suggestions use your laptop and calendar</span></div>`;
+  return `<div class="status"><span>Halftime · now 3:45</span><span>45 min to Chem lab</span></div>
+  <h1 class="q">Short walk now?</h1>
+  <p class="sub">5 minutes fits. You'll be back by 3:50, well before lab<span class="nw">${chip(calN, "next class, calendar")}.</span></p>
+  <p class="why">You've been at it <b class="nw">2 h 40 min</b><span class="nw">${chip(1, "session time, laptop")},</span> with <b class="nw">14 app switches</b> in 20 min${chip(2, "app switches, laptop")}${sleepPart}</p>
+  ${mode === "stale" ? `<p class="note">${glyph(D.glyph, 16)}<span>Sleep is left out today: your ${D.name} hasn't synced since yesterday 7:42 am. Open the ${D.app} app to sync.</span></p>` : ""}
+  <p class="sure"><span class="tag">Early read</span><span>In 4 of your last 6 afternoons like this, your app switching settled back to usual after a walk.</span></p>
+  ${withWhy ? `<div class="ev">
+    <div class="row"><span class="k">1 · Session time</span><span class="val">2 h 40 min</span><span class="m">laptop · 1 min ago · usual 45–90 min</span><span class="rng"><span style="left:25%;width:25%"></span><em style="left:89%"></em></span></div>
+    <div class="row"><span class="k">2 · App switches</span><span class="val">14 / 20 min</span><span class="m">laptop · 1 min ago · usual 5–8</span><span class="rng"><span style="left:25%;width:15%"></span><em style="left:70%"></em></span></div>
+    ${mode === "none" ? "" : sleepRow}${heartRow}
+    <div class="row"><span class="k">${calN} · Next class</span><span class="val">Chem lab 4:30</span><span class="m">calendar · you turned this on · ${TEAM ? "next class and away games" : "next class only"} · we never use your location</span></div>
+    ${mode === "none" ? sleepRow : ""}
+    <p class="fine" style="margin-top:0">"Early read" means under 10 afternoons like this so far. On the laptop we only see which kind of app you're in, never what you type, read or browse.</p>
+    ${mode === "ok" ? "" : `<button class="inl" data-go="sources">Data sources</button>`}</div>` : ""}
+  <div class="acts"><button class="a yes" data-go="running">Walk 5 min</button><button class="a no" data-go="keep">Keep going</button></div>
+  <div class="links">${withWhy ? `<button data-go="snooze">Snooze 20 min</button><button data-go="wrong">This looks wrong</button><button data-go="walk">Hide why</button>` : `<button data-go="snooze">Snooze 20 min</button><button data-go="why">See why</button>`}</div>`;
+};
+const V = {
+  escbook: () => `<div class="status"><span>Halftime · morning</span><span>you choose</span></div>
+    <h1 class="q q2">Book a time to talk</h1>
+    <p class="why">In the real app this opens your campus counseling booking page. <b>Demo:</b> the service and link are still to be confirmed with Columbia Health.</p>
+    <div class="acts"><button class="a yes" data-go="escdone2">Pick a time (demo)</button><button class="a no" data-go="escalate">Back</button></div>`,
+  escdone2: () => `<div class="status"><span>Halftime · morning</span><span>booked (demo)</span></div>
+    <h1 class="q q2">Thursday, 2:00 pm. You're booked.</h1>
+    <p class="why">Sample booking. Halftime won't mention sleep again before then. You can cancel any time.</p>
+    <div class="acts"><button class="a yes" data-go="idle">Done</button><button class="a no" data-go="escalate">Back</button></div>`,
+  escnow: () => `<div class="status"><span>Halftime · morning</span><span>you choose</span></div>
+    <h1 class="q q2">Talk to someone now</h1>
+    <p class="why">In the real app this connects you to campus counseling, any time of day. <b>Demo:</b> the number is still to be confirmed with Columbia Health. In an emergency, call 911.</p>
+    <div class="acts"><button class="a no" data-go="escalate">Back</button><button class="a no" data-go="idle">Close</button></div>`,
+  escquiet: () => `<div class="status"><span>Halftime · two quiet minutes</span><span>breathe slowly</span></div>
+    <p class="quiet" id="qt">2:00</p>
+    <p class="why">Breathe in for 4, out for 6. Nothing to do but this.</p>
+    <div class="acts"><button class="a yes" data-go="idle">Done</button><button class="a no" data-go="escalate">Back</button></div>`,
+  walk: () => walkBody(false),
+  why: () => walkBody(true),
+  runopen: () => `<div class="status"><span>Halftime · walking</span><span>back 3:50 pm</span></div>
+    <h1 class="q" style="font-weight:300;font-size:4rem;letter-spacing:-.05em;color:var(--refill)">4:12</h1>
+    <p class="why">Your study clock is paused at 2:40. Walk, water, window. Back by 3:50, still 40 min before lab.</p>
+    <div class="acts"><button class="a no" data-go="keep">End break</button><button class="a no" data-act="plus5">+5 min</button></div>
+    <div class="links"><button data-go="running">Make it small</button></div>`,
+  keep: () => `<div class="status"><span>Halftime · check-in</span><span>45 min to Chem lab</span></div>
+    <h1 class="q">OK, keep going.</h1>
+    <p class="sub">Your call. I'll check in again around 4:05.</p>
+    <p class="why">The reasons haven't changed: you've been at it <b class="nw">2 h 40 min</b>${chip(1, "session time, laptop")}${dev() ? ` and slept <b class="nw">5 h 10 min</b><span class="nw">${sleepChip()},</span> under your usual 7 h` : `, with <b class="nw">14 app switches</b> in 20 min${chip(2, "app switches, laptop")}`}. The walk still fits before lab if you want it later.</p>
+    <div class="acts"><button class="a yes" data-go="idle">Got it</button><button class="a no" data-go="running">Walk now</button></div>`,
+  nodata: () => dev() ? `<div class="status"><span>Halftime · learning</span><span>4 of 7 nights</span></div>
+    <h1 class="q q2">Still learning your usual sleep.</h1>
+    <div class="learn" role="img" aria-label="4 of 7 nights">${[1,1,1,1,0,0,0].map((x) => `<i class="${x ? "on" : ""}"></i>`).join("")}</div>
+    <p class="why">Sleep joins your reasons around Sunday. Until then, suggestions use your laptop and calendar: right now, <b>2 h 40 min</b> in, lab at 4:30.</p>
+    <div class="acts" style="grid-template-columns:1fr"><button class="a no" data-go="idle">Got it</button></div>`
+  : `<div class="status"><span>Halftime · learning</span><span>2 of 3 sessions</span></div>
+    <h1 class="q q2">Getting to know your study rhythm.</h1>
+    <div class="learn" role="img" aria-label="2 of 3 sessions">${[1,1,0].map((x) => `<i class="${x ? "on" : ""}"></i>`).join("")}</div>
+    <p class="why">Suggestions start after your third study session, from your laptop and calendar. No wearable needed. Right now: <b>2 h 40 min</b> in, lab at 4:30.</p>
+    <div class="acts" style="grid-template-columns:1fr"><button class="a no" data-go="idle">Got it</button></div>`,
+  escalate: () => { const { left, short } = counted(); return `<div class="status"><span>Halftime · morning</span><span>you choose</span></div>
+    <h1 class="q q2">Sleep's been short for a while. Want to talk it over with someone?</h1>
+    <p class="why">${AWAY ? `Leaving out the ${AWAY} away-game nights on your calendar, ${short} of your last ${left.length}` : `${short} of your last ${left.length}`} nights were under 6 hours<span class="nw">${sleepChip()}.</span> You choose if and when. Halftime never tells your coach, team or school, and never contacts anyone for you.</p>
+    <div class="ladder"><button class="rung first" data-go="escbook"><b>Book a time to talk</b><span>[Counseling booking: confirm]</span></button>
+      <button class="rung" data-go="escnow"><b>Talk to someone now</b><span>[Campus counseling, 24/7: confirm]</span></button>
+      <button class="rung" data-go="escquiet"><b>Something for right now</b><span>2 quiet minutes</span></button></div>
+    <button class="ctx" data-go="escctx">Some were travel, games, shifts or exams?</button>
+    <div class="links"><button data-go="escnot">Not now</button><button data-go="escwhy">Why am I seeing this?</button></div>`; },
+  escwhy: () => { const { left, short } = counted(); return `<div class="status"><span>Halftime · morning</span><span>you choose</span></div>
+    <h1 class="q q2">Why you're seeing this</h1>
+    <div class="ev"><div class="row"><span class="k">3 · Sleep, last 14 nights</span><span class="val">${short} of ${left.length} under 6 h</span><span class="m">${dev() ? dev().name : "sleep source"} · usual about 7 h${AWAY ? ` · ${AWAY} away-game nights left out` : ""}</span></div></div>
+    <p class="why">We bring this up after two weeks of mostly short nights, and only in the morning, never while you're studying. It's not a diagnosis. It's a nudge to talk to a person, if you want to.</p>
+    <div class="acts"><button class="a no" data-go="escalate">Back</button><button class="a no" data-go="escnot">Not now</button></div>`; },
+  escctx: () => {
+    const left = NIGHTS.filter((_, i) => !excused(i)), short = left.filter((n) => n.h < 6).length;
+    return `<div class="status"><span>Halftime · morning</span><span>you choose</span></div>
+    <h1 class="q q2">Which nights were they?</h1>
+    <p class="tally" style="margin-top:6px">Pick a reason, then tap the nights it explains.</p>
+    <div class="reasons" role="group" aria-label="What were they">${REASONS.map((r) => `<button class="reason" data-reason="${r}" aria-pressed="${r === reason}">${r}</button>`).join("")}</div>
+    <div class="nights" role="group" aria-label="Last 14 nights. Tap to mark.">${NIGHTS.map((n, i) => `<button class="night${n.h < 6 ? " short" : ""}${marked.has(i) ? " on" : ""}" data-night="${i}" aria-pressed="${marked.has(i)}" aria-label="${n.d}, ${n.h} hours${n.cal ? ", " + n.cal + " on your calendar" : ""}">${n.cal ? '<span class="cal"></span>' : ""}<span>${n.d}</span><b>${n.h.toFixed(1)}</b></button>`).join("")}</div>
+    ${AWAY ? `<p class="tally"><span style="color:#5AA9FF">●</span> your calendar's last 14 days show ${AWAY} away games, so those start marked. Tap any night to change it.</p>` : ""}
+    ${reason === EXAMS || [...marked.values()].includes(EXAMS) ? `<p class="tally note">Exam and deadline nights still count. Crunch weeks are a good time to talk to someone too.</p>` : ""}
+    <p class="tally">Marked: <b>${marked.size ? byReason() : "none"}</b>. Of the ${left.length} nights that count, <b>${short}</b> were under 6 hours.</p>
+    <div class="acts"><button class="a yes" data-go="escdone">Done</button><button class="a no" data-go="escalate">Back</button></div>`;
+  },
+  escdone: () => {
+    const left = NIGHTS.filter((_, i) => !excused(i)), short = left.filter((n) => n.h < 6).length, keep = short >= 5 && short * 2 >= left.length;
+    return `<div class="status"><span>Halftime · morning</span><span>you choose</span></div>
+    <h1 class="q q2">${keep ? "Thanks. That still looks like a lot." : "Thanks, that explains it."}</h1>
+    <p class="why">${keep ? `Counting everything except the travel, game and shift nights you marked, <b>${short} of ${left.length}</b> nights were still under 6 hours. So this card stays: in the morning, at most once a week. You choose if and when.` : `Counting everything except the travel, game and shift nights you marked, ${short} of ${left.length} nights were short. That's too few nights to call it a pattern, so we'll check again next week.`} <b>Talk to someone</b> is always at the bottom of the screen.</p>
+    <div class="acts"><button class="a yes" data-go="idle">Got it</button><button class="a no" data-go="escalate">Back</button></div>`;
+  },
+  wrong: () => `<div class="status"><span>Halftime · now 3:45</span><span>your feedback</span></div>
+    <h1 class="q q2">What looks wrong?</h1>
+    <div class="ladder"><button class="rung" data-go="wrongtask"><b>That was one task</b><span>Like switching between Anki, a PDF and notes, or an editor and docs</span></button>
+      ${dev() ? `<button class="rung" data-go="wrongsleep"><b>My sleep number is off</b><span>It came from your ${dev().name}</span></button>` : ""}
+      <button class="rung" data-go="wrongme"><b>That wasn't me</b><span>Someone else was on this laptop</span></button></div>
+    <div class="links"><button data-go="why">Back</button></div>`,
+  wrongtask: () => wrongOk(`The apps you were switching between now count as one task. Reason 2 is gone for this session, so this suggestion rests on your ${dev() ? "time and sleep" : "study time and next class"} only. It'll learn from this next time too.`),
+  wrongsleep: () => wrongOk(`Sleep is out of today's reasons, and we'll re-check the sync with your ${dev() ? dev().name : "sleep source"}. If it keeps looking off, you can turn sleep off in Data sources.`),
+  wrongme: () => wrongOk("This laptop's last session is out of your numbers. Next time the laptop wakes, the pill will ask \"Is this you?\" first."),
+  stale: () => walkBody(false, dev() ? "stale" : "none"),
+  stalewhy: () => walkBody(true, dev() ? "stale" : "none"),
+  nowear: () => { devKey = "none"; return walkBody(false, "none"); },
+  nowearwhy: () => { devKey = "none"; return walkBody(true, "none"); },
+  connect: () => `<div class="status"><span>Halftime · setup</span><span>step 2 of 3</span></div>
+    <h1 class="q q2">Where should sleep come from?</h1>
+    <p class="why">Optional. Halftime works without it, using just your laptop and your next class.</p>
+    <div class="srcs">
+      <button class="src" data-dev="none" data-go="connected">${glyph("laptop")}<span><b>No wearable</b><span>Laptop and calendar only. Add one any time.</span></span><i>Choose</i></button>
+      <button class="src" data-dev="fitbit" data-go="connectwarn">${glyph("band")}<span><b>Fitbit</b><span>Any Fitbit: Charge, Inspire, Versa, Sense, Air · through Google Health</span></span><i>Connect</i></button>
+      <button class="src" data-dev="oura" data-go="connected">${glyph("ring")}<span><b>Oura Ring</b><span>Uses your Oura membership</span></span><i>Connect</i></button>
+      <button class="src" data-dev="whoop" data-go="connected">${glyph("band")}<span><b>WHOOP</b><span>Uses your WHOOP membership</span></span><i>Connect</i></button>
+      <button class="src" data-dev="apple" data-go="connected">${glyph("watch")}<span><b>Apple Watch</b><span>Through Apple Health on this iPhone</span></span><i>Connect</i></button>
+      <button class="src" data-dev="garmin" data-go="connected">${glyph("band")}<span><b>Garmin</b><span>Through Garmin Connect</span></span><i>Connect</i></button>
+    </div>
+    <p class="fine">We read how long and when you slept. Nothing else unless you turn it on. Never your location, your messages, or the device's own scores like Readiness or Recovery.</p>
+    <p class="fine">Team-issued watch? Your team's staff may already see its data in their own system. Halftime never sends them anything.</p>
+    <div class="links"><button data-go="sources">Back</button></div>`,
+  connectwarn: () => `<div class="status"><span>Halftime · setup</span><span>Fitbit</span></div>
+    <h1 class="q q2">Next, Google asks. It will say "unverified app".</h1>
+    <p class="why">That's expected for a class pilot with fewer than 100 testers. Halftime asks to read your sleep, nothing else, and can't change anything in your Fitbit.</p>
+    <div class="ev">
+      <div class="row"><span class="k">What we ask for</span><span class="val">read only</span><span class="m">how long and when you slept</span></div>
+      <div class="row"><span class="k">Every 7 days</span><span class="val">reconnect</span><span class="m">Google asks again; we remind you with one tap</span></div>
+      <div class="row"><span class="k">Any time</span><span class="val">disconnect</span><span class="m">Settings → Data sources</span></div>
+    </div>
+    <div class="acts"><button class="a yes" data-dev="fitbit" data-go="connected">Go to Google</button><button class="a no" data-go="connect">Back</button></div>`,
+  connected: () => dev() ? `<div class="status"><span>Halftime · setup</span><span>step 3 of 3</span></div>
+    <h1 class="q q2"><span class="qg">${glyph(dev().glyph, 26)}${dev().name} connected.</span></h1>
+    <p class="sub">Last night synced at 7:42 am.</p>
+    <div class="learn" role="img" aria-label="1 of 7 nights">${[1,0,0,0,0,0,0].map((x) => `<i class="${x ? "on" : ""}"></i>`).join("")}</div>
+    <p class="why">Learning your usual sleep: night 1 of 7. Until then, suggestions use your laptop and calendar, starting today.${devKey === "fitbit" ? " Google asks you to reconnect every 7 days; we'll remind you." : ""}</p>
+    <div class="acts"><button class="a yes" data-go="idle">Done</button><button class="a no" data-go="sources">Data sources</button></div>`
+  : `<div class="status"><span>Halftime · setup</span><span>step 3 of 3</span></div>
+    <h1 class="q q2"><span class="qg">${glyph("laptop", 26)}Laptop and calendar only.</span></h1>
+    <p class="sub">No wearable needed.</p>
+    <p class="why">Suggestions start after your third study session. You can add a sleep source any time in Data sources.</p>
+    <div class="acts"><button class="a yes" data-go="idle">Done</button><button class="a no" data-go="sources">Data sources</button></div>`,
+  reconnect: () => { const D = dev() || DEVICES[PROFILE.lastDevice] || DEVICES.fitbit; return `<div class="status"><span>Halftime · morning</span><span>${D.short}</span></div>
+    <h1 class="q q2"><span class="qg">${glyph(D.glyph, 26)}Reconnect ${D.short}?</span></h1>
+    <p class="why">${devKey === "fitbit" ? "Google asks every 7 days." : `${D.short} asked you to sign in again.`} Until you do, sleep is left out of your reasons. Everything else carries on.</p>
+    <div class="acts"><button class="a yes" data-dev="${Object.keys(DEVICES).find((k) => DEVICES[k] === D)}" data-go="connected">Reconnect</button><button class="a no" data-go="idle">Later</button></div>`; },
+  escnot: () => `<div class="status"><span>Halftime · morning</span><span>you choose</span></div>
+    <h1 class="q q2">OK. Not now.</h1>
+    <p class="why">We won't bring this up again for 7 days, and your walk suggestions carry on as usual. <b>Talk to someone</b> is always at the bottom of the screen.</p>
+    <div class="acts"><button class="a yes" data-go="idle">Got it</button><button class="a no" data-go="escalate">Back</button></div>`,
+};
+// Settings sub-views: "" (the list) · "disc" (disconnect a sleep source) · "del" (delete everything) · "deleted"
+let keepSleep = false; // on Disconnect: delete the saved nights unless the person chooses to keep them
+function renderSources(view = "") {
+  const D = dev(), sw = (on, label) => `<button class="sw" role="switch" aria-checked="${on}" aria-label="${label}" data-toggle></button>`;
+  const card = (g, title, small, desc, ctl, btns = "") => `<section class="card"><div class="ch">${glyph(g)}<span><b>${title}</b><small>${small}</small></span>${ctl}</div><p class="cd">${desc}</p>${btns ? `<div class="cbtns">${btns}</div>` : ""}</section>`;
+  const head = document.querySelector("#settings .st"), lede = document.querySelector("#settings .sl"), back = document.querySelector("#settings .back");
+  const what = (rows) => `<section class="card"><dl class="dl">${rows.map(([t, d]) => `<div><dt>${t}</dt><dd>${d}</dd></div>`).join("")}</dl></section>`;
+  back.dataset.go = view && view !== "deleted" ? "sources" : "idle";
+  if (view === "disc" && D) {
+    head.textContent = `Disconnect ${D.short}?`;
+    lede.textContent = "Here's exactly what happens.";
+    document.getElementById("srclist").innerHTML = what([
+      ["Right away", `Halftime stops reading your sleep and removes its access in ${D.acct}. Nothing changes on your ${D.short} itself.`],
+      ["Sleep already saved", `14 nights. <span class="cbtns" style="padding:0;margin-top:8px"><button class="pill" aria-pressed="${!keepSleep}" data-keep="0">Delete them</button><button class="pill" aria-pressed="${keepSleep}" data-keep="1">Keep them</button></span>`],
+      ["Your suggestions", "Carry on from your laptop and calendar. Sleep shows as not connected."],
+    ]) + `<div class="acts lt"><button class="a dz" data-dev="none" data-go="sources">Disconnect</button><button class="a lo" data-go="sources">Cancel</button></div>`;
+    return;
+  }
+  if (view === "del") {
+    head.textContent = "Delete all your data?";
+    lede.textContent = "Everything Halftime has stored about you. This can't be undone.";
+    document.getElementById("srclist").innerHTML = what([
+      ["From your laptop", "Every study session: times, breaks, and app-switch counts."],
+      ["From your sleep", D ? `Every night from your ${D.short}. Halftime's access in ${D.acct} is removed too.` : "Nothing, no sleep source is connected."],
+      ["From your calendar", "The class times Halftime saved. Your calendar itself isn't touched."],
+      ["Your answers", "Walk or keep going, \"This looks wrong\", and any nights you marked."],
+      ["The study", "You leave the class pilot. [Study data already de-identified: confirm with CSO]"],
+    ]) + `<div class="acts lt"><button class="a dz" data-go="sourcesdeleted">Delete everything</button><button class="a lo" data-go="sources">Cancel</button></div>`;
+    return;
+  }
+  if (view === "deleted") {
+    head.textContent = "Deleted.";
+    lede.textContent = `Everything Halftime stored about you is gone${D ? `, and your ${D.short} is disconnected` : ""}. The laptop app stops collecting until you sign in again.`;
+    document.getElementById("srclist").innerHTML = `<div class="acts lt" style="grid-template-columns:1fr"><button class="a lo" data-go="idle">Done</button></div>`;
+    return;
+  }
+  head.textContent = "Data sources"; lede.textContent = "What Halftime reads, and what it never does.";
+  const hrv = `<span class="sub2"><span><b>Heart rate, resting heart rate, HRV</b><small>On · shown as context, not used in suggestions yet</small></span>${sw(true, "Heart data")}</span><span class="cd2">Heart rate through the day, your resting rate, and overnight HRV (how much the time between heartbeats varies). Each is compared with your own usual. Never a diagnosis.</span>`;
+  document.getElementById("srclist").innerHTML =
+    card("laptop", "Laptop", `on · ${OS}`, "Session time, idle time, and which kind of app you're in. Never what you type, read or browse. Mac and Windows; not Linux yet.", sw(true, "Laptop"))
+    + (D ? card(D.glyph, `Sleep and heart · ${D.name}`, `synced 7:42 am${devKey === "fitbit" ? " · reconnect in 3 days" : ""}`, `Sleep, heart rate, resting heart rate and overnight HRV, read only. Never the device's own scores. ${hrv}`, sw(true, "Sleep from " + D.name), `<button class="pill" data-go="connect">Change source</button><button class="pill" data-go="sourcesdisc">Disconnect</button>`)
+         : card("band", "Sleep", "not connected", "Suggestions use your laptop and calendar. Sleep is optional.", "", `<button class="pill" data-go="connect">Add a sleep source</button>`))
+    + card("calendar", "Calendar", PROFILE.cal === false ? "off · you type your next stop" : `on · ${({ google: "Google Calendar", apple: "Apple Calendar", outlook: "Outlook" })[PROFILE.calProvider] || "Google Calendar"}`, PROFILE.cal === false ? "Turn it on in Change setup to see your whole day and let breaks fit around it." : TEAM ? "Event times and titles for today and this week, plus away games so travel nights can be left out of your sleep." : "Event times and titles for today and this week. On a team? Add games, and nights away can be left out of your sleep.", sw(PROFILE.cal !== false, "Calendar"), `<button class="pill" aria-pressed="${!TEAM}" data-seg="cal">Class only</button><button class="pill" aria-pressed="${TEAM}" data-seg="cal">Class + games</button>`)
+    + card("pin", "Location", "never used", "Halftime has no location permission and never asks for one.", "")
+    + `<section class="card"><b style="font:600 1rem/1.25 var(--ui)">Where your data goes</b><dl class="dl">
+        <div><dt>Stored</dt><dd>[Server and region: confirm with CTO]</dd></div>
+        <div><dt>The AI writer sees</dt><dd>Short summaries only, like "slept 5 h 10 min, usual 7 h". Never raw data or app names.</dd></div>
+        <div><dt>Kept for</dt><dd>[How long: confirm with CTO]</dd></div>
+        <div><dt>Who else sees it</dt><dd>Never your coach, team or school. The project team sees de-identified study data [confirm with CSO].</dd></div>
+      </dl><button class="danger" data-go="sourcesdel">Delete all my data…</button></section>`;
+}
+const wrongOk = (msg) => `<div class="status"><span>Halftime · now 3:45</span><span>your feedback</span></div>
+  <h1 class="q q2">Thanks, noted.</h1>
+  <p class="why">${msg}</p>
+  <div class="acts"><button class="a yes" data-go="idle">Got it</button><button class="a no" data-go="walk">Back</button></div>`;
+// 14 sample nights, Thu Oct 22 to Wed Nov 4 (hours of sleep). 12 are under 6 h; 3 are away games on the calendar.
+const NIGHTS = [["Th 22",5.2],["Fr 23",4.8],["Sa 24",4.2,"away game"],["Su 25",3.9,"away game"],["Mo 26",5.6],["Tu 27",6.4],["We 28",5.1],
+  ["Th 29",5.5],["Fr 30",5.0],["Sa 31",5.8],["Su 1",4.6,"away game"],["Mo 2",7.1],["Tu 3",5.3],["We 4",5.1]].map(([d, h, cal]) => ({d, h, cal: TEAM ? cal : undefined})); // games only show for someone on a team
+const AWAY = NIGHTS.filter((n) => n.cal).length;
+const counted = () => { const left = NIGHTS.filter((_, i) => !excused(i)); return { left, short: left.filter((n) => n.h < 6).length }; };
+const REASONS = ["Travel or games", "Work shifts", "Exams or deadlines"];
+let marked = new Map(NIGHTS.flatMap((n, i) => (n.cal ? [[i, "Travel or games"]] : []))), reason = "Travel or games";
+const EXAMS = "Exams or deadlines";
+const excused = (i) => marked.has(i) && marked.get(i) !== EXAMS; // travel, games, shifts can explain short sleep; exams and deadlines stay counted
+const byReason = () => REASONS.map((r) => [r, [...marked.values()].filter((x) => x === r).length]).filter(([, c]) => c).map(([r, c]) => `${c} ${r.toLowerCase()}`).join(", ");
+let morning = /^(esc|connect|reconnect)/.test(Q.get("state") || "");
+function setPage(mode) {
+  page.className = "page " + mode + (morning ? " morning" : "");
+  const walking = mode.includes("walking");
+  if (morning) {
+    document.getElementById("subj").innerHTML = "<span>Thursday</span><span>9:10 am</span>";
+    document.getElementById("clock").innerHTML = `9:10<small>am</small>`;
+    document.getElementById("since").textContent = "Morning. No study session running.";
+    document.getElementById("ctime").textContent = "9:10";
+    return;
+  }
+  document.getElementById("subj").innerHTML = SUBJ0; document.getElementById("ctime").textContent = "2:40";
+  document.getElementById("clock").innerHTML = walking ? `2:40<small>paused</small>` : `2:40<small>studying</small>`;
+  document.getElementById("since").textContent = walking ? "On a walk. Back at 3:50 pm." : "No break yet this session.";
+  document.getElementById("flabel").textContent = walking ? "a break, in progress" : "up to your next stop";
+}
+const stack = document.getElementById("stack");
+function push(on) { // make room: slide the page so the session line sits just below the open island
+  if (!on) { stack.style.transform = ""; document.querySelector(".next").classList.remove("tuck"); return; }
+  const f = document.querySelector(".forecast"), base = f.getBoundingClientRect().top - (new DOMMatrix(getComputedStyle(stack).transform).m42 || 0);
+  const islandBottom = parseFloat(getComputedStyle(island).top) + parseFloat(island.style.height);
+  const dy = Math.max(0, islandBottom + 20 - base);
+  stack.style.transform = `translateY(${dy}px)`;
+  // short screens: if the pushed line would land on the next-class card, hide the card (the island already says "45 min to Chem lab")
+  const nx = document.querySelector(".next"), fb = f.getBoundingClientRect().bottom - (new DOMMatrix(getComputedStyle(stack).transform).m42 || 0) + dy;
+  nx.classList.toggle("tuck", fb + 8 > nx.getBoundingClientRect().top);
+}
+function size(pushOn) { const w = Math.min(innerWidth - 24, 480); island.style.width = w + "px"; full.style.width = w + "px"; island.style.height = full.scrollHeight + "px"; push(pushOn); setTimeout(more, 520); }
+function more() { full.classList.toggle("more", full.scrollHeight - full.scrollTop - full.clientHeight > 4); }
+full.addEventListener("scroll", more, { passive: true });
+function closeFull() { full.inert = true; setTimeout(() => { if (!island.classList.contains("open")) full.innerHTML = ""; }, 520); }
+const settings = document.getElementById("settings");
+function showApp(on) { settings.hidden = on; page.hidden = !on; island.style.display = on ? "" : "none"; }
+function go(s) {
+  if (s.startsWith("sources")) { showApp(false); renderSources(s.slice(7)); scrollTo(0, 0); return; }
+  showApp(true);
+  island.classList.remove("live");
+  if (s === "idle" || s === "snooze") { island.classList.remove("open"); closeFull(); push(false); island.style.width = "170px"; island.style.height = "44px"; setPage(""); return; }
+  if (s === "running") { island.classList.remove("open"); closeFull(); push(false); island.classList.add("live"); island.style.width = ""; island.style.height = "44px"; setPage("walking"); return; }
+  full.innerHTML = V[s](); full.inert = false;
+  island.classList.add("open");
+  setPage(["walk", "why", "stale", "stalewhy", "nowear", "nowearwhy"].includes(s) ? "speaking suggesting" : s === "runopen" ? "speaking walking" : s === "keep" ? "speaking keeping" : "speaking");
+  requestAnimationFrame(() => size(["walk", "stale", "nowear", "keep", "nodata", "runopen", "wrong", "wrongtask", "wrongsleep", "wrongme"].includes(s)));
+}
+document.addEventListener("click", (e) => {
+  const tg = e.target.closest("[data-toggle]"); if (tg) { tg.setAttribute("aria-checked", tg.getAttribute("aria-checked") !== "true"); return; }
+  const kp = e.target.closest("[data-keep]"); if (kp) { keepSleep = kp.dataset.keep === "1"; return renderSources("disc"); }
+  const sg = e.target.closest("[data-seg]"); if (sg) { sg.parentElement.querySelectorAll(`[data-seg="${sg.dataset.seg}"]`).forEach((b) => b.setAttribute("aria-pressed", b === sg)); return; }
+  const dv = e.target.closest("[data-dev]"); if (dv) { devKey = dv.dataset.dev; if (window.APP) APP.setDevice(devKey); }
+  const n = e.target.closest("[data-night]"), r = e.target.closest("[data-reason]");
+  if (n) { const i = +n.dataset.night; marked.has(i) ? marked.delete(i) : marked.set(i, reason); return redraw(); }
+  if (r) { reason = r.dataset.reason; return redraw(); }
+  const b = e.target.closest("[data-go]"); if (b) go(b.dataset.go);
+});
+function redraw() { const y = full.scrollTop; full.innerHTML = V.escctx(); full.scrollTop = y; size(false); }
+document.getElementById("compact").addEventListener("click", () => { if (window.APP && APP.paused()) { APP.toast("Suggestions are paused. Tap Resume suggestions to turn them back on."); return; } go("walk"); });
+document.getElementById("liveview").addEventListener("click", () => go("runopen"));
+addEventListener("resize", () => island.classList.contains("open") && size(page.classList.contains("suggesting") || page.classList.contains("keeping")));
+const _go = go;
+go = function (s) {
+  morning = /^(esc|connect|reconnect)/.test(s);
+  if (window.APP) APP.beforeGo(s);
+  _go(s);
+  if (window.APP) APP.afterGo(s);
+  if (window.HT) HT.screen(s, { device: devKey });
+};
+const start = Q.get("state") || "idle";
+if (new URLSearchParams(location.search).get("pick") === "exams") { reason = EXAMS; [0, 1, 4, 6, 7, 8].forEach((i) => marked.set(i, EXAMS)); } // capture helper: the exam-nights example
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (start === "running" || start === "idle" || start.startsWith("sources")) go(start); else setTimeout(() => go(V[start] ? start : "walk"), reduce ? 0 : 450);
+</script>
+
+<script>
+// App shell for the site: tabs, history, you, the demo sheet, toasts, and the buttons the mockup left empty.
+(() => {
+  if (!PROFILE.name || !PROFILE.done) { location.replace(PROFILE.name ? "/start#about" : "/start#account"); return; }
+  if (PROFILE.signedIn === false) { location.replace("/start#login"); return; }
+  const $ = (id) => document.getElementById(id);
+  const first = String(PROFILE.name).split(" ")[0];
+  const esc = (x) => String(x || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  let toastT, paused = false, tab = "now", quietT, lastState = Q.get("state") || "idle", srcFrom = "", plus = 0;
+  // "+5 min" during a walk: shift the countdown and the back-by time everywhere they show
+  function applyPlus(root) {
+    if (!plus) return;
+    const back = `3:${String(50 + plus).padStart(2, "0")}`, left = `${4 + plus}:12`;
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); let n;
+    while ((n = w.nextNode())) { const t = n.nodeValue.replace(/\b3:50\b/g, back).replace(/\b4:12\b/g, left); if (t !== n.nodeValue) n.nodeValue = t; }
+  }
+  const saveProfile = () => { try { localStorage.setItem("ht-profile", JSON.stringify(PROFILE)); } catch {} };
+  // the next commitment people chose in setup names the sample day's 4:30 stop (the sample afternoon keeps its times)
+  const NEXT = String(PROFILE.next || "Chem lab").replace(/\s+(at\s+)?\d{1,2}(:\d{2})?\s*(am|pm)?$/i, "").trim() || "Chem lab";
+  const nextShort = NEXT === "Chem lab" ? "lab" : NEXT.toLowerCase();
+  const RENAME = [[/Chem lab/g, NEXT], [/\blab\b/g, nextShort], ...(PROFILE.cal === false ? [[/from your calendar/g, "you added this"], [/calendar · you turned this on/g, "you added this"]] : [])];
+  function rename(root) {
+    if (NEXT === "Chem lab" && PROFILE.cal !== false) return;
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); let n;
+    while ((n = w.nextNode())) { let t = n.nodeValue, o = t; for (const [re, to] of RENAME) t = t.replace(re, to); if (t !== o) n.nodeValue = t; }
+    root.querySelectorAll("[aria-label]").forEach((el) => { let t = el.getAttribute("aria-label"), o = t; for (const [re, to] of RENAME) t = t.replace(re, to); if (t !== o) el.setAttribute("aria-label", t); });
+  }
+  function toast(m) { const t = $("htoast"); t.textContent = m; t.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("on"), 2400); }
+  const views = { history: $("history"), you: $("you") };
+  function setTab(t, fromGo) {
+    tab = t; clearInterval(quietT);
+    document.querySelectorAll("[data-tab]").forEach((b) => b.dataset.tab === t ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current"));
+    const app = t === "now";
+    views.history.hidden = t !== "history"; views.you.hidden = t !== "you";
+    if (!app) { page.hidden = true; settings.hidden = true; island.style.display = "none"; }
+    if (!fromGo) { scrollTo(0, 0); if (window.HT) HT.screen("tab_" + t); }
+  }
+  window.APP = {
+    beforeGo(s) { views.history.hidden = true; views.you.hidden = true; clearInterval(quietT); },
+    paused: () => paused,
+    toast: (m) => toast(m),
+    setDevice(k) { if (k === "none" && PROFILE.device && PROFILE.device !== "none") PROFILE.lastDevice = PROFILE.device; PROFILE.device = k; saveProfile(); drawShell(); },
+    afterGo(s) {
+      rename(full); rename(page);
+      if (s === "running" || s === "runopen") { applyPlus(full); applyPlus(page); applyPlus($("liveview")); } else if (s !== "runopen") plus = 0;
+      if (!s.startsWith("sources")) lastState = s;
+      if (s === "idle" && srcFrom === "you") { srcFrom = ""; setTab("you"); return; }
+      tab = s.startsWith("sources") ? "you" : "now";
+      document.querySelectorAll("[data-tab]").forEach((b) => b.dataset.tab === tab ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current"));
+      if (s === "escquiet") { let left = 120; const q = () => { const el = $("qt"); if (!el) return clearInterval(quietT); el.textContent = `${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}`; if (left-- <= 0) { clearInterval(quietT); toast("Two minutes. Nice."); } }; q(); quietT = setInterval(q, 1000); }
+    },
+  };
+  document.querySelector(".tabbar").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-tab]"); if (!b) return; // the Demo button has its own handler
+    const t = b.dataset.tab;
+    if (t === "now") { go(lastState); return; }
+    setTab(t);
+  });
+
+  const DEMO = window.HALFTIME_DEMO;
+  const role = PROFILE.role === "athlete" ? "athlete" : "student";
+  const calOn = PROFILE.cal !== false;
+  const calName = calOn ? (DEMO.PROVIDERS[PROFILE.calProvider] || "Google Calendar") : "";
+  function spark(vals, usual, unit, label) { // one series, drawn to scale, with your usual as a dashed line
+    const W = 300, H = 64, lo = Math.min(...vals, usual) - 3, hi = Math.max(...vals, usual) + 3, x = (i) => 6 + i * ((W - 12) / (vals.length - 1)), y = (v) => H - 8 - ((v - lo) / (hi - lo)) * (H - 20);
+    const pts = vals.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+    return `<svg class="spark" viewBox="0 0 ${W} ${H + 14}" role="img" aria-label="${label}, last 14 nights: ${vals.join(", ")} ${unit}. Your usual: ${usual} ${unit}.">
+      <line x1="6" x2="${W - 6}" y1="${y(usual).toFixed(1)}" y2="${y(usual).toFixed(1)}" stroke="#0F5E46" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <polyline points="${pts}" fill="none" stroke="#141414" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="${x(vals.length - 1).toFixed(1)}" cy="${y(vals[vals.length - 1]).toFixed(1)}" r="3.5" fill="#141414"/>
+      <text x="${W - 6}" y="${(y(usual) - 5).toFixed(1)}" text-anchor="end" font-size="11" fill="#0F5E46" font-family="Geist Mono, monospace">usual ${usual}</text>
+      <text x="6" y="${H + 12}" font-size="11" fill="#64625C" font-family="Geist Mono, monospace">${DEMO.NIGHTS[0].d}</text><text x="${W - 6}" y="${H + 12}" text-anchor="end" font-size="11" fill="#64625C" font-family="Geist Mono, monospace">${DEMO.NIGHTS[DEMO.NIGHTS.length - 1].d}</text></svg>`;
+  }
+  function drawHome() {
+    const D = dev(), T = DEMO.today(role), U = DEMO.USUAL, kind = DEMO.HRV_KIND[devKey] || "RMSSD";
+    const tile = (l, v, unit, u) => `<div><span class="l">${l}</span><b>${v}<small>${unit}</small></b><span class="u">${u}</span></div>`;
+    $("home-body").innerHTML = `<h2>Body today <span class="src2">${D ? esc(D.name) + " · sample" : "Sample · no wearable"}</span></h2>
+      <div class="vit">${tile("Sleep last night", "5 h 10", "min", "usual about 7 h")}${tile("Heart rate now", T.hrNow.bpm, "bpm", T.hrNow.note)}${tile("Resting heart rate", T.lastNight.rhr, "bpm", "usual " + U.rhr + " bpm")}${tile("HRV, overnight", T.lastNight.hrv, "ms", kind + " · usual " + U.hrv + " ms")}</div>
+      ${T.training ? `<p class="fine2">${esc(T.training.what)} today: ${T.training.dur}, average heart rate ${T.training.avgHr} bpm.</p>` : ""}
+      <p class="fine2">${D ? "After short sleep, resting heart rate often runs higher and HRV lower. Shown for context, never as a diagnosis." : "Connect a watch or ring in Data sources to see your own. These are sample numbers."}</p>`;
+    const ev = DEMO.calendar(role);
+    $("home-cal").innerHTML = calOn
+      ? `<h2>Today <span class="src2">${esc(calName)} · sample</span></h2><ol class="ag">${ev.map((e) => `<li class="ev-${e.state}"><span class="at">${e.t}</span><div><b>${esc(e.state === "next" ? NEXT_LABEL(e) : e.what)}${e.state === "next" ? '<span class="tg">next stop</span>' : e.state === "now" ? '<span class="tg">now</span>' : ""}</b><span class="w">${esc(e.where)}</span></div></li>`).join("")}</ol>
+        <p class="fine2">${DEMO.week(role).map(([d, w]) => `${d}: ${esc(w)}`).join(" · ")}</p>`
+      : `<h2>Today <span class="src2">calendar off</span></h2><p class="fine2" style="margin-top:6px">Next stop: <b>${esc(NEXT)}</b> at 4:30 pm (you typed this). Turn the calendar on in Change setup to see your whole day.</p>`;
+  }
+  const NEXT_LABEL = (e) => (PROFILE.next && PROFILE.next !== e.stop ? NEXT : e.what);
+  function drawShell() {
+  const D = dev(), none = !D; drawHome();
+  // heart history
+  $("h-heart").innerHTML = `<h2>Resting heart rate <span class="smp">${none ? "Sample · no wearable" : esc(D.name) + " · sample"}</span></h2>${spark(DEMO.NIGHTS.map((n) => n.rhr), DEMO.USUAL.rhr, "bpm", "Resting heart rate")}
+    <h2 style="margin-top:14px">HRV, overnight <span class="smp">${DEMO.HRV_KIND[devKey] || "RMSSD"}, ms</span></h2>${spark(DEMO.NIGHTS.map((n) => n.hrv), DEMO.USUAL.hrv, "ms", "Overnight HRV")}
+    <p class="fine2" style="font-size:.8125rem;color:var(--muted);margin-top:8px">Higher resting heart rate and lower HRV tend to follow your short nights. Context only.</p>`;
+  $("h-hello").textContent = `${first}'s week`;
+  $("h-sleep-title").innerHTML = none ? `Sleep vs your usual <span class="smp">Sample · no wearable</span>` : `Sleep vs your usual <span class="smp">${esc(D.name)} · sample</span>`;
+  const mx = 9, H = 140 - 17;
+  $("h-bars").innerHTML = NIGHTS.map((n, i) => `<div class="b"><i class="${n.h < 6 ? "lo" : ""}" style="height:${Math.round((n.h / mx) * H)}px" title="${n.d}: ${n.h} h"></i><small>${i % 2 ? "" : n.d.split(" ")[1]}</small></div>`).join("")
+    + `<span class="usual" style="bottom:${Math.round(17 + (7 / mx) * H)}px"><em>usual 7 h</em></span>`;
+  $("h-bars").setAttribute("aria-label", "Sleep, last 14 nights: " + NIGHTS.map((n) => `${n.d} ${n.h} hours`).join(", ") + ". Usual about 7 hours.");
+  const LOG = [["Today 3:45", "Short walk now?", "2 h 40 min in, 14 switches", "took it", 1], ["Wed 11:50 pm", "Stop for tonight?", "Class at 9:30 am", "20 more min", 0],
+    ["Wed 4:10", "Keep going.", "Steady switching", "kept going", 0], ["Tue 2:30", "Short walk now?", "2 h 10 min in", "took it", 1], ["Mon 9:40 pm", "Take a 15-minute break?", "3 h 20 min in", "snoozed", 0],
+    ["Mon 3:05", "Still learning your usual sleep.", "Night 6 of 7", "noted", 0]];
+  $("h-log").innerHTML = LOG.map(([w, q, why, r, ok]) => `<li><span class="when">${w}</span><b>${q}</b><span class="res${ok ? " took" : ""}">${r}</span><span class="what">${why}</span></li>`).join("");
+  const SES = [["Today", "Organic chemistry", "2 h 40 min · 1 break"], ["Wed", "Problem set 7", "3 h 05 min · 2 breaks"], ["Tue", "Organic chemistry", "2 h 15 min · 1 break"], ["Mon", "Bio reading", "3 h 20 min · 1 break"], ["Sun", "Essay draft", "2 h 30 min · 1 break"]];
+  $("h-sessions").innerHTML = SES.map(([w, t, d]) => `<li><span class="when">${w}</span><b>${t}</b><span class="what">${d}</span></li>`).join("");
+
+  // ---- you
+  $("y-av").textContent = first.slice(0, 1).toUpperCase();
+  $("y-name").textContent = PROFILE.name;
+  $("y-meta").textContent = [PROFILE.role === "athlete" ? "Student-athlete" : "Student", PROFILE.school, none ? "No wearable" : D.name, calOn ? calName : "Calendar off"].filter(Boolean).join(" · ");
+  $("y-rec").setAttribute("aria-checked", window.HT ? HT.isRecording() : false);
+  $("dlist").innerHTML = moments(D, none).map(([s, t, d]) => `<button type="button" data-moment="${s}"><b>${esc(t)}</b><span>${esc(d)}</span></button>`).join("");
+  }
+
+  const moments = (D, none) => [
+    ["walk", "2 h 40 min in: a walk fits", "Halftime speaks once, with its reasons"],
+    ["keep", "You keep going", "It checks in once more, later"],
+    ["running", "On a 5-minute walk", "The pill becomes a countdown"],
+    ["nodata", "Your first week", "It says it's still learning instead of guessing"],
+    ...(none ? [["nowear", "No wearable", "Laptop and next class only"]] : [["stale", "Your " + D.short + " didn't sync", "Sleep is left out, and it says so"]]),
+    ["wrong", "Something looks wrong", "Tell it what was off"],
+    ["escalate", "Thursday morning, after weeks of short sleep", "It offers someone to talk to"],
+    ...(none ? [] : [["reconnect", "Reconnect your " + D.short, "Every 7 days"]]),
+    ["idle", "Back to the quiet pill", "Nothing to read"],
+    ["tour", "Take the tour again", "What each part of the screen does"],
+  ];
+  drawShell(); rename(page);
+  // ---- greeting on the Now screen
+  const sj = $("subj"); if (sj) { const hi = document.createElement("p"); hi.className = "hello"; hi.textContent = `Hi ${first}`; document.querySelector(".hero").prepend(hi); }
+
+  // ---- demo moments
+  const sheet = $("dsheet"), scrim = $("scrim"); sheet.inert = true;
+  const openSheet = (on) => { sheet.classList.toggle("on", on); scrim.classList.toggle("on", on); sheet.setAttribute("aria-hidden", !on); sheet.inert = !on; if (on) { sheet.querySelector("button").focus(); if (window.HT) HT.event("demo_sheet", { value: "open" }); } else $("demobtn").focus(); };
+  $("demobtn").addEventListener("click", () => openSheet(true));
+  $("dclose").addEventListener("click", () => openSheet(false));
+  scrim.addEventListener("click", () => openSheet(false));
+  addEventListener("keydown", (e) => { if (e.key === "Escape" && sheet.classList.contains("on")) openSheet(false); });
+  $("dlist").addEventListener("click", (e) => { const b = e.target.closest("[data-moment]"); if (!b) return; openSheet(false); if (window.HT) HT.event("demo_jump", { value: b.dataset.moment });
+    if (b.dataset.moment === "tour") { if (window.HTTour) { HTTour.reset(); go("idle"); setTimeout(() => HTTour.start(), 350); } return; }
+    go(b.dataset.moment); });
+
+  // ---- buttons the mockup left empty, and the you tab
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("[data-act]"); if (!a) return;
+    const k = a.dataset.act;
+    if (k === "talk") go("escalate");
+    else if (k === "pause") { paused = !paused; page.classList.toggle("paused", paused); document.querySelectorAll(".pausebtn").forEach((b) => b.textContent = paused ? "Resume suggestions" : "Pause suggestions"); toast(paused ? "Suggestions paused for 1 hour" : "Suggestions back on"); if (paused) go("idle"); }
+    else if (k === "plus5") { if (plus >= 9) { toast("That's the longest this walk can go."); return; } const before = plus; plus += 5; if (plus > 9) plus = 9;
+      const back = (p) => `3:${String(50 + p).padStart(2, "0")}`, left = (p) => `${4 + p}:12`;
+      for (const root of [full, page, $("liveview")]) { const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); let n; while ((n = w.nextNode())) { const t = n.nodeValue.replace(new RegExp(`\\b${back(before)}\\b`, "g"), back(plus)).replace(new RegExp(`\\b${left(before)}\\b`, "g"), left(plus)); if (t !== n.nodeValue) n.nodeValue = t; } }
+      toast(`Added ${plus - before} minutes. Back by ${back(plus)} pm.`); }
+    else if (k === "setup") location.href = "/start#wearable";
+    else if (k === "tour") { if (window.HTTour) { HTTour.reset(); go("idle"); setTimeout(() => HTTour.start(), 350); } }
+    else if (k === "replay") { try { sessionStorage.removeItem("ht-played"); } catch {} location.href = "/app"; }
+    else if (k === "rec") { const on = a.getAttribute("aria-checked") !== "true"; a.setAttribute("aria-checked", on); if (window.HT) { on ? HT.optIn() : HT.optOut(); } toast(on ? "Usage analytics on" : "Usage analytics off on this device"); }
+    else if (k === "signout") { if (window.HT) { HT.event("sign_out"); HT.flush(); } PROFILE.signedIn = false; saveProfile(); location.href = "/"; }
+    else if (k === "sources-from-you") { srcFrom = "you"; go("sources"); }
+  });
+
+  // ---- first visit in this tab: the quiet pill, then a fast-forward to the moment Halftime speaks
+  let played = false; try { played = sessionStorage.getItem("ht-played") === "1"; } catch {}
+  // first visit after setup: the tour (once per person); otherwise the quiet pill, then a fast-forward to the moment Halftime speaks
+  const touring = () => !!(window.HTTour && HTTour.isRunning());
+  if (window.HTTour && !HTTour.isDone() && !Q.get("state")) { try { sessionStorage.setItem("ht-played", "1"); } catch {} setTimeout(() => HTTour.start(), 500); }
+  else if (!Q.get("state") && !played) {
+    try { sessionStorage.setItem("ht-played", "1"); } catch {}
+    let touched = false; addEventListener("pointerdown", () => { touched = true; }, { once: true });
+    setTimeout(() => { if (!touched && !touring() && tab === "now") toast("Fast-forward: 2 h 40 min into Organic chemistry"); }, 1300);
+    setTimeout(() => { if (!touched && !touring() && !paused && tab === "now" && !island.classList.contains("open")) go("walk"); }, 2900);
+  }
+})();
+</script>
+</body>
+</html>

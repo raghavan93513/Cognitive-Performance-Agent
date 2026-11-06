@@ -1,6 +1,6 @@
 ---
 title: Hot Cache
-updated: 2026-11-05T21:00:00Z
+updated: 2026-11-06T08:15:00Z
 ---
 
 # Hot Cache
@@ -9,6 +9,30 @@ updated: 2026-11-05T21:00:00Z
 
 ## Recent Activity
 
+- [2026-11-06] **The demo app has heart data, a dummy calendar, a first-run tour, and a landing comparison chart.** All are live at https://halftime-study.vercel.app/.
+  - **Heart data:** sleep, heart rate, resting heart rate and HRV, each against your own usual and shown as context. This is Heramb's decision; the team must confirm it.
+  - **Calendar:** a student's day or an athlete's day; the next stop comes from it.
+  - **Tour:** runs right after every new setup. A welcome card (the tagline plus your wearable vs study apps vs Halftime) comes first, then 8 spotlight steps on springs.
+  - **Analytics:** always on by default, with no pop-up and no setup switch; the You tab can turn it off.
+  - **Tested:** 7 devices at once, 0 errors.
+  - **Still open:** the sheet setup (the team).
+
+  See [[25-journal/2026-11-06-demo-app-and-analytics]].
+
+- [2026-11-06] **The site is now a working demo app**, on sample data, with usage analytics.
+  - **The flow:** landing → log in with a name, or create an account → any wearable, or none (sample sleep is shown anyway) → the app, with Now, History, You and Demo tabs.
+  - **Analytics:** screens, time, taps, scroll, attention, movement, device, IP address. It goes to the Google Sheet "Halftime prototype analytics", recorded by default with an off switch (the first-visit notice was removed).
+  - **Tested:** 7 visitors at once on 7 devices, 0 JS errors.
+  - **Not done yet:** the team must deploy the Apps Script and add 2 Vercel env vars before rows reach the sheet.
+
+  See [[25-journal/2026-11-06-demo-app-and-analytics]].
+- [2026-11-05] **Every screen stitched into one journey:** https://claude.ai/artifact/YJ7dhaYckaNcexVPUWt3XY.
+  - 41 screens, in seven chapters of one student's week: finds it, sets it up, studies with it, isn't sure, gets it wrong, needs a person, owns their data.
+  - Each screen opens live in a phone frame.
+  - Plus 11 explorations, with the team's picks tagged.
+  - **Still missing:** a history view, the laptop app's own screens, and a full first-run consent flow.
+
+  See [[09-design/screen-gallery]].
 - [2026-11-05] **The Halftime landing page is live** at https://halftime-study.vercel.app/. It's a demo with sample data, not indexed. See [[09-design/landing-page]].
   - **Words:** rebuilt over 11 rounds from five ICP tests (teach-back ×2, the "Three steps" section with the CMO, moments, hero) and two boardrooms (privacy blanks; leading with late night).
   - **Team picks:**

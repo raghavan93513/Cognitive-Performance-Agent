@@ -28,7 +28,7 @@ updated: 2026-11-05T21:00:00Z
 - [[09-design/design-evidence|Design evidence]] — research on scores, nudges, uncertainty, escalation, consent and athletes, 8 design failures, 12 rules for our screens
 - [[09-design/steal-library|Steal library]] — mechanisms worth taking from other products, plus anti-steals
 - [[09-design/studies/design-studies|Design studies]] — 9 deep studies of ~60 products (wearables, Apple, indie health, student apps, focus tools, calm apps, uncertainty, navigation/money/sport, craft and privacy) and the rules they agree on, screen by screen
-- [[09-design/screen-gallery|Screen gallery]] — screenshots of every state (empty until screens exist)
+- [[09-design/screen-gallery|Screen gallery]] — every screen we built, stitched into one student's journey (41 screens, openable live), plus which states are still missing
 - [[09-design/designer-evals|Designer evals]] — trap prompts for the designer persona
 - [[09-design/team-prototypes-week-8|Team prototypes, week 8 lab]] — what Raghavan, Alexa and Yulee each prototyped (archive, not a reference)
 - [[32-wearlab/architecture|WearLab design language]] — dark theme, chunky UI, explain cards, no-game stance (a starting point)

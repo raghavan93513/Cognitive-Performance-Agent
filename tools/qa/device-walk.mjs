@@ -29,6 +29,8 @@
 //   {"click": "text:Snooze"} or {"click": "css:.btn"}      a real click (a tap on phones) on the element's centre
 //   {"tap": [0.5, 0.8]}                                    a tap at a point (fractions of the screen, or pixels)
 //   {"repeat": {"click": "text:Next", "until": "css:#done", "max": 20, "gap": 800}}
+//   {"eval": "localStorage.x=1; true"}                   run page JS (setup before a step)
+//   {"type": "Maya"}                                      type text into the focused field
 //   {"key": "Enter"} · {"scroll": 600} (≤ 5 means screens) · {"scrollTo": "text:Sources"} · {"go": "/other.html"}
 //   {"resize": [882, 1104]}                                 change the viewport mid-walk (a fold opening, a phone rotating)
 // UI checks (heuristics, not a full audit; a real screen reader and real phones still need a human):
@@ -303,6 +305,8 @@ for (const name of WANT) {
         ...(mobile ? { screenOrientation: rw > rh ? { type: 'landscapePrimary', angle: 90 } : { type: 'portraitPrimary', angle: 0 } } : {}) }); await sleep(400); }
       else if (s.scroll) await js(`scrollBy({ top: ${+s.scroll <= 5 ? `${+s.scroll} * innerHeight` : +s.scroll}, behavior: "instant" }); true`);
       else if (s.scrollTo) { if (!(await js(scrollToEl(s.scrollTo)))) throw new Error(`not on the page: ${s.scrollTo}`); }
+      else if (s.eval) await js(String(s.eval)); // run page JS, e.g. set localStorage before a step
+      else if (s.type !== undefined) await send('Input.insertText', { text: String(s.type) });
       else if (s.key) { for (const type of ['keyDown', 'keyUp']) await send('Input.dispatchKeyEvent', { type, key: s.key, code: s.key, windowsVirtualKeyCode: { ArrowRight: 39, ArrowLeft: 37, ArrowDown: 40, ArrowUp: 38, Enter: 13, ' ': 32, Escape: 27, Tab: 9 }[s.key] || 0 }); }
       else if (s.tap) { const [vw, vh] = await js('[innerWidth, innerHeight]'); const [x, y] = s.tap.map((v, i) => (v <= 1 ? v * (i ? vh : vw) : v)); await clickAt(x, y); }
       else if (s.repeat) {

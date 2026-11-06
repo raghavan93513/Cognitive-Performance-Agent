@@ -1,0 +1,287 @@
+<title>Halftime Screen Journey</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: one student's journey, top to bottom in chapters; inside a chapter each path runs left to right as phone
+   frames joined by the tap that leads to the next screen. Tap a frame to open that exact state live, in a phone.
+   One light world on purpose: the landing page's paper, ink, black island and one mint accent. */
+:root{
+  color-scheme:light;
+  --paper:#F4F3EF; --paper2:#EAE8E1; --ink:#141414; --ink2:#46453F; --muted:#5E5C56; --line:#DCD9D1;
+  --island:#0A0A0A; --on:#F4F3EF; --mint:#8ED6BC; --mint-ink:#0F5E46; --now:#D23B40;
+  --ui:"Geist", system-ui, -apple-system, "Segoe UI", sans-serif; --mono:"Geist Mono", ui-monospace, Menlo, monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font:400 1rem/1.5 var(--ui)}
+::selection{background:rgba(142,214,188,.55)}
+:focus-visible{outline:3px solid var(--mint-ink);outline-offset:3px;border-radius:10px}
+.wrap{max-width:1320px;margin:0 auto;padding-block:40px 72px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.mark{display:inline-flex;align-items:center;gap:10px;font:700 1.0625rem/1 var(--ui);letter-spacing:-.02em}
+.mark i{display:block;width:34px;height:14px;border-radius:7px;background:var(--island);position:relative}
+.mark i::after{content:"";position:absolute;left:5px;top:4.5px;width:5px;height:5px;border-radius:50%;background:var(--mint)}
+h1{font:650 clamp(2.3rem,5.4vw,4.25rem)/.98 var(--ui);letter-spacing:-.045em;text-wrap:balance;max-width:16ch;margin-top:26px}
+h1 em{font-style:normal;background:linear-gradient(transparent 62%, rgba(142,214,188,.8) 62%, rgba(142,214,188,.8) 92%, transparent 92%)}
+.lede{font-size:1.125rem;color:var(--ink2);max-width:60ch;margin-top:16px;text-wrap:pretty}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.stats span{font:500 .875rem/1 var(--mono);background:#fff;border-radius:999px;padding:9px 13px}
+.stats b{font-weight:600}
+/* chapter index */
+.map{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:30px}
+@media (max-width:900px){.map{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.map a{display:flex;flex-direction:column;gap:4px;background:#fff;border-radius:18px;padding:14px 16px;text-decoration:none;color:inherit;min-height:44px}
+.map a:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.map .n{font:600 .8125rem/1 var(--mono);color:var(--mint-ink)}
+.map .t{font:600 1rem/1.25 var(--ui)}
+.map .c{font:400 .8125rem/1.3 var(--ui);color:var(--muted)}
+/* chapters */
+.ch{margin-top:64px;scroll-margin-top:16px}
+.ch header{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;border-top:1px solid var(--line);padding-top:22px}
+.ch .k{font:600 .875rem/1 var(--mono);background:var(--ink);color:var(--paper);border-radius:8px;padding:6px 9px}
+.ch h2{font:650 clamp(1.6rem,3vw,2.25rem)/1.08 var(--ui);letter-spacing:-.035em}
+.ch .when{font:500 .875rem/1.3 var(--mono);color:var(--muted)}
+.ch .desc{flex-basis:100%;color:var(--ink2);max-width:70ch}
+.path{margin-top:18px}
+.plabel{font:500 .8125rem/1.3 var(--mono);color:var(--muted);margin-bottom:8px}
+.row{display:flex;align-items:flex-start;gap:0;overflow-x:auto;padding:6px 4px 14px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.row::-webkit-scrollbar{height:8px}.row::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+.fr{flex:none;width:208px;scroll-snap-align:start;display:flex;flex-direction:column;gap:9px}
+.fr.lap{width:420px}
+.shot{display:block;width:100%;border:0;padding:0;background:var(--island);border-radius:30px;padding:6px;cursor:pointer;box-shadow:0 10px 24px rgba(20,20,20,.14);position:relative;transition:transform .15s cubic-bezier(.23,1,.32,1)}
+.lap .shot{border-radius:14px;padding:5px}
+.shot img{display:block;width:100%;height:auto;border-radius:25px;background:var(--paper2)}
+.lap .shot img{border-radius:9px}
+.shot .live{position:absolute;right:12px;bottom:12px;font:600 .75rem/1 var(--mono);background:var(--mint);color:#0B3D2E;border-radius:999px;padding:6px 9px;opacity:0;transition:opacity .15s ease}
+@media (hover:hover) and (pointer:fine){.shot:hover{transform:translateY(-3px)}.shot:hover .live{opacity:1}}
+.fr h3{font:600 .9375rem/1.25 var(--ui);letter-spacing:-.01em}
+.fr p{font:400 .8125rem/1.4 var(--ui);color:var(--ink2)}
+.arr{flex:none;width:92px;align-self:center;display:flex;flex-direction:column;align-items:center;gap:6px;padding:0 6px;margin-top:-40px}
+.arr span{font:500 .75rem/1.25 var(--mono);color:var(--mint-ink);text-align:center}
+.arr i{display:block;width:100%;height:2px;background:var(--mint-ink);position:relative}
+.arr i::after{content:"";position:absolute;right:-1px;top:-5px;border:6px solid transparent;border-left:9px solid var(--mint-ink);border-right:0}
+.from{flex:none;align-self:center;font:500 .8125rem/1.3 var(--mono);color:var(--ink);background:#fff;border-radius:14px;padding:10px 12px;width:150px;margin-top:-40px}
+.from small{display:block;color:var(--muted);font-size:.75rem}
+.tag{display:inline-block;font:600 .75rem/1 var(--mono);border-radius:6px;padding:4px 6px;margin-right:4px;vertical-align:1px}
+.tag.pick{background:var(--mint);color:#0B3D2E}.tag.kept{background:var(--paper2);color:var(--ink)}.tag.no{background:transparent;box-shadow:inset 0 0 0 1px var(--line);color:var(--muted)}
+.note{margin-top:48px;color:var(--ink2);font-size:.9375rem;max-width:74ch}
+/* live viewer */
+dialog{border:0;padding:0;background:transparent;max-width:none;max-height:none;width:100%;height:100%;margin:0;inset:0}
+dialog::backdrop{background:rgba(20,20,20,.72)}
+.viewer{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:max(12px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px))}
+.vbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+.vbar b{font:600 .9375rem/1.2 var(--ui);color:var(--on)}
+.vbar button,.vbar a{font:600 .875rem/1 var(--ui);min-height:44px;padding:0 16px;border-radius:22px;border:0;background:var(--on);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;text-decoration:none}
+.vbar a{background:transparent;color:var(--on);box-shadow:inset 0 0 0 1.5px rgba(244,243,239,.5)}
+.device{background:var(--island);border-radius:44px;padding:9px;box-shadow:0 30px 60px rgba(0,0,0,.4);overflow:hidden}
+.device.lap{border-radius:16px;padding:7px}
+.device .clip{overflow:hidden;border-radius:36px;background:var(--paper)}
+.device.lap .clip{border-radius:10px}
+.device iframe{display:block;border:0;transform-origin:0 0;background:var(--paper)}
+.hint{font:500 .8125rem/1.3 var(--mono);color:rgba(244,243,239,.75);text-align:center}
+.vstep{display:flex;align-items:center;gap:12px}
+.vstep>button{flex:none;width:48px;height:48px;border-radius:24px;border:0;background:rgba(244,243,239,.92);color:var(--ink);font:600 1.25rem/1 var(--ui);cursor:pointer}
+.vstep>button:disabled{opacity:.3;cursor:default}
+@media (max-width:520px){.vstep{position:relative}.vstep>button{position:absolute;bottom:-60px;z-index:1}#vprev{left:0}#vnext{right:0}}
+.walkbtn{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border-radius:24px;border:0;background:var(--ink);color:var(--paper);font:600 1rem/1 var(--ui);cursor:pointer;margin-top:22px}
+.walkbtn::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--mint)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <span class="mark"><i aria-hidden="true"></i>Halftime</span>
+  <h1>Every screen, stitched into <em>one student’s week.</em></h1>
+  <p class="lede">Each frame is a real capture of a mockup we built, in the order a student would meet it: finding Halftime, setting it up, studying with it, and the moments it isn’t sure, gets it wrong, or should point to a person. Arrows show the tap that leads to the next screen. Tap any screen to open that exact state live and click through it. Everything is sample data.</p>
+  <div class="stats" id="stats"></div>
+  <button type="button" class="walkbtn" id="walk">Walk the whole journey, live</button>
+  <nav class="map" id="map" aria-label="Chapters"></nav>
+  <main id="chapters"></main>
+  <p class="note">Sources: the product screens are <span style="font-family:var(--mono)">design/mockups/suggestion-card-v3/island-forecast.html</span> (Island + Forecast, round 3) and the landing page, live at halftime-study.vercel.app. Captured on an iPhone-sized screen (390 × 844) and a 1440 × 900 laptop. Words marked [confirm] in the settings screens are still waiting on the team.</p>
+</div>
+
+<dialog id="dlg" aria-label="Live screen">
+  <div class="viewer">
+    <div class="vbar"><b id="vtitle"></b><a id="vopen" href="#" target="_blank" rel="noopener">Open full page</a><button type="button" id="vclose">Close</button></div>
+    <p class="hint" id="vpos"></p>
+    <div class="vstep"><button type="button" id="vprev" aria-label="Previous screen">←</button>
+      <div class="device" id="dev"><div class="clip" id="clip"></div></div>
+      <button type="button" id="vnext" aria-label="Next screen">→</button></div>
+    <p class="hint"><span id="vnexttap" style="color:var(--mint)"></span> Live mockup: tap its buttons, or use ← → to walk the journey.</p>
+  </div>
+</dialog>
+
+<script>
+// One student's journey. Each path is a run of screens; "tap" is what leads from a screen to the next one.
+const A = (s) => "live/app.html#state=" + s; // the Island + Forecast mockup reads its state from the hash
+const LAND = "live/landing.html";
+// earlier rounds: every state each direction supported (their own state lists)
+const V1S = [["walk", "Short walk"], ["keep", "Keep going"], ["break", "Longer break"], ["why", "See why"], ["nodata", "Not enough data"], ["laptoponly", "No watch"], ["running", "Break running"], ["snoozed", "Snoozed"], ["escalate", "Talk to someone"], ["firstrun", "First run"]];
+const V2S = [["walk", "Short walk"], ["why", "See why"], ["keep", "Keep going"], ["running", "Break running"], ["nodata", "Not enough data"], ["escalate", "Talk to someone"]];
+const dir = (key, label, states, tag) => ({ label, tag, items: states.map(([s, t]) => ({ img: `${key}-${s}`, t, p: "", live: `live/${key}.html#state=${s}` })) });
+const CH = [
+  { id: "finds", n: "1", title: "Finds Halftime", when: "a link in a group chat, between classes", desc: "The landing page. Two taps on a sample card show what Halftime would say, then the page plays how it works and what it will never read.",
+    paths: [
+      { label: "On an iPhone", items: [
+        { img: "l-hero", t: "The promise", p: "One line, the problem, and a demo right under it.", live: LAND, tap: "scrolls" },
+        { img: "l-demo", t: "Two taps, a real answer", p: "Pick when, how long, and last night’s sleep; the black card answers with its reasons.", live: LAND, tap: "scrolls" },
+        { img: "l-how1", t: "How it works, step 2", p: "Last night’s sleep against your own usual. Plain code, not an AI.", live: LAND, tap: "keeps scrolling" },
+        { img: "l-how3", t: "Step 3: the card opens", p: "The now-dot opens into the card; both reasons rise into it.", live: LAND, tap: "flips the switch" },
+        { img: "l-xray", t: "What Halftime sees", p: "Every word becomes a grey bar; apps become kinds.", live: LAND, tap: "scrolls" },
+        { img: "l-honest", t: "Honest about limits", p: "It learns your usual first, and offers a person in the morning, never mid-study.", live: LAND, tap: "scrolls" },
+        { img: "l-join", t: "Sign-up isn’t open yet", p: "What joining would mean, ticked in as you read.", live: LAND } ] },
+      { label: "On a laptop", lap: true, items: [
+        { img: "lap-l-hero", t: "The promise and the demo, side by side", p: "", live: LAND, tap: "scrolls" },
+        { img: "lap-l-how3", t: "How it works, pinned as you scroll", p: "", live: LAND, tap: "scrolls" },
+        { img: "lap-l-xray", t: "What Halftime sees", p: "", live: LAND, tap: "scrolls" },
+        { img: "lap-l-join", t: "Joining", p: "", live: LAND } ] } ] },
+  { id: "setup", n: "2", title: "Sets it up", when: "Thursday, 9:10 am", desc: "Sleep is the one thing it reads from a wearable, so setup asks where sleep should come from, warns about Google’s “unverified app” screen, then confirms what it took.",
+    paths: [
+      { label: "With a Fitbit", items: [
+        { img: "connect", t: "Where should sleep come from?", p: "No wearable is a full option, listed first.", live: A("connect"), tap: "picks Fitbit" },
+        { img: "connectwarn", t: "Google will say “unverified app”", p: "Said before it happens, with what it asks for and when.", live: A("connectwarn"), tap: "Go to Google" },
+        { img: "connected", t: "Fitbit Air connected", p: "Last night synced; it’s learning your usual sleep.", live: A("connected&device=fitbit") } ] },
+      { label: "Other choices", items: [
+        { from: "Where should sleep come from?", fromNote: "picks Oura Ring" },
+        { img: "connected-oura", t: "Oura Ring connected", p: "Same promise, same one number.", live: A("connected&device=oura") },
+        { from: "Where should sleep come from?", fromNote: "picks No wearable" },
+        { img: "connected-none", t: "Laptop and calendar only", p: "No wearable needed; suggestions start after the third study session.", live: A("connected&device=none") } ] } ] },
+  { id: "study", n: "3", title: "Studies with it", when: "Organic chemistry, 1:05 to 4:30 pm", desc: "The island waits as a small pill. After 2 h 40 min it speaks once: a 5-minute walk fits before lab. Every reason carries its source and how sure it is.",
+    paths: [
+      { label: "It suggests a walk", items: [
+        { img: "idle", t: "The pill waits", p: "Session clock and the line to your next stop. Nothing to read.", live: A("idle"), tap: "2 h 40 min in" },
+        { img: "walk", t: "Short walk now?", p: "5 minutes fits, back by 3:50, well before lab.", live: A("walk"), tap: "See why" },
+        { img: "why", t: "Every reason, with its source", p: "Session, app switches, sleep, next class, each with where it came from.", live: A("why") } ] },
+      { label: "You take the walk", items: [
+        { from: "Short walk now?", fromNote: "taps Walk 5 min" },
+        { img: "running", t: "A live walk timer", p: "The study clock pauses; the pill counts down.", live: A("running"), tap: "taps the pill" },
+        { img: "runopen", t: "The break, opened", p: "End early, add 5 minutes, or make it small again.", live: A("runopen") } ] },
+      { label: "Or you keep going", items: [
+        { from: "Short walk now?", fromNote: "taps Keep going" },
+        { img: "keep", t: "OK, keep going.", p: "Your call. It checks in once more around 4:05.", live: A("keep") } ] } ] },
+  { id: "unsure", n: "4", title: "When it isn’t sure", when: "the first week, a stale sync, no watch", desc: "It says what it doesn’t know instead of guessing: still learning, sleep out of date, or no wearable at all.",
+    paths: [
+      { label: "Still learning", items: [
+        { img: "nodata", t: "Still learning your usual sleep", p: "4 of 7 nights. Suggestions run on your laptop and calendar until then.", live: A("nodata") } ] },
+      { label: "Sleep is out of date", items: [
+        { img: "stale", t: "Sleep left out today", p: "The Fitbit hasn’t synced since yesterday, so it isn’t used.", live: A("stale"), tap: "See why" },
+        { img: "stalewhy", t: "Why, with a fix", p: "Open the Fitbit app to sync, or carry on without it.", live: A("stalewhy") } ] },
+      { label: "No wearable", items: [
+        { img: "nowear", t: "Short walk now? (no watch)", p: "Same card from the laptop and calendar alone.", live: A("nowear&device=none"), tap: "See why" },
+        { img: "nowearwhy", t: "Why, without sleep", p: "Sleep shows as not connected, never as a guess.", live: A("nowearwhy&device=none") } ] } ] },
+  { id: "wrong", n: "5", title: "When it gets it wrong", when: "from the card, “This looks wrong”", desc: "One tap tells it what was off. Each answer changes what it does next, and it says so.",
+    paths: [
+      { label: "Tell it what was off", items: [
+        { img: "wrong", t: "What looks wrong?", p: "One task, a sleep number, or not you at all.", live: A("wrong"), tap: "That was one task" },
+        { img: "wrongtask", t: "Those switches were one task", p: "Counts them as one task from now on.", live: A("wrongtask") },
+        { from: "What looks wrong?", fromNote: "My sleep number is off" },
+        { img: "wrongsleep", t: "Sleep left out today", p: "Turn sleep off in Data sources any time.", live: A("wrongsleep") },
+        { from: "What looks wrong?", fromNote: "That wasn’t me" },
+        { img: "wrongme", t: "Not you", p: "Takes the session out of your numbers.", live: A("wrongme") } ] } ] },
+  { id: "person", n: "6", title: "When it needs a person", when: "Thursday morning, never mid-study", desc: "After 12 short nights in 14 it offers someone to talk to, in the morning. You can say which nights were travel or games, and it recounts.",
+    paths: [
+      { label: "The offer, and what explains it", items: [
+        { img: "escalate", t: "Want to talk it over with someone?", p: "Book a time, talk now, or something for right now.", live: A("escalate&team=1"), tap: "Some were travel or games" },
+        { img: "escctx", t: "Which nights were they?", p: "Away games are pre-marked from the calendar.", live: A("escctx&team=1"), tap: "Done" },
+        { img: "escdone", t: "That still looks like a lot", p: "9 of 11 counted nights were short, so the offer stays.", live: A("escdone&team=1") } ] },
+      { label: "Or", items: [
+        { from: "Want to talk it over?", fromNote: "Why am I seeing this?" },
+        { img: "escwhy", t: "Why you’re seeing this", p: "The rule, in one line, with your numbers.", live: A("escwhy") },
+        { from: "Want to talk it over?", fromNote: "Not now" },
+        { img: "escnot", t: "OK. Not now.", p: "It won’t bring it up again for 7 days.", live: A("escnot") } ] } ] },
+  { id: "data", n: "7", title: "Owns their data", when: "Settings, any time", desc: "Every source can be paused, disconnected or deleted, and each screen says exactly what happens.",
+    paths: [
+      { label: "Data sources", items: [
+        { img: "sources", t: "Data sources", p: "What it reads from each source, and what it never does.", live: A("sources"), tap: "Disconnect" },
+        { img: "sourcesdisc", t: "Disconnect Fitbit?", p: "Keep or delete the saved nights; you choose.", live: A("sourcesdisc") } ] },
+      { label: "Delete everything", items: [
+        { from: "Data sources", fromNote: "Delete all my data" },
+        { img: "sourcesdel", t: "Delete all your data?", p: "Lists everything that goes, source by source.", live: A("sourcesdel"), tap: "Delete everything" },
+        { img: "sourcesdeleted", t: "Deleted.", p: "The laptop app stops collecting until you sign in again.", live: A("sourcesdeleted") } ] },
+      { label: "Every 7 days", items: [
+        { img: "reconnect", t: "Reconnect Fitbit?", p: "Google asks again every 7 days; until then sleep is left out.", live: A("reconnect") } ] } ] },
+  { id: "explore", n: "8", title: "How we got here", when: "every direction we tried, every state", desc: "Earlier rounds, kept for the record, with every state each one supported. The team’s picks carry a mint tag; ideas that carried forward are tagged “kept”. Round 1 also covered a longer break, snoozed and first run, which the current direction doesn’t have yet.",
+    paths: [
+      dir("v1a", "Round 1 · A, Clear card", V1S, ["no", "rejected: too plain"]),
+      dir("v1b", "Round 1 · B, Forecast", V1S, ["kept", "its session line carried forward"]),
+      dir("v1c", "Round 1 · C, Quiet", V1S, ["no", "rejected: too plain"]),
+      dir("v2island", "Round 2 · Island", V2S, ["pick", "team pick, became round 3"]),
+      dir("v2flip", "Round 2 · Flip", V2S),
+      dir("v2halftime", "Round 2 · Halftime", V2S),
+      { label: "The landing page’s sections", items: [
+        { img: "hw-a", t: "How it works · A, The thread", p: "", tag: ["pick", "Heramb’s pick"] },
+        { img: "hw-b", t: "How it works · B, The board", p: "" },
+        { img: "hw-c", t: "How it works · C, One night", p: "" },
+        { img: "lo-e", t: "Trust · E, See what it sees", p: "", tag: ["pick", "picked for what it reads"] },
+        { img: "lo-d", t: "Trust · D, The sorter", p: "", tag: ["pick", "picked for honesty and joining"] } ] } ] },
+];
+
+const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+let screens = 0, live = 0;
+const ALL = []; // every live screen in journey order, for the step-through viewer
+const chapters = document.getElementById("chapters");
+CH.forEach((c) => {
+  const sec = document.createElement("section"); sec.className = "ch"; sec.id = c.id; sec.setAttribute("aria-labelledby", "h-" + c.id);
+  let html = `<header><span class="k">${c.n}</span><h2 id="h-${c.id}">${esc(c.title)}</h2><span class="when">${esc(c.when)}</span><p class="desc">${esc(c.desc)}</p></header>`;
+  let count = 0;
+  c.paths.forEach((p) => {
+    const ptag = p.tag ? ` <span class="tag ${p.tag[0]}">${esc(p.tag[1])}</span>` : "";
+    html += `<div class="path"><p class="plabel">${esc(p.label)}${ptag}</p><div class="row">`;
+    p.items.forEach((it, i) => {
+      if (it.from) { html += `<div class="from"><small>from</small>${esc(it.from)}</div><div class="arr"><span>${esc(it.fromNote)}</span><i></i></div>`; return; }
+      count++; screens++; if (it.live) live++;
+      const tag = it.tag ? `<span class="tag ${it.tag[0]}">${esc(it.tag[1])}</span>` : "";
+      const alt = `${it.t}. ${it.p}`.trim();
+      const title = c.id === "explore" ? `${p.label} · ${it.t}` : it.t;
+      const idx = it.live ? ALL.push({ src: it.live, title, ch: c.title, lap: !!p.lap, next: it.tap || "" }) - 1 : -1;
+      const shot = it.live
+        ? `<button type="button" class="shot" data-idx="${idx}" data-live="${esc(it.live)}" aria-label="Open live: ${esc(title)}"><img src="img/${it.img}.jpg" alt="${esc(alt)}" loading="lazy" decoding="async"><span class="live">Open live</span></button>`
+        : `<div class="shot" style="cursor:default"><img src="img/${it.img}.jpg" alt="${esc(alt)}" loading="lazy" decoding="async"></div>`;
+      html += `<figure class="fr${p.lap ? " lap" : ""}">${shot}<figcaption><h3>${tag}${esc(it.t)}</h3>${it.p ? `<p>${esc(it.p)}</p>` : ""}</figcaption></figure>`;
+      if (it.tap && i < p.items.length - 1) html += `<div class="arr"><span>${esc(it.tap)}</span><i></i></div>`;
+    });
+    html += `</div></div>`;
+  });
+  sec.innerHTML = html; chapters.appendChild(sec); c.count = count;
+});
+document.getElementById("map").innerHTML = CH.map((c) => `<a href="#${c.id}"><span class="n">${c.n}</span><span class="t">${esc(c.title)}</span><span class="c">${c.count} screens · ${esc(c.when)}</span></a>`).join("");
+const prod = CH.filter((c) => c.id !== "explore").reduce((s, c) => s + c.count, 0);
+document.getElementById("stats").innerHTML = `<span><b>${prod}</b> screens in the journey</span><span><b>${CH.find((c) => c.id === "explore").count}</b> from earlier rounds</span><span><b>${screens}</b> in all · <b>${live}</b> open live</span><span>iPhone + laptop</span>`;
+
+// live viewer: the real mockup in a phone (or laptop) frame, scaled to fit the window.
+// Previous / Next (or the arrow keys) walk the whole journey in order.
+const dlg = document.getElementById("dlg"), clip = document.getElementById("clip"), dev = document.getElementById("dev");
+const vprev = document.getElementById("vprev"), vnext = document.getElementById("vnext");
+let lastBtn = null, cur = null, at = -1;
+function fit() {
+  if (!cur) return; const [w, h] = cur.lap ? [1440, 900] : [390, 844];
+  const s = Math.min(1, (innerWidth - 56) / w, (innerHeight - 190) / h);
+  clip.style.width = w * s + "px"; clip.style.height = h * s + "px";
+  const f = clip.querySelector("iframe"); if (f) { f.style.width = w + "px"; f.style.height = h + "px"; f.style.transform = `scale(${s})`; }
+}
+function show(i) {
+  at = Math.max(0, Math.min(ALL.length - 1, i)); cur = ALL[at];
+  dev.classList.toggle("lap", cur.lap);
+  clip.innerHTML = ""; const f = document.createElement("iframe"); f.title = "Live: " + cur.title; f.src = cur.src; clip.appendChild(f);
+  document.getElementById("vtitle").textContent = cur.title;
+  document.getElementById("vpos").textContent = `${at + 1} of ${ALL.length} · ${cur.ch}`;
+  document.getElementById("vnexttap").textContent = cur.next ? `Next: ${cur.next}` : "";
+  document.getElementById("vopen").href = cur.src;
+  vprev.disabled = at === 0; vnext.disabled = at === ALL.length - 1;
+  fit();
+}
+function openLive(btn) {
+  lastBtn = btn; show(+btn.dataset.idx);
+  if (!dlg.open) { if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", ""); }
+  vnext.focus();
+}
+function closeLive() { if (dlg.open) { dlg.close ? dlg.close() : dlg.removeAttribute("open"); } clip.innerHTML = ""; cur = null; lastBtn && lastBtn.focus(); }
+chapters.addEventListener("click", (e) => { const b = e.target.closest(".shot[data-idx]"); if (b) openLive(b); });
+document.getElementById("vclose").addEventListener("click", closeLive);
+vprev.addEventListener("click", () => show(at - 1));
+vnext.addEventListener("click", () => show(at + 1));
+document.getElementById("walk").addEventListener("click", (e) => { lastBtn = e.currentTarget; show(0); if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", ""); vnext.focus(); });
+dlg.addEventListener("keydown", (e) => { if (e.key === "ArrowRight") { e.preventDefault(); show(at + 1); } else if (e.key === "ArrowLeft") { e.preventDefault(); show(at - 1); } });
+dlg.addEventListener("click", (e) => { if (e.target.classList.contains("viewer")) closeLive(); });
+dlg.addEventListener("close", () => { clip.innerHTML = ""; cur = null; });
+addEventListener("resize", fit);
+</script>

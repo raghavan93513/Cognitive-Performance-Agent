@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-11-05
 tier: core
 created: 2026-11-05T21:00:00Z
-updated: 2026-11-05T21:00:00Z
+updated: 2026-11-06T07:00:00Z
 ---
 
 # Landing page (Halftime)
@@ -31,11 +31,12 @@ updated: 2026-11-05T21:00:00Z
    2. It reads your watch, carefully.
    3. It suggests, and shows why.
    4. You decide.
-3. **Clear about what it reads.** A sample laptop with a "What you see / What Halftime sees" switch, beside the "What it reads" and "What it never reads" lists.
-4. **Honesty cards.**
+3. **How it compares** (added 2026-11-06). Headline: "Your watch knows your body. Your study apps know your hours. Halftime connects them to your day." A table compares wearables (WHOOP, Fitbit, Oura), productivity apps (focus timers, to-dos, blockers) and Halftime on five rows: sleep and heart data, the study session, your day, when to take a break, and why it's suggesting. On phones each row becomes a card. Mint arcs draw once above the column headers. A note says features vary by app.
+4. **Clear about what it reads.** A sample laptop with a "What you see / What Halftime sees" switch, beside the "What it reads" and "What it never reads" lists.
+5. **Honesty cards.**
    - A learning bar that fills to 7 of 7 nights.
    - A day strip where the "Talk to someone?" offer skips the late-night study block and lands at 8 am.
-5. **Sign-up isn't open yet.** The four "joining means" lines tick in as you scroll. "How long it runs" and "Who can join" show as dashes.
+6. **Sign-up isn't open yet.** The four "joining means" lines tick in as you scroll. "How long it runs" and "Who can join" show as dashes.
 
 ## Team decisions (who decided)
 
@@ -43,6 +44,7 @@ The page went through rounds 1–11 between 2026-11-05 and 2026-11-06; the BRIEF
 
 - **"How it works" as direction A, "The thread":** Heramb, "lets do A". See [[09-design/design-crit-log]].
 - **Trust sections as a mix of E then D** (E's laptop switch, then D's scroll-played honesty cards and joining ticks): Heramb, "Mix: E then D".
+- **A comparison chart, wearables vs productivity apps vs Halftime:** Heramb, 2026-11-06 ("we do a mix of both, and we are the layer connecting your health+productivity to your life"). The column contents describe each category in general; check them before the page goes public.
 - **Host it on Vercel, using the Vercel CLI:** Heramb, "host it on. vercel" and "Yes, use the CLI".
 - **Rounds 9–11:** goals Heramb set:
   - optimise the page for laptops, iPhones and foldables;

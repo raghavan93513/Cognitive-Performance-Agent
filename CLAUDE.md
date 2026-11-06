@@ -3,7 +3,7 @@
 A wellness agent for students and athletes. It reads watch and laptop signals and answers *"Should I keep going or take a break?"*. It suggests **continue / short walk / break**, always with its reasons, sources and uncertainty, and says "not enough data" when it doesn't know. This is the BINF 4070 final project (Columbia, fall 2026). **Users: US college students and athletes on iPhones** (Safari first; laptops are Mac or Windows).
 
 ## Team (they decide; AI sessions advise)
-Heramb Chaudhari · Raghavan Vaidhyaraman (repo owner) · Alexa Kafka · Yulee (full name not recorded yet). Whoever asks owns calls in their own lane. Anything that changes the shared design (scope, architecture, data collected, what users see) is a **team** decision: record who decided.
+Heramb Chaudhari · Raghavan Vaidhyaraman (repo owner) · Alexa Kafka · Yulee Kang. Whoever asks owns calls in their own lane. Anything that changes the shared design (scope, architecture, data collected, what users see) is a **team** decision: record who decided.
 
 ## Where things live
 - Wiki (Obsidian vault): `Wiki/Cognitive Perf Agent Wiki/`. Front door: `index.md`. Rules: `_meta/conventions.md`. Recent state: `hot.md`. Change log: `log.md`.

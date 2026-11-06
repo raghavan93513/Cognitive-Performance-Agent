@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F4F3EF">
+<title>Halftime · Get started</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Account setup, one screen at a time on a phone: log in or create an account, then what it reads, the laptop app,
+   a wearable (any, or none), its permission screen, syncing, your sample data, your next class, done.
+   Everything is a demo with made-up data; nothing connects to a real account. Same paper, ink, island and mint as the landing page. */
+:root{
+  color-scheme:light;
+  --paper:#F4F3EF; --paper2:#EAE8E1; --ink:#141414; --ink2:#46453F; --muted:#5E5C56; --line:#DCD9D1;
+  --island:#0A0A0A; --on:#F4F3EF; --mint:#8ED6BC; --mint-ink:#0F5E46; --now:#D23B40;
+  --ui:"Geist", system-ui, -apple-system, "Segoe UI", sans-serif; --mono:"Geist Mono", ui-monospace, Menlo, monospace;
+  --ease:cubic-bezier(.23,1,.32,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;background:var(--paper)}
+body{min-height:100dvh;background:var(--paper);color:var(--ink);font:400 1rem/1.5 var(--ui)}
+button,input{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer;touch-action:manipulation}
+:focus-visible{outline:3px solid var(--mint-ink);outline-offset:3px;border-radius:12px}
+::selection{background:rgba(142,214,188,.55)}
+.wrap{max-width:480px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 14px) max(20px, env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 20px) max(20px, env(safe-area-inset-left,0px))}
+.top{display:flex;align-items:center;justify-content:space-between;min-height:44px}
+.back{min-height:44px;min-width:44px;display:inline-flex;align-items:center;gap:6px;font-weight:500;color:var(--ink2)}
+.back[hidden]{display:none}
+.mark{display:inline-flex;align-items:center;gap:8px;font:700 1rem/1 var(--ui);letter-spacing:-.02em;text-decoration:none;color:inherit;min-height:44px}
+.mark i{display:block;width:30px;height:12px;border-radius:6px;background:var(--island);position:relative}
+.mark i::after{content:"";position:absolute;left:4px;top:3.5px;width:5px;height:5px;border-radius:50%;background:var(--mint)}
+.prog{height:4px;border-radius:2px;background:var(--line);margin-top:6px;overflow:hidden}
+.prog span{display:block;height:100%;width:0;background:var(--ink);border-radius:2px;transition:width .3s var(--ease)}
+.step{flex:1;display:flex;flex-direction:column;padding-top:26px;animation:in .28s var(--ease)}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.eyebrow{font:500 .8125rem/1 var(--mono);color:var(--muted)}
+h1{font:650 2.125rem/1.05 var(--ui);letter-spacing:-.035em;margin-top:10px;text-wrap:balance}
+.lede{color:var(--ink2);font-size:1.0625rem;margin-top:10px}
+.field{margin-top:26px;display:flex;flex-direction:column;gap:8px}
+.field label{font:600 .9375rem/1.2 var(--ui)}
+.field input{min-height:54px;border-radius:16px;border:1.5px solid var(--line);background:#fff;padding:0 16px;font-size:1.0625rem}
+.field input:focus{outline:none;border-color:var(--ink)}
+.hint{font-size:.875rem;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{min-height:44px;padding:0 16px;border-radius:22px;background:#fff;font-weight:500;font-size:.9375rem;transition:background .15s ease,color .15s ease}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.group{margin-top:22px}
+.group > p{font:600 .9375rem/1.2 var(--ui)}
+.spacer{flex:1;min-height:24px}
+.cta{position:sticky;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);z-index:2;box-shadow:0 -14px 0 2px var(--paper),0 8px 20px rgba(20,20,20,.12);min-height:56px;border-radius:28px;background:var(--ink);color:var(--paper);font-weight:600;font-size:1.0625rem;width:100%;transition:transform .12s var(--ease),opacity .15s ease}
+.cta:active{transform:scale(.98)}
+.cta:disabled{opacity:.35;cursor:default}
+.cta.mint{background:var(--mint);color:#0B3D2E}
+.ghost{min-height:48px;width:100%;margin-top:8px;font-weight:600;color:var(--ink2)}
+.card{background:#fff;border-radius:22px;padding:18px;margin-top:16px}
+.card h3{font:600 1.0625rem/1.2 var(--ui);display:flex;align-items:center;gap:8px}
+.card ul{list-style:none;margin-top:10px;display:grid;gap:8px}
+.card li{padding-left:22px;position:relative;color:var(--ink2);font-size:.9375rem}
+.yes li::before{content:"";position:absolute;left:2px;top:.45em;width:9px;height:5px;border-left:2px solid var(--mint-ink);border-bottom:2px solid var(--mint-ink);transform:rotate(-45deg)}
+.no li::before{content:"";position:absolute;left:3px;top:.62em;width:10px;height:2px;background:var(--ink2)}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;width:100%;text-align:left;border-top:1px solid var(--line);padding:6px 0}
+.toggle:first-of-type{border-top:0}
+.toggle b{display:block;font-weight:600;font-size:.9375rem}
+.toggle span{font-size:.8125rem;color:var(--muted)}
+.sw{flex:none;width:50px;height:30px;border-radius:15px;background:var(--line);position:relative;transition:background .2s ease}
+.sw::after{content:"";position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .2s var(--ease)}
+[aria-checked="true"] .sw{background:var(--mint-ink)}
+[aria-checked="true"] .sw::after{transform:translateX(20px)}
+[aria-disabled="true"]{opacity:.7;cursor:default}
+.code{font:600 2.5rem/1 var(--mono);letter-spacing:.12em;text-align:center;background:#fff;border-radius:22px;padding:26px 0;margin-top:20px}
+.paired{display:flex;gap:12px;align-items:center}
+.ok{flex:none;width:34px;height:34px;border-radius:50%;background:var(--mint);display:grid;place-items:center}
+.ok::after{content:"";width:11px;height:6px;border-left:2.5px solid #0B3D2E;border-bottom:2.5px solid #0B3D2E;transform:rotate(-45deg) translate(1px,-1px)}
+.list{display:grid;gap:8px;margin-top:20px}
+.opt{display:flex;align-items:center;gap:14px;min-height:64px;padding:10px 16px;border-radius:18px;background:#fff;text-align:left;width:100%;transition:box-shadow .15s ease}
+.opt[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--ink)}
+.opt svg{flex:none}
+.opt b{display:block;font-weight:600}
+.opt span{font-size:.8125rem;color:var(--muted)}
+.opt .r{margin-left:auto;font:500 .8125rem/1 var(--mono);color:var(--mint-ink)}
+.sheet{background:#fff;border-radius:26px;padding:22px 20px;margin-top:22px;box-shadow:0 18px 40px rgba(20,20,20,.12)}
+.sheet .who{display:flex;align-items:center;gap:10px;font-weight:600}
+.sheet .av{width:36px;height:36px;border-radius:50%;background:var(--paper2);display:grid;place-items:center;font-weight:700}
+.sheet h2{font:650 1.375rem/1.15 var(--ui);letter-spacing:-.02em;margin-top:16px}
+.sheet .perm{margin-top:14px;display:grid;gap:10px}
+.perm div{display:flex;gap:10px;font-size:.9375rem}
+.perm .tick{color:var(--mint-ink);font-weight:700}
+.perm .x{color:var(--muted)}
+.demo{display:inline-block;font:500 .75rem/1 var(--mono);background:var(--paper2);border-radius:6px;padding:5px 7px;color:var(--ink2)}
+.sync{margin-top:28px}
+.sync .bar{height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.sync .bar span{display:block;height:100%;width:0;background:var(--mint-ink);border-radius:5px}
+.sync ol{list-style:none;margin-top:18px;display:grid;gap:10px;font:500 .9375rem/1.3 var(--mono);color:var(--muted)}
+.sync li.on{color:var(--ink)}
+.sync li.on::before{content:"✓ ";color:var(--mint-ink)}
+.nights{display:flex;align-items:flex-end;gap:6px;height:124px;margin-top:14px;position:relative}
+.nights .n{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.nights .n i{display:block;width:100%;border-radius:6px;background:var(--ink)}
+.nights .n i.lo{background:#7A7872}
+.nights .n small{font:500 .75rem/1 var(--mono);color:var(--muted);height:11px}
+.usual{position:absolute;left:0;right:0;border-top:2px dashed var(--mint-ink)}
+.usual em{position:absolute;right:0;top:-20px;font:500 .75rem/1 var(--mono);color:var(--mint-ink);font-style:normal;background:#fff;padding:2px 4px}
+.kv{display:grid;grid-template-columns:1fr auto;gap:6px 12px;margin-top:14px;font-size:.9375rem}
+.kv span{color:var(--ink2)} .kv b{font-weight:600;text-align:right}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.tile{background:var(--paper);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:2px}
+.tile .tl{font:500 .8125rem/1.2 var(--ui);color:var(--ink2)}
+.tile b{font:650 1.75rem/1.1 var(--ui);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.tile b small{font:500 .875rem/1 var(--ui);color:var(--ink2);margin-left:3px}
+.tile .tu{font:500 .75rem/1.3 var(--mono);color:var(--muted)}
+.agenda ol{list-style:none;margin-top:10px;display:grid;gap:0}
+.agenda li{display:grid;grid-template-columns:76px 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.agenda li:first-child{border-top:0}
+.agenda .at{font:500 .8125rem/1.3 var(--mono);color:var(--muted);padding-top:2px}
+.agenda b{display:block;font-weight:600;font-size:.9375rem}
+.agenda li span:not(.at){font-size:.8125rem;color:var(--muted)}
+.agenda li.done b{color:var(--muted);font-weight:500}
+.agenda li.now{background:rgba(142,214,188,.25);border-radius:12px;padding:10px 8px;margin:0 -8px}
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 64px);transform:translate(-50%,-10px);opacity:0;background:var(--ink);color:var(--paper);border-radius:16px;padding:12px 16px;font-size:.9375rem;transition:opacity .2s ease,transform .2s var(--ease);pointer-events:none;max-width:calc(100% - 32px)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top"><button class="back" id="back" type="button" data-track="back" hidden>‹ Back</button><a class="mark" href="/" data-track="home"><i aria-hidden="true"></i>Halftime</a><span class="demo">Demo</span></header>
+  <div class="prog" aria-hidden="true"><span id="prog"></span></div>
+  <main id="view" aria-live="polite"></main>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script src="/assets/track.js"></script>
+<script src="/assets/demo-data.js"></script>
+<script>
+// Steps, in order. #login and #account both lead into #about. Demo only: no real account, nothing connected.
+const ORDER = ["account", "about", "reads", "laptop", "wearable", "permission", "syncing", "data", "calendar", "done"];
+const P = (() => { try { return JSON.parse(localStorage.getItem("ht-profile") || "{}"); } catch { return {}; } })();
+const save = () => { try { localStorage.setItem("ht-profile", JSON.stringify(P)); } catch {} };
+const DEV = {
+  none: { name: "No wearable", model: "", acct: "", via: "", glyph: "laptop" },
+  fitbit: { name: "Fitbit", model: "Fitbit Air", acct: "Google", via: "Google Health", glyph: "band" },
+  oura: { name: "Oura Ring", model: "Oura Ring 4", acct: "Oura", via: "your Oura account", glyph: "ring" },
+  whoop: { name: "WHOOP", model: "WHOOP 5.0", acct: "WHOOP", via: "your WHOOP account", glyph: "band" },
+  apple: { name: "Apple Watch", model: "Apple Watch", acct: "Apple Health", via: "Apple Health on this iPhone", glyph: "watch" },
+  garmin: { name: "Garmin", model: "Garmin Forerunner", acct: "Garmin Connect", via: "Garmin Connect", glyph: "band" },
+};
+const G = {
+  band: '<rect x="8.5" y="2" width="7" height="20" rx="3.5"/><rect x="10" y="8.5" width="4" height="7" rx="1.2"/>',
+  ring: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.6"/>',
+  watch: '<rect x="6" y="6" width="12" height="12" rx="3.2"/><path d="M9 6V2.5h6V6M9 18v3.5h6V18"/>',
+  laptop: '<rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19.5h20"/>',
+};
+const calGlyph = `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2.2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>`;
+const glyph = (k) => `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${G[k]}</svg>`;
+const esc = (s) => String(s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const first = () => esc((P.name || "").split(" ")[0]);
+// 7 sample nights (hours). Same numbers the app uses.
+const DEMO = window.HALFTIME_DEMO;
+const NIGHTS = DEMO.NIGHTS.slice(-7).map((n) => [n.d.slice(0, 2), n.sleep, n.rhr, n.hrv]);
+const view = document.getElementById("view"), back = document.getElementById("back"), prog = document.getElementById("prog");
+let toastT;
+function toast(msg) { const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("on"), 1600); }
+
+const S = {
+  login: () => `<section class="step" data-attn="login">
+    <p class="eyebrow">Log in</p><h1>Welcome back. What’s your name?</h1>
+    <p class="lede">No password in this demo. Your name only shows on your screens.</p>
+    <form id="f" class="field" autocomplete="on"><label for="name">Your name</label>
+      <input id="name" name="name" autocomplete="given-name" autocapitalize="words" enterkeyhint="go" maxlength="40" required value="${esc(P.name)}" data-track-value="1">
+      <p class="hint">Like “Maya”.</p></form>
+    <div class="spacer"></div>
+    <button class="cta" id="go" form="f" type="submit" data-track="login continue">Continue</button>
+    <a class="ghost" href="#account" style="display:grid;place-items:center;text-decoration:none" data-track="new here">New here? Create an account</a></section>`,
+  account: () => `<section class="step" data-attn="account">
+    <p class="eyebrow">Create your account · 1 of 9</p><h1>Let’s set up Halftime. What should we call you?</h1>
+    <p class="lede">It takes about a minute. Everything here is sample data; nothing connects to a real account.</p>
+    <form id="f" class="field"><label for="name">Your first name</label>
+      <input id="name" name="name" autocomplete="given-name" autocapitalize="words" enterkeyhint="next" maxlength="40" required value="${esc(P.name)}" data-track-value="1">
+      <label for="school" style="margin-top:12px">School</label>
+      <input id="school" name="school" autocomplete="organization" maxlength="60" value="${esc(P.school || "Columbia University")}"></form>
+    <div class="spacer"></div>
+    <button class="cta" id="go" form="f" type="submit" data-track="account continue">Continue</button>
+    <a class="ghost" href="#login" style="display:grid;place-items:center;text-decoration:none" data-track="have account">I already have an account</a></section>`,
+  about: () => `<section class="step" data-attn="about">
+    <p class="eyebrow">About you · 2 of 9</p><h1>Nice to meet you, ${first()}. When do long study sessions happen for you?</h1>
+    <div class="group"><p>Pick any</p><div class="chips" data-multi="when">
+      ${["Afternoons", "Late nights", "After practice", "Before exams"].map((c) => `<button type="button" class="chip" aria-pressed="${(P.when || ["Afternoons"]).includes(c)}" data-chip="${c}">${c}</button>`).join("")}</div></div>
+    <div class="group"><p>You are a</p><div class="chips" data-one="role">
+      ${[["student", "Student"], ["athlete", "Student-athlete"]].map(([v, l]) => `<button type="button" class="chip" aria-pressed="${(P.role || "student") === v}" data-chip="${v}">${l}</button>`).join("")}</div></div>
+    <div class="spacer"></div><button class="cta" data-next type="button" data-track="about continue">Continue</button></section>`,
+  reads: () => `<section class="step" data-attn="reads">
+    <p class="eyebrow">What it reads · 3 of 9</p><h1>You choose what Halftime can see.</h1>
+    <div class="card" data-attn="reads-sources">
+      <button type="button" class="toggle" role="switch" aria-checked="true" aria-disabled="true" data-track="laptop source (required)"><div><b>Laptop study time and app switches</b><span>Needed. App kinds only (notes, reading, chat), never names.</span></div><i class="sw"></i></button>
+      <button type="button" class="toggle" role="switch" aria-checked="${P.sleep !== false}" data-sw="sleep"><div><b>Sleep and heart data from a wearable</b><span>Sleep, heart rate, resting heart rate and HRV. You pick the device next.</span></div><i class="sw"></i></button>
+      <button type="button" class="toggle" role="switch" aria-checked="${P.cal !== false}" data-sw="cal"><div><b>Your calendar</b><span>Event times and titles for today and this week.</span></div><i class="sw"></i></button></div>
+    <div class="card no" data-attn="reads-never"><h3>Never</h3><ul><li>What you type, read or browse</li><li>Your messages or your screen</li><li>Your location</li><li>Your watch’s own scores, like Readiness</li></ul></div>
+    <div class="spacer"></div><button class="cta" data-next type="button" data-track="reads agree">Sounds good</button></section>`,
+  laptop: () => P.paired ? `<section class="step" data-attn="laptop-paired">
+    <p class="eyebrow">Laptop app · 4 of 9</p><h1>Your laptop is paired.</h1>
+    <div class="card paired"><span class="ok" aria-hidden="true"></span><div><b>MacBook Air</b><br><span class="hint">Paired just now · sample data</span></div></div>
+    <p class="lede">It counts study time and app switches by kind. You can pause it from the menu bar.</p>
+    <div class="spacer"></div><button class="cta" data-next type="button" data-track="laptop continue">Continue</button></section>`
+    : `<section class="step" data-attn="laptop">
+    <p class="eyebrow">Laptop app · 4 of 9</p><h1>Add the small laptop app.</h1>
+    <p class="lede">On your laptop, open <b>halftime.app/pair</b> and type this code.</p>
+    <p class="code" aria-label="Pairing code H T 4 8 2 1">HT-4821</p>
+    <p class="hint" style="margin-top:10px;text-align:center">Demo: tap below to pretend it’s paired.</p>
+    <div class="spacer"></div><button class="cta" id="pair" type="button" data-track="pair laptop">I’ve entered the code</button>
+    <button class="ghost" data-next type="button" data-track="skip laptop">Do this later</button></section>`,
+  wearable: () => `<section class="step" data-attn="wearable">
+    <p class="eyebrow">Wearable · 5 of 9</p><h1>Which watch or ring do you wear?</h1>
+    <p class="lede">Any of these work in the demo. No wearable works too: Halftime uses your laptop and calendar.</p>
+    <div class="list" role="list">${Object.entries(DEV).map(([k, d]) => `<button type="button" class="opt" role="listitem" aria-pressed="${P.device === k}" data-dev="${k}">${glyph(d.glyph)}<div><b>${d.name}</b><span>${k === "none" ? "Laptop and calendar only" : "Sleep, heart rate and HRV, through " + d.via}</span></div><span class="r">${P.device === k ? "Selected" : ""}</span></button>`).join("")}</div>
+    <div class="spacer"></div><button class="cta" data-next type="button" ${P.device ? "" : "disabled"} data-track="wearable continue">Continue</button></section>`,
+  permission: () => { const d = DEV[P.device]; return `<section class="step" data-attn="permission">
+    <p class="eyebrow">Connect ${esc(d.name)} · 6 of 9</p><h1>${esc(d.acct)} will ask you to allow this.</h1>
+    <div class="sheet" data-attn="permission-sheet"><div class="who"><span class="av" aria-hidden="true">${first().slice(0, 1) || "?"}</span>${first()}’s ${esc(d.acct)} account <span class="demo" style="margin-left:auto">sample</span></div>
+      <h2>Halftime wants to read your sleep and heart data</h2>
+      <div class="perm"><div><span class="tick">✓</span><span>Sleep: how long, and when you went to bed and woke up</span></div>
+      <div><span class="tick">✓</span><span>Heart rate through the day, and during workouts</span></div>
+      <div><span class="tick">✓</span><span>Resting heart rate</span></div>
+      <div><span class="tick">✓</span><span>Heart rate variability (HRV, ${DEMO.HRV_KIND[P.device] || "RMSSD"}), overnight</span></div>
+      <div><span class="x">—</span><span>Not your location, messages, or your ${esc(d.name)} scores</span></div></div></div>
+    <p class="hint" style="margin-top:14px">Last 28 nights, then new data as it syncs. Demo: no real ${esc(d.acct)} account is connected.</p>
+    <div class="spacer"></div><button class="cta" data-next type="button" data-track="permission allow">Allow</button>
+    <button class="ghost" type="button" data-to="wearable" data-track="permission cancel">Cancel</button></section>`; },
+  syncing: () => `<section class="step" data-attn="syncing">
+    <p class="eyebrow">Syncing · 7 of 9</p><h1>Reading your last 28 nights…</h1>
+    <div class="sync"><div class="bar"><span id="sbar"></span></div><ol id="slist"><li>Connected to ${esc(DEV[P.device].via)}</li><li>Found 14 nights of sleep</li><li>Heart rate, resting heart rate and HRV</li><li>Working out your usual</li></ol></div></section>`,
+  data: () => { const none = P.device === "none", d = DEV[P.device] || DEV.none, mx = 9, T = DEMO.today(P.role), U = DEMO.USUAL;
+    const tile = (label, val, unit, usual, note) => `<div class="tile"><span class="tl">${label}</span><b>${val}<small>${unit}</small></b><span class="tu">your usual ${usual}${unit}</span>${note ? `<span class="tu">${note}</span>` : ""}</div>`;
+    return `<section class="step" data-attn="data">
+    <p class="eyebrow">${none ? "No wearable · 7 of 9" : "Connected · 7 of 9"}</p><h1>${none ? "No wearable? Halftime still works." : `${esc(d.model)} connected.`}</h1>
+    <p class="lede">${none ? "Suggestions use your laptop and calendar. Here’s sample data so you can see what a wearable adds." : "Here’s what it read. Each number is compared with your own usual, never with anyone else."}</p>
+    <div class="card" data-attn="data-nights"><h3>${none ? "Sample sleep, last 7 nights" : "Sleep, last 7 nights"} <span class="demo" style="margin-left:auto">sample</span></h3>
+      <div class="nights" role="img" aria-label="Sleep last 7 nights: ${NIGHTS.map(([n, h]) => n + " " + h + " hours").join(", ")}. Usual about 7 hours.">
+        ${NIGHTS.map(([n, h]) => `<div class="n"><i class="${h < 6 ? "lo" : ""}" style="height:${Math.round((h / mx) * 100)}px"></i><small>${n}</small></div>`).join("")}
+        <span class="usual" style="bottom:${Math.round(17 + (7 / mx) * 100)}px"><em>usual 7 h</em></span></div>
+      <div class="kv"><span>Last night</span><b>${T.lastNight.sleep}</b><span>Your usual</span><b>about 7 h</b></div></div>
+    <div class="card" data-attn="data-heart"><h3>Heart, last night <span class="demo" style="margin-left:auto">sample</span></h3>
+      <div class="tiles">${tile("Resting heart rate", T.lastNight.rhr, " bpm", U.rhr, "higher than usual")}${tile("HRV, overnight", T.lastNight.hrv, " ms", U.hrv, (DEMO.HRV_KIND[P.device] || "RMSSD") + " · lower than usual")}</div>
+      <p class="hint" style="margin-top:10px">After short sleep, resting heart rate often runs higher and HRV lower. Halftime shows these as context, never as a diagnosis.</p>
+      ${T.training ? `<div class="kv" style="border-top:1px solid var(--line);padding-top:12px"><span>${T.training.what}, today</span><b>${T.training.dur}</b><span>Average heart rate</span><b>${T.training.avgHr} bpm</b></div>` : ""}</div>
+    <div class="spacer"></div><button class="cta" data-next type="button" data-track="data continue">Continue</button></section>`; },
+  calendar: () => { const ev = DEMO.calendar(P.role);
+    if (P.cal === false) return `<section class="step" data-attn="class">
+    <p class="eyebrow">Your day · 8 of 9</p><h1>What’s next after your study session?</h1>
+    <p class="lede">Calendar is off, so type it. Halftime only suggests breaks that fit before it. In the demo, it’s at 4:30 pm.</p>
+    <div class="chips" data-one="next">${["Chem lab", "Practice", "Work shift", "Study group"].map((c) => `<button type="button" class="chip" aria-pressed="${(P.next || "Chem lab") === c}" data-chip="${c}">${c}</button>`).join("")}</div>
+    <form id="fc" class="field"><label for="other">Or type it</label><input id="other" name="other" maxlength="30" placeholder="e.g. Bio review" enterkeyhint="done" value=""></form>
+    <div class="spacer"></div><button class="cta" data-next type="button" data-track="class continue">Continue</button></section>`;
+    if (!P.calProvider) return `<section class="step" data-attn="calendar">
+    <p class="eyebrow">Calendar · 8 of 9</p><h1>Connect your calendar.</h1>
+    <p class="lede">So Halftime only suggests a break when it fits before your next thing. It reads event times and titles, nothing else.</p>
+    <div class="list">${Object.entries(DEMO.PROVIDERS).map(([k, n]) => `<button type="button" class="opt" data-cal="${k}">${calGlyph}<div><b>${n}</b><span>Read only · today and this week</span></div><span class="r">Connect</span></button>`).join("")}</div>
+    <button class="ghost" type="button" data-calskip data-track="calendar skip">Skip and type my next class</button>
+    <p class="hint" style="margin-top:8px;text-align:center">Demo: no real calendar is connected.</p></section>`;
+    return `<section class="step" data-attn="calendar-today">
+    <p class="eyebrow">Calendar · 8 of 9</p><h1>${esc(DEMO.PROVIDERS[P.calProvider])} connected.</h1>
+    <p class="lede">Here’s today. Your next stop after studying is <b>${esc(DEMO.nextStop(P.role))} at 4:30 pm</b>.</p>
+    <div class="card agenda" data-attn="calendar-agenda"><h3>Today, Thursday <span class="demo" style="margin-left:auto">sample</span></h3>
+      <ol>${ev.map((e) => `<li class="${e.state}"><span class="at">${e.t}</span><div><b>${esc(e.what)}</b><span>${esc(e.where)}${e.state === "next" ? " · next stop" : e.state === "now" ? " · now" : ""}</span></div></li>`).join("")}</ol></div>
+    <div class="card"><h3>Coming up</h3><div class="kv">${DEMO.week(P.role).map(([d, w]) => `<span>${d}</span><b>${esc(w)}</b>`).join("")}</div></div>
+    <div class="spacer"></div><button class="cta" data-next type="button" data-track="calendar continue">Continue</button></section>`; },
+  done: () => { const d = DEV[P.device] || DEV.none; return `<section class="step" data-attn="done">
+    <p class="eyebrow">All set · 9 of 9</p><h1>You’re all set, ${first()}.</h1>
+    <div class="card"><div class="kv" style="margin-top:0"><span>Laptop</span><b>${P.paired ? "MacBook Air, paired" : "Not yet paired"}</b><span>Sleep and heart</span><b>${P.device === "none" ? "No wearable" : esc(d.model)}</b><span>Calendar</span><b>${P.cal === false ? "Off" : P.calProvider ? esc(DEMO.PROVIDERS[P.calProvider]) : "Not connected"}</b><span>Next stop</span><b>${esc(P.next || DEMO.nextStop(P.role))}, 4:30 pm</b></div></div>
+    <p class="lede">Halftime sits as a small pill at the top. It speaks once, when a break fits, and always says why. A short tour starts next.</p>
+    <div class="spacer"></div><button class="cta mint" id="open" type="button" data-track="open halftime">Open Halftime</button></section>`; },
+};
+
+function setProg(step) { const i = ORDER.indexOf(step); prog.style.width = (i < 0 ? 4 : Math.round(((i + 1) / ORDER.length) * 100)) + "%"; }
+let cur = "";
+function show(step) {
+  if (!S[step]) step = "account";
+  if (["permission", "syncing"].includes(step) && (!P.device || P.device === "none")) step = P.device === "none" ? "data" : "wearable";
+  if (["about", "reads", "laptop", "wearable", "permission", "syncing", "data", "calendar", "done"].includes(step) && !P.name) step = "account";
+  cur = step; view.innerHTML = S[step](); setProg(step);
+  back.hidden = step === "account" || step === "login";
+  if (window.HT) HT.screen(step, { device: P.device || "", role: P.role || "" });
+  if (location.hash.slice(1) !== step) history.replaceState(null, "", "#" + step);
+  scrollTo(0, 0);
+  const inp = view.querySelector("#name"); if (inp && !inp.value) setTimeout(() => inp.focus(), 50);
+  if (step === "syncing") runSync();
+}
+let lastNav = 0;
+function go(step) { const t = performance.now(); if (t - lastNav < 450) return; lastNav = t; history.pushState(null, "", "#" + step); show(step); }
+function next() {
+  let i = ORDER.indexOf(cur), n = ORDER[i + 1] || "done";
+  if (n === "wearable" && P.sleep === false) { P.device = "none"; save(); n = "data"; }
+  if (n === "permission" && P.device === "none") n = "data";
+  go(n);
+}
+function runSync() {
+  const bar = document.getElementById("sbar"), lis = [...document.querySelectorAll("#slist li")], t0 = performance.now(), dur = 1500;
+  const tick = (t) => { if (cur !== "syncing") return; const p = Math.min(1, (t - t0) / dur); bar.style.width = p * 100 + "%"; lis.forEach((li, i) => li.classList.toggle("on", p >= (i + 1) / lis.length - .01)); if (p < 1) requestAnimationFrame(tick); else setTimeout(() => { if (cur === "syncing") { history.replaceState(null, "", "#data"); show("data"); } }, 350); };
+  requestAnimationFrame(tick);
+}
+
+view.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const f = e.target;
+  if (f.id === "f") {
+    const name = (f.querySelector("#name").value || "").trim().replace(/\s+/g, " ");
+    if (!name) { toast("Type your name to continue"); return; }
+    const same = P.name && P.name.toLowerCase() === name.toLowerCase();
+    if (P.done && !same && f.dataset.replace !== "1") { // this phone already has someone's finished demo account
+      const box = document.getElementById("swap") || Object.assign(document.createElement("div"), { id: "swap", className: "card" });
+      box.innerHTML = `<p style="font-weight:600">This phone has ${esc(P.name.split(" ")[0])}’s demo account.</p><p class="hint" style="margin-top:4px">Continue as ${esc(name.split(" ")[0])}? That starts a new demo account and replaces it.</p>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button type="button" class="chip" aria-pressed="true" id="swapyes" data-track="replace account">Continue as ${esc(name.split(" ")[0])}</button><button type="button" class="chip" id="swapno" data-track="keep account">Log in as ${esc(P.name.split(" ")[0])}</button></div>`;
+      f.appendChild(box);
+      box.querySelector("#swapyes").onclick = () => { f.dataset.replace = "1"; f.requestSubmit ? f.requestSubmit() : f.dispatchEvent(new Event("submit", { cancelable: true })); };
+      box.querySelector("#swapno").onclick = () => { f.querySelector("#name").value = P.name; box.remove(); };
+      return;
+    }
+    if (P.name && !same) { Object.keys(P).forEach((k) => delete P[k]); } // someone new on this browser: start clean
+    P.name = name; if (f.querySelector("#school")) P.school = f.querySelector("#school").value.trim();
+    save(); if (window.HT) HT.identify(name);
+    if (same && P.done) { P.signedIn = true; save(); location.href = "/app"; return; }
+    if (cur === "login") toast(same ? `Hi ${name.split(" ")[0]}. Let’s finish setting up.` : `Hi ${name.split(" ")[0]}. Let’s set you up.`);
+    lastNav = 0; go("about");
+  }
+  if (f.id === "fc") { const v = f.querySelector("#other").value.trim(); if (v) { P.next = v; save(); } next(); }
+});
+view.addEventListener("input", (e) => { if (e.target.id === "name") document.getElementById("go").disabled = !e.target.value.trim(); });
+view.addEventListener("click", (e) => {
+  const chip = e.target.closest("[data-chip]");
+  if (chip) {
+    const box = chip.parentElement;
+    if (box.dataset.multi) { const on = chip.getAttribute("aria-pressed") !== "true"; chip.setAttribute("aria-pressed", on); P[box.dataset.multi] = [...box.querySelectorAll("[aria-pressed=true]")].map((c) => c.dataset.chip); }
+    else { box.querySelectorAll("[data-chip]").forEach((c) => c.setAttribute("aria-pressed", c === chip)); P[box.dataset.one] = chip.dataset.chip; const o = document.getElementById("other"); if (o) o.value = ""; }
+    save(); return;
+  }
+  const sw = e.target.closest("[data-sw]");
+  if (sw) { const on = sw.getAttribute("aria-checked") !== "true"; sw.setAttribute("aria-checked", on);
+    P[sw.dataset.sw] = on; save(); return; }
+  const cp = e.target.closest("[data-cal]");
+  if (cp) { cp.querySelector(".r").textContent = "Connecting…"; setTimeout(() => { P.calProvider = cp.dataset.cal; P.next = DEMO.nextStop(P.role); save(); if (window.HT) HT.event("calendar_connected", { value: P.calProvider }); show("calendar"); }, 650); return; }
+  if (e.target.closest("[data-calskip]")) { P.cal = false; save(); show("calendar"); return; }
+  const d = e.target.closest("[data-dev]");
+  if (d) { P.device = d.dataset.dev; save(); view.querySelectorAll("[data-dev]").forEach((b) => { const on = b === d; b.setAttribute("aria-pressed", on); b.querySelector(".r").textContent = on ? "Selected" : ""; }); view.querySelector("[data-next]").disabled = false; return; }
+  if (e.target.closest("#pair")) { P.paired = true; save(); toast("MacBook Air paired (demo)"); show("laptop"); return; }
+  const to = e.target.closest("[data-to]"); if (to) { go(to.dataset.to); return; }
+  if (e.target.closest("[data-next]")) {
+    if (cur === "reads" && P.sleep === false && !P.device) P.device = "none";
+    if (cur === "wearable" && !P.device) { toast("Pick one, or No wearable"); return; }
+    if (cur === "calendar") { const v = (document.getElementById("other") || {}).value; if (v && v.trim()) P.next = v.trim(); if (!P.next) P.next = DEMO.nextStop(P.role); }
+    save(); next(); return;
+  }
+  if (e.target.closest("#open")) { P.done = true; P.signedIn = true; P.created = P.created || new Date().toISOString(); save(); if (window.HT) { HT.event("account_created", { value: P.device, extra: { role: P.role, when: P.when, next: P.next, paired: !!P.paired } }); HT.flush(); } try { localStorage.removeItem("ht-tour-done"); } catch {} location.href = "/app"; } // every new setup ends in the tour
+});
+back.addEventListener("click", () => history.back());
+addEventListener("popstate", () => show(location.hash.slice(1) || "account"));
+show(location.hash.slice(1) || "account");
+</script>
+</body>
+</html>
