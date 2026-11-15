@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Halftime laptop minutes</title>
+<style>
+  :root { color-scheme: light dark; --ink: #1d1d1f; --muted: #6e6e73; --line: #e5e5ea; --bg: #fff; }
+  @media (prefers-color-scheme: dark) { :root { --ink: #f5f5f7; --muted: #a1a1a6; --line: #3a3a3c; --bg: #1c1c1e; } }
+  body { margin: 0; width: 300px; background: var(--bg); color: var(--ink); font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  main { padding: 16px; }
+  h1 { font-size: 15px; margin: 0 0 8px; }
+  p { margin: 0 0 10px; }
+  .muted { color: var(--muted); font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; margin: 0 0 10px; }
+  th, td { padding: 4px 0; border-bottom: 1px solid var(--line); font-weight: 400; }
+  th { text-align: left; } td { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  ul { list-style: none; padding: 0; margin: 0 0 6px; }
+  li { display: flex; justify-content: space-between; padding: 2px 0; }
+  li span { font-variant-numeric: tabular-nums; }
+  button { font: inherit; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--muted); background: transparent; color: var(--ink); cursor: pointer; }
+</style>
+</head>
+<body>
+<main>
+  <p id="state" class="muted"></p>
+  <section id="report" hidden>
+    <h1 id="title"></h1>
+    <table><tbody id="buckets"></tbody></table>
+    <ul id="sites"></ul>
+    <p id="sitesNote" class="muted" hidden>Only you see the per-site minutes. They stay on this laptop.</p>
+  </section>
+  <p id="picks" class="muted"></p>
+  <p class="muted">Halftime gets the four totals above, once per session. Never which site, any web address, or what's on a page.</p>
+  <button id="pick" type="button">Pick sites</button>
+</main>
+<script type="module" src="popup.js"></script>
+</body>
+</html>

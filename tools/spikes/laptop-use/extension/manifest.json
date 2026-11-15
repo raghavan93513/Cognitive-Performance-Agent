@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Halftime laptop minutes (spike)",
+  "version": "0.1.0",
+  "description": "Splits a Halftime session into your picked sites, other tabs, other apps and away. Halftime gets totals, never sites or URLs.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsyYPGJlKKyMyq35iEj7mfl84Fcz6fI3H7JKevs4TnOxjiZEwixw+pVKAIFYVszqb5V9ygQ7ZMD8r3aC7dX+ZllkQI9iK2oowkCR6q4yXAnogiHqSeFp9QQ9K0UPFVqw4GhozVUq1vYu7gVxOMgW5cXa/oqk4WDdpkpbZGZ5fCuURL7q2J4C90Oxxh1T6ZR1NeD/EP0vGInIwMqjCJ+5ETxMDQHxutA7OZzWxqmaPbD5TLP/LlZ3RkDgbYYDc4ee9l6CJtrlthHVSES/TMOseMg1l8Fole5Y8c2zGgutofBGefkh0Miw55Pi3Yc6PpZ3DOXM6HPGQOFtccm8dkgMriQIDAQAB",
+  "minimum_chrome_version": "116",
+  "incognito": "not_allowed",
+  "background": { "service_worker": "background.js", "type": "module" },
+  "permissions": ["storage", "idle"],
+  "optional_host_permissions": [
+    "*://*.instagram.com/*",
+    "*://*.tiktok.com/*",
+    "*://*.youtube.com/*",
+    "*://*.x.com/*",
+    "*://*.twitter.com/*",
+    "*://*.reddit.com/*",
+    "*://*.facebook.com/*",
+    "*://*.snapchat.com/*",
+    "*://*.netflix.com/*",
+    "*://*.twitch.tv/*",
+    "*://*.pinterest.com/*",
+    "*://*.discord.com/*"
+  ],
+  "externally_connectable": {
+    "matches": ["https://halftime-study.vercel.app/*", "http://localhost/*", "http://127.0.0.1/*"]
+  },
+  "action": { "default_popup": "popup.html", "default_title": "Halftime laptop minutes" },
+  "options_ui": { "page": "options.html", "open_in_tab": true }
+}

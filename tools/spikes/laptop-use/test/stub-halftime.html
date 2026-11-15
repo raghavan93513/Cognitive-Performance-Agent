@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halftime stub (local test page)</title>
+<style>body{font:16px/1.5 system-ui,sans-serif;max-width:560px;margin:40px auto;padding:0 16px}button{font:inherit;padding:8px 14px;margin-right:8px}pre{background:#f2f2f2;padding:12px;white-space:pre-wrap}</style>
+</head>
+<body>
+<h1>Halftime stub</h1>
+<p>A local stand-in for the Halftime study page (synthetic, not the live site). It is served with the live site's
+Content-Security-Policy and talks to the extension through <code>halftime-bridge.js</code>, exactly as study.js would.</p>
+<p><button id="hello" type="button">Check extension</button><button id="start" type="button">Start session</button><button id="end" type="button">End session</button><button id="discard" type="button">Discard</button></p>
+<pre id="log">log:</pre>
+<script src="/halftime-bridge.js"></script>
+<script>
+  const log = (x) => { document.getElementById("log").textContent += "\n" + JSON.stringify(x); };
+  window.cspViolations = [];
+  document.addEventListener("securitypolicyviolation", (e) => window.cspViolations.push(e.violatedDirective + " " + e.blockedURI));
+  let id = null;
+  window.stub = {
+    hello: () => HalftimeLaptop.ask({ type: "hello" }),
+    start: async (sid) => { id = sid || crypto.randomUUID(); const r = await HalftimeLaptop.ask({ type: "start", id, maxMin: 360 }); return { id, r }; },
+    end: () => HalftimeLaptop.ask({ type: "end", id }),
+    discard: () => HalftimeLaptop.ask({ type: "discard", id }),
+  };
+  for (const k of ["hello", "start", "end", "discard"]) document.getElementById(k).addEventListener("click", async () => log({ [k]: await stub[k]() }));
+</script>
+</body>
+</html>
