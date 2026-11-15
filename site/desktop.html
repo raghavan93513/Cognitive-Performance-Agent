@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F4F3EF">
+<title>Halftime for your laptop</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Halftime on the laptop.
+   Left: your session. It is the same app as on the phone (/app), so the timer, the suggestion, breaks and the
+   check-in all work here and there is one timing rule, not two.
+   Right: what the wide screen adds. Every source drawn as its own lane on one clock, moving as you study:
+   what each one contributed, whether it is live or sample, and what was left out.
+   Real today: the session (timer, breaks, your answers) and, on a computer that holds the credentials, a Fitbit
+   through Google Health. Sample today, and labelled so: laptop activity (the laptop app isn't built) and the calendar.
+   With no session running, the lanes show one sample afternoon from /assets/halftime-data.js. */
+:root{
+  --paper:#F4F3EF; --card:#FBFAF7; --ink:#141414; --ink2:#46453F; --muted:#64625C; --line:#E3E1DB; --track:#E6E4DE;
+  --slot:#8ED6BC; --slot-ink:#0F5E46; --now:#E5484D;
+  --c-study:#141414; --c-browser:#6B6A64; --c-messages:#A9A79F; --c-media:#CFCDC5; --c-other:#E6E4DE;
+  --ui:"Geist", system-ui, -apple-system, sans-serif; --mono:"Geist Mono", ui-monospace, Menlo, monospace;
+  --ease:cubic-bezier(.23,1,.32,1); --lab:176px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--paper);-webkit-text-size-adjust:100%}
+body{min-height:100vh;background:var(--paper);color:var(--ink);font:400 1rem/1.45 var(--ui);font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--slot-ink);outline-offset:3px;border-radius:10px}
+::selection{background:rgba(142,214,188,.55)}
+.wrap{max-width:1480px;margin:0 auto;padding:0 28px 40px}
+
+/* top bar */
+.bar{display:flex;align-items:center;gap:12px;height:64px}
+.brand{font:600 1.0625rem/1 var(--ui);letter-spacing:-.01em}
+.brand span{font-weight:400;color:var(--muted);margin-left:8px}
+.when{font:500 .875rem/1 var(--mono);color:var(--ink2);margin-left:8px}
+.bar .sp{flex:1}
+.pill{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:13px;font:500 .75rem/1 var(--ui);white-space:nowrap;border:1px solid var(--line);color:var(--ink2);background:var(--card)}
+.pill.live{background:var(--slot);border-color:var(--slot);color:var(--slot-ink);font-weight:600}
+.pill.live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--slot-ink)}
+.pill.warn{border-style:dashed;border-color:var(--ink2)}
+.pill.off{color:var(--muted)}
+.navlink{font:500 .875rem/1 var(--ui);text-decoration:none;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card)}
+.navlink:hover,.navlink[aria-pressed="true"]{border-color:var(--ink)}
+.navlink[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+/* two columns: the session, then the evidence */
+.shell{display:grid;grid-template-columns:420px minmax(0,1fr);gap:20px;align-items:start}
+.sess{position:sticky;top:16px;height:calc(100vh - 96px);min-height:620px;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:28px;overflow:hidden}
+.sess .sh{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:14px 20px 12px;border-bottom:1px solid var(--line)}
+.sess .sh p{font:400 .75rem/1.3 var(--ui);color:var(--muted);text-align:right}
+.sess iframe{flex:1;width:100%;border:0;background:var(--paper)}
+.right{min-width:0;display:grid;gap:20px}
+
+/* the lanes */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:22px 24px 18px;min-width:0;display:flex;flex-direction:column}
+.ph{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+h2{font:600 1.0625rem/1.2 var(--ui);letter-spacing:-.01em}
+.ph p{font:400 .8125rem/1.3 var(--ui);color:var(--muted);text-align:right}
+.scroll{display:flex;flex-direction:column;min-width:0;margin-top:14px}
+.lanes{position:relative;display:flex;flex-direction:column}
+.axis{position:relative;height:22px;margin-left:var(--lab)}
+.axis span{position:absolute;top:0;transform:translateX(-50%);font:400 .6875rem/1 var(--mono);color:var(--muted);white-space:nowrap}
+.axis span:first-child{transform:none}.axis span.end{transform:translateX(-100%)}
+.lane{display:flex;align-items:stretch;border-top:1px solid var(--line);min-height:74px}
+.ll{flex:none;width:var(--lab);padding:12px 12px 10px 0;text-align:left;display:grid;align-content:start;gap:6px;border-radius:10px}
+.ll:hover .nm{text-decoration:underline;text-underline-offset:3px}
+.ll .nm{display:flex;align-items:center;gap:8px;font:500 .875rem/1.1 var(--ui)}
+.ll .nm svg{flex:none;color:var(--ink2)}
+.ll .mt{font:400 .6875rem/1.3 var(--ui);color:var(--muted)}
+.tr{position:relative;flex:1;min-width:0}
+.ann{position:absolute;top:9px;font:500 .6875rem/1 var(--mono);color:var(--ink2);white-space:nowrap;display:flex;align-items:center;gap:6px}
+.ann.r{transform:translateX(-100%)}
+.ann.flag{color:var(--ink);font-weight:600}
+.win{position:absolute;top:31px;height:32px;background:var(--track);border-radius:6px}
+.bars{position:absolute;left:0;right:0;top:36px;height:22px}
+.bars span{position:absolute;top:0;bottom:0;min-width:1px;box-shadow:inset -1px 0 0 var(--card)}
+.c-study{background:var(--c-study)}.c-browser{background:var(--c-browser)}.c-messages{background:var(--c-messages)}.c-media{background:var(--c-media)}.c-other{background:var(--c-other)}
+.bars .idle{background:repeating-linear-gradient(135deg,var(--track) 0 3px,transparent 3px 6px);box-shadow:none}
+.dot{position:absolute;border-radius:50%;background:var(--ink);transform:translate(-50%,-50%)}
+.dot.hr{width:5px;height:5px;background:var(--ink2)}
+.hatch{position:absolute;left:0;right:0;top:30px;bottom:10px;border-radius:8px;border:1px dashed var(--ink2);background:repeating-linear-gradient(135deg,transparent 0 6px,rgba(20,20,20,.05) 6px 12px);display:flex;align-items:center;padding:0 12px;font:500 .8125rem/1.2 var(--ui);color:var(--ink2)}
+.ev{position:absolute;top:32px;height:30px;border-radius:8px;border:1px solid var(--ink2);padding:0 8px;display:flex;align-items:center;font:500 .75rem/1 var(--ui);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.ev.past{border-color:var(--line);color:var(--muted)}
+.ev.on{border-style:dashed}
+.ev.next{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.ev.walk{background:var(--slot);border-color:var(--slot);color:#06281D;padding:0;justify-content:center;overflow:visible}
+.ev.walk b{position:absolute;top:-17px;left:0;font:600 .6875rem/1 var(--mono);color:var(--slot-ink)}
+/* the live session lane */
+.seg{position:absolute;top:36px;height:22px;background:var(--ink);border-radius:4px;min-width:2px}
+.brk{position:absolute;top:36px;height:22px;background:var(--slot);border-radius:4px;min-width:3px}
+.pomo{position:absolute;top:33px;height:28px;border:1px dashed var(--ink2);border-radius:5px}
+.mark{position:absolute;top:28px;bottom:6px;width:0;border-left:2px dashed var(--ink2)}
+.mark span{position:absolute;top:-19px;left:4px;font:500 .6875rem/1 var(--mono);color:var(--ink2);white-space:nowrap}
+.mark.l span{left:auto;right:6px}
+.mark.cue{border-left:2px solid var(--slot-ink)}
+.mark.cue span{color:var(--slot-ink);font-weight:600}
+.nowline{position:absolute;top:22px;bottom:0;width:2px;background:var(--now);pointer-events:none}
+.nowline span{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font:600 .6875rem/1 var(--mono);color:#FFFFFF;background:#B42318;padding:4px 6px;border-radius:6px;white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:10px 0 0 var(--lab);font:400 .6875rem/1 var(--ui);color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:2px;border:1px solid rgba(20,20,20,.25)}
+.legend i.lb{background:var(--slot);border-color:var(--slot)}
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font:500 .8125rem/1 var(--ui);color:var(--ink2)}
+.pipe b{font:500 .8125rem/1 var(--mono);color:var(--ink)}
+.pipe .arr{color:var(--muted)}
+.pipe .st{padding:8px 10px;border-radius:9px;background:var(--paper);border:1px solid var(--line)}
+.pipe button.st:hover{border-color:var(--ink2)}
+.pipe .st.end{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:20px 22px;min-width:0}
+.card .lead{font:400 .8125rem/1.4 var(--ui);color:var(--muted);margin-top:4px}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+.srcs{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:0 28px;margin-top:8px}
+.src{display:grid;grid-template-columns:24px minmax(0,1fr);gap:4px 12px;align-items:start;padding:14px 0;border-top:1px solid var(--line)}
+.src svg{margin-top:1px;color:var(--ink2)}
+.src .nm{display:flex;align-items:center;justify-content:space-between;gap:8px;font:500 .9375rem/1.2 var(--ui)}
+.src .dt{font:400 .75rem/1.45 var(--ui);color:var(--muted);margin-top:3px}
+.src .dt b{font-weight:500;color:var(--ink2)}
+.lnk{font:500 .75rem/1 var(--ui);color:var(--ink2);text-decoration:underline;text-underline-offset:3px;padding:6px 0;display:inline-block}
+.lnk:hover{color:var(--ink)}
+.m{padding:14px 0;border-top:1px solid var(--line)}
+.m:first-of-type{margin-top:12px}
+.m .t{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.m .k{font:500 .8125rem/1 var(--ui);color:var(--ink2)}
+.m .v{font:500 1.375rem/1 var(--ui);letter-spacing:-.02em;text-align:right}
+.m .v small{font:400 .75rem/1 var(--ui);color:var(--muted);letter-spacing:0;margin-left:6px}
+.rng{position:relative;height:8px;border-radius:4px;background:var(--track);margin-top:12px}
+.rng .band{position:absolute;top:0;bottom:0;border-radius:4px;background:#C9C6BD}
+.rng .us{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink2)}
+.rng .me{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:var(--ink);border:3px solid var(--card);transform:translate(-50%,-50%)}
+.m .cap{display:flex;justify-content:space-between;font:400 .6875rem/1 var(--ui);color:var(--muted);margin-top:8px}
+.empty{font:400 .875rem/1.5 var(--ui);color:var(--ink2);margin-top:14px;padding:14px;border:1px dashed var(--ink2);border-radius:12px}
+.nights{position:relative;display:flex;align-items:flex-end;gap:4px;height:120px;margin-top:22px;border-bottom:1px solid var(--ink2)}
+.nights span{flex:1;background:#C9C6BD;border-radius:3px 3px 0 0;min-height:2px}
+.nights span.last{background:var(--ink)}
+.nights .u{position:absolute;left:0;right:0;border-top:1px dashed var(--ink2)}
+.nights .u em{position:absolute;right:0;top:-16px;font:400 .6875rem/1 var(--mono);font-style:normal;color:var(--ink2);background:var(--card);padding-left:6px}
+.nx{display:flex;justify-content:space-between;font:400 .6875rem/1 var(--mono);color:var(--muted);margin-top:8px}
+.fine{font:400 .75rem/1.5 var(--ui);color:var(--muted);margin-top:14px}
+
+/* sheets */
+dialog{border:1px solid var(--ink);border-radius:20px;background:var(--card);color:var(--ink);padding:0;width:min(640px,calc(100vw - 32px));max-height:min(720px,calc(100vh - 48px));margin:auto}
+dialog::backdrop{background:rgba(20,20,20,.38)}
+.dh{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:20px 22px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--card)}
+.dh p{font:400 .8125rem/1.4 var(--ui);color:var(--muted);margin-top:4px}
+.x{flex:none;width:36px;height:36px;border-radius:10px;border:1px solid var(--line);font:500 1rem/1 var(--ui)}
+.db{padding:6px 22px 20px;overflow:auto}
+table{width:100%;border-collapse:collapse;font:400 .8125rem/1.3 var(--ui)}
+th{text-align:left;font:500 .6875rem/1 var(--ui);color:var(--muted);padding:12px 8px 8px 0}
+td{padding:8px 8px 8px 0;border-top:1px solid var(--line);vertical-align:top}
+td:first-child{font-family:var(--mono);white-space:nowrap;color:var(--ink2)}
+.rule{font:400 .9375rem/1.55 var(--ui);margin-top:14px}
+.small{font:400 .8125rem/1.5 var(--ui);color:var(--muted);margin-top:12px}
+
+@media (max-width:1100px){ .shell{grid-template-columns:1fr} .sess{position:static;height:760px} }
+@media (max-width:760px){ :root{--lab:104px} .wrap{padding:0 16px 32px} .bar{flex-wrap:wrap;height:auto;padding:14px 0;gap:10px} .when{display:none} .two{grid-template-columns:1fr} .ll .mt{display:none} .scroll{overflow-x:auto;padding-bottom:6px} .lanes{min-width:680px} .legend{margin-left:0} .sess{height:720px;min-height:0} }
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <div class="brand">Halftime<span>for your laptop</span></div>
+    <div class="when" id="when"></div>
+    <div class="sp"></div>
+    <div id="pills" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+    <button class="navlink" id="fast" aria-pressed="false" title="Runs a session 60 times faster, for a demo. Those sessions are marked as tests.">Fast demo</button>
+    <a class="navlink" href="/app">Open Halftime</a>
+  </header>
+
+  <main class="shell">
+    <aside class="sess" aria-label="Your study session">
+      <div class="sh"><h2>Your session</h2><p>The same app as on your phone.</p></div>
+      <iframe allow="bluetooth" id="app" name="app" title="Halftime: your study session"></iframe>
+    </aside>
+
+    <div class="right">
+      <section class="panel" aria-labelledby="lh">
+        <div class="ph"><h2 id="lh"></h2><p id="lsub"></p></div>
+        <div class="scroll" tabindex="0" role="group" aria-label="Timeline, one lane per source. Scrolls sideways on a small screen."><div class="lanes" id="lanes"></div></div>
+        <div class="legend" id="legend"></div>
+        <div class="pipe" id="pipe"></div>
+      </section>
+      <section class="card" aria-labelledby="ch"><h2 id="ch">What's connected</h2><p class="lead">What each source reads, what it never reads, and whether it's working.</p><div class="srcs" id="srcs"></div></section>
+      <div class="two">
+        <section class="card" aria-labelledby="bh"><h2 id="bh">Body, last night</h2><p class="lead" id="bodylead"></p><div id="body"></div></section>
+        <section class="card" aria-labelledby="nh"><h2 id="nh">Sleep, night by night</h2><p class="lead" id="nightlead"></p><div id="nightsbox"></div></section>
+      </div>
+    </div>
+  </main>
+</div>
+
+<dialog id="sheet" aria-labelledby="sheet-t"><div class="dh"><div><h2 id="sheet-t"></h2><p id="sheet-s"></p></div><button class="x" id="sheet-x" aria-label="Close">×</button></div><div class="db" id="sheet-b"></div></dialog>
+
+<!-- No /assets/track.js here on purpose: the session frame below already runs it, and two copies in one tab would
+     share one event counter and drop each other's events. This page reports through the frame's copy. -->
+<script src="/assets/demo-data.js"></script>
+<script src="/assets/halftime-data.js"></script>
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id), HD = window.HalftimeData, { clock, dur, CATS } = HD;
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const Q = new URLSearchParams(location.search);
+const readJSON = (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } };
+const profile = () => readJSON("ht-profile", {});            // the same profile the phone setup (/start) saves
+const frame = $("app");
+const track = (type, data) => { try { const w = frame.contentWindow; if (w && w.HT && w.HT.event) w.HT.event(type, data); } catch {} };
+let LIVE = null;   // the /api/health answer, when this computer has a live watch
+let S = null;      // the sample afternoon (and the watch, calendar and profile the cards read)
+let SES = null;    // the real session, read from the app's own saved state ("ht-study"); null when none is running
+let shown = "";    // what the lanes last drew, so they redraw only when something changed
+
+const GL = {
+  timer: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9.5 2.5h5"/>',
+  laptop: '<rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19.5h20"/>',
+  phone: '<rect x="7" y="2.5" width="10" height="19" rx="2.6"/><path d="M10.5 5.5h3"/>',
+  watch: '<rect x="8.5" y="2" width="7" height="20" rx="3.5"/><rect x="10" y="8.5" width="4" height="7" rx="1.2"/>',
+  calendar: '<rect x="4" y="5" width="16" height="15" rx="2.2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+};
+const glyph = (k, s = 20) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${GL[k]}</svg>`;
+const pillFor = (src) => src.mode === "none" ? `<span class="pill off">Not connected</span>` : src.stale ? `<span class="pill warn">${src.mode === "live" ? "Live" : "Sample"} · not synced</span>` : src.mode === "live" ? `<span class="pill live">Live</span>` : `<span class="pill">Sample</span>`;
+const laneName = (id) => ({ timer: "Study timer", laptop: "This laptop", phone: "iPhone", watch: S.sources.watch.name, calendar: S.sources.calendar.name }[id]);
+const lab = (id, pillHtml, meta) => `<button class="ll" data-lane="${id}" aria-label="${esc(laneName(id))}: show records"><span class="nm">${glyph(id)}${esc(laneName(id))}</span><span>${pillHtml}</span><span class="mt">${esc(meta)}</span></button>`;
+const laneW = () => Math.max(200, $("lanes").clientWidth - parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--lab")));
+const rng = (seed) => () => { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+const hash = (s) => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h | 0; };
+
+/* ============ a real session: the app's saved state, drawn on one clock ============ */
+// Everything is in "session minutes" (minutes since the start). At normal speed that is the real clock.
+function sessionModel(ses) {
+  const sp = ses.speed || 1, M = (t) => ((t - ses.startAt) * sp) / 60000, endAt = ses.endAt || Date.now(), now = Math.max(0, M(endAt));
+  const d0 = new Date(ses.startAt), start = d0.getHours() * 60 + d0.getMinutes() + d0.getSeconds() / 60, ck = (m, ap = false) => clock(start + m, ap);
+  const breaks = (ses.breaks || []).map((b) => ({ s: M(b.startAt), e: b.endAt ? M(b.endAt) : now, open: !b.endAt, from: b.from }));
+  const onBreak = (m) => breaks.some((b) => m >= b.s && m < b.e);
+  // Laptop activity is SAMPLE: made up minute by minute from the session id, so it is the same every time it is drawn.
+  // It drifts toward more switching the longer you go without a break, and settles after one. Idle while on a break.
+  const seed = hash(String(ses.id)), spans = [], switches = [], order = ["study", "browser", "study", "messages", "study", "browser", "media", "study", "other", "browser"];
+  let cat = "study", from = 0, ci = 0, idleFrom = null;
+  for (let i = 0; i < Math.floor(now); i++) {
+    if (onBreak(i + 0.5)) { if (idleFrom == null) { spans.push({ s: from, e: i, cat }); idleFrom = i; } continue; }
+    if (idleFrom != null) { spans.push({ s: idleFrom, e: i, cat: "idle" }); idleFrom = null; from = i; cat = "study"; }
+    const r = rng(seed + i * 7919), since = i - breaks.filter((b) => b.e <= i).reduce((a, b) => Math.max(a, b.e), 0);
+    const rate = Math.min(0.8, 0.26 + Math.max(0, since - 25) * 0.013);
+    if (r() < rate) { const t = i + r(); spans.push({ s: from, e: t, cat }); switches.push(t); ci = (ci + 1 + Math.floor(r() * 3)) % order.length; let nx = order[ci]; if (nx === cat) nx = cat === "study" ? "browser" : "study"; cat = nx; from = t; }
+  }
+  if (idleFrom != null) spans.push({ s: idleFrom, e: now, cat: "idle" }); else spans.push({ s: from, e: now, cat });
+  const c = ses.cue || null, nextM = ses.next ? M(ses.next.at) : null;
+  return { ses, sp, M, now, ck, breaks, spans: spans.filter((x) => x.e > x.s), switches, switches20: now >= 20 ? switches.filter((t) => t > now - 20).length : null,
+    cue: c, cueShownM: c && c.shownAt ? M(c.shownAt) : null, nextM, ended: ses.phase === "checkin" || !!ses.endAt, studyMin: now - breaks.reduce((a, b) => a + (b.e - b.s), 0) };
+}
+const realClock = (ms, ap = false) => { const d = new Date(ms); return clock(d.getHours() * 60 + d.getMinutes(), ap); }; // a next stop keeps its real time, even at test speed
+const cueWord = (c) => ({ walk: "5-minute walk", break: "15-minute break", keep: "keep going", pomo: "5-minute break" }[c.kind] || c.kind);
+const respWord = (c) => !c.done ? (c.snoozes ? `snoozed ${c.snoozes}×` : "waiting for you") : ({ take: "taken", keep: "kept going", wrong: "marked wrong", missed: "missed", ended: "session ended", not_needed: "not needed" }[c.response] || c.response || "");
+const sleepLine = (ses) => ses.sleepH == null ? "left out of this session" : `${dur(Math.round(ses.sleepH * 60))} · ${ses.sleepSrc === "wearable" ? esc(ses.sleepDev || "watch") : ses.sleepSrc === "wearable_sample" ? "sample data, not your real sleep" : "typed by you"}`;
+function decisionLine(m) {
+  const s = m.ses, c = s.cue;
+  if (s.arm === "pomodoro") return "25 min on, 5 off (comparison timer)";
+  if (!c) return "No suggestion: session under 20 min";
+  if (c.shownAt || c.done) return `${cueWord(c)[0].toUpperCase() + cueWord(c).slice(1)} at ${Math.round(c.min)} min · ${respWord(c)}`;
+  return "One suggestion, at the right moment";
+}
+function liveRecords(m) {
+  const s = m.ses, out = [], add = (source, metric, value, at, mode) => out.push({ source, metric, value, unit: "", at, mode });
+  add("timer", "session_start", `planned ${dur(s.planned)}`, m.ck(0, true), "live");
+  m.breaks.forEach((b) => { add("timer", "break_start", b.from === "manual" ? "your own break" : b.from === "pomo" ? "timer break" : "from the suggestion", m.ck(b.s, true), "live"); if (!b.open) add("timer", "break_end", dur(Math.max(1, Math.round(b.e - b.s))), m.ck(b.e, true), "live"); });
+  if (m.cue && (m.cue.shownAt || m.cue.done)) add("timer", "suggestion", `${cueWord(m.cue)} · ${respWord(m.cue)}`, m.ck(m.cueShownM != null ? m.cueShownM : m.cue.min, true), "live");
+  if (m.ended) add("timer", "session_end", `${dur(Math.round(m.studyMin))} studying`, m.ck(m.now, true), "live");
+  m.spans.forEach((x) => add("laptop", x.cat === "idle" ? "idle" : "app_category", x.cat === "idle" ? "on a break" : CATS[x.cat], `${m.ck(x.s)}–${m.ck(x.e)}`, "sample"));
+  add("watch", "sleep_last_night", s.sleepH == null ? "left out" : dur(Math.round(s.sleepH * 60)), "last night", s.sleepSrc === "wearable" ? "live" : s.sleepSrc === "self" ? "typed" : "sample");
+  if (s.next) add("calendar", "next_stop", s.next.label, realClock(s.next.at, true), s.next.src === "typed" ? "typed" : "sample");
+  return out;
+}
+
+function renderLive() {
+  const m = sessionModel(SES), s = m.ses, W = S.sources.watch;
+  const raw = Math.max(s.planned || 60, m.now + 8, m.nextM != null && m.nextM <= (s.planned || 60) + 45 ? m.nextM + 12 : 0), step = raw > 150 ? 30 : raw > 70 ? 15 : 10, T1 = Math.ceil(raw / step) * step;
+  const x = (v) => (Math.max(0, Math.min(T1, v)) / T1) * 100, w = (a, b) => Math.max(0, x(b) - x(a));
+  let ticks = ""; for (let t = 0; t <= T1; t += step) if (Math.abs(t - m.now) > T1 * 0.07) ticks += `<span class="${t === T1 ? "end" : ""}" style="left:${x(t)}%">${m.ck(t)}</span>`;
+  // the session itself: real
+  let cur = 0, segs = "";
+  m.breaks.forEach((b) => { if (b.s > cur) segs += `<span class="seg" style="left:${x(cur)}%;width:${w(cur, b.s)}%"></span>`; segs += `<span class="brk" style="left:${x(b.s)}%;width:${w(b.s, b.e)}%" title="Break, ${m.ck(b.s, true)}"></span>`; cur = b.e; });
+  if (m.now > cur) segs += `<span class="seg" style="left:${x(cur)}%;width:${w(cur, m.now)}%"></span>`;
+  let pomo = ""; if (s.arm === "pomodoro") for (let c = 0; c * 30 + 25 < T1; c++) pomo += `<span class="pomo" style="left:${x(c * 30 + 25)}%;width:${w(c * 30 + 25, c * 30 + 30)}%" title="Timer break"></span>`;
+  const cueM = m.cue && (m.cue.shownAt || m.cue.done) && s.arm !== "pomodoro" ? (m.cueShownM != null ? m.cueShownM : m.cue.min) : null;
+  const sessLane = `<span class="ann" style="left:0">${dur(Math.round(m.studyMin))} studying · ${m.breaks.length} break${m.breaks.length === 1 ? "" : "s"}${m.ended ? " · ended" : ""}</span>
+    <span class="ann r" style="left:100%">${s.arm === "pomodoro" ? "25/5 timer (the comparison)" : "Halftime's timing"}</span>${pomo}${segs}
+    ${cueM != null ? `<span class="mark cue${x(cueM) > 55 ? " l" : ""}" style="left:${x(cueM)}%;top:40px"><span style="top:auto;bottom:-3px">suggested: ${cueWord(m.cue)} · ${respWord(m.cue)}</span></span>` : ""}`;
+  // the laptop: sample
+  const bars = m.spans.map((p) => `<span class="${p.cat === "idle" ? "idle" : "c-" + p.cat}" style="left:${x(p.s)}%;width:${w(p.s, p.e)}%"></span>`).join("");
+  const lapLane = `<span class="ann" style="left:0">${m.switches20 == null ? "under 20 min: too soon to count switches" : `${m.switches20} switches in the last 20 min · sample usual 5–8`}</span><span class="ann r" style="left:100%">not used in suggestions yet</span><div class="bars">${bars}</div>`;
+  // the watch: whatever this session's sleep number really is
+  const step0 = s.rule && s.rule.steps ? s.rule.steps.find((q) => q.k === "sleep") : null;
+  let wa;
+  if (W.mode === "live" && W.stale) wa = `<div class="hatch">${esc(W.name)} hasn't synced since ${esc(W.lastSync)}. ${s.sleepH == null ? "Sleep is left out of this session." : `This session uses ${sleepLine(s)}.`}</div>`;
+  else wa = `<span class="ann${s.sleepSrc === "wearable" ? " flag" : ""}" style="left:0">sleep last night: ${sleepLine(s)}</span>` + (step0 ? `<span class="ann" style="left:0;top:40px;color:var(--muted)">${esc(step0.text)}: ${esc(step0.val)}</span>` : "");
+  // the calendar: the next stop, and the planned end
+  const endMark = (s.planned || 0) <= T1 ? `<span class="mark${x(s.planned) > 55 ? " l" : ""}" style="left:${x(s.planned)}%;top:40px"><span style="top:auto;bottom:-3px">planned end ${m.ck(s.planned)}</span></span>` : "";
+  const cal = (s.next ? (m.nextM <= T1 ? `<span class="ev next" style="left:${x(m.nextM)}%;right:0" title="${esc(s.next.label)}">${esc(s.next.label)} ${realClock(s.next.at)}</span>` : `<span class="ann r" style="left:100%">next: ${esc(s.next.label)}, ${realClock(s.next.at, true)} →</span>`) + `<span class="ann" style="left:0">${s.next.src === "typed" ? "you typed the next stop" : "sample calendar, not your real one"}</span>` : `<span class="ann" style="left:0">no next stop for this session</span>`) + endMark;
+
+  $("lh").textContent = m.ended ? "The session you just finished, source by source" : "Your session, source by source";
+  $("lsub").textContent = (s.speed || 1) !== 1 ? `Test speed ×${s.speed}: one real second is ${s.speed === 60 ? "a minute" : s.speed + " seconds"} here.` : "Moves as you study. Pick a source to see its records.";
+  $("lanes").innerHTML = `<div class="axis">${ticks}</div>
+    <div class="lane" data-lane="timer">${lab("timer", `<span class="pill live">Live</span>`, "your timer, breaks and answers")}<div class="tr">${sessLane}</div></div>
+    <div class="lane" data-lane="laptop">${lab("laptop", `<span class="pill">Sample</span>`, "kinds of app and switches. The laptop app isn't built yet.")}<div class="tr">${lapLane}</div></div>
+    <div class="lane" data-lane="watch">${lab("watch", s.sleepSrc === "wearable" ? `<span class="pill live">Live</span>` : pillFor(W), "last night's sleep")}<div class="tr">${wa}</div></div>
+    <div class="lane" data-lane="calendar">${lab("calendar", `<span class="pill">${s.next && s.next.src === "typed" ? "Typed" : "Sample"}</span>`, "your next stop")}<div class="tr">${cal}</div></div>
+    <div class="nowline" style="left:calc(var(--lab) + (100% - var(--lab)) * ${x(m.now) / 100})"><span>${m.ended ? "ended" : "now"} ${m.ck(m.now)}</span></div>`;
+  $("legend").innerHTML = `<span><i class="c-study"></i>Studying</span><span><i class="lb"></i>Break</span>` + Object.entries(CATS).filter(([c]) => c !== "study").map(([c, n]) => `<span><i class="c-${c}"></i>${n}</span>`).join("") + `<span>Laptop activity is sample data.</span>`;
+  const recs = liveRecords(m), n = (k) => recs.filter((r) => r.source === k).length;
+  $("pipe").innerHTML = `<button class="st" data-lane="timer"><b>${n("timer")}</b> timer records</button><span class="arr">+</span><button class="st" data-lane="watch">sleep: <b>${s.sleepH == null ? "left out" : dur(Math.round(s.sleepH * 60))}</b></button><span class="arr">+</span><button class="st" data-lane="calendar">${s.next ? "next stop" : "no next stop"}</button><span class="arr">→</span><button class="st" data-sheet="rule">${s.arm === "pomodoro" ? "fixed timer" : "timing rule v0"}</button><span class="arr">→</span><span class="st end">${esc(decisionLine(m))}</span>`;
+}
+
+/* ============ no session: one sample afternoon, so the page is never empty ============ */
+function renderSample() {
+  const { laptop: L, phone: P, watch: W, calendar: C } = S.sources, d = S.decision, now = S.now.min;
+  const T0 = Math.floor((L.session.start - 5) / 30) * 30, T1 = Math.ceil(Math.max(now + 30, C.next ? C.next.start + 50 : 0) / 30) * 30;
+  const x = (t) => ((Math.max(T0, Math.min(T1, t)) - T0) / (T1 - T0)) * 100, w = (a, b) => Math.max(0, x(b) - x(a));
+  const flag = (label) => { const r = d.reasons.find((q) => q.label === label); return r && r.flag ? " flag" : ""; };
+  let ticks = ""; for (let t = T0; t <= T1; t += 30) if (Math.abs(t - now) > 20) ticks += `<span class="${t === T1 ? "end" : ""}" style="left:${x(t)}%">${clock(t, false)}</span>`;
+  const bars = L.spans.map((s) => `<span class="c-${s.cat}" style="left:${x(s.s)}%;width:${w(s.s, s.e)}%"></span>`).join("") + L.idle.map((s) => `<span class="idle" style="left:${x(s.s)}%;width:${w(s.s, s.e)}%"></span>`).join("");
+  const room = ((x(now) - x(L.session.start)) / 100) * laneW(), tight = room < 340, before = `class="ann r$F" style="left:${x(now) - 0.6}%"`, after = `class="ann$F" style="left:${x(now) + 0.8}%"`;
+  const lap = `<span ${tight ? before.replace("$F", flag("Session time")) : `class="ann${flag("Session time")}" style="left:${x(L.session.start)}%"`}>${dur(L.session.minutes)}${room > 430 || tight ? " session" : ""}</span>`
+    + (L.switches20 != null ? `<span class="win" style="left:${x(now - 20)}%;width:${w(now - 20, now)}%"></span><span ${(tight ? after : before).replace("$F", flag("App switches"))}>${L.switches20} switches / 20 min · usual ${L.usual.switches20.join("–")}</span>` : `<span ${after.replace("$F", "")}>under 20 min: too soon to count switches</span>`)
+    + `<div class="bars">${bars}</div>`;
+  const ph = P.pickups.map((p) => `<span class="dot" style="left:${x(p.t)}%;top:47px;width:${5 + p.min * 2.5}px;height:${5 + p.min * 2.5}px"></span>`).join("")
+    + `<span class="ann" style="left:0">${P.pickups20 != null ? `${P.pickups20} pickups / 20 min · usual ${P.usual.pickups20.join("–")} · ` : ""}sample data · context only, never used in a suggestion</span>`;
+  let wa;
+  if (W.mode === "none") wa = `<div class="hatch">No watch or ring. Halftime uses your timer and calendar.</div>`;
+  else if (W.stale) wa = `<div class="hatch">Not synced since ${esc(W.lastSync)}. Left out today. Open the ${esc(W.short)} app to sync.</div>`;
+  else {
+    const lo = 55, hi = 100, last = W.hr[W.hr.length - 1];
+    wa = W.hr.filter(([t]) => t >= T0).map(([t, b]) => `<span class="dot hr" style="left:${x(t)}%;top:${62 - ((Math.max(lo, Math.min(hi, b)) - lo) / (hi - lo)) * 28}px"></span>`).join("")
+      + `<span class="ann${flag("Sleep last night")}" style="left:0">slept ${W.lastNight.sleepText} last night${W.usual ? ` · usual ${dur(W.usual.sleep * 60)}` : ""}</span>`
+      + (last ? `<span class="ann r" style="left:100%">${last[1]} bpm at ${clock(last[0], false)} · context only</span>` : "");
+  }
+  const cal = C.events.filter((e) => e.s != null && (e.e2 == null ? now : e.e2) > T0 && e.s < T1).map((e) => {
+    const end = e.e2 == null ? now : e.e2, cls = e.state === "next" ? "next" : e.state === "now" ? "on" : end <= now ? "past" : "";
+    return `<span class="ev ${cls}" style="left:${x(e.s)}%;width:${w(e.s, end)}%" title="${esc(e.what)}, ${esc(e.t)}">${esc(e.state === "next" ? `${e.stop || e.what} ${clock(e.s, false)}` : e.what)}</span>`;
+  }).join("") + (d.walk ? `<span class="ev walk" style="left:${x(d.walk.s)}%;width:${w(d.walk.s, d.walk.e)}%"><b>5 min walk</b></span>` : "");
+  $("lh").textContent = "A sample afternoon, source by source";
+  $("lsub").textContent = "Start a session on the left and this becomes your own.";
+  $("lanes").innerHTML = `<div class="axis">${ticks}</div>
+    <div class="lane" data-lane="laptop">${lab("laptop", pillFor(L), L.reads)}<div class="tr">${lap}</div></div>
+    <div class="lane" data-lane="phone">${lab("phone", pillFor(P), P.reads)}<div class="tr">${ph}</div></div>
+    <div class="lane" data-lane="watch">${lab("watch", pillFor(W), W.mode === "none" ? "" : W.reads)}<div class="tr">${wa}</div></div>
+    <div class="lane" data-lane="calendar">${lab("calendar", pillFor(C), C.reads)}<div class="tr">${cal}</div></div>
+    <div class="nowline" style="left:calc(var(--lab) + (100% - var(--lab)) * ${x(now) / 100})"><span>sample · ${clock(now, false)}</span></div>`;
+  $("legend").innerHTML = Object.entries(CATS).map(([c, n]) => `<span><i class="c-${c}"></i>${n}</span>`).join("") + `<span>We see the kind of app, never which one.</span>`;
+  const n = S.counts;
+  $("pipe").innerHTML = ["laptop", "phone", "watch", "calendar"].map((k) => `<button class="st" data-lane="${k}"><b>${n[k] || 0}</b> ${k} records</button>`).join(`<span class="arr">+</span>`)
+    + `<span class="arr">→</span><button class="st" data-sheet="rule">sample-day rule</button><span class="arr">→</span><span class="st end">${esc(d.headline)}</span>`;
+}
+
+/* ============ cards ============ */
+function renderCards() {
+  const src = S.sources, W = src.watch, live = !!SES;
+  const row = (id, pillHtml, detail, reads, never, extra = "") => `<div class="src">${glyph(id, 22)}<div><div class="nm"><span>${esc(laneName(id))}</span>${pillHtml}</div><div class="dt">${detail}</div><div class="dt"><b>Reads</b> ${esc(reads)}. <b>Never</b> ${esc(never)}.</div>${extra}</div></div>`;
+  $("srcs").innerHTML =
+    row("timer", `<span class="pill live">Live</span>`, live ? "a session is running in the panel on the left" : "ready: start a session in the panel on the left", "your timer, breaks, and the answers you give", "what you're studying", `<button class="lnk" data-lane="timer">Records</button>`)
+    + row("watch", pillFor(W), `${esc(W.detail)}${W.via ? " · " + esc(W.via) : ""}`, W.reads || "nothing: none is connected", W.never || "anything", W.mode === "none" ? `<a class="lnk" href="/start#wearable" target="app">Set one up</a>` : `<button class="lnk" data-lane="watch">Records</button>`)
+    + row("laptop", `<span class="pill">Sample</span>`, "sample activity · the laptop app isn't built yet, so nothing is read from this computer", src.laptop.reads, src.laptop.never, `<button class="lnk" data-lane="laptop">Records</button>`)
+    + row("calendar", `<span class="pill">Sample</span>`, "sample day · not your real calendar", src.calendar.reads, src.calendar.never, `<button class="lnk" data-lane="calendar">Records</button>`);
+
+  // body: last night against the person's own range. A band, never a score, and no good/bad colours.
+  const N = W.nights, night = W.lastNight || (W.stale ? W.lastKnown || null : null);
+  if (W.mode === "none") { $("bodylead").textContent = "No watch or ring connected."; $("body").innerHTML = `<p class="empty">Halftime works without one: you type last night's sleep when you start a session, or leave it out.</p>`; }
+  else {
+    $("bodylead").textContent = W.stale ? `Last known night${W.lastKnown ? ` (${W.lastKnown.label})` : ""}. Not used today: the ${W.short} hasn't synced since ${W.lastSync}.` : `From your ${W.name}${W.mode === "sample" ? " (sample data)" : ""}, against your own range. Context, not a score.`;
+    const metric = (key, name, val, fmt) => {
+      const vals = N.map((q) => q[key]).filter((v) => v != null); if (!vals.length) return `<div class="m"><div class="t"><span class="k">${name}</span><span class="v"><small>no readings</small></span></div></div>`;
+      const lo = Math.min(...vals), hi = Math.max(...vals), pad = (hi - lo || 1) * 0.25, a = lo - pad, b = hi + pad, p = (v) => ((v - a) / (b - a)) * 100, us = W.usual ? W.usual[key === "sleepH" ? "sleep" : key] : null;
+      return `<div class="m"><div class="t"><span class="k">${name}</span><span class="v">${val == null ? `<small>no reading</small>` : fmt(val)}<small>${us != null ? `usual ${fmt(us)}` : W.learning ? `learning · ${W.learning.have} of ${W.learning.need} nights` : ""}</small></span></div>
+        <div class="rng" role="img" aria-label="${name}: ${val == null ? "no reading" : fmt(val)}. Your range over ${vals.length} nights: ${fmt(lo)} to ${fmt(hi)}."><span class="band" style="left:${p(lo)}%;width:${p(hi) - p(lo)}%"></span>${us != null ? `<span class="us" style="left:${p(us)}%"></span>` : ""}${val != null ? `<span class="me" style="left:${p(val)}%"></span>` : ""}</div>
+        <div class="cap"><span>${fmt(lo)}</span><span>your range, ${vals.length} nights</span><span>${fmt(hi)}</span></div></div>`;
+    };
+    $("body").innerHTML = night ? metric("sleepH", "Sleep", night.sleepMin / 60, (v) => dur(Math.round(v * 60))) + metric("rhr", "Resting heart rate", night.rhr, (v) => `${Math.round(v)} bpm`) + metric("hrv", `Overnight HRV (${W.hrvKind})`, night.hrv, (v) => `${Math.round(v)} ms`) : `<p class="empty">No nights yet. Wear it to sleep, then open the ${esc(W.short)} app to sync.</p>`;
+  }
+  if (!N.length) { $("nightlead").textContent = W.mode === "none" ? "Needs a watch or ring." : "No nights yet."; $("nightsbox").innerHTML = `<p class="empty">${W.mode === "none" ? "With no watch or ring, Halftime never guesses your sleep." : "Nothing has synced yet."}</p>`; return; }
+  const top = Math.max(9, ...N.map((q) => q.sleepH));
+  $("nightlead").textContent = `${N.length} night${N.length > 1 ? "s" : ""} from your ${W.name}${W.mode === "live" ? ", live through Google Health" : " (sample data)"}.`;
+  $("nightsbox").innerHTML = `<div class="nights" role="img" aria-label="Hours slept on each of ${N.length} nights, from ${N[0].label} to ${N[N.length - 1].label}.">${N.map((q, i) => `<span class="${i === N.length - 1 ? "last" : ""}" style="height:${(q.sleepH / top) * 100}%" title="${q.label}: ${dur(q.sleepMin)}"></span>`).join("")}${W.usual ? `<div class="u" style="bottom:${(W.usual.sleep / top) * 100}%"><em>usual ${dur(W.usual.sleep * 60)}</em></div>` : ""}</div>
+    <div class="nx"><span>${esc(N[0].label)}</span><span>${esc(N[N.length - 1].label)}</span></div>
+    <p class="fine">${W.usual ? `"Usual" is your own middle night out of the last ${W.usual.n}, never anyone else's.` : `Halftime waits for ${HD.LEARN_NIGHTS} nights before it calls anything your usual. So far: ${N.length}.`}${W.mode === "live" && W.stale ? ` Last synced ${esc(W.lastSync)}.` : ""}</p>`;
+}
+
+function renderChrome() {
+  const W = S.sources.watch, d = new Date();
+  $("when").textContent = d.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" }) + " · " + clock(d.getHours() * 60 + d.getMinutes());
+  $("pills").innerHTML = (W.mode === "live" ? `<span class="pill ${W.stale ? "warn" : "live"}">${esc(W.name)}: live${W.stale ? ` · not synced since ${esc(W.lastSync)}` : ""}</span>` : W.mode === "none" ? `<span class="pill off">No watch or ring</span>` : `<span class="pill">Watch: sample data</span>`) + `<span class="pill">Laptop and calendar: sample data</span>`;
+}
+
+/* ============ sheets ============ */
+function openSheet(kind, lane) {
+  const m = SES ? sessionModel(SES) : null;
+  if (kind === "rule" && m) {
+    const s = m.ses;
+    $("sheet-t").textContent = "How the moment was picked"; $("sheet-s").textContent = "Plain code makes the call. No language model computes a number or picks the suggestion.";
+    $("sheet-b").innerHTML = s.arm === "pomodoro"
+      ? `<p class="rule">This session uses the comparison timer: 25 minutes on, 5 off, the same for everyone. Each session gets Halftime's timing or this timer at random, so the team can compare them.</p>`
+      : `<p class="rule">Halftime starts from a 50-minute focus block and moves it for last night's sleep and the time of day. It offers one suggestion, only if it fits before your session ends.</p><table><thead><tr><th>Step</th><th>Effect</th></tr></thead><tbody>${((s.rule && s.rule.steps) || []).map((q) => `<tr><td style="font-family:var(--ui);color:var(--ink)">${esc(q.text)}</td><td>${esc(q.val)}</td></tr>`).join("")}<tr><td style="font-family:var(--ui);color:var(--ink)">Result</td><td>${esc(decisionLine(m))}</td></tr></tbody></table><p class="small">A starting rule the team chose, the same for everyone. It uses your timer and your sleep. It does not use the laptop activity yet: that lane is sample data.</p>`;
+  } else if (kind === "rule") {
+    const f = S.features, d = S.decision, rows = [["Session length", dur(f.sessionMin)], ["App switches, last 20 min", f.switches20 == null ? "unknown (under 20 min)" : f.switches20], ["Sleep last night", f.sleepMin == null ? "left out" : dur(f.sleepMin)], ["Your usual sleep", f.sleepUsualMin == null ? "not known yet" : dur(f.sleepUsualMin)], ["Minutes to next stop", f.minutesToNext == null ? "none today" : f.minutesToNext]];
+    $("sheet-t").textContent = "How the sample afternoon was decided"; $("sheet-s").textContent = "Plain code. This rule only explains the sample afternoon.";
+    $("sheet-b").innerHTML = `<p class="rule">${esc(d.rule.text)}</p><table><thead><tr><th>Number</th><th>Value</th></tr></thead><tbody>${rows.map((r) => `<tr><td style="font-family:var(--ui);color:var(--ink)">${r[0]}</td><td>${esc(r[1])}</td></tr>`).join("")}</tbody></table><p class="small">Your own sessions use the study timer's timing rule instead. The team still has to choose one rule.</p>`;
+  } else {
+    const recs = (m && lane !== "phone" ? liveRecords(m) : lane === "timer" ? [] : S.records).filter((r) => r.source === lane);
+    const modes = [...new Set(recs.map((r) => r.mode))].map((q) => ({ live: "live", sample: "sample data", typed: "typed by you" }[q] || q)).join(", ");
+    $("sheet-t").textContent = `${laneName(lane)}: ${recs.length} record${recs.length === 1 ? "" : "s"}`; $("sheet-s").textContent = recs.length ? `What this source contributed${modes ? ` (${modes})` : ""}.` : lane === "timer" ? "No session yet. Start one in the panel on the left." : "Nothing from this source.";
+    $("sheet-b").innerHTML = recs.length ? `<table><thead><tr><th>When</th><th>What</th><th>Value</th></tr></thead><tbody>${recs.slice().reverse().slice(0, 400).map((r) => `<tr><td>${esc(r.at)}</td><td>${r.metric.replace(/_/g, " ")}</td><td>${esc(r.value)}${["h", "bpm", "ms", "min"].includes(r.unit) ? " " + r.unit : ""}</td></tr>`).join("")}</tbody></table>` : "";
+  }
+  track("desktop_sheet", { value: kind === "rule" ? "rule" : lane });
+  $("sheet").showModal();
+}
+$("sheet-x").addEventListener("click", () => $("sheet").close());
+$("sheet").addEventListener("click", (e) => { if (e.target === $("sheet")) $("sheet").close(); });
+document.addEventListener("click", (e) => {
+  const sh = e.target.closest("[data-sheet]"); if (sh) return openSheet(sh.dataset.sheet);
+  const ln = e.target.closest("button[data-lane]"); if (ln) return openSheet("records", ln.dataset.lane);
+});
+
+/* ============ keeping in step with the session ============ */
+function build() {
+  const P = profile();
+  S = HD.build({ role: Q.get("role") || P.role || "student", device: Q.has("device") ? Q.get("device") : P.device === undefined ? "fitbit" : P.device, calProvider: P.calProvider || "google", watch: Q.get("watch") || "", live: LIVE });
+  // calendar skipped in setup: say so; the lane still plays the sample day, labelled as one
+  if (P.cal === false && S && S.sources && S.sources.calendar) Object.assign(S.sources.calendar, { name: "Calendar off", detail: "you skipped it in setup · a sample day is shown" });
+}
+function drawLanes(force) {
+  const ses = readJSON("ht-study", null);
+  SES = ses && ses.id && ses.startAt ? ses : null;
+  // redraw when the session changes or every half session-minute; otherwise leave the page alone (focus, hover)
+  const key = SES ? [SES.id, Math.floor((((SES.endAt || Date.now()) - SES.startAt) * (SES.speed || 1)) / 30000), (SES.breaks || []).length, SES.brk ? 1 : 0, SES.phase, SES.cue ? [SES.cue.shownAt ? 1 : 0, SES.cue.done ? 1 : 0, SES.cue.snoozes || 0, SES.cue.response || ""].join("") : ""].join("|") : "sample|" + (LIVE ? 1 : 0) + "|" + (profile().role || "") + (profile().device || "");
+  if (!force && key === shown) return;
+  const was = shown.split("|")[0], a = document.activeElement, keep = a && a.closest ? a.closest("#lanes [data-lane], #pipe [data-lane], #pipe [data-sheet]") : null;
+  const sel = keep ? (keep.dataset.sheet ? "#pipe [data-sheet]" : `${keep.closest("#pipe") ? "#pipe" : "#lanes"} [data-lane="${keep.dataset.lane}"]`) : null;
+  shown = key;
+  if (SES) renderLive(); else { build(); renderSample(); }
+  if (sel) { const el = document.querySelector(sel); if (el) el.focus({ preventScroll: true }); }
+  if ((SES ? String(SES.id) : "sample") !== was) { renderCards(); if (SES) track("desktop_session_seen", { value: SES.arm }); }
+}
+let rz = 0; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => drawLanes(true), 120); });
+addEventListener("storage", (e) => { if (!e.key || e.key === "ht-study" || e.key === "ht-profile") drawLanes(); });
+
+// the session panel: the phone app itself. ?speed=60 and friends pass through for demos and QA.
+const pass = new URLSearchParams(); ["speed", "arm", "task"].forEach((k) => { if (Q.get(k)) pass.set(k, Q.get(k)); });
+const fastOn = () => { try { return +(sessionStorage.getItem("ht-speed") || 1) > 1; } catch { return false; } };
+frame.src = "/app" + (pass.toString() ? "?" + pass : "");
+frame.addEventListener("load", () => {
+  let path = ""; try { path = frame.contentWindow.location.pathname; } catch {}
+  if (path === "/" || path === "/index.html") { location.href = "/"; return; } // signed out: leave the laptop view too
+  $("fast").setAttribute("aria-pressed", fastOn()); build(); renderChrome(); drawLanes(true); renderCards();
+});
+$("fast").addEventListener("click", () => {
+  if (readJSON("ht-study", null) && !confirm("A session is running. Switching speed ends it without saving. Switch anyway?")) return;
+  const on = !fastOn(); try { localStorage.removeItem("ht-study"); } catch {}
+  frame.src = "/app?speed=" + (on ? 60 : 1) + (on ? "&arm=halftime" : "");
+});
+
+build(); renderChrome(); drawLanes(true); renderCards();
+setInterval(() => drawLanes(), 1000);
+setInterval(renderChrome, 30000);
+fetch("/api/health", { cache: "no-store" }).then((r) => (r.ok ? r.json() : null)).then((j) => { if (j && j.connected) { LIVE = j; build(); renderChrome(); drawLanes(true); renderCards(); } }).catch(() => {});
+</script>
+</body>
+</html>
