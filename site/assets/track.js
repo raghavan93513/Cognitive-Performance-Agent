@@ -11,7 +11,7 @@
   // ?preview=1 is the admin dashboard showing a screen under its tap heat map: record nothing
   if (/[?&]preview=1(&|$)/.test(location.search)) {
     const no = () => {};
-    window.HT = { screen: no, event: no, identify: no, optOut: no, optIn: no, isRecording: () => false, watch: no, flush: no };
+    window.HT = { screen: no, event: no, identify: no, optOut: no, optIn: no, isRecording: () => false, watch: no, flush: no, forget: no, visitor: () => "" };
     return;
   }
   const ENDPOINT = "/api/collect";
@@ -23,12 +23,23 @@
   };
   const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
   let visitor = store.get("ht-visitor"); if (!visitor) { visitor = uid(); store.set("ht-visitor", visitor); }
+  // One id per person on this browser (2026-11-15): two people signing up on one laptop no longer share an id, so one
+  // person's "Delete my data" can't delete the other's. ht-visitors maps a lower-cased name to its id; the first name
+  // seen keeps the id this browser already had, so nobody's earlier data is cut off from them.
+  const usePerson = (n) => {
+    n = String(n || "").trim().toLowerCase().slice(0, 40); if (!n) return;
+    let map = {}; try { map = JSON.parse(store.get("ht-visitors") || "{}") || {}; } catch {}
+    const id = map[n] || (Object.keys(map).length ? uid() : visitor);
+    if (!map[n]) { map[n] = id; store.set("ht-visitors", JSON.stringify(map)); }
+    if (id !== visitor) { visitor = id; store.set("ht-visitor", id); queue.forEach((e) => { e.visitor = id; }); }
+  };
   let session = store.sget("ht-session"); if (!session) { session = uid(); store.sset("ht-session", session); }
   const optedOut = () => store.get("ht-optout") === "1";
   const consent = () => true; // recording is on by default; opting out (HT.optOut) is the only way to stop it
   const page = location.pathname.replace(/\.html$/, "").replace(/\/$/, "/") || "/";
   let seq = +(store.sget("ht-seq") || 0);
   let screen = "", screenStart = performance.now(), queue = [], maxScroll = 0, lastEv = 0;
+  try { usePerson((JSON.parse(store.get("ht-profile") || "{}") || {}).name); } catch {} // the signed-in person's id
 
   // ---------- device
   const ua = navigator.userAgent;
@@ -110,7 +121,11 @@
   const describe = (el) => {
     if (!el || el === document) return "";
     const t = el.closest("[data-track],button,a,[role=button],input,label,select,summary,[data-go]") || el;
-    const label = t.getAttribute("data-track") || t.getAttribute("aria-label") || (t.innerText || t.value || "").trim().replace(/\s+/g, " ").slice(0, 60);
+    // A label is the control's own words. A field is named by its label, name or id, never by what was typed into it,
+    // and plain text someone tapped (which can be their own words, like a study plan) is named only by its section.
+    const field = /^(input|textarea|select)$/i.test(t.tagName), control = /^(button|a|summary|label)$/i.test(t.tagName) || t.getAttribute("role") === "button" || (t.dataset && t.dataset.go);
+    const sect = () => { const a = t.closest("[data-attn]"); return a ? "@" + a.getAttribute("data-attn") : ""; };
+    const label = t.getAttribute("data-track") || t.getAttribute("aria-label") || (field ? t.name || t.id || t.type || "" : control ? (t.innerText || "").trim().replace(/\s+/g, " ").slice(0, 60) : sect());
     return `${t.tagName.toLowerCase()}${t.id ? "#" + t.id : ""}${t.dataset && t.dataset.go ? "[go=" + t.dataset.go + "]" : ""}:${label}`;
   };
   const interactive = (el) => !!(el && el.closest && el.closest("button,a,input,label,select,textarea,summary,[role=button],[data-go],[data-track],[tabindex]"));
@@ -192,8 +207,10 @@
   addEventListener("pagehide", () => { ev("page_exit", { dwell: Math.round(performance.now() - screenStart), scroll: maxScroll }); flush(true); });
   addEventListener("orientationchange", () => ev("orientation", { value: (screen_w() > screen_h()) ? "landscape" : "portrait" }));
   let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => ev("resize", { value: vp() }), 500); });
-  let sel; document.addEventListener("selectionchange", () => { const s = String(getSelection() || ""); if (s.length > 12) { clearTimeout(sel); sel = setTimeout(() => ev("select_text", { value: s.slice(0, 80) }), 800); } });
-  document.addEventListener("copy", () => ev("copy", { value: String(getSelection() || "").slice(0, 80) }));
+  // text selected or copied inside a [data-private] area (the person's own sessions) is counted, never quoted
+  const privateSel = () => { try { const n = getSelection().anchorNode, el = n && (n.nodeType === 1 ? n : n.parentElement); return !!(el && el.closest("[data-private]")); } catch { return true; } };
+  let sel; document.addEventListener("selectionchange", () => { const s = String(getSelection() || ""); if (s.length > 12) { clearTimeout(sel); sel = setTimeout(() => ev("select_text", { value: privateSel() ? `len:${s.length}` : s.slice(0, 80) }), 800); } });
+  document.addEventListener("copy", () => { const s = String(getSelection() || ""); ev("copy", { value: privateSel() ? `len:${s.length}` : s.slice(0, 80) }); });
 
   // ---------- speed and errors
   addEventListener("load", () => setTimeout(() => {
@@ -214,10 +231,12 @@
   window.HT = {
     screen: setScreen,
     event: (type, data) => ev(type, data),
-    identify(n) { store.set("ht-name", String(n).slice(0, 40)); ev("identify", { value: String(n).slice(0, 40) }); },
+    identify(n) { usePerson(n); store.set("ht-name", String(n).slice(0, 40)); ev("identify", { value: String(n).slice(0, 40) }); },
     optOut() { ev("consent", { value: "opt_out" }); flush(true); store.set("ht-optout", "1"); queue = []; }, // send what was recorded while on, then stop
     optIn() { try { localStorage.removeItem("ht-optout"); } catch {} store.set("ht-consent", "1"); ev("consent", { value: "opt_in" }); },
     isRecording: () => !optedOut(),
+    visitor: () => visitor,
+    forget() { queue = []; inflight = null; path = []; store.set("ht-optout", "1"); }, // "Delete my data": stop, and send nothing that is still waiting
     watch, flush,
   };
 
