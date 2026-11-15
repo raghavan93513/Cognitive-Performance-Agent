@@ -50,9 +50,11 @@ alter table halftime.login_attempts enable row level security;
 create or replace function halftime._ts(t text) returns timestamptz language plpgsql stable as $$
 begin return t::timestamptz; exception when others then return null; end $$;
 
+-- A number too big for the columns it feeds (real, integer) counts as missing, so one odd event can't make a cast
+-- fail and take a whole batch or an admin view down with it.
 create or replace function halftime._num(v jsonb) returns real language sql immutable as $$
-  select case when jsonb_typeof(v) = 'number' then (v #>> '{}')::real
-              when jsonb_typeof(v) = 'string' and (v #>> '{}') ~ '^-?[0-9]+(\.[0-9]+)?$' then (v #>> '{}')::real end $$;
+  select case when jsonb_typeof(v) = 'number' and abs((v #>> '{}')::numeric) < 2000000000 then (v #>> '{}')::real
+              when jsonb_typeof(v) = 'string' and (v #>> '{}') ~ '^-?[0-9]{1,9}(\.[0-9]{1,9})?$' then (v #>> '{}')::real end $$;
 
 create or replace function halftime._s(v jsonb, n int) returns text language sql immutable as $$
   select nullif(left(case when v is null or jsonb_typeof(v) = 'null' then '' when jsonb_typeof(v) = 'string' then v #>> '{}' else v::text end, n), '') $$;
@@ -334,3 +336,218 @@ revoke all on function halftime._ts(text), halftime._num(jsonb), halftime._s(jso
 grant execute on function public.halftime_ingest(jsonb), public.halftime_admin_login(text, text, text), public.halftime_admin_logout(text),
   public.halftime_admin_password(text, text, text), public.halftime_admin_data(text, text, jsonb) to anon;
 -- halftime_admin_create stays with the database owner only (SQL editor).
+
+-- ================================================================ real study sessions (added 2026-11-13)
+-- Study sessions, suggestions, check-ins and the SUS survey arrive as ordinary events through halftime_ingest
+-- (study_start, study_suggest, study_response, study_break, study_end, study_checkin, study_sus, consent_study),
+-- each with extra.study = the session's id and extra.arm = 'halftime' | 'pomodoro'. Nothing new is needed to store
+-- them. What is new here: Web Push delivery, "Delete my data", and the admin view that compares the two arms.
+
+-- ---------------------------------------------------------------- web push: one address per visitor, and a queue
+create table if not exists halftime.push_subs (
+  visitor text primary key, endpoint text not null, p256dh text not null, auth text not null,
+  created_at timestamptz not null default now(), updated_at timestamptz not null default now(), test boolean not null default false
+);
+create table if not exists halftime.push_jobs (
+  id bigint generated always as identity primary key,
+  visitor text not null, study text, kind text not null, m integer not null default 0,
+  fire_at timestamptz not null, state text not null default 'pending', -- pending → claimed → sent | failed; or cancelled | expired
+  token text not null default encode(extensions.gen_random_bytes(24), 'hex'),
+  attempts integer not null default 0, claimed_at timestamptz, sent_at timestamptz, status integer, error text,
+  created_at timestamptz not null default now(), test boolean not null default false
+);
+create index if not exists push_jobs_due on halftime.push_jobs (fire_at) where state = 'pending';
+create index if not exists push_jobs_visitor on halftime.push_jobs (visitor, state);
+alter table halftime.push_subs enable row level security;
+alter table halftime.push_jobs enable row level security;
+
+-- p = { visitor, endpoint, p256dh, auth, test }
+create or replace function public.halftime_push_save(p jsonb) returns jsonb
+language plpgsql security definer set search_path = halftime, public, extensions as $$
+declare v text := halftime._s(p->'visitor', 64);
+begin
+  -- only real browser push services (the same list as site/api/_webpush.js), and a ceiling on how many phones
+  if v is null or length(v) < 16 or coalesce(halftime._s(p->'endpoint', 600), '') !~ '^https://([a-z0-9-]+\.)*(push\.apple\.com|fcm\.googleapis\.com|push\.services\.mozilla\.com|notify\.windows\.com)/'
+    then return jsonb_build_object('ok', false, 'error', 'bad'); end if;
+  if not exists (select 1 from halftime.push_subs where visitor = v) and (select count(*) from halftime.push_subs) >= 2000 then return jsonb_build_object('ok', false, 'error', 'full'); end if;
+  insert into halftime.push_subs (visitor, endpoint, p256dh, auth, test)
+  values (v, halftime._s(p->'endpoint', 600), halftime._s(p->'p256dh', 200), halftime._s(p->'auth', 80), coalesce((p->>'test')::boolean, false))
+  on conflict (visitor) do update set endpoint = excluded.endpoint, p256dh = excluded.p256dh, auth = excluded.auth, updated_at = now(), test = excluded.test;
+  return jsonb_build_object('ok', true);
+end $$;
+
+create or replace function public.halftime_push_remove(p_visitor text) returns jsonb
+language plpgsql security definer set search_path = halftime, public, extensions as $$
+begin
+  update halftime.push_jobs set state = 'cancelled' where visitor = p_visitor and state = 'pending';
+  delete from halftime.push_subs where visitor = p_visitor;
+  return jsonb_build_object('ok', true);
+end $$;
+
+-- p = { visitor, study, jobs: [{ kind, at, m }], replace, test }. Only for a visitor with a saved push address;
+-- at most 24 notifications, each within the next 12 hours. The words sent are fixed templates picked by `kind`
+-- (site/api/push.js), so this can't be used to send free text.
+create or replace function public.halftime_push_schedule(p jsonb) returns jsonb
+language plpgsql security definer set search_path = halftime, public, extensions as $$
+declare v text := halftime._s(p->'visitor', 64); n int;
+begin
+  if v is null or jsonb_typeof(p->'jobs') <> 'array' then return jsonb_build_object('ok', false, 'error', 'bad'); end if;
+  if not exists (select 1 from halftime.push_subs where visitor = v) then return jsonb_build_object('ok', true, 'scheduled', 0, 'reason', 'no_sub'); end if;
+  if coalesce((p->>'replace')::boolean, true) then update halftime.push_jobs set state = 'cancelled' where visitor = v and state = 'pending'; end if;
+  -- one phone can't fill the queue: at most 30 waiting, and 400 queued a day
+  if (select count(*) from halftime.push_jobs where visitor = v and state = 'pending') + least(jsonb_array_length(p->'jobs'), 24) > 30
+     or (select count(*) from halftime.push_jobs where visitor = v and created_at > now() - interval '1 day') > 400 then return jsonb_build_object('ok', true, 'scheduled', 0, 'reason', 'limit'); end if;
+  insert into halftime.push_jobs (visitor, study, kind, m, fire_at, test)
+  select v, halftime._s(p->'study', 64), halftime._s(j->'kind', 24), coalesce(halftime._num(j->'m')::int, 0), halftime._ts(halftime._s(j->'at', 40)), coalesce((p->>'test')::boolean, false)
+  from jsonb_array_elements(p->'jobs') with ordinality as r(j, i)
+  where i <= 24 and halftime._s(j->'kind', 24) in ('suggest_walk', 'suggest_break', 'suggest_keep', 'break_over', 'pomo_break', 'pomo_work')
+    and halftime._ts(halftime._s(j->'at', 40)) between now() - interval '1 minute' and now() + interval '12 hours';
+  get diagnostics n = row_count;
+  return jsonb_build_object('ok', true, 'scheduled', n);
+end $$;
+
+-- p = { visitor, study, kinds: [..] | null }
+create or replace function public.halftime_push_cancel(p jsonb) returns jsonb
+language plpgsql security definer set search_path = halftime, public, extensions as $$
+declare n int;
+begin
+  update halftime.push_jobs set state = 'cancelled'
+  where visitor = halftime._s(p->'visitor', 64) and state = 'pending'
+    and (halftime._s(p->'study', 64) is null or study = halftime._s(p->'study', 64))
+    and (jsonb_typeof(p->'kinds') <> 'array' or kind in (select jsonb_array_elements_text(p->'kinds')));
+  get diagnostics n = row_count;
+  return jsonb_build_object('ok', true, 'cancelled', n);
+end $$;
+
+-- Called by /api/push?op=send with the id and one-time token the timer below handed it.
+create or replace function public.halftime_push_take(p_id bigint, p_token text) returns jsonb
+language sql security definer set search_path = halftime, public, extensions as $$
+  select coalesce((select jsonb_build_object('ok', true, 'kind', j.kind, 'm', j.m, 'study', j.study, 'endpoint', s.endpoint, 'p256dh', s.p256dh, 'auth', s.auth)
+    from halftime.push_jobs j join halftime.push_subs s on s.visitor = j.visitor
+    where j.id = p_id and j.token = p_token and j.state = 'claimed'), jsonb_build_object('ok', false)) $$;
+
+create or replace function public.halftime_push_result(p_id bigint, p_token text, p_status int, p_error text default '') returns void
+language plpgsql security definer set search_path = halftime, public, extensions as $$
+declare v text;
+begin
+  update halftime.push_jobs set state = case when p_status between 200 and 299 then 'sent' when p_status in (404, 410) or attempts >= 3 then 'failed' else 'pending' end,
+    sent_at = now(), status = p_status, error = nullif(left(p_error, 200), '')
+  where id = p_id and token = p_token and state = 'claimed' returning visitor into v;
+  if v is not null and p_status in (404, 410) then delete from halftime.push_subs where visitor = v; end if; -- the phone removed the app or turned notifications off
+end $$;
+
+-- The timer: every 30 seconds pg_cron runs this. It hands notifications that are due to the website, which signs
+-- and sends them (the signing key lives only in Vercel). Not in the public schema, so the website's key can't call it.
+create extension if not exists pg_net;
+create extension if not exists pg_cron;
+create or replace function halftime._push_tick() returns void
+language plpgsql security definer set search_path = halftime, public, extensions as $$
+declare j jsonb;
+begin
+  update halftime.push_jobs set state = case when attempts >= 3 then 'failed' else 'pending' end where state = 'claimed' and claimed_at < now() - interval '90 seconds';
+  update halftime.push_jobs set state = 'expired' where state = 'pending' and fire_at < now() - interval '10 minutes'; -- too late to be useful
+  with due as (
+    update halftime.push_jobs set state = 'claimed', claimed_at = now(), attempts = attempts + 1
+    where id in (select id from halftime.push_jobs where state = 'pending' and fire_at <= now() order by fire_at limit 100 for update skip locked)
+    returning id, token)
+  select jsonb_agg(jsonb_build_object('id', id, 'token', token)) into j from due;
+  if j is not null then
+    perform net.http_post(url := 'https://halftime-study.vercel.app/api/push?op=send', body := jsonb_build_object('jobs', j),
+      headers := '{"Content-Type": "application/json"}'::jsonb, timeout_milliseconds := 9000);
+  end if;
+  delete from halftime.push_jobs where created_at < now() - interval '14 days';
+end $$;
+revoke all on function halftime._push_tick() from public, anon, authenticated;
+select cron.unschedule(jobid) from cron.job where jobname in ('halftime-push', 'halftime-cron-clean');
+select cron.schedule('halftime-push', '30 seconds', 'select halftime._push_tick()');
+select cron.schedule('halftime-cron-clean', '17 9 * * *', $c$delete from cron.job_run_details where end_time < now() - interval '1 day' and jobid in (select jobid from cron.job where jobname like 'halftime-%')$c$);
+
+-- ---------------------------------------------------------------- "Delete my data" (called by /api/forget)
+-- Removes everything stored for one browser's visitor id. The id is a random uuid made on the phone.
+create or replace function public.halftime_forget(p_visitor text) returns jsonb
+language plpgsql security definer set search_path = halftime, public, extensions as $$
+declare n int;
+begin
+  if p_visitor is null or length(p_visitor) < 16 then return jsonb_build_object('ok', false, 'error', 'bad'); end if;
+  delete from halftime.push_jobs where visitor = p_visitor;
+  delete from halftime.push_subs where visitor = p_visitor;
+  delete from halftime.events where visitor = p_visitor;
+  get diagnostics n = row_count;
+  -- one anonymous marker, so the admin page can count deletions without keeping anything about the person
+  if n > 0 then insert into halftime.events (visitor, event, value) values ('deleted', 'data_deleted', n::text); end if;
+  return jsonb_build_object('ok', true, 'deleted', n);
+end $$;
+
+-- ---------------------------------------------------------------- admin: the two arms side by side
+-- p_args: { range, tests }. Sessions run at test speed (?speed=, extra.qa) count only when "Load tests" is ticked.
+create or replace function public.halftime_admin_study(p_token text, p_args jsonb default '{}') returns jsonb
+language plpgsql security definer set search_path = halftime, public, extensions as $$
+declare
+  u text := halftime._who(p_token);
+  rng text := coalesce(p_args->>'range', '24h');
+  since timestamptz := case rng when 'live' then now() - interval '30 minutes' when 'today' then date_trunc('day', now() at time zone 'America/New_York') at time zone 'America/New_York'
+                                when '24h' then now() - interval '24 hours' when '7d' then now() - interval '7 days' else '-infinity'::timestamptz end;
+  tests boolean := coalesce((p_args->>'tests')::boolean, false);
+  res jsonb;
+begin
+  if u is null then return jsonb_build_object('error', 'auth'); end if;
+  with ev as (
+    select * from halftime.events where received_at >= since and (tests or not test)
+      and event in ('study_start', 'study_suggest', 'study_response', 'study_break', 'study_end', 'study_checkin', 'study_sus', 'consent_study', 'push_status', 'data_deleted')),
+  s as (
+    select extra->>'study' sid, visitor, (array_agg(name order by received_at desc) filter (where name is not null))[1] nm,
+      max(extra->>'arm') arm, bool_or(extra->>'qa' = 'true') qa,
+      min(received_at) filter (where event = 'study_start') started,
+      max(halftime._num(extra->'n')) filter (where event = 'study_start') n,
+      max(halftime._num(extra->'planned')) filter (where event = 'study_start') planned,
+      max(halftime._num(extra->'sleep_h')) filter (where event = 'study_start') sleep_h,
+      max(extra->>'sleep_src') filter (where event = 'study_start') sleep_src,
+      max(extra->>'push') filter (where event = 'study_start') push,
+      bool_or(event = 'study_end') ended,
+      max(halftime._num(extra->'minutes')) filter (where event = 'study_end') minutes,
+      max(halftime._num(extra->'break_min')) filter (where event = 'study_end') break_min,
+      count(*) filter (where event = 'study_suggest') suggested,
+      count(*) filter (where event = 'study_suggest' and extra->>'via' = 'push') via_push,
+      count(*) filter (where event = 'study_response' and value = 'take') taken,
+      count(*) filter (where event = 'study_response' and value = 'keep') kept,
+      count(*) filter (where event = 'study_response' and value = 'snooze') snoozed,
+      count(*) filter (where event = 'study_response' and value = 'wrong') wrong_taps,
+      count(*) filter (where event = 'study_break' and value = 'manual') manual_breaks,
+      bool_or(event = 'study_checkin') checked,
+      max(extra->>'finished') filter (where event = 'study_checkin') finished,
+      max(extra->>'wrong') filter (where event = 'study_checkin') wrong,
+      max(extra->'task'->>'id') filter (where event = 'study_checkin') task_id,
+      max(halftime._num(extra->'task'->'score')) filter (where event = 'study_checkin') score
+    from ev where event like 'study\_%' and event <> 'study_sus' and extra ? 'study' group by 1, 2),
+  ok as (select * from s where arm in ('halftime', 'pomodoro') and started is not null and (tests or not coalesce(qa, false))),
+  arms as (
+    select arm, jsonb_build_object('arm', arm, 'sessions', count(*), 'people', count(distinct visitor), 'ended', count(*) filter (where ended), 'checkins', count(*) filter (where checked),
+      'avg_min', round(avg(minutes)::numeric, 1), 'median_min', round((percentile_cont(0.5) within group (order by minutes))::numeric, 1), 'avg_planned', round(avg(planned)::numeric, 1),
+      'suggested', sum(suggested), 'via_push', sum(via_push), 'taken', sum(taken), 'kept', sum(kept), 'snoozed', sum(snoozed), 'wrong_taps', sum(wrong_taps), 'manual_breaks', sum(manual_breaks),
+      'fin_yes', count(*) filter (where finished = 'yes'), 'fin_mostly', count(*) filter (where finished = 'mostly'), 'fin_no', count(*) filter (where finished = 'no'),
+      'wrong_no', count(*) filter (where wrong = 'no'), 'wrong_timing', count(*) filter (where wrong = 'timing'), 'wrong_reason', count(*) filter (where wrong = 'reason'), 'wrong_none', count(*) filter (where wrong = 'none'),
+      'score_n', count(score), 'score_avg', round(avg(score)::numeric, 1), 'score_sd', round(stddev_samp(score)::numeric, 1)) a
+    from ok group by arm)
+  select jsonb_build_object(
+    'arms', coalesce((select jsonb_agg(a order by arm) from arms), '[]'),
+    'people', (select count(distinct visitor) from ok),
+    'both_arms', (select count(*) from (select visitor from ok group by visitor having count(distinct arm) = 2) t),
+    'sessions', coalesce((select jsonb_agg(x order by x->>'started' desc) from (select jsonb_build_object('study', sid, 'visitor', visitor, 'name', coalesce(nm, left(visitor, 6)), 'arm', arm, 'qa', coalesce(qa, false),
+        'n', n, 'started', started, 'planned', planned, 'minutes', minutes, 'break_min', break_min, 'ended', ended, 'sleep_h', sleep_h, 'sleep_src', sleep_src, 'push', push,
+        'suggested', suggested, 'via_push', via_push, 'taken', taken, 'kept', kept, 'snoozed', snoozed, 'checked', checked, 'finished', finished, 'wrong', wrong, 'task', task_id, 'score', score) x
+      from ok order by started desc limit 300) t), '[]'),
+    'sus', coalesce((select jsonb_agg(jsonb_build_object('visitor', visitor, 'name', coalesce(name, left(visitor, 6)), 'at', received_at, 'score', halftime._num(to_jsonb(value)), 'answers', extra->'answers', 'sessions', extra->'sessions') order by received_at desc)
+      from ev where event = 'study_sus' and (tests or extra->>'qa' is distinct from 'true')), '[]'),
+    'consent', coalesce((select jsonb_object_agg(value, c) from (select value, count(distinct visitor) c from ev where event = 'consent_study' and value is not null group by value) t), '{}'),
+    'push', coalesce((select jsonb_object_agg(value, c) from (select value, count(distinct visitor) c from (select distinct on (visitor) visitor, value from ev where event = 'push_status' and value is not null order by visitor, received_at desc) l group by value) t), '{}'),
+    'jobs', coalesce((select jsonb_object_agg(state, c) from (select state, count(*) c from halftime.push_jobs where created_at >= since and (tests or not test) group by state) t), '{}'),
+    'subs', (select count(*) from halftime.push_subs where tests or not test),
+    'deleted', (select count(*) from ev where event = 'data_deleted')
+  ) into res;
+  return coalesce(res, '{}'::jsonb);
+end $$;
+
+revoke all on function public.halftime_push_save(jsonb), public.halftime_push_remove(text), public.halftime_push_schedule(jsonb), public.halftime_push_cancel(jsonb),
+  public.halftime_push_take(bigint, text), public.halftime_push_result(bigint, text, int, text), public.halftime_forget(text), public.halftime_admin_study(text, jsonb) from public, anon, authenticated;
+grant execute on function public.halftime_push_save(jsonb), public.halftime_push_remove(text), public.halftime_push_schedule(jsonb), public.halftime_push_cancel(jsonb),
+  public.halftime_push_take(bigint, text), public.halftime_push_result(bigint, text, int, text), public.halftime_forget(text), public.halftime_admin_study(text, jsonb) to anon;

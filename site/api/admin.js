@@ -3,12 +3,12 @@
 //                                          tries from one IP in 15 minutes lock that IP out)
 //   POST ?op=logout                        ends the session
 //   POST ?op=password {old, new}           changes the password (12+ characters) and signs out other sessions
-//   POST ?op=data     {view, args}         one dashboard view: halftime_admin_data in tools/site/supabase.sql
+//   POST ?op=data     {view, args}         one dashboard view: halftime_admin_data (and halftime_admin_study) in tools/site/supabase.sql
 // Every request must carry the X-Admin header (a cross-site form can't set it), and the cookie is SameSite=Strict.
 import { rpc, configured, clientIp, readJson } from "./_db.js";
 
 const COOKIE = "ht_admin";
-const VIEWS = new Set(["me", "pulse", "funnel", "screens", "tour", "taps", "heat", "visitors", "visitor", "devices", "health", "export"]);
+const VIEWS = new Set(["me", "study", "pulse", "funnel", "screens", "tour", "taps", "heat", "visitors", "visitor", "devices", "health", "export"]);
 const tokenOf = (req) => { const m = /(?:^|;\s*)ht_admin=([0-9a-f]{64})(?:;|$)/.exec(req.headers.cookie || ""); return m ? m[1] : null; };
 const cookie = (value, maxAge) => {
   const secure = process.env.ADMIN_INSECURE_COOKIE === "1" ? "" : " Secure;"; // local http testing only
@@ -34,8 +34,10 @@ export default async function handler(req, res) {
     }
     if (op === "logout") {
       const t = tokenOf(req);
-      if (t) await rpc("halftime_admin_logout", { p_token: t });
-      return send(res, 200, { ok: true }, cookie("", 0));
+      // the cookie is cleared even if the database call fails, so signing out always signs this browser out
+      let ok = true;
+      if (t) { try { await rpc("halftime_admin_logout", { p_token: t }); } catch (e) { ok = false; console.error("admin logout:", e && e.message); } }
+      return send(res, 200, { ok }, cookie("", 0));
     }
     const t = tokenOf(req);
     if (!t) return send(res, 401, { error: "auth" });
@@ -47,7 +49,9 @@ export default async function handler(req, res) {
       const view = String(body.view || "");
       if (!VIEWS.has(view)) return send(res, 400, { error: "unknown view" });
       const args = body.args && typeof body.args === "object" && !Array.isArray(body.args) ? body.args : {};
-      const r = await rpc("halftime_admin_data", { p_token: t, p_view: view, p_args: args }, { timeout: 25000 });
+      // "study" (real sessions, the two arms) has its own function: halftime_admin_study
+      const r = view === "study" ? await rpc("halftime_admin_study", { p_token: t, p_args: args }, { timeout: 25000 })
+        : await rpc("halftime_admin_data", { p_token: t, p_view: view, p_args: args }, { timeout: 25000 });
       if (r && r.error === "auth") return send(res, 401, { error: "auth" }, cookie("", 0));
       return send(res, 200, r);
     }

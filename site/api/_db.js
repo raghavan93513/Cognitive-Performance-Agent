@@ -1,9 +1,11 @@
 // The one door to the analytics database: a Supabase RPC call. The logic lives in tools/site/supabase.sql.
 // The key is the project's *publishable* key, which is safe to publish by design: the tables are locked (row-level
 // security, unexposed schema), so all it can do is call the halftime_* functions, and the admin ones need a session.
-// Env vars override the defaults: SUPABASE_URL, SUPABASE_KEY.
-export const SUPABASE_URL = process.env.SUPABASE_URL || "https://ggxqauebvxnjdyfkajjw.supabase.co";
-const KEY = process.env.SUPABASE_KEY || "sb_publishable_x70lt97JS6OKgE44FKufQA_LPnfNZ58"; // publishable: safe to publish
+// Env vars override the defaults: SUPABASE_URL, SUPABASE_KEY. The local server (tools/site/serve.mjs) sets
+// HALFTIME_LOCAL=1, which turns the defaults off: a local run stays unconnected unless both env vars are set.
+const LOCAL = process.env.HALFTIME_LOCAL === "1";
+export const SUPABASE_URL = process.env.SUPABASE_URL || (LOCAL ? "" : "https://ggxqauebvxnjdyfkajjw.supabase.co");
+const KEY = process.env.SUPABASE_KEY || (LOCAL ? "" : "sb_publishable_x70lt97JS6OKgE44FKufQA_LPnfNZ58"); // publishable: safe to publish
 export const configured = () => Boolean(SUPABASE_URL && KEY);
 
 export async function rpc(fn, args, { timeout = 15000 } = {}) {
