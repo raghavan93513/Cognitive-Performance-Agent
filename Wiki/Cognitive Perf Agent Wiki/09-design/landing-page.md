@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-11-05
 tier: core
 created: 2026-11-05T21:00:00Z
-updated: 2026-11-06T07:00:00Z
+updated: 2026-11-13T14:00:00Z
 ---
 
 # Landing page (Halftime)
@@ -34,7 +34,7 @@ updated: 2026-11-06T07:00:00Z
 3. **How it compares** (added 2026-11-06). Headline: "Your watch knows your body. Your study apps know your hours. Halftime connects them to your day." A table compares wearables (WHOOP, Fitbit, Oura), productivity apps (focus timers, to-dos, blockers) and Halftime on five rows: sleep and heart data, the study session, your day, when to take a break, and why it's suggesting. On phones each row becomes a card. Mint arcs draw once above the column headers. A note says features vary by app.
 4. **Clear about what it reads.** A sample laptop with a "What you see / What Halftime sees" switch, beside the "What it reads" and "What it never reads" lists.
 5. **Honesty cards.**
-   - A learning bar that fills to 7 of 7 nights.
+   - A learning bar that fills to 14 of 14 nights (7 until 2026-11-13).
    - A day strip where the "Talk to someone?" offer skips the late-night study block and lands at 8 am.
 6. **Sign-up isn't open yet.** The four "joining means" lines tick in as you scroll. "How long it runs" and "Who can join" show as dashes.
 
@@ -84,12 +84,14 @@ The page went through rounds 1–11 between 2026-11-05 and 2026-11-06; the BRIEF
 
 ## Open (for the team)
 
-- **Claims that are false or unconfirmed are still on the page.** Fix them before sharing widely; see [[25-journal/2026-11-05-boardroom-privacy-blanks]].
-  - "never tells your coach, team or school": the school part is false.
-  - "Works with a Fitbit, Oura or WHOOP": only Fitbit (Google) is confirmed.
-  - The learning bar says 7 nights; the proposal is 14.
-  - The Late night and After practice modes aren't scoped. The CEO's recommendation is night only, with After practice gated on Dec 1; see [[25-journal/2026-11-05-boardroom-late-night-lead]].
-  - The counselor is unnamed until Columbia Health confirms.
+- **Claims that are false or unconfirmed.** The list comes from [[25-journal/2026-11-05-boardroom-privacy-blanks]]. Four were reworded on 2026-11-13 (Heramb approved the wording; the team still has to lock it). See [[25-journal/2026-11-13-real-study-sessions]].
+  - **Fixed 2026-11-13:** "never tells your coach, team or school" (the school part was false). The page now says "It never tells your coach or your team."
+  - **Fixed 2026-11-13:** "Works with a Fitbit, Oura or WHOOP" (only Fitbit, through Google, is confirmed). The page now says "Built for Fitbit first, or no watch at all. Other watches are planned."
+  - **Fixed 2026-11-13:** the learning bar said 7 nights; the proposal is 14. The bar now counts to 14 nights, and the card says "first two weeks".
+  - **Labelled 2026-11-13, still not scoped:** the Late night and After practice modes now read "Late night (planned)" and "After practice (planned)". The CEO's recommendation is night only, with After practice gated on Dec 1; see [[25-journal/2026-11-05-boardroom-late-night-lead]].
+  - **Added 2026-11-13:** the footer now says "and rough location" and "Sessions and answers are saved only if you join the class test in the app."
+  - **Remains:** the counselor is unnamed until Columbia Health confirms.
+  - **Remains:** `noindex` stays on until the team approves the claims.
 - **Not checked on a physical iPhone.** Simulator Safari only.
 - **When the claims are approved,** remove `noindex` and the `robots.txt` disallow.
 - **Words not locked yet:**
