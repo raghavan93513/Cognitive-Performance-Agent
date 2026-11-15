@@ -8,6 +8,10 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Halftime">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -53,10 +57,11 @@ h1{font:650 2.125rem/1.05 var(--ui);letter-spacing:-.035em;margin-top:10px;text-
 .group{margin-top:22px}
 .group > p{font:600 .9375rem/1.2 var(--ui)}
 .spacer{flex:1;min-height:24px}
-.cta{position:sticky;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);z-index:2;box-shadow:0 -14px 0 2px var(--paper),0 8px 20px rgba(20,20,20,.12);min-height:56px;border-radius:28px;background:var(--ink);color:var(--paper);font-weight:600;font-size:1.0625rem;width:100%;transition:transform .12s var(--ease),opacity .15s ease}
+.cta{position:sticky;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);z-index:2;box-shadow:0 8px 20px rgba(20,20,20,.12),0 -14px 0 2px var(--paper),0 34px 0 14px var(--paper);min-height:56px;border-radius:28px;background:var(--ink);color:var(--paper);font-weight:600;font-size:1.0625rem;width:100%;transition:transform .12s var(--ease),opacity .15s ease}
 .cta:active{transform:scale(.98)}
-.cta:disabled{opacity:.35;cursor:default}
+.cta:disabled,.cta.mint:disabled{background:#D9D6CE;color:#46453F;cursor:default} /* solid, so the page doesn't show through the pinned button */
 .cta.mint{background:var(--mint);color:#0B3D2E}
+.cta.mint:disabled{background:#D9D6CE;color:#46453F}
 .ghost{min-height:48px;width:100%;margin-top:8px;font-weight:600;color:var(--ink2)}
 .card{background:#fff;border-radius:22px;padding:18px;margin-top:16px}
 .card h3{font:600 1.0625rem/1.2 var(--ui);display:flex;align-items:center;gap:8px}
@@ -139,6 +144,7 @@ html{scroll-padding-top:16px;scroll-padding-bottom:calc(env(safe-area-inset-bott
 </div>
 <div class="toast" id="toast" role="status"></div>
 <script src="/assets/track.js"></script>
+<script src="/assets/install-tip.js"></script>
 <script src="/assets/demo-data.js"></script>
 <script>
 // Steps, in order. #login and #account both lead into #about. Demo only: no real account, nothing connected.
@@ -147,12 +153,15 @@ const ORDER = ["account", "about", "reads", "laptop", "wearable", "permission", 
 const PREVIEW = /[?&]preview=1(&|$)/.test(location.search);
 const P = PREVIEW ? { name: "Maya", school: "Columbia", role: "student", device: "oura", paired: true, calProvider: "google" }
   : (() => { try { return JSON.parse(localStorage.getItem("ht-profile") || "{}"); } catch { return {}; } })();
+// set up on a laptop or desktop (not a phone or tablet): the laptop step and the last step say "this computer"
+const COMPUTER = !/iPhone|iPad|iPod|Android|Mobi/i.test(navigator.userAgent) && !(navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+const WAS_DONE = !PREVIEW && P.done === true; // an existing account changing its setup (You → Change setup), not a new one
 const save = () => { if (PREVIEW) return; try { localStorage.setItem("ht-profile", JSON.stringify(P)); } catch {} };
 const DEV = {
   none: { name: "No wearable", model: "", acct: "", via: "", glyph: "laptop" },
   fitbit: { name: "Fitbit", model: "Fitbit Air", acct: "Google", via: "Google Health", glyph: "band" },
   oura: { name: "Oura Ring", model: "Oura Ring 4", acct: "Oura", via: "your Oura account", glyph: "ring" },
-  whoop: { name: "WHOOP", model: "WHOOP 5.0", acct: "WHOOP", via: "your WHOOP account", glyph: "band" },
+  whoop: { name: "WHOOP", model: "WHOOP 4.0", acct: "WHOOP", via: "Bluetooth, from Halftime on your laptop", glyph: "band", bt: true },
   apple: { name: "Apple Watch", model: "Apple Watch", acct: "Apple Health", via: "Apple Health on this iPhone", glyph: "watch" },
   garmin: { name: "Garmin", model: "Garmin Forerunner", acct: "Garmin Connect", via: "Garmin Connect", glyph: "band" },
 };
@@ -215,36 +224,36 @@ const S = {
     <div class="spacer"></div><button class="cta" data-next type="button" data-track="laptop continue">${P.done ? "Back to Halftime" : "Continue"}</button></section>`
     : `<section class="step" data-attn="laptop">
     <p class="eyebrow">Laptop app · 4 of 9</p><h1>Add the small laptop app.</h1>
-    <p class="lede">On your laptop, open <b>halftime.app/pair</b> and type this code.</p>
+    <p class="lede">${COMPUTER ? "You’re on a computer now. In the full version you’d install a small Halftime app here and type this code into it." : "On your laptop, open <b>halftime.app/pair</b> and type this code."}</p>
     <p class="code" aria-label="Pairing code H T 4 8 2 1">HT-4821</p>
-    <p class="hint" style="margin-top:10px;text-align:center">Demo: tap below to pretend it’s paired.</p>
-    <div class="spacer"></div><button class="cta" id="pair" type="button" data-track="pair laptop">I’ve entered the code</button>
+    <p class="hint" style="margin-top:10px;text-align:center">${COMPUTER ? "Demo: nothing is installed." : "Demo: tap below to pretend it’s paired."}</p>
+    <div class="spacer"></div><button class="cta" id="pair" type="button" data-track="pair laptop">${COMPUTER ? "Pretend it’s installed" : "I’ve entered the code"}</button>
     <button class="ghost" data-next type="button" data-track="skip laptop">${P.done ? "Back to Halftime" : "Do this later"}</button></section>`,
   wearable: () => `<section class="step" data-attn="wearable">
     <p class="eyebrow">Wearable · 5 of 9</p><h1>Which watch or ring do you wear?</h1>
     <p class="lede">Any of these work in the demo. No wearable works too: Halftime uses your laptop and calendar.</p>
-    <div class="list" role="list">${Object.entries(DEV).map(([k, d]) => `<button type="button" class="opt" role="listitem" aria-pressed="${P.device === k}" data-dev="${k}">${glyph(d.glyph)}<div><b>${d.name}</b><span>${k === "none" ? "Laptop and calendar only" : "Sleep, heart rate and HRV, through " + d.via}</span></div><span class="r">${P.device === k ? "Selected" : ""}</span></button>`).join("")}</div>
+    <div class="list" role="group" aria-label="Watch or ring">${Object.entries(DEV).map(([k, d]) => `<button type="button" class="opt" aria-pressed="${P.device === k}" data-dev="${k}">${glyph(d.glyph)}<div><b>${d.name}</b><span>${k === "none" ? "Laptop and calendar only" : "Sleep, heart rate and HRV, through " + d.via}</span></div><span class="r">${P.device === k ? "Selected" : ""}</span></button>`).join("")}</div>
     <div class="spacer"></div><button class="cta" data-next type="button" ${P.device ? "" : "disabled"} data-track="wearable continue">Continue</button></section>`,
   permission: () => { const d = DEV[P.device]; return `<section class="step" data-attn="permission">
-    <p class="eyebrow">Connect ${esc(d.name)} · 6 of 9</p><h1>${esc(d.acct)} will ask you to allow this.</h1>
-    <div class="sheet" data-attn="permission-sheet"><div class="who"><span class="av" aria-hidden="true">${first().slice(0, 1) || "?"}</span>${first()}’s ${esc(d.acct)} account <span class="demo" style="margin-left:auto">sample</span></div>
+    <p class="eyebrow">Connect ${esc(d.name)} · 6 of 9</p><h1>${d.bt ? "Your WHOOP connects on your laptop." : `${esc(d.acct)} will ask you to allow this.`}</h1>
+    <div class="sheet" data-attn="permission-sheet"><div class="who"><span class="av" aria-hidden="true">${first().slice(0, 1) || "?"}</span>${d.bt ? "Halftime on your laptop · Bluetooth" : `${first()}’s ${esc(d.acct)} account`} <span class="demo" style="margin-left:auto">sample</span></div>
       <h2>Halftime wants to read your sleep and heart data</h2>
       <div class="perm"><div><span class="tick">✓</span><span>Sleep: how long, and when you went to bed and woke up</span></div>
       <div><span class="tick">✓</span><span>Heart rate through the day, and during workouts</span></div>
       <div><span class="tick">✓</span><span>Resting heart rate</span></div>
       <div><span class="tick">✓</span><span>Heart rate variability (HRV, ${DEMO.HRV_KIND[P.device] || "RMSSD"}), overnight</span></div>
       <div><span class="x">—</span><span>Not your location, messages, or your ${esc(d.name)} scores</span></div></div></div>
-    <p class="hint" style="margin-top:14px">Last 28 nights, then new data as it syncs. Demo: no real ${esc(d.acct)} account is connected.</p>
+    <p class="hint" style="margin-top:14px">${d.bt ? "On your laptop, in Chrome or Edge, the Night tab reads what the band stored. No WHOOP account or membership is used, and the readings stay on that laptop. Until then, you’ll see sample nights." : `Last 28 nights, then new data as it syncs. Demo: no real ${esc(d.acct)} account is connected.`}</p>
     <div class="spacer"></div><button class="cta" data-next type="button" data-track="permission allow">Allow</button>
     <button class="ghost" type="button" data-to="wearable" data-track="permission cancel">Cancel</button></section>`; },
   syncing: () => `<section class="step" data-attn="syncing">
     <p class="eyebrow">Syncing · 7 of 9</p><h1>Reading your last 28 nights…</h1>
-    <div class="sync"><div class="bar"><span id="sbar"></span></div><ol id="slist"><li>Connected to ${esc(DEV[P.device].via)}</li><li>Found 14 nights of sleep</li><li>Heart rate, resting heart rate and HRV</li><li>Working out your usual</li></ol></div></section>`,
-  data: () => { const none = P.device === "none", d = DEV[P.device] || DEV.none, mx = 9, T = DEMO.today(P.role), U = DEMO.USUAL;
+    <div class="sync"><div class="bar"><span id="sbar"></span></div><ol id="slist"><li>${DEV[P.device].bt ? "Sample nights, until your laptop syncs the band" : "Connected to " + esc(DEV[P.device].via)}</li><li>Found 14 nights of sleep</li><li>Heart rate, resting heart rate and HRV</li><li>Working out your usual</li></ol></div></section>`,
+  data: () => { const none = !DEV[P.device] || P.device === "none", d = DEV[P.device] || DEV.none, mx = 9, T = DEMO.today(P.role), U = DEMO.USUAL;
     const tile = (label, val, unit, usual, note) => `<div class="tile"><span class="tl">${label}</span><b>${val}<small>${unit}</small></b><span class="tu">your usual ${usual}${unit}</span>${note ? `<span class="tu">${note}</span>` : ""}</div>`;
     return `<section class="step" data-attn="data">
-    <p class="eyebrow">${none ? "No wearable · 7 of 9" : "Connected · 7 of 9"}</p><h1>${none ? "No wearable? Halftime still works." : `${esc(d.model)} connected.`}</h1>
-    <p class="lede">${none ? "Suggestions use your laptop and calendar. Here’s sample data so you can see what a wearable adds." : "Here’s what it read. Each number is compared with your own usual, never with anyone else."}</p>
+    <p class="eyebrow">${none ? "No wearable · 7 of 9" : d.bt ? "WHOOP · 7 of 9" : "Connected · 7 of 9"}</p><h1>${none ? "No wearable? Halftime still works." : d.bt ? `${esc(d.model)}: sample nights for now.` : `${esc(d.model)} connected.`}</h1>
+    <p class="lede">${none ? "Suggestions use your laptop and calendar. Here’s sample data so you can see what a wearable adds." : (d.bt ? "Here’s what a night will look like, as sample data, until your laptop syncs the band. Each number is compared with your own usual, never with anyone else." : "Here’s what it read. Each number is compared with your own usual, never with anyone else.")}</p>
     <div class="card" data-attn="data-nights"><h3>${none ? "Sample sleep, last 7 nights" : "Sleep, last 7 nights"} <span class="demo" style="margin-left:auto">sample</span></h3>
       <div class="nights" role="img" aria-label="Sleep last 7 nights: ${NIGHTS.map(([n, h]) => n + " " + h + " hours").join(", ")}. Usual about 7 hours.">
         ${NIGHTS.map(([n, h]) => `<div class="n"><i class="${h < 6 ? "lo" : ""}" style="height:${Math.round((h / mx) * 100)}px"></i><small>${n}</small></div>`).join("")}
@@ -259,7 +268,7 @@ const S = {
     if (P.cal === false) return `<section class="step" data-attn="class">
     <p class="eyebrow">Your day · 8 of 9</p><h1>What’s next after your study session?</h1>
     <p class="lede">Calendar is off, so type it. Halftime only suggests breaks that fit before it. In the demo, it’s at 4:30 pm.</p>
-    <div class="chips" data-one="next">${["Chem lab", "Practice", "Work shift", "Study group"].map((c) => `<button type="button" class="chip" aria-pressed="${(P.next || "Chem lab") === c}" data-chip="${c}">${c}</button>`).join("")}</div>
+    <div class="chips" data-one="next">${[...new Set([DEMO.nextStop(P.role), "Chem lab", "Practice", "Work shift", "Study group"])].map((c) => `<button type="button" class="chip" aria-pressed="${(P.next || DEMO.nextStop(P.role)) === c}" data-chip="${esc(c)}">${esc(c)}</button>`).join("")}</div>
     <form id="fc" class="field"><label for="other">Or type it</label><input id="other" name="other" maxlength="30" placeholder="e.g. Bio review" enterkeyhint="done" value=""></form>
     <div class="spacer"></div><button class="cta" data-next type="button" data-track="class continue">Continue</button></section>`;
     if (!P.calProvider) return `<section class="step" data-attn="calendar">
@@ -277,8 +286,8 @@ const S = {
     <div class="spacer"></div><button class="cta" data-next type="button" data-track="calendar continue">Continue</button></section>`; },
   done: () => { const d = DEV[P.device] || DEV.none; return `<section class="step" data-attn="done">
     <p class="eyebrow">All set · 9 of 9</p><h1>You’re all set, ${first()}.</h1>
-    <div class="card"><div class="kv" style="margin-top:0"><span>Laptop</span><b>${P.paired ? "MacBook Air, paired" : "Not yet paired"}</b><span>Sleep and heart</span><b>${P.device === "none" ? "No wearable" : esc(d.model)}</b><span>Calendar</span><b>${P.cal === false ? "Off" : P.calProvider ? esc(DEMO.PROVIDERS[P.calProvider]) : "Not connected"}</b><span>Next stop</span><b>${esc(P.next || DEMO.nextStop(P.role))}, 4:30 pm</b></div></div>
-    <p class="lede">Halftime sits as a small pill at the top. It speaks once, when a break fits, and always says why. A short tour starts next.</p>
+    <div class="card"><div class="kv" style="margin-top:0"><span>Laptop</span><b>${P.paired ? "MacBook Air, paired" : "Not yet paired"}</b><span>Sleep and heart</span><b>${P.device === "none" || !DEV[P.device] ? "No wearable" : esc(d.model)}</b><span>Calendar</span><b>${P.cal === false ? "Off" : P.calProvider ? esc(DEMO.PROVIDERS[P.calProvider]) : "Not connected"}</b><span>Next stop</span><b>${esc(P.next || DEMO.nextStop(P.role))}, 4:30 pm</b></div></div>
+    <p class="lede">${COMPUTER ? "On this computer, Halftime is one browser tab: keep it open while you study. It speaks once, when a break fits, and always says why. A short tour starts next." : "Halftime sits as a small pill at the top. It speaks once, when a break fits, and always says why. A short tour starts next."}</p>
     <div class="spacer"></div><button class="cta mint" id="open" type="button" data-track="open halftime">Open Halftime</button></section>`; },
 };
 
@@ -357,7 +366,8 @@ view.addEventListener("click", (e) => {
   if (cp) { cp.querySelector(".r").textContent = "Connecting…"; setTimeout(() => { P.calProvider = cp.dataset.cal; P.next = DEMO.nextStop(P.role); save(); if (window.HT) HT.event("calendar_connected", { value: P.calProvider }); show("calendar"); }, 650); return; }
   if (e.target.closest("[data-calskip]")) { P.cal = false; save(); show("calendar"); return; }
   const d = e.target.closest("[data-dev]");
-  if (d) { P.device = d.dataset.dev; save(); view.querySelectorAll("[data-dev]").forEach((b) => { const on = b === d; b.setAttribute("aria-pressed", on); b.querySelector(".r").textContent = on ? "Selected" : ""; }); view.querySelector("[data-next]").disabled = false; return; }
+  if (d) { P.device = d.dataset.dev; if (P.device !== "none" && P.sleep === false) delete P.sleep; save(); // picking a watch turns sleep data back on
+    view.querySelectorAll("[data-dev]").forEach((b) => { const on = b === d; b.setAttribute("aria-pressed", on); b.querySelector(".r").textContent = on ? "Selected" : ""; }); view.querySelector("[data-next]").disabled = false; return; }
   if (e.target.closest("#pair")) { P.paired = true; save(); toast("MacBook Air paired (demo)"); show("laptop"); return; }
   const to = e.target.closest("[data-to]"); if (to) { go(to.dataset.to); return; }
   if (e.target.closest("[data-next]")) {
@@ -367,6 +377,7 @@ view.addEventListener("click", (e) => {
     if (cur === "calendar") { const v = (document.getElementById("other") || {}).value; if (v && v.trim()) P.next = v.trim(); if (!P.next) P.next = DEMO.nextStop(P.role); }
     save(); next(); return;
   }
+  if (e.target.closest("#open") && WAS_DONE) { P.signedIn = true; save(); if (window.HT) { HT.event("setup_changed", { value: P.device, extra: { role: P.role || "student", paired: !!P.paired } }); HT.flush(); } location.href = "/app"; return; } // "Change setup" from the app: same account, no second tour
   if (e.target.closest("#open")) { P.done = true; P.signedIn = true; P.created = P.created || new Date().toISOString(); save(); if (window.HT) { HT.event("account_created", { value: P.device, extra: { role: P.role || "student", when: P.when, next: P.next, paired: !!P.paired } }); HT.flush(); } try { localStorage.removeItem("ht-tour-done"); } catch {} location.href = "/app"; } // every new setup ends in the tour
 });
 back.addEventListener("click", () => history.back());

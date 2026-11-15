@@ -69,7 +69,7 @@
       els: () => { const c = $$("#full .chip"); return [...new Set(c.map((x) => x.closest("p") || x))]; }, fx: "chips", radius: () => 16, pad: 8 },
     { id: "decide", island: true, title: "You decide", body: "You decide. Walk, keep going or snooze. It asks once, then stays quiet.",
       els: () => { const a = $("#full .acts"), l = $("#full .links"); return l ? [a, l] : [a]; }, radius: () => 30, pad: 8 },
-    { id: "tabs", title: "Everything else", body: "History shows your week. You holds your data sources and settings. Demo jumps to any moment, like a late night or a missed sync.",
+    { id: "tabs", title: "Everything else", body: "That was a sample afternoon. Yours starts when you press Start studying. History shows your sessions, Night shows last night from your watch, You holds your data and settings, and Demo replays sample moments.",
       els: () => [$(".tabbar .in") || $(".tabbar")], pad: 4, radius: () => 18 },
   ];
   const available = (st) => {

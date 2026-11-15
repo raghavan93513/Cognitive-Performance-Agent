@@ -8,6 +8,10 @@
 <meta name="description" content="Halftime is a study-break helper for students: it tells you when to keep going, take a short walk, or stop for tonight, and always shows why.">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Halftime">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Halftime">
 <meta property="og:description" content="When to keep going, take a walk, or stop for tonight. Always with the reason. A student project with sample data.">
@@ -298,6 +302,16 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
 @media (min-width:761px){ .cmp-row{display:contents} .cmp-grid .who{display:none} }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation:none!important}}
 </style>
+<script>
+/* Opened from the Home Screen: someone set up goes straight to the app, someone new straight to setup. */
+(function () { try {
+  var alone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  var p = JSON.parse(localStorage.getItem("ht-profile") || "{}");
+  if (!alone || /[?&]preview=1/.test(location.search)) return;
+  if (p.name && p.done && p.signedIn !== false) location.replace("/app");
+  else if (!p.name) location.replace("/start#account"); // installed from the landing page: set up here
+} catch (e) {} })();
+</script>
 </head>
 <body>
 <div class="wrap">
@@ -312,7 +326,7 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
         <h1>Every long study session needs a <em>halftime.</em></h1>
         <p class="lede"><strong>Two hours into studying, it's hard to tell if you need a break or should push on.</strong> Halftime suggests a short break when one fits, and always shows you why.</p>
         <div class="ctas"><a class="btn dark" href="/start#account" data-track="hero create account">Create a demo account</a><a class="btn soft" href="/start#login" data-track="hero log in">Log in</a></div>
-        <p class="fineprint">For students and athletes. Works with a Fitbit, Oura or WHOOP, or with no watch at all.<span class="joinlink"> <a href="#pilot">It's a class study, not open yet. What joining involves →</a></span></p>
+        <p class="fineprint">For students and athletes. Built for Fitbit first, or no watch at all. Other watches are planned.<span class="joinlink"> <a href="#pilot">It's a class study, not open yet. What joining involves →</a></span></p>
       </div>
 
       <div class="stage" id="try" aria-label="Try Halftime" data-attn="landing-demo">
@@ -447,8 +461,8 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
       </div>
       <div class="hsty" id="tr-hsty" data-attn="landing-honesty"><div class="hpin">
         <div class="honest">
-          <div class="hcard"><h3>When it doesn't know, it says so.</h3><p>For the first week it's still learning what's normal for you, and it tells you that instead of guessing.</p><div class="learn" id="tr-learn" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div><span class="mono" id="tr-lt">Still learning your usual sleep · 4 of 7 nights</span></div>
-          <div class="hcard"><h3>Some things need a person.</h3><p>If your sleep has been short for weeks, it offers someone to talk to, in the morning, never mid-study. It never tells your coach, team or school.</p>
+          <div class="hcard"><h3>When it doesn't know, it says so.</h3><p>For the first two weeks it's still learning what's normal for you, and it tells you that instead of guessing.</p><div class="learn" id="tr-learn" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="mono" id="tr-lt">Still learning your usual sleep · 8 of 14 nights</span></div>
+          <div class="hcard"><h3>Some things need a person.</h3><p>If your sleep has been short for weeks, it offers someone to talk to, in the morning, never mid-study. It never tells your coach or your team.</p>
             <div class="day" aria-hidden="true"><svg viewBox="0 0 300 86">
               <line x1="8" y1="50" x2="292" y2="50" stroke="#2C2C2E" stroke-width="4" stroke-linecap="round"/>
               <rect id="tr-blk" x="8" y="39" width="110" height="22" rx="11" fill="#46453F"/>
@@ -480,7 +494,7 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
     </section>
   </main>
 
-  <footer><span>Halftime is a BINF 4070 student project at Columbia University. It's a wellness tool, not medical advice.</span><span>Everything on this page is sample data. This prototype records how it's used (screens, taps, device, IP address) to improve it.</span></footer>
+  <footer><span>Halftime is a BINF 4070 student project at Columbia University. It's a wellness tool, not medical advice.</span><span>Everything on this page is sample data. This prototype records how it's used (screens, taps, device, IP address and rough location) to improve it. Sessions and answers are saved only if you join the class test in the app.</span></footer>
 </div>
 
 <script>
@@ -488,7 +502,7 @@ footer{padding-block:28px 40px;font:400 .875rem/1.5 var(--ui);color:var(--muted)
 // Three moments: the same two questions give a different card in the afternoon, late at night, or after practice.
 const T = [[35, "35 min"], [90, "1 h 30"], [160, "2 h 40"], [220, "3 h 40"]];
 const S = [[7, "About 7 h"], [5, "About 5 h"], [0, "Not tracked"]];
-const W = [["day", "Afternoon"], ["night", "Late night"], ["gym", "After practice"]];
+const W = [["day", "Afternoon"], ["night", "Late night (planned)"], ["gym", "After practice (planned)"]];
 const M = {
   day:   { start: 12 * 60 + 30, span: 240, from: "Started 12:30 pm", to: "Chem lab 4:30 pm", left: "to lab", past: "lab time" },
   night: { start: 22 * 60, span: 210, from: "Started 10:00 pm", to: "Bed by 1:30 am", left: "to bed at 1:30", past: "past bedtime" },
@@ -748,9 +762,9 @@ const T = (el, v) => { if (el.__t !== v) { el.__t = v; el.textContent = v; } };
 const learn = [...document.querySelectorAll("#tr-learn i")], checks = [...document.querySelectorAll("#tr-checks li")];
 let halfW = 75; // half the offer pill's width, set by adaptDay
 function seek2(p) {
-  const n = Math.max(1, Math.min(7, 1 + Math.floor(seg(p, .05, .6) * 7)));
+  const n = Math.max(1, Math.min(14, 1 + Math.floor(seg(p, .05, .6) * 14)));
   learn.forEach((el, i) => el.classList.toggle("on", i < n));
-  T($("tr-lt"), n < 7 ? `Still learning your usual sleep · ${n} of 7 nights` : "Learned your usual sleep · 7 of 7 nights");
+  T($("tr-lt"), n < 14 ? `Still learning your usual sleep · ${n} of 14 nights` : "Learned your usual sleep · 14 of 14 nights");
   const m = io(seg(p, .45, .85)), land = m > .98;
   A($("tr-offer"), "transform", `translate(${Math.min(80 + 145 * m, 296 - halfW).toFixed(1)} 0)`); // never past the strip's end
   A($("tr-ofr"), "stroke-dasharray", land ? "none" : "3 3");
@@ -851,5 +865,6 @@ frame();
 })();
 </script>
 <script src="/assets/track.js"></script>
+<script src="/assets/install-tip.js"></script>
 </body>
 </html>
