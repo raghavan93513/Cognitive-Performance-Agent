@@ -1,6 +1,6 @@
 ---
 title: Hot Cache
-updated: 2026-11-06T10:00:00Z
+updated: 2026-11-15T17:10:00Z
 ---
 
 # Hot Cache
@@ -8,6 +8,52 @@ updated: 2026-11-06T10:00:00Z
 *A ~500-word semantic snapshot of recent activity. Updated after every major write operation.*
 
 ## Recent Activity
+
+- [2026-11-15] **Everything since Nov 6 is committed locally** on `heramb-setup+context`, in sorted commits by topic. It is not pushed. Uncommitted `.obsidian` settings and the ICP testing screenshots stay out on purpose.
+
+- [2026-11-15] **Spikes on measuring device use** (routes from the declutter brief). Neither is in `site/` or tested by a real tester.
+  - **Phone:** route B (an iOS Shortcuts "app opened/closed" automation posting to our endpoint) works on paper, with caveats. Route D (a dev-signed Family Controls app) works for a few testers, but needs a paid Apple team and a Mac. A two-phone test by Nov 21 decides. See [[25-journal/2026-11-15-spike-phone-use]].
+  - **Laptop:** route C is a 2-permission Chrome/Edge extension. It splits a session into picked sites, other tabs, outside the browser and away, and Halftime gets only the four totals. All checks pass on a Mac; Windows and Edge are untested; about 13–18 h to pilot. See [[25-journal/2026-11-15-spike-laptop-use]].
+
+- [2026-11-15] **Heramb's call: Halftime becomes one product that links last night's body to today's phone and laptop use.**
+  - The app was "way too cluttered". The brief cuts the 9-step sign-up, the tour, the Demo tab, the fake pairing and Allow screens, and the sample calendar and week. What's left is 4 screens (Today as "the two halves", Session, Check-in, Week) plus a privacy sheet: 5 taps to a timer, down from ~24.
+  - The new metric is a comparison with its night count, not a combined score. Code computes it and an LLM only writes the sentence, which fills the missing-LLM gap.
+  - Device use is to be measured, not just asked ("we'll find a way"). A web page can't read Screen Time or laptop apps, so routes A–F (page-hidden time, iOS Shortcuts, a browser extension, a native app…) get spikes with a kill rule.
+  - Six ICP testers: 4 MEH, 2 I'D QUIT, 4.5/10. They want the link, with n shown, no app names, and a person to talk to.
+  - The team (Raghavan, Alexa, Yulee) and the CSO still decide the cuts, the 25/5 arm, the threshold, consent and escalation.
+  - Nothing in `site/` has changed. See [[24-synthesis/declutter-brief-2026-11-15]].
+
+- [2026-11-15] **ICP testing 1 and a bug hunt.**
+  - **The framework:** a new reusable one (`ICP testing/`), plus a sixth tester, ICP_6 Ethan Park (MS student and club rower, WHOOP).
+  - **The test:** a 2-day full journey on phone and laptop, with made-up nights. Verdict I'D QUIT, 4/10, SUS 52.5. The one fix asked for: "stop for tonight" based on tomorrow's calendar.
+  - **The fixes:** the quick bugs, a UI/UX batch and 23 of 26 bugs from a bug hunt were fixed and deployed (the local server no longer writes to the live database). Synthetic testers, not research.
+
+- [2026-11-14] **How Halftime's variables connect, and what a wearable can give us.**
+  - Rule v0 reads only sleep, the clock and the session end. HRV, resting HR, usual sleep and app switches never reach it and are never logged, so "does watch data help?" can't be tested yet.
+  - Research covered ~60 metrics and five brands, and six citations were checked. Sleep length has the best student evidence. Borrow the brands' rules (personal baselines, waiting periods, named "not enough data" reasons), never their composite scores.
+  - See [[05-data/variable-map]], [[12-research/wearable-metrics-and-devices]] and [[25-journal/2026-11-13-connecting-the-sources]] (live Fitbit on one computer, the data layer, `/desktop`).
+
+- [2026-11-14] **A Night tab reads Heramb's WHOOP 4.0 over Bluetooth, with no membership.** Bare minimum by his choice: one sentence, what it changes today, the night on a clock, and sleep, resting HR and HRV against your usual. Sleep feeds the study setup (never logged); readings stay in the browser. A phone can't read the band; showing it there needs a team decision. Live at https://halftime-study.vercel.app/app (Night tab), with a quieter History and Now. Not yet run on a real night; not committed. See [[25-journal/2026-11-14-night-tab-whoop]].
+
+- [2026-11-13] **The phone app runs real study sessions.** Live at https://halftime-study.vercel.app/app.
+  - The Now tab is your own session: a real timer, one suggestion with reasons and sources, a break countdown, then a 3-question check-in; the SUS after 3 sessions. The sample day moved to the Demo tab.
+  - Each session is randomly Halftime's timing or a fixed 25/5 timer; `/admin` → Study compares them.
+  - Consent before the first session; "Delete my data" on the You tab; the landing claims were reworded (Heramb).
+  - The database part is in (Heramb ran the SQL): notifications are switched on, Delete my data works live. A notification on a physical locked iPhone is still untested. IRB / consent review is still open.
+
+  - **Laptop version:** the same `/app` lays itself out for a laptop (top bar, two columns, the timer in the tab title, keyboard shortcuts, an always-on-top mini timer in Chrome). `/desktop` stays as the every-source-on-one-clock view.
+  - **Laptop QA round 2 + MacBook preview:** 9 laptop issues fixed and deployed; `/preview` shows the real app inside a drawn MacBook Air/Pro at true browser-window size (team only). Laptop push now works end to end in a scripted real Chrome (the consent screen used to leave notifications off); not yet re-tried in Heramb's own Chrome.
+  See [[25-journal/2026-11-13-real-study-sessions]].
+
+- [2026-11-10] **Written proposal drafted** in a new "Draft" tab of the team's Google Doc (due Nov 11).
+  - The team's outline pitched a task manager and left the control group, roles and data source open.
+  - The draft keeps the keep-going-or-break pitch. It proposes a Pomodoro control (each person tries both), a study-task outcome, Apple Health or uploaded exports as the Fitbit fallback, first testers on Nov 24, and a roles list.
+  - The roles of Raghavan, Alexa and Yulee are guesses to confirm.
+
+  See [[25-journal/2026-11-10-written-proposal-draft]].
+- [2026-11-06] **Admin login renamed and a demo script written.**
+  - The `/admin` account is now `admin`, with a short password Heramb chose, kept outside the repo. Change it after the handout.
+  - The 90-second demo has one main moment, one honesty beat and the QR code at the end. See [[09-design/prototype-demo-script]].
 
 - [2026-11-06] **Analytics now go to Supabase, with an admin page** at https://halftime-study.vercel.app/admin, built like Startup City's.
   - It shows who's on now, the funnel, the tour, a tap heat map on the real screens, and each visitor's timeline.
@@ -91,10 +137,14 @@ updated: 2026-11-06T10:00:00Z
   - the unnamed counselor.
 
   Then lift `noindex`. Also try the page on a real iPhone. See [[09-design/landing-page]].
-- **Build the synthetic-data generator.** First milestone is one sample day for the Nov 6 proposal slide. See [[05-data/synthetic-data-generator]].
-- **Proposal prep, due Nov 6** (design studio Oct 30). Checklist on [[30-course/deliverables/part-2-proposal-presentation]].
+- **Team calls from the declutter brief:** the cuts, the 25/5 arm, the threshold, consent and escalation (Raghavan, Alexa, Yulee, plus the CSO). See [[24-synthesis/declutter-brief-2026-11-15]].
+- **Device-use spikes:** a two-phone test of route B, and route C on two team laptops, by about Nov 21 (kill rule in each note).
+- **One rule and its inputs (#19):** rule v0 (absolute) or personal baselines. Also, whether watch values get logged, which changes the consent text. See [[05-data/variable-map]].
+- **Build the synthetic-data generator.** By the proposal's timeline: sleep, steps and HR by Nov 13; laptop and task data plus scenarios by Nov 20; 28 days end to end by Dec 4. See [[05-data/synthetic-data-generator]].
+- **Confirm the proposal's open items:** roles, first testers on Nov 24, the Fitbit fallback and the study task. See [[24-synthesis/open-decisions]] #2 and #20–22.
+- **Change the `/admin` password** to a long one once the handout is over.
 - **Decide scope.** Lean desktop pilot or production plan. The course readings lean towards the lean choices: Postgres first, SQL retrieval before pgvector. See [[24-synthesis/design-comparison]].
-- **Open decisions** grew to 16, including choosing retrieval by measured precision/recall, escalation to a human, and which data goes to a hosted LLM. See [[24-synthesis/open-decisions]].
+- **Open decisions** are now at 22, including choosing retrieval by measured precision/recall, escalation to a human, and which data goes to a hosted LLM. See [[24-synthesis/open-decisions]].
 
 ## Key Takeaways
 
