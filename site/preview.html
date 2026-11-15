@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#E9E7E1">
+<title>MacBook preview · Halftime</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* MacBook preview (added 2026-11-13). For the team, not for students: nothing links here from the app.
+   The iPhone version of Halftime is checked in the iOS Simulator. There is no simulator for a Mac, so this page draws
+   one: the real /app of this site in an iframe, at the exact size a browser window has on each MacBook, inside a
+   drawn MacBook (bezel, notch, menu bar, a browser's tab strip and toolbar). The tab in the drawn browser shows the
+   page's real title, so the timer in the tab title is visible too.
+   Sizes: each model's default "looks like" display size in points (System Settings → Displays), minus the menu bar
+   under the notch (37 pt) and a browser's tab strip and toolbar (86 pt, Chrome with no bookmarks bar). These match
+   the macbook-* devices in tools/qa/device-walk.mjs. The drawn chrome is approximate; the viewport size is the point.
+   The frame runs the real app in this browser: a session started in it is saved in this browser like any other. */
+:root{
+  --paper:#E9E7E1; --card:#FBFAF7; --ink:#141414; --ink2:#46453F; --muted:#64625C; --line:#D6D3CB; --slot:#8ED6BC; --slot-ink:#0F5E46;
+  --ui:"Geist", system-ui, -apple-system, sans-serif; --mono:"Geist Mono", ui-monospace, Menlo, monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--paper);color:var(--ink);font:400 .9375rem/1.45 var(--ui);display:flex;flex-direction:column;overflow:hidden}
+button,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--slot-ink);outline-offset:2px;border-radius:8px}
+
+/* controls */
+.top{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding:12px 20px;border-bottom:1px solid var(--line);background:#F4F3EF}
+.brand{display:flex;align-items:center;gap:10px;font:600 1rem/1 var(--ui);margin-right:6px}
+.brand i{position:relative;width:28px;height:11px;border-radius:6px;background:var(--ink)}
+.brand i::after{content:"";position:absolute;left:4px;top:3px;width:5px;height:5px;border-radius:50%;background:var(--slot)}
+.tag{font:500 .6875rem/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--slot-ink);background:rgba(142,214,188,.35);padding:5px 8px;border-radius:6px}
+.grp{display:flex;align-items:center;gap:6px}
+.grp>span{font:500 .75rem/1 var(--mono);color:var(--muted);margin-right:2px}
+.seg{display:flex;background:#E3E1DB;border-radius:10px;padding:3px}
+.seg button{border:0;background:none;padding:7px 11px;border-radius:8px;font-size:.8125rem;color:var(--ink2);cursor:pointer;white-space:nowrap;min-height:32px}
+.seg button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 12px;font-size:.8125rem;cursor:pointer;min-height:34px;text-decoration:none;display:inline-flex;align-items:center}
+.btn:hover{border-color:#B9B6AE}
+.spacer{flex:1}
+
+/* stage */
+.stage{flex:1;min-height:0;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage.actual{overflow:auto;align-items:flex-start;justify-content:flex-start;padding:24px}
+.fitbox{transform-origin:top left;position:absolute;left:0;top:0}
+.stage.actual .fitbox{position:relative}
+
+/* the MacBook, in points (1 CSS px = 1 point at "Actual size") */
+.mac{position:relative}
+.lid{background:#0C0C0D;border-radius:22px 22px 10px 10px;padding:14px 14px 18px;box-shadow:inset 0 0 0 2px #2A2A2D, 0 30px 60px rgba(0,0,0,.18)}
+.screen{position:relative;overflow:hidden;border-radius:10px 10px 2px 2px;background:#1E1E20}
+.notch{position:absolute;left:50%;top:0;transform:translateX(-50%);height:32px;background:#0C0C0D;border-radius:0 0 12px 12px;z-index:5}
+.notch::after{content:"";position:absolute;left:50%;top:12px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:#1D2430;box-shadow:inset 0 0 0 2px #121620}
+.menubar{height:37px;display:flex;align-items:center;gap:20px;padding:0 18px;background:#ECEAE5;font:500 13.5px/1 system-ui,-apple-system,"Geist",sans-serif;color:#1A1A1A}
+.menubar b{font-weight:700}
+.menubar .r{margin-left:auto;display:flex;align-items:center;gap:16px;font-weight:500}
+.glyph{display:inline-block;vertical-align:middle}
+.win{display:flex;flex-direction:column;background:#fff}
+.tabs{height:40px;background:#DEE1E6;display:flex;align-items:flex-end;padding:0 10px 0 78px;position:relative}
+.lights{position:absolute;left:14px;top:14px;display:flex;gap:8px}
+.lights i{width:12px;height:12px;border-radius:50%;background:#FF5F57}.lights i:nth-child(2){background:#FEBC2E}.lights i:nth-child(3){background:#28C840}
+.tab{height:32px;max-width:260px;min-width:180px;background:#fff;border-radius:9px 9px 0 0;display:flex;align-items:center;gap:8px;padding:0 12px;font:400 12.5px/1 system-ui,-apple-system,sans-serif;color:#202124}
+.tab img{width:16px;height:16px;flex:none}
+.tab span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tab.ghost{background:none;min-width:0;color:#5F6368;padding:0 14px}
+.bar2{height:46px;display:flex;align-items:center;gap:14px;padding:0 12px;border-bottom:1px solid #DADCE0}
+.bar2 .nav{display:flex;gap:16px;color:#5F6368;font:400 16px/1 system-ui,sans-serif}
+.url{flex:1;height:32px;border-radius:16px;background:#F1F3F4;display:flex;align-items:center;gap:8px;padding:0 14px;font:400 13.5px/1 system-ui,-apple-system,sans-serif;color:#202124;overflow:hidden;white-space:nowrap}
+.url em{font-style:normal;color:#5F6368}
+iframe{display:block;border:0;background:#F4F3EF}
+.base{position:relative;height:16px;margin:0 -46px;background:linear-gradient(#D8D8DA,#A9A9AD);border-radius:2px 2px 16px 16px}
+.base::before{content:"";position:absolute;left:50%;top:0;width:15%;height:7px;transform:translateX(-50%);background:#B9B9BD;border-radius:0 0 8px 8px}
+.half .win{width:50%}
+.half .desk{display:flex}
+.desk{display:none;flex:1;align-items:center;justify-content:center;background:linear-gradient(135deg,#C9D6DF,#E6DED3);color:rgba(20,20,20,.45);font:500 14px/1.4 var(--ui);text-align:center;padding:30px}
+.split{display:flex}
+
+/* notes under the stage */
+.notes{display:flex;flex-wrap:wrap;gap:6px 22px;padding:10px 20px 14px;border-top:1px solid var(--line);background:#F4F3EF;font-size:.8125rem;color:var(--ink2)}
+.notes b{color:var(--ink)}
+.notes code{font:500 .75rem/1 var(--mono)}
+@media (max-width:700px){.top{gap:8px 10px;padding:10px 12px}.notes{padding:8px 12px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><i aria-hidden="true"></i>Halftime <span class="tag">MacBook preview · team only</span></div>
+  <div class="grp" role="group" aria-label="MacBook model"><span>Mac</span><div class="seg" id="dev"></div></div>
+  <div class="grp" role="group" aria-label="Browser window"><span>Window</span><div class="seg" id="win"></div></div>
+  <div class="grp" role="group" aria-label="Page"><span>Page</span><div class="seg" id="page"></div></div>
+  <div class="grp" role="group" aria-label="Session speed"><span>Speed</span><div class="seg" id="speed"></div></div>
+  <div class="grp" role="group" aria-label="Which timer"><span>Timer</span><div class="seg" id="arm"></div></div>
+  <div class="grp" role="group" aria-label="Zoom"><span>Zoom</span><div class="seg" id="zoom"></div></div>
+  <span class="spacer"></span>
+  <button class="btn" id="sample" type="button">Use a sample profile</button>
+  <button class="btn" id="reload" type="button">Reload</button>
+  <a class="btn" id="open" href="/app" target="_blank" rel="noopener">Open in its own tab</a>
+</header>
+<main class="stage" id="stage" aria-label="A drawn MacBook showing Halftime">
+  <div class="fitbox" id="fitbox">
+    <div class="mac" id="mac">
+      <div class="lid"><div class="screen" id="screen">
+        <div class="notch" id="notch" aria-hidden="true"></div>
+        <div class="menubar" aria-hidden="true"><b>Browser</b><span>File</span><span>Edit</span><span>View</span><span>History</span><span>Window</span><span>Help</span>
+          <span class="r"><svg class="glyph" width="18" height="13" viewBox="0 0 18 13"><path d="M9 12.2 1.2 4.6a11 11 0 0 1 15.6 0Z" fill="#1A1A1A"/></svg><svg class="glyph" width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#1A1A1A" opacity=".5"/><rect x="2.5" y="2.5" width="15" height="8" rx="2" fill="#1A1A1A"/><rect x="24.6" y="4.5" width="1.6" height="4" rx=".8" fill="#1A1A1A" opacity=".5"/></svg><span id="mclock">Fri 10:46 AM</span></span></div>
+        <div class="split">
+          <div class="win" id="win2">
+            <div class="tabs"><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span><div class="tab"><img src="/favicon.svg" alt=""><span id="ttl">Halftime</span></div><div class="tab ghost" aria-hidden="true">+</div></div>
+            <div class="bar2" aria-hidden="true"><span class="nav">‹ › ↻</span><div class="url"><em>🔒</em><span id="addr">halftime-study.vercel.app/app</span></div></div>
+            <iframe allow="bluetooth" id="frame" title="Halftime, as it looks in a browser window on this MacBook" src="about:blank"></iframe>
+          </div>
+          <div class="desk" aria-hidden="true">Another window: your notes, a PDF, the problem set.<br>Halftime still shows its timer in the tab title.</div>
+        </div>
+      </div></div>
+      <div class="base" aria-hidden="true"></div>
+    </div>
+  </div>
+</main>
+<footer class="notes">
+  <span><b id="size">1470 × 833</b> points of browser window, as on that Mac (Chrome, full screen width, no bookmarks bar).</span>
+  <span>Click inside the screen first, then the keys work: <code>N</code> start · <code>↵</code> accept · <code>K</code> keep going · <code>B</code> break · <code>E</code> end.</span>
+  <span>This is the real app in <b>this</b> browser: what you do here is saved here, like opening <code>/app</code>. Test speeds mark sessions as tests; changing the speed ends a running session.</span>
+</footer>
+<script>
+"use strict";
+// default "looks like" size of each Mac's display, in points; the notch width is approximate
+const MACS = {
+  air13: { label: "Air 13″", w: 1470, h: 956, notch: 196 },
+  air15: { label: "Air 15″", w: 1710, h: 1107, notch: 206 },
+  pro14: { label: "Pro 14″", w: 1512, h: 982, notch: 196 },
+  pro16: { label: "Pro 16″", w: 1728, h: 1117, notch: 206 },
+};
+const MENU = 37, BROWSER = 86; // menu bar under the notch; a browser's tab strip + toolbar
+const PAGES = { app: ["Now", "/app"], start: ["Set-up", "/start"], land: ["Landing", "/"], desk: ["One clock", "/desktop"] };
+const SPEEDS = { 1: "1×", 60: "60×", 300: "300×" };
+const ARMS = { random: "Random", halftime: "Halftime", pomodoro: "Fixed 25/5" };
+const WINS = { full: "Full", half: "Half (split view)" };
+const ZOOMS = { fit: "Fit", actual: "Actual size" };
+const qs = new URLSearchParams(location.search);
+const st = { dev: MACS[qs.get("mac")] ? qs.get("mac") : "air13", page: PAGES[qs.get("page")] ? qs.get("page") : "app", speed: SPEEDS[qs.get("speed")] ? +qs.get("speed") : 60,
+  arm: ARMS[qs.get("arm")] ? qs.get("arm") : "random", win: WINS[qs.get("win")] ? qs.get("win") : "full", zoom: qs.get("zoom") === "actual" ? "actual" : "fit" };
+const $ = (id) => document.getElementById(id);
+const frame = $("frame");
+
+function seg(id, opts, key, after) {
+  const el = $(id);
+  el.innerHTML = Object.entries(opts).map(([k, v]) => `<button type="button" data-k="${k}" aria-pressed="${String(st[key]) === k}">${Array.isArray(v) ? v[0] : v.label || v}</button>`).join("");
+  el.onclick = (e) => { const b = e.target.closest("button"); if (!b) return; st[key] = key === "speed" ? +b.dataset.k : b.dataset.k; el.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b)); after(); };
+}
+const src = () => {
+  const [, path] = PAGES[st.page], p = new URLSearchParams();
+  if (st.page === "app") { p.set("speed", st.speed); if (st.arm !== "random") p.set("arm", st.arm); }
+  return path + (p.toString() ? "?" + p : "");
+};
+function layout() {
+  const M = MACS[st.dev], vw = st.win === "half" ? Math.round(M.w / 2) : M.w, vh = M.h - MENU - BROWSER;
+  $("screen").style.width = M.w + "px"; $("screen").style.height = M.h + "px";
+  $("notch").style.width = M.notch + "px";
+  $("win2").style.width = vw + "px";
+  frame.style.width = vw + "px"; frame.style.height = vh + "px";
+  $("mac").parentElement.parentElement.classList.toggle("half", st.win === "half");
+  $("size").textContent = `${vw} × ${vh}`;
+  fit();
+}
+function fit() {
+  const stage = $("stage"), box = $("fitbox"), mac = $("mac");
+  stage.classList.toggle("actual", st.zoom === "actual");
+  const w = mac.offsetWidth + 92, h = mac.offsetHeight + 20; // the base sticks out 46 pt each side
+  if (st.zoom === "actual") { box.style.transform = "translateX(46px)"; box.style.width = w + "px"; box.style.height = h + "px"; return; }
+  const s = Math.min((stage.clientWidth - 32) / w, (stage.clientHeight - 24) / h, 1);
+  box.style.width = ""; box.style.height = "";
+  box.style.transform = `translate(${Math.round((stage.clientWidth - w * s) / 2 + 46 * s)}px, ${Math.round((stage.clientHeight - h * s) / 2)}px) scale(${s})`;
+}
+function load() {
+  const u = src(); frame.src = u; $("open").href = u;
+  history.replaceState(null, "", "?" + new URLSearchParams({ mac: st.dev, page: st.page, speed: st.speed, arm: st.arm, win: st.win, zoom: st.zoom }));
+}
+seg("dev", Object.fromEntries(Object.entries(MACS).map(([k, v]) => [k, v.label])), "dev", layout);
+seg("win", WINS, "win", layout);
+seg("page", PAGES, "page", load);
+seg("speed", SPEEDS, "speed", load);
+seg("arm", ARMS, "arm", load);
+seg("zoom", ZOOMS, "zoom", fit);
+$("reload").onclick = () => { try { frame.contentWindow.location.reload(); } catch { load(); } };
+// a sample profile so the app opens without the set-up. Only when this browser has none: it never replaces yours.
+$("sample").onclick = () => {
+  let had = false; try { const p = JSON.parse(localStorage.getItem("ht-profile") || "{}"); had = !!(p.done || p.name); } catch {} // a finished set-up, or one still in progress
+  if (had) { $("sample").textContent = "This browser already has a profile"; return; }
+  try {
+    localStorage.setItem("ht-profile", JSON.stringify({ name: "Maya", school: "Columbia University", created: new Date().toISOString(), done: true, signedIn: true, role: "student", device: "oura", cal: true, calProvider: "google", paired: true }));
+    localStorage.setItem("ht-tour-done", "1");
+  } catch {}
+  $("sample").textContent = "Sample profile added"; st.page = "app"; seg("page", PAGES, "page", load); load();
+};
+// the drawn tab and address bar follow the real page (same origin, so its title is readable)
+setInterval(() => {
+  try { const d = frame.contentDocument, l = frame.contentWindow.location; if (d && d.title) $("ttl").textContent = d.title; if (l && l.href !== "about:blank") $("addr").textContent = location.host + l.pathname + l.search + l.hash; } catch {}
+  const n = new Date(); $("mclock").textContent = n.toLocaleDateString("en-US", { weekday: "short" }) + " " + n.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+}, 500);
+addEventListener("resize", fit);
+layout(); load();
+</script>
+</body>
+</html>

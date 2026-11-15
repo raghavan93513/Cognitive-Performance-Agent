@@ -1,17 +1,19 @@
 // Local preview of site/ with the same response headers Vercel will send (read from site/vercel.json),
 // so the Content-Security-Policy is tested before deploying. Never serves outside site/.
 // /api/* runs the matching site/api/<name>.js handler (Vercel's Node function shape). With no SUPABASE_KEY set,
-// /api/collect only logs and /api/admin says it isn't connected; set LOG_EVENTS=path.jsonl to also append each
+// /api/collect only logs and /api/admin says it isn't connected (HALFTIME_LOCAL=1 below turns off _db.js's built-in
+// live key, so a local run never writes to the team's database unless you set SUPABASE_URL and SUPABASE_KEY yourself); set LOG_EVENTS=path.jsonl to also append each
 // received event there for testing. ADMIN_INSECURE_COOKIE=1 lets the admin cookie work over plain http locally.
 //   node tools/site/serve.mjs [port]      then open http://127.0.0.1:<port>/
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { join, normalize, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+process.env.HALFTIME_LOCAL = '1'; // site/api/_db.js: no fallback to the live database from this machine
 const ROOT = normalize(join(fileURLToPath(import.meta.url), '../../../site'));
 const PORT = +(process.argv[2] || 3007);
 const cfg = JSON.parse(await readFile(join(ROOT, 'vercel.json'), 'utf8'));
-const TYPES = { '.html': 'text/html; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.txt': 'text/plain; charset=utf-8', '.json': 'application/json', '.js': 'text/javascript; charset=utf-8' };
+const TYPES = { '.html': 'text/html; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.txt': 'text/plain; charset=utf-8', '.json': 'application/json', '.js': 'text/javascript; charset=utf-8', '.webmanifest': 'application/manifest+json' };
 const { appendFile } = await import('node:fs/promises');
 async function api(name, req, res) {
   const mod = await import(join(ROOT, 'api', name + '.js'));

@@ -19,6 +19,8 @@
 //   laptop-small  1366×768                                            ICP_4 Jordan
 //   also: iphone-landscape 844×390 · phone-320 320×568 · fold-cover 344×882 · fold-narrow 280×653 · fold-open 882×1104 ·
 //         pixel-fold-open 841×701 · ipad 768×1024 · desktop 1920×1080 (Android UA on the foldables)
+//         macbook-air-13 1470×833 · macbook-air-15 1710×984 · macbook-pro-14 1512×859 · macbook-pro-16 1728×994 ·
+//         macbook-half 735×833 (Chrome's window on each MacBook at its default display size; see site/preview.html)
 // THIS IS CHROME, NOT SAFARI. It emulates iPhone sizes, touch and the iOS user agent, but WebKit-only behaviour
 // (100vh vs the URL bar, input zoom, safe areas, sticky hover, rubber-banding) only shows in Safari: before calling a
 // screen done, open it in Safari on the iOS Simulator (the page is reachable at localhost) or on a real iPhone.
@@ -84,6 +86,14 @@ const DEVICES = {
   ipad: { who: 'iPad mini, portrait', size: [768, 1024], dpr: 2, ua: IPAD, platform: 'iPad' },
   desktop: { who: 'a wide desktop monitor', size: [1920, 1080], dpr: 1 },
   og: { who: 'a 1200×630 link-preview card (for rendering og images)', size: [1200, 630], dpr: 1 },
+  // added 2026-11-13 for the laptop version: each MacBook's default "looks like" display size (System Settings →
+  // Displays) minus the menu bar under the notch (37 pt) and Chrome's tab strip and toolbar (86 pt). The same sizes
+  // as the drawn MacBooks in site/preview.html. Retina, so dpr 2.
+  'macbook-air-13': { who: 'MacBook Air 13″ (1470×956 display), Chrome full width', size: [1470, 833], dpr: 2 },
+  'macbook-air-15': { who: 'MacBook Air 15″ (1710×1107 display), Chrome full width', size: [1710, 984], dpr: 2 },
+  'macbook-pro-14': { who: 'MacBook Pro 14″ (1512×982 display), Chrome full width', size: [1512, 859], dpr: 2 },
+  'macbook-pro-16': { who: 'MacBook Pro 16″ (1728×1117 display), Chrome full width', size: [1728, 994], dpr: 2 },
+  'macbook-half': { who: 'MacBook Air 13″, Chrome in half of a split view', size: [735, 833], dpr: 2 },
 };
 const WANT = opt('devices', 'iphone,laptop').split(',');
 for (const d of WANT) if (!DEVICES[d]) { console.error(`unknown device ${d} (have ${Object.keys(DEVICES).join(', ')})`); process.exit(1); }
@@ -217,7 +227,7 @@ const CHECKS = (touch) => `(() => {
   // controls: names and tap targets
   for (const el of document.querySelectorAll('a[href], button, input:not([type=hidden]), select, textarea, summary, [role=button], [role=link], [role=switch], [role=tab], [onclick]')) {
     if (!vis(el)) continue;
-    const named = (el.getAttribute('aria-label') || el.getAttribute('aria-labelledby') || el.getAttribute('title') || (el.innerText || '').trim() || el.value || el.querySelector('img[alt]:not([alt=""])') || (el.id && document.querySelector('label[for="' + el.id + '"]')));
+    const named = (el.getAttribute('aria-label') || el.getAttribute('aria-labelledby') || el.getAttribute('title') || (el.innerText || '').trim() || el.value || el.querySelector('img[alt]:not([alt=""])') || (el.id && document.querySelector('label[for="' + el.id + '"]')) || (el.closest('label') && el.closest('label').innerText.trim())); // a wrapping <label> names it too
     if (!named) add('control with no name', el.tagName.toLowerCase() + (el.className ? '.' + String(el.className).split(' ')[0] : ''));
     if (touch) {
       const r = el.getBoundingClientRect();
