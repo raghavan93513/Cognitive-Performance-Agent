@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-10-26
 tier: core
 created: 2026-10-26T20:00:00Z
-updated: 2026-10-26T20:00:00Z
+updated: 2026-11-15T17:00:00Z
 ---
 
 # 12 · Research
@@ -22,6 +22,7 @@ updated: 2026-10-26T20:00:00Z
 
 - [[12-research/evaluation-plan|Evaluation plan]] — Randomized adaptive vs fixed breaks; release gates
 - [[12-research/science-and-tech-evidence|Science and tech evidence]] — how strong the evidence for breaks, sleep, HRV and adaptive timing is; data access after the Fitbit API turn-off; LLM agent failures; what a small pilot can show
+- [[12-research/wearable-metrics-and-devices|Wearable metrics and devices]] — ~60 metrics a WHOOP 4.0 can support, best brand per metric, rules to borrow and scores never to borrow, a WHOOP vs Polar H10 validation plan (2026-11-14)
 
 ## Planned pages
 

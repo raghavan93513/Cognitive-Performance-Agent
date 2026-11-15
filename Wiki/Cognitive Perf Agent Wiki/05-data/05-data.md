@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-10-26
 tier: core
 created: 2026-10-26T20:00:00Z
-updated: 2026-10-26T20:00:00Z
+updated: 2026-11-15T17:00:00Z
 ---
 
 # 05 · Data
@@ -23,12 +23,13 @@ updated: 2026-10-26T20:00:00Z
 - [[05-data/synthetic-data-generator|Synthetic data generator]] — planned: seeded student days (watch, laptop, tasks) with a hidden ground truth, built on WearLab ([[20-decisions/adr-001-reuse-wearlab-simulators-for-synthetic-data|ADR-001]])
 - [[05-data/data-sources|Data sources]] — Watch = context, laptop = behaviour, study task = performance
 - [[05-data/data-pipeline|Data pipeline]] — Validate, dedupe, time-align, store; observation schema; missingness
+- [[05-data/variable-map|Variable map]] — every variable in the live prototype: source, what uses it, where it's logged, live or sample (2026-11-14)
 
 ## Planned pages
 
 *Not written yet. Create them from `_meta/templates/` when the work starts.*
 
-- Fitbit / Google Health access via the course OAuth helper
+- Fitbit / Google Health access via the course OAuth helper (prototype wiring: `tools/site/CONNECTIONS.md`)
 - Laptop collector spec
 - Study task spec
 - Data quality checks

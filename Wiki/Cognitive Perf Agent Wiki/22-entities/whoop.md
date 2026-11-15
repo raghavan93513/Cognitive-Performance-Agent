@@ -26,7 +26,7 @@ lifecycle: draft
 lifecycle_changed: 2026-10-26
 tier: supporting
 created: 2026-10-26T21:30:00Z
-updated: 2026-10-26T21:30:00Z
+updated: 2026-11-15T17:10:00Z
 ---
 
 # WHOOP
@@ -78,6 +78,14 @@ Concepts: [[21-concepts/recovery-and-strain|Recovery and strain]] · [[21-concep
 - WHOOP is the **closest positioning neighbour**: it already tells users how "recovered" they are and when they are "stressed". A reviewer will ask how we differ. Our answer is that we measure *performance on a study task*, use laptop behaviour, and recommend a specific short action with sources, or abstain. See [[24-synthesis/competitive-landscape|Competitive landscape]]. ^[inferred]
 - The Stress Monitor's design (HR + HRV against a **two-week personal normal**, with motion removed) is a useful reference for our own baseline features on [[04-agent-engine/performance-model|Performance model]]. ^[inferred]
 - The membership model shows that people pay monthly for interpretation, not hardware. ^[inferred]
+
+## In the Halftime prototype (2026-11-14)
+
+Heramb's spare WHOOP 4.0 feeds the Night tab over Web Bluetooth in laptop Chrome, with no membership. The code
+(`site/assets/whoop4.js`) is our own, written from community protocol notes. What the band stores while it isn't
+connected is heart rate plus beat intervals, so our sleep, resting HR and HRV are our own approximations, not WHOOP's
+scores. Don't reconnect a decoded band to the official app (firmware updates). See
+[[25-journal/2026-11-14-night-tab-whoop|Night tab]] and [[12-research/wearable-metrics-and-devices|Wearable metrics and devices]].
 
 ## Sources
 
