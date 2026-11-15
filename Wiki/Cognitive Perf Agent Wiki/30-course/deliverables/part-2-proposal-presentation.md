@@ -17,7 +17,7 @@ lifecycle: draft
 lifecycle_changed: 2026-10-26
 tier: core
 created: 2026-10-26T20:00:00Z
-updated: 2026-10-26T20:00:00Z
+updated: 2026-11-13T12:00:00Z
 ---
 
 # Part 2 — Proposal Presentation
@@ -52,6 +52,8 @@ Feedback is only as specific as what you show: a sketched screen gets "that conf
 ## Written draft
 
 This is the **week 9 lab notebook**: the five-part structure taught in class (problem, data plan, technical approach, evaluation, timeline & risks), finalized with feedback from the presentation.
+
+**Status (2026-11-10):** the team's outline sat in a shared Google Doc, "PHA-Group3_ProjectProposal-Week9". A full draft was written into a new "Draft" tab, covering the five sections plus "What changed since Nov 6" and "Safety and privacy". Roles and dates are still for the team to confirm. What it says, and what's left: [[25-journal/2026-11-10-written-proposal-draft|Written proposal draft]].
 
 ## Our prep checklist ^[inferred]
 

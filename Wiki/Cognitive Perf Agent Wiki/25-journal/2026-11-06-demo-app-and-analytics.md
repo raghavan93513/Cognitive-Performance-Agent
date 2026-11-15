@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-11-06
 tier: supporting
 created: 2026-11-06T03:00:00Z
-updated: 2026-11-06T10:00:00Z
+updated: 2026-11-13T12:00:00Z
 ---
 
 # Demo app with account setup and usage analytics
@@ -204,8 +204,20 @@ A second QA pass confirmed the fixes.
   - the tour's wording assumed a watch;
   - the sticky Continue button covered controls.
 
+## Admin login changed, and the demo script (2026-11-06, after the commit)
+
+- **Admin login:**
+  - At Heramb's request, the only admin account is now named `admin` with a short password he chose. The old `heramb` account was deleted.
+  - The database's own 12-character rule (`halftime_admin_create`) refused that password, so the hash was written into `halftime.admins` directly (still bcrypt).
+  - The page's password-change form still requires 12 or more characters.
+  - The login lives only in `halftime-admin-login.txt` next to the repo, never in the repo.
+  - Checked live: sign in, data read and sign out all work.
+- **Risk:** a short, common username and password guards visitors' IP addresses and rough locations. The lockout (8 tries per IP in 15 min) slows guessing from one place but not from many. Change it to a long password once the handout is over. ^[inferred]
+- **Demo script:** a 90-second way to show the prototype and then hand out the QR code is on [[09-design/prototype-demo-script|Prototype demo script]].
+
 ## Still open
 
+- **The admin password is short.** Change it after the handout (see above).
 - **The old Google Sheet** (now unused) is still set to "anyone with the link can edit". Set it back to Restricted or delete it. Same for the unused public summary sheet.
 - **Same false or unconfirmed claims as before:** the landing page still has the ones listed in [[09-design/landing-page]].
 
