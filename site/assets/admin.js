@@ -131,7 +131,7 @@
   }
 
   // ------------------------------------------------------------------ state, kept in the hash: #pulse/today[/tests]
-  const VIEWS = ["pulse", "funnel", "screens", "tour", "taps", "visitors", "devices", "health"];
+  const VIEWS = ["pulse", "study", "funnel", "screens", "tour", "taps", "visitors", "devices", "health"];
   const RANGES = ["live", "today", "24h", "7d", "all"];
   const S = { view: "pulse", range: "today", tests: false };
   const ui = { sort: { key: "views", dir: -1 }, q: "", heatKey: null, heatDesk: false, visitors: [], showMove: false };
@@ -760,7 +760,60 @@
     </div>`;
   }
 
-  const RENDER = { pulse: renderPulse, funnel: renderFunnel, screens: renderScreens, tour: renderTour, taps: renderTaps, visitors: renderVisitors, devices: renderDevices, health: renderHealth };
+  // ------------------------------------------------------------------ Study: real sessions, the two arms side by side
+  function renderStudy(d) {
+    const arms = arr(d.arms), A = (k) => obj(arms.find((a) => a.arm === k)), H = A("halftime"), P = A("pomodoro");
+    const sessions = arr(d.sessions), sus = arr(d.sus), consent = obj(d.consent), push = obj(d.push), jobs = obj(d.jobs);
+    const total = n0(H.sessions) + n0(P.sessions);
+    const rate = (a, k) => (n0(a.suggested) ? `${fmt(a[k])} (${pct(a[k], a.suggested)})` : "—");
+    const of3 = (a, keys) => keys.map((k) => fmt(a[k])).join(" / ");
+    const score = (a) => (n0(a.score_n) ? `${fmt(a.score_avg, 1)}${num(a.score_sd) !== null ? " ± " + fmt(a.score_sd, 1) : ""} (n=${fmt(a.score_n)})` : "no scores yet");
+    const rows = [
+      ["Sessions started", fmt(H.sessions), fmt(P.sessions)],
+      ["People", fmt(H.people), fmt(P.people)],
+      ["Sessions ended properly", `${fmt(H.ended)} (${pct(H.ended, H.sessions)})`, `${fmt(P.ended)} (${pct(P.ended, P.sessions)})`],
+      ["Check-ins finished", `${fmt(H.checkins)} (${pct(H.checkins, H.sessions)})`, `${fmt(P.checkins)} (${pct(P.checkins, P.sessions)})`],
+      ["Study time, average", H.avg_min == null ? "—" : fmt(H.avg_min, 1) + " min", P.avg_min == null ? "—" : fmt(P.avg_min, 1) + " min"],
+      ["Study time, median", H.median_min == null ? "—" : fmt(H.median_min, 1) + " min", P.median_min == null ? "—" : fmt(P.median_min, 1) + " min"],
+      ["Planned length, average", H.avg_planned == null ? "—" : fmt(H.avg_planned, 1) + " min", P.avg_planned == null ? "—" : fmt(P.avg_planned, 1) + " min"],
+      ["Suggestions shown", fmt(H.suggested), fmt(P.suggested)],
+      ["… opened from a notification", rate(H, "via_push"), rate(P, "via_push")],
+      ["… break taken", rate(H, "taken"), rate(P, "taken")],
+      ["… kept going / skipped", rate(H, "kept"), rate(P, "kept")],
+      ["… snoozed", rate(H, "snoozed"), "—"],
+      ["… tapped “Looks wrong”", rate(H, "wrong_taps"), rate(P, "wrong_taps")],
+      ["Breaks started by hand", fmt(H.manual_breaks), fmt(P.manual_breaks)],
+      ["Finished what they planned: yes / mostly / no", of3(H, ["fin_yes", "fin_mostly", "fin_no"]), of3(P, ["fin_yes", "fin_mostly", "fin_no"])],
+      ["Felt wrong: no / timing / reason", of3(H, ["wrong_no", "wrong_timing", "wrong_reason"]), of3(P, ["wrong_no", "wrong_timing", "wrong_reason"])],
+      ["Study-task score (main outcome)", score(H), score(P)],
+    ];
+    const armT = table([{ h: "" }, { h: "Halftime timing", n: true }, { h: "Fixed 25/5 timer", n: true }], rows.map((r) => [esc(r[0]), esc(r[1]), esc(r[2])]), { empty: "No sessions yet." });
+    const armTag = (a) => `<span class="tag${a === "halftime" ? " m" : ""}">${a === "halftime" ? "Halftime" : "Fixed 25/5"}</span>`;
+    const sesT = table([{ h: "Started" }, { h: "Who" }, { h: "#", n: true }, { h: "Arm" }, { h: "Planned", n: true }, { h: "Studied", n: true }, { h: "Suggested", n: true }, { h: "Taken", n: true }, { h: "Sleep" }, { h: "Notified" }, { h: "Finished" }, { h: "Felt wrong" }, { h: "Score", n: true }],
+      sessions.map((r) => [`<span style="white-space:nowrap">${esc(when(r.started))}</span>`, esc(who(r.name, r.visitor)) + (r.qa ? ' <span class="tag w">test speed</span>' : ""), esc(fmt(r.n)), armTag(r.arm),
+        esc(r.planned == null ? "—" : fmt(r.planned) + " min"), esc(r.minutes == null ? (r.ended ? "—" : "running or left") : fmt(r.minutes) + " min"), esc(fmt(r.suggested)), esc(fmt(r.taken)),
+        esc(r.sleep_h == null ? (r.sleep_src === "wearable" ? "from a watch · not saved" : "left out") : fmt(r.sleep_h, 1) + " h · " + ({ wearable_sample: "sample", self: "typed" }[r.sleep_src] || "")), esc(r.push === "on" ? (n0(r.via_push) ? "opened it" : "on") : "no"),
+        esc(r.finished || (r.checked ? "—" : "no check-in")), esc(r.wrong || "—"), esc(r.score == null ? "—" : fmt(r.score, 1))]), { empty: `No real sessions ${RANGE_WORDS[S.range]} yet.` });
+    const susAvg = sus.length ? sus.reduce((a, r) => a + n0(r.score), 0) / sus.length : null;
+    const susT = table([{ h: "When" }, { h: "Who" }, { h: "Score (0–100)", n: true }, { h: "Answers 1–10" }, { h: "After sessions", n: true }],
+      sus.map((r) => [esc(when(r.at)), esc(who(r.name, r.visitor)), esc(fmt(r.score, 1)), `<span class="mono">${esc(arr(r.answers).join(" "))}</span>`, esc(fmt(r.sessions))]), { empty: "No surveys yet. It is offered after a person's third session." });
+    const kv = (o, labels) => table([{ h: "" }, { h: "People", n: true }], Object.keys(labels).filter((k) => o[k] != null).map((k) => [esc(labels[k]), esc(fmt(o[k]))]), { empty: "Nothing yet." });
+    const jobT = table([{ h: "Notification" }, { h: "Count", n: true }], Object.keys(jobs).map((k) => [esc(({ sent: "Sent", pending: "Waiting", cancelled: "Cancelled (shown in the app, or the session ended)", failed: "Failed", expired: "Too late to send", claimed: "Sending now" })[k] || k), esc(fmt(jobs[k]))]), { empty: "No notifications queued yet." });
+    view.innerHTML = `<div class="stack">
+      <div class="kpis">${kpi("Real sessions", fmt(total))}${kpi("People", fmt(d.people))}${kpi("Did both arms", fmt(d.both_arms), false, "people")}${kpi("Check-ins", fmt(n0(H.checkins) + n0(P.checkins)))}${kpi("SUS average", susAvg === null ? "—" : fmt(susAvg, 1), false, plural(sus.length, "survey"))}${kpi("Phones with notifications", fmt(d.subs))}</div>
+      ${card("Halftime timing vs the fixed 25/5 timer", "Each session is randomly given one arm (in pairs, so each person gets both). Sessions run at test speed are left out unless “Load tests” is ticked.", armT +
+        `<p class="note">Taking a suggested break is a process measure, not proof it helped. With this few sessions, read these as a check that the logging works, not as a result.</p>`)}
+      ${card("Sessions", "Newest first", `<div class="scroll">${sesT}</div>`)}
+      <div class="grid g2">
+        ${card("System Usability Scale", "Ten questions, offered after the third session. 68 is the usual “average” mark.", `<div class="scroll">${susT}</div>`)}
+        ${card("Consent", "The choice on “Before your first session”", kv(consent, { agree: "Agreed and joined", decline: "Using it without sharing" }) + `<p class="note">${plural(d.deleted, "person", "people")} used “Delete my data” ${RANGE_WORDS[S.range]}.</p>`)}
+        ${card("Notifications on each phone", "Latest state per person", kv(push, { on: "On", ask: "Not turned on yet", denied: "Blocked in Settings", install: "iPhone in Safari: needs the Home Screen app", unsupported: "Browser can't", server_off: "Server key not set" }))}
+        ${card("Notification queue", "What the server did with each queued notification", jobT)}
+      </div>
+    </div>`;
+  }
+
+  const RENDER = { study: renderStudy, pulse: renderPulse, funnel: renderFunnel, screens: renderScreens, tour: renderTour, taps: renderTaps, visitors: renderVisitors, devices: renderDevices, health: renderHealth };
 
   // ------------------------------------------------------------------ Export CSV
   const CSV_HEAD = ["received_at", "ip", "country", "region", "city", "visitor", "session", "name", "device", "os", "browser", "screen", "viewport", "event", "page", "state", "target", "x", "y", "scroll", "dwell", "value", "client_time", "seq", "referrer", "extra"];
