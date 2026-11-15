@@ -16,4 +16,5 @@ This repository includes or adapts work by others under their licences.
 - **Taste Skill**, by Leonxlnx: https://github.com/Leonxlnx/taste-skill. MIT License. The tells registry and app-screen rules adapted in `/polish` and `design/PRODUCT.md`.
 - **gstack**, by Garry Tan (MIT): the methods behind `/decide`, `/plan-review`, `/checkpoint`, `/restore`, `/review`, `/security`, via Heramb's Startup City.
 - **prompt-motion.com**: the six-block motion prompt method in `/prompt-motion`.
+- **WHOOP 4.0 Bluetooth protocol notes**: whoof-40 (`docs/PROTOCOL.md`, MIT, https://github.com/Octavian-Mihai/whoof-40) and zordhalo/whoopsie-protocol. `site/assets/whoop4.js` is our own code written from those notes (packet framing, command numbers, record layouts); the CRC-8 and CRC-32 are the standard algorithms. Unofficial; not affiliated with WHOOP.
 - **REA** (morluto/rea): the tool `/teardown` drives; it isn't included in this repo.

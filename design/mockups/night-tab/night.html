@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Night tab · mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Mockup of a new "Night" tab for /app. Same tokens as site/app.html. Sample data only. */
+:root{
+  --paper:#F4F3EF; --ink:#141414; --ink2:#46453F; --muted:#64625C; --line:#E3E1DB; --track:#E6E4DE; --card:#fff;
+  --island:#000; --on:#FFF; --on2:rgba(255,255,255,.74); --usual:#D9D6CE; --refill:#8ED6BC; --refill-ink:#0F5E46;
+  --ui:"Geist", system-ui, -apple-system, sans-serif; --mono:"Geist Mono", ui-monospace, Menlo, monospace;
+  --ease:cubic-bezier(.23,1,.32,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;background:var(--paper)}
+body{min-height:100dvh;background:var(--paper);color:var(--ink);font:400 1rem/1.45 var(--ui);font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;touch-action:manipulation}
+:focus-visible{outline:3px solid var(--refill-ink);outline-offset:3px;border-radius:12px}
+
+.view{max-width:520px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 18px) 16px calc(env(safe-area-inset-bottom,0px) + 104px)}
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+h1{font:600 1.75rem/1.1 var(--ui);letter-spacing:-.02em}
+.meta{margin-top:6px;font-size:.8125rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 10px}
+.meta b{font-weight:500;color:var(--ink2)}
+.sample{flex:none;font:500 .75rem/1 var(--ui);color:var(--ink2);background:var(--card);box-shadow:inset 0 0 0 1px var(--line);border-radius:999px;padding:7px 10px;margin-top:4px}
+
+.finding{margin-top:22px;font:500 1.5rem/1.25 var(--ui);letter-spacing:-.015em;text-wrap:pretty}
+.finding .soft{color:var(--muted)}
+.voice{margin-top:14px;display:flex;gap:12px;align-items:center;background:var(--island);color:var(--on);border-radius:22px;padding:14px 16px}
+.voice i{flex:none;width:26px;height:10px;border-radius:5px;background:var(--refill)}
+.voice p{font-size:.9375rem;line-height:1.35}
+.voice p span{color:var(--on2)}
+.voice.quiet{background:var(--card);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.voice.quiet i{background:var(--usual)}
+.voice.quiet p span{color:var(--muted)}
+
+.card{margin-top:14px;background:var(--card);border-radius:22px;padding:16px;box-shadow:inset 0 0 0 1px var(--line)}
+.cardh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:.8125rem;color:var(--muted)}
+.cardh b{font:500 .9375rem/1.2 var(--ui);color:var(--ink)}
+
+/* Direction A: the night, drawn */
+.night{position:relative;margin-top:14px}
+.night svg{display:block;width:100%;height:64px;overflow:visible}
+.lane{display:grid;grid-template-columns:68px 1fr;align-items:center;gap:8px;margin-top:8px;font-size:.75rem;color:var(--muted)}
+.bar{position:relative;height:14px;border-radius:7px;background:transparent}
+.bar span{position:absolute;top:0;bottom:0;border-radius:7px}
+.bar .u{background:var(--usual)}
+.bar .l{background:var(--ink)}
+.axis{display:grid;grid-template-columns:68px 1fr;gap:8px;margin-top:6px}
+.axis div{display:flex;justify-content:space-between;font:400 .6875rem/1 var(--mono);color:var(--muted)}
+.ask{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.ask p{font-size:.875rem;color:var(--ink2)}
+.ask p b{font-weight:600;color:var(--ink)}
+.ask .ok{font-size:.8125rem;color:var(--muted)}
+.btns{display:flex;gap:8px}
+.btn{min-height:44px;padding:0 16px;border-radius:22px;background:var(--ink);color:var(--paper);font:600 .9375rem/1 var(--ui);display:inline-flex;align-items:center}
+.btn.ghost{background:var(--card);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.btn.wide{width:100%;justify-content:center;min-height:52px;border-radius:26px;margin-top:14px}
+
+/* the three rows */
+.rows{margin-top:14px;background:var(--card);border-radius:22px;box-shadow:inset 0 0 0 1px var(--line);padding:4px 16px}
+.row{padding:14px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.rhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.rname{font-size:.875rem;color:var(--ink2)}
+.rval{font:500 1.375rem/1 var(--ui);letter-spacing:-.01em}
+.rval small{font-size:.875rem;color:var(--muted);font-weight:400;margin-left:2px}
+.rword{margin-top:6px;display:flex;justify-content:space-between;gap:10px;font-size:.8125rem;color:var(--muted)}
+.rword b{font-weight:600;color:var(--ink)}
+.band{position:relative;height:16px;margin-top:8px}
+.band::before{content:"";position:absolute;left:0;right:0;top:7px;height:2px;border-radius:1px;background:var(--track)}
+.band .u{position:absolute;top:3px;height:10px;border-radius:5px;background:var(--usual)}
+.band .d{position:absolute;top:1px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 3px var(--card)}
+.dots{display:flex;gap:6px;margin-top:10px}
+.dots i{width:10px;height:10px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--muted)}
+.dots i.on{background:var(--ink);box-shadow:none}
+
+/* direction B: three lines */
+.b .rval{font-size:1.75rem}
+.b .row{padding:18px 0}
+.b .rsent{margin-top:6px;font-size:.9375rem;color:var(--ink2);text-wrap:pretty}
+.b .rsent b{color:var(--ink);font-weight:600}
+.when{margin-top:8px;font-size:.8125rem;color:var(--muted)}
+.when button{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:3px;min-height:44px}
+
+.foot{margin-top:16px;font-size:.8125rem;color:var(--muted);text-wrap:pretty}
+.foot a{color:var(--ink);font-weight:500;text-underline-offset:3px}
+
+.dim{opacity:.55}
+
+/* bottom bar, five tabs */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:4;background:var(--paper);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px max(10px, env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 6px) max(10px, env(safe-area-inset-left,0px))}
+.tabbar .in{display:grid;grid-template-columns:repeat(5,1fr);width:100%;max-width:520px}
+.tabbar button{min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font:500 .75rem/1 var(--ui);color:var(--muted)}
+.tabbar button[aria-current="page"]{color:var(--ink)}
+.tabbar svg{width:24px;height:24px}
+.tabbar .new{position:relative}
+.tabbar .new::after{content:"";position:absolute;top:8px;right:calc(50% - 18px);width:7px;height:7px;border-radius:50%;background:var(--refill-ink)}
+/* no entrance animation in the mockup: content must never depend on an animation finishing */
+</style>
+</head>
+<body>
+<main class="view" id="view"></main>
+
+<nav class="tabbar" aria-label="Halftime"><div class="in">
+  <button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="9" width="16" height="6" rx="3"/><path d="M8 19h8"/></svg>Now</button>
+  <button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 19V11M10 19V6M15 19v-9M20 19v-5"/></svg>History</button>
+  <button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1.2-3.6 4-5.5 7-5.5s5.8 1.9 7 5.5"/></svg>You</button>
+  <button type="button" class="new" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 4.5a7 7 0 1 0 4 11.6A6 6 0 0 1 15.5 4.5z"/><path d="M4 21h16"/></svg>Night</button>
+  <button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l9 8-9 8zM15 4l5 8-5 8"/></svg>Demo</button>
+</div></nav>
+
+<script>
+const Q = new URLSearchParams(location.search);
+const DIR = Q.get("dir") === "b" ? "b" : "a";
+const STATE = Q.get("state") || "ok";
+
+// ---------- sample nights (made up; labelled Sample data on screen)
+const T = (h, m = 0) => h * 60 + m;                 // minutes after midnight; evening hours are negative
+const AXIS = { from: T(-2), to: T(9) };            // 10 pm → 9 am
+const clock = (min) => { let m = ((min % 1440) + 1440) % 1440, h = Math.floor(m / 60), mm = m % 60; const ap = h >= 12 ? "pm" : "am"; h = h % 12 || 12; return `${h}:${String(mm).padStart(2, "0")} ${ap}`; };
+const dur = (min) => `${Math.floor(min / 60)} h ${String(Math.round(min % 60)).padStart(2, "0")} min`;
+const S = {
+  ok:       { bed: T(0, 40), wake: T(6, 30), rhr: 54, hrv: 61, low: T(4, 12), sync: "7:42 am", n: 21, confirmed: true },
+  usual:    { bed: T(0, 10), wake: T(7, 15), rhr: 52, hrv: 66, low: T(4, 40), sync: "7:51 am", n: 22, confirmed: true },
+  confirm:  { bed: T(0, 40), wake: T(6, 30), rhr: 54, hrv: 61, low: T(4, 12), sync: "7:42 am", n: 21, confirmed: false },
+  learning: { bed: T(23 - 24, 55), wake: T(6, 50), rhr: 55, hrv: 58, low: T(3, 50), sync: "7:20 am", n: 3, confirmed: true },
+  nodata:   { worn: 130, sync: "8:05 am", n: 21 },
+  phone:    { lastFrom: "Wednesday night", sync: "yesterday 8:02 am", n: 20 },
+};
+const USUAL = { bed: T(0, 10), wake: T(7, 20), sleepLo: 400, sleepHi: 460, rhrLo: 51, rhrHi: 57, hrvLo: 52, hrvHi: 74 };
+const s = S[STATE] || S.ok;
+const pct = (min) => ((min - AXIS.from) / (AXIS.to - AXIS.from)) * 100;
+
+// heart rate across the night: falls to its lowest in the early morning, small bumps, rises before waking
+function hrLine(bed, wake, low, rhr) {
+  const raw = [], n = 90;
+  for (let i = 0; i <= n; i++) {
+    const t = bed + (i / n) * (wake - bed), d = (t - low) / (wake - bed);
+    let hr = rhr + 10 * d * d * (d < 0 ? 3 : 2.4) + 1.6 * Math.sin(i * 0.55) + 1.2 * Math.sin(i * 0.17 + 1);
+    raw.push([pct(t), Math.max(rhr, Math.min(rhr + 14, hr))]);
+  }
+  // light smoothing, like a 3-minute average
+  return raw.map((p, i) => { const w = raw.slice(Math.max(0, i - 2), i + 3); return [p[0], i === raw.findIndex((q) => q[1] === Math.min(...raw.map((r) => r[1]))) ? p[1] : w.reduce((a, b) => a + b[1], 0) / w.length]; });
+}
+
+// ---------- pieces
+const sleepMin = s.bed != null ? s.wake - s.bed : null;
+const word = (v, lo, hi, low, high, usual = "Your usual") => (v < lo ? low : v > hi ? high : usual);
+const learning = STATE === "learning";
+
+function band(v, lo, hi, min, max) {
+  const p = (x) => Math.max(0, Math.min(100, ((x - min) / (max - min)) * 100));
+  return `<div class="band" aria-hidden="true"><span class="u" style="left:${p(lo)}%;width:${p(hi) - p(lo)}%"></span><span class="d" style="left:${p(v)}%"></span></div>`;
+}
+function dots(n) { return `<div class="dots" aria-label="${n} of 7 nights">${Array.from({ length: 7 }, (_, i) => `<i class="${i < n ? "on" : ""}"></i>`).join("")}</div>`; }
+
+function row(name, val, unit, w, usualText, v, lo, hi, min, max, sentence) {
+  const meas = learning ? `${dots(s.n)}` : band(v, lo, hi, min, max);
+  const wordLine = learning ? `<div class="rword"><span><b>Learning your usual</b></span><span>${s.n} of 7 nights</span></div>` : `<div class="rword"><span><b>${w}</b></span><span>usual ${usualText}</span></div>`;
+  if (DIR === "b") return `<div class="row"><div class="rhead"><span class="rname">${name}</span><span class="rval">${val}<small>${unit}</small></span></div><p class="rsent">${sentence}</p>${meas}${wordLine}</div>`;
+  return `<div class="row"><div class="rhead"><span class="rname">${name}</span><span class="rval">${val}<small>${unit}</small></span></div>${wordLine}${meas}</div>`;
+}
+
+function rows() {
+  const sleepMin = s.wake - s.bed; // per call: the phone state swaps in an earlier night
+  const sw = word(sleepMin, USUAL.sleepLo, USUAL.sleepHi, "Shorter than usual", "Longer than usual");
+  const rw = word(s.rhr, USUAL.rhrLo, USUAL.rhrHi, "Lower than usual", "Higher than usual");
+  const hw = word(s.hrv, USUAL.hrvLo, USUAL.hrvHi, "Lower than usual", "Higher than usual");
+  const h = Math.floor(sleepMin / 60), m = sleepMin % 60;
+  return `<section class="rows enter" aria-label="Last night's three numbers">
+    ${row("Sleep", `${h} h ${String(m).padStart(2, "0")}`, "", sw, "6 h 40 – 7 h 40", sleepMin, USUAL.sleepLo, USUAL.sleepHi, 240, 600,
+      learning ? `You slept <b>${dur(sleepMin)}</b>.` : `You slept <b>${dur(sleepMin)}</b>, ${sleepMin < USUAL.sleepLo ? `about ${Math.round((USUAL.sleepLo + USUAL.sleepHi) / 2 / 60 - sleepMin / 60)} h under your usual` : "in your usual range"}.${DIR === "b" ? `<span class="when"><br>${clock(s.bed)} → ${clock(s.wake)} · read from your heart rate · <button type="button">Change</button></span>` : ""}`)}
+    ${row("Resting heart rate", s.rhr, " bpm", rw, "51–57 bpm", s.rhr, USUAL.rhrLo, USUAL.rhrHi, 40, 70, `Lowest point of the night: <b>${s.rhr} bpm</b> at ${clock(s.low)}.`)}
+    ${row("HRV", s.hrv, " ms", hw, "52–74 ms", s.hrv, USUAL.hrvLo, USUAL.hrvHi, 20, 110, `How much the time between beats varied overnight: <b>${s.hrv} ms</b>.`)}
+  </section>`;
+}
+
+function drawing() {
+  const pts = hrLine(s.bed, s.wake, s.low, s.rhr), lo = Math.min(...pts.map((p) => p[1])), hi = Math.max(...pts.map((p) => p[1]));
+  const y = (hr) => 6 + (1 - (hr - lo) / (hi - lo || 1)) * 52;
+  const path = pts.map((p, i) => `${i ? "L" : "M"}${p[0].toFixed(2)} ${y(p[1]).toFixed(1)}`).join(" ");
+  const lp = pts.reduce((a, b) => (b[1] < a[1] ? b : a));
+  const ticks = [T(-1), T(1), T(3), T(5), T(7), T(9)].map((t) => `<span>${clock(t).replace(":00", "").replace(" ", "")}</span>`).join("");
+  return `<section class="card enter" aria-label="Last night on a clock">
+    <div class="cardh"><b>Your night</b><span>heart rate while asleep</span></div>
+    <div class="night">
+      <div style="display:grid;grid-template-columns:68px 1fr;gap:8px">
+        <span></span>
+        <svg viewBox="0 0 100 64" preserveAspectRatio="none" role="img" aria-label="Heart rate fell to its lowest, ${s.rhr} beats a minute, at ${clock(s.low)}">
+          <path d="${path}" fill="none" stroke="var(--ink)" stroke-width="1.6" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
+          <circle cx="${lp[0]}" cy="${y(lp[1])}" r="1.6" fill="var(--refill-ink)" stroke="var(--card)" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+        </svg>
+      </div>
+      <div class="lane"><span>Lowest</span><span style="position:relative;height:14px"><span style="position:absolute;left:${lp[0]}%;transform:translateX(-50%);white-space:nowrap;color:var(--ink);font-weight:500">${s.rhr} bpm · ${clock(s.low)}</span></span></div>
+      <div class="lane"><span>Last night</span><div class="bar"><span class="l" style="left:${pct(s.bed)}%;width:${pct(s.wake) - pct(s.bed)}%"></span></div></div>
+      <div class="lane"><span>Your usual</span><div class="bar"><span class="u" style="left:${pct(USUAL.bed)}%;width:${pct(USUAL.wake) - pct(USUAL.bed)}%"></span></div></div>
+      <div class="axis"><span></span><div>${ticks}</div></div>
+    </div>
+    ${s.confirmed ? `<div class="ask"><p><b>${clock(s.bed)} → ${clock(s.wake)}</b></p><span class="ok">You confirmed this · <button type="button" style="text-decoration:underline;text-underline-offset:3px;min-height:44px">Change</button></span></div>`
+      : `<div class="ask"><p>Is this when you slept?<br><b>${clock(s.bed)} → ${clock(s.wake)}</b></p><div class="btns"><button class="btn" type="button">Yes</button><button class="btn ghost" type="button">Change</button></div></div>`}
+  </section>`;
+}
+
+function header(extra = "") {
+  return `<header class="top"><div><h1>Last night</h1><p class="meta"><span>Thu → Fri, Nov 14</span><span><b>WHOOP 4.0</b> · synced ${s.sync}</span>${extra}</p></div><span class="sample">Sample data</span></header>`;
+}
+const foot = `<p class="foot">Only sleep changes your break timing. Resting heart rate and HRV are here for context. <a href="#">How these are worked out</a></p>`;
+
+// ---------- states
+let html = "";
+if (STATE === "nodata") {
+  html = `${header()}
+    <p class="finding enter">Not enough data for last night.</p>
+    <p class="foot" style="margin-top:8px;font-size:.9375rem;color:var(--ink2)">Your WHOOP was on your wrist for <b>${dur(s.worn)}</b>. Halftime needs about 4 hours of sleep to say anything.</p>
+    <div class="voice quiet enter"><i></i><p>Today's breaks use the standard timing.<br><span>You can type last night's sleep when you start studying.</span></p></div>
+    <section class="rows enter">${["Sleep", "Resting heart rate", "HRV"].map((n) => `<div class="row"><div class="rhead"><span class="rname">${n}</span><span class="rval" style="color:var(--muted)">—</span></div><div class="rword"><span>Not enough data</span><span>worn ${dur(s.worn)}</span></div></div>`).join("")}</section>
+    <button class="btn wide" type="button">Type last night's sleep</button>
+    ${foot}`;
+} else if (STATE === "phone") {
+  html = `<header class="top"><div><h1>Last night</h1><p class="meta"><span>Thu → Fri, Nov 14</span><span><b>WHOOP 4.0</b> · last synced ${s.sync}</span></p></div><span class="sample">Sample data</span></header>
+    <p class="finding enter">Last night isn't here yet.</p>
+    <div class="voice quiet enter"><i></i><p>Your WHOOP talks to your laptop, not your phone.<br><span>Open Halftime on your laptop in Chrome and press <b style="color:var(--ink)">Sync my WHOOP</b>. It shows here after.</span></p></div>
+    <button class="btn wide ghost" type="button">Type last night's sleep instead</button>
+    <p class="foot" style="margin-top:22px">From ${s.lastFrom}</p>
+    <div class="dim">${(() => { const k = Object.assign({}, S.usual); Object.assign(s, k); return rows(); })()}</div>
+    ${foot}`;
+} else {
+  const short = sleepMin < USUAL.sleepLo;
+  const finding = learning
+    ? `You slept <b>${dur(sleepMin)}</b>.`
+    : short ? `You slept ${dur(sleepMin)}, <span class="soft">about an hour under your usual.</span>` : `You slept ${dur(sleepMin)}. <span class="soft">That's your usual.</span>`;
+  const voice = learning
+    ? `<div class="voice quiet enter"><i></i><p>Halftime is still learning your usual.<br><span>${s.n} of 7 nights so far. Until then, breaks use the standard timing.</span></p></div>`
+    : short ? `<div class="voice enter"><i></i><p>Today your first break comes 10 minutes sooner.<br><span>Because sleep was short. Nothing else changes.</span></p></div>`
+      : `<div class="voice quiet enter"><i></i><p>Today's breaks follow your normal timing.<br><span>Nothing from last night changes them.</span></p></div>`;
+  html = `${header()}
+    ${STATE === "confirm" ? `<p class="finding enter">First, one check.</p><p class="foot" style="margin-top:8px;font-size:.9375rem;color:var(--ink2)">Halftime reads when you slept from your heart rate. A tap keeps it honest.</p>` : `<p class="finding enter">${finding}</p>${voice}`}
+    ${DIR === "a" ? drawing() : ""}
+    ${STATE === "confirm" && DIR === "b" ? `<div class="card enter"><div class="ask" style="border:0;margin:0;padding:0"><p>Is this when you slept?<br><b>${clock(s.bed)} → ${clock(s.wake)}</b></p><div class="btns"><button class="btn" type="button">Yes</button><button class="btn ghost" type="button">Change</button></div></div></div>` : ""}
+    <div class="${DIR}">${STATE === "confirm" ? `<div class="dim">${rows()}</div>` : rows()}</div>
+    ${foot}`;
+}
+document.getElementById("view").innerHTML = html;
+document.title = `Night tab · ${DIR.toUpperCase()} · ${STATE}`;
+</script>
+</body>
+</html>
