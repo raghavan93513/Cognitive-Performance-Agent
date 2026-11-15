@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-11-04
 tier: supporting
 created: 2026-11-04T22:40:00Z
-updated: 2026-11-06T00:30:00Z
+updated: 2026-11-15T18:00:00Z
 ---
 
 # ICP_4 — Jordan Lee (they/them)
@@ -41,6 +41,7 @@ The score line from each `/icp` session, newest last. Scale 1–10: Clarity · T
 | 2026-11-05 | [[25-journal/2026-11-05-icp-cmo-three-steps]] Landing 'Three steps' section only (iPhone SE + small laptop) · simple 8 · amazing 6 | MEH | 8 · 7 · n/a · 5 · 6 · 7 · 3 | 6 (=) | 0.25 · 0.25 · 0.60 | Step 1 example with no watch + 'No watch needed' in plain words |
 | 2026-11-05 | [[25-journal/2026-11-05-icp-moments]] Landing 'When is it?' moments demo (iPhone SE + small laptop) · picked Late night, no watch | MEH | 8 · 7 · 7 · 6 · 7 · 7 · 3 | 6 (=) | 0.30 · 0.30 · 0.60 | No-watch late-night card from night one (calendar bedtime math), not a week of 'not enough data yet' |
 | 2026-11-05 | [[25-journal/2026-11-05-icp-hero]] Landing hero only (iPhone SE + small laptop) | MEH | 8 · 7 · n/a · 5 · 6 · 6 · 3 | 6 (=) | 0.25 · 0.25 · 0.60 | Demo opens on 'No watch' + 'No watch needed' in the bold line |
+| 2026-11-15 | [[25-journal/2026-11-15-icp-three-problems]] Three-problem reframe: free wearable view + device-use tracking + sleep-to-device link (concept, no screens) | MEH | 6 · 6 · 5 · 4 · 5 · 4 · 3 | 5 (−1) | 0.25 · 0.15 · 0.40 | A no-watch version of the new number from night one (one-tap sleep or shift end time) |
 
 ## Open asks
 
@@ -102,6 +103,13 @@ Marked at the wearables test (2026-11-05). ✅ fixed · ◐ partly fixed · ⬜ 
 - 🆕 new: 'No wearable' first in the list
 - 🆕 new: Default calendar to 'Class only'
 - 🆕 new: Fill Stored / Kept for; say what Delete does
+
+Marked at the three-problem reframe review (2026-11-15). ✅ fixed · ◐ partly fixed · ⬜ not fixed · ❔ can't tell · 🆕 new.
+
+- ⬜ worse: no watch first (two of three new parts need a wearable); shared laptop
+- ⬜ not fixed: 'after a shift' moment
+- ❔ can't tell: Windows + install size; week one useful without a watch; snooze visible
+- 🆕 new: phone only, counts only, no app names; let me choose the timer on a hyperfocus day
 
 ## Related
 

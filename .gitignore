@@ -13,3 +13,7 @@
 .env
 .env.*
 *.pem
+
+# ICP testing screenshots (screens/, sheets/) stay local, like .icp-tests/
+ICP testing/**/*.jpg
+ICP testing/**/*.png

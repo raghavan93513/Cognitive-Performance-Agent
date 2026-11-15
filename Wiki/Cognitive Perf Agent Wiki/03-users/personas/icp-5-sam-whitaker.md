@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-11-04
 tier: supporting
 created: 2026-11-04T22:40:00Z
-updated: 2026-11-06T00:30:00Z
+updated: 2026-11-15T18:00:00Z
 ---
 
 # ICP_5 — Sam Whitaker (he/him)
@@ -41,6 +41,7 @@ The score line from each `/icp` session, newest last. Scale 1–10: Clarity · T
 | 2026-11-05 | [[25-journal/2026-11-05-icp-cmo-three-steps]] Landing 'Three steps' section only (iPhone) · simple 8 · amazing 5 | MEH | 8 · 7 · n/a · 4 · 7 · 8 · n/a | 6 | n/a · 0.30 · 0.65 | Step 3 must say plainly when it asks again ('asks once' vs 'Next check 3:30') |
 | 2026-11-05 | [[25-journal/2026-11-05-icp-moments]] Landing 'When is it?' moments demo (iPhone) · picked Late night | I'D USE IT (late nights) | 8 · 7 · 7 · 6 · 8 · 8 · 5 | 7 (+1) | 0.50 · 0.35 · 0.65 | Named campus counseling line on the late-night card after repeated short nights |
 | 2026-11-05 | [[25-journal/2026-11-05-icp-hero]] Landing hero only (iPhone) | I'D USE IT (Late night chip; headline alone MEH) | 8 · 7 · n/a · 5 · 7 · 8 · n/a | 7 | n/a · 0.35 · n/a | Headline and bold line include stopping for the night, not only an afternoon break |
+| 2026-11-15 | [[25-journal/2026-11-15-icp-three-problems]] Three-problem reframe: free wearable view + device-use tracking + sleep-to-device link (concept, no screens) | I'D QUIT | 6 · 5 · 4 · 4 · 5 · 3 · 3 | 4 (−3) | 0.20 · 0.10 · 0.35 | Name campus counseling (and how to reach it) when short nights persist, before any sleep-to-scrolling number |
 
 ## Open asks
 
@@ -100,6 +101,13 @@ Marked at the wearables test (2026-11-05). ✅ fixed · ◐ partly fixed · ⬜ 
 - 🆕 new: Explain HRV in one sentence, or stop reading it
 - 🆕 new: Don't show 'away-game nights' to non-athletes
 - 🆕 new: Switch vs Disconnect: say the difference
+
+Marked at the three-problem reframe review (2026-11-15). ✅ fixed · ◐ partly fixed · ⬜ not fixed · ❔ can't tell · 🆕 new.
+
+- ⬜ not fixed: named counseling contact (8th ask)
+- ⬜ worse: explain HRV (now a headline)
+- ❔ can't tell: 'never sees what I write'; 1 am stop-for-tonight card; choose when the counseling offer comes
+- 🆕 new: tell me which timer I got; part 3 opt-in, plain words, no app names; one line on what the laptop app reads; the learning window lands the number in finals week
 
 ## Related
 

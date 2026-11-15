@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-11-04
 tier: supporting
 created: 2026-11-04T22:40:00Z
-updated: 2026-11-06T00:30:00Z
+updated: 2026-11-15T18:00:00Z
 ---
 
 # ICP_1 — Maya Okafor (she/her)
@@ -41,6 +41,7 @@ The score line from each `/icp` session, newest last. Scale 1–10: Clarity · T
 | 2026-11-05 | [[25-journal/2026-11-05-icp-cmo-three-steps]] Landing 'Three steps' section only (iPhone + laptop) · simple 7 · amazing 5 | MEH | 8 · 7 · 5 · 6 · 6 · 7 · 5 | 6 (=) | 0.40 · 0.35 · 0.60 | Step 3 says it waits until I finish the problem, not 'Next check 3:30' |
 | 2026-11-05 | [[25-journal/2026-11-05-icp-moments]] Landing 'When is it?' moments demo (iPhone + laptop) · picked Late night | MEH | 8 · 7 · 5 · 7 · 7 · 7 · 5 | 6 (=) | 0.43 · 0.35 · 0.60 | Check in at my next pause on my Apple Watch, not 'ask at 2:00' |
 | 2026-11-05 | [[25-journal/2026-11-05-icp-hero]] Landing hero only (iPhone + laptop) | MEH | 8 · 7 · 5 · 7 · 7 · 7 · 5 | 6 (=) | 0.43 · 0.35 · 0.60 | Name Apple Watch (or 'coming soon') in the hero line under the headline |
+| 2026-11-15 | [[25-journal/2026-11-15-icp-three-problems]] Three-problem reframe: free wearable view + device-use tracking + sleep-to-device link (concept, no screens) | MEH | 7 · 6 · 4 · 6 · 5 · 5 · 4 | 5 (−1) | 0.30 · 0.20 · 0.50 | Read my Apple Watch sleep (or say 'not yet' up front) so the link number has data |
 
 ## Open asks
 
@@ -105,6 +106,14 @@ Marked at the wearables test (2026-11-05). ✅ fixed · ◐ partly fixed · ⬜ 
 - 🆕 new: Calendar default 'Class only' / ask if you have games
 - 🆕 new: Remove the buttons on the learning card
 - 🆕 new: Say what Delete does
+
+Marked at the three-problem reframe review (2026-11-15). ✅ fixed · ◐ partly fixed · ⬜ not fixed · ❔ can't tell · 🆕 new.
+
+- ⬜ worse: Apple Watch named (now named as the thing that may not work); Anki/PDF/notes switching counted as distraction
+- ⬜ not fixed: reaches a face-down phone; Stored / Kept for / Delete
+- ◐ partly fixed: knows the 9:30 is an exam; say what I install
+- ❔ can't tell: ask at my next pause
+- 🆕 new: opt out of 25/5 in exam week or make it wait for my pause; every link number says 'from N nights' and admits the other direction
 
 ## Related
 

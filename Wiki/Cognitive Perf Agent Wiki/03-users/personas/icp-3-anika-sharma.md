@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-11-04
 tier: supporting
 created: 2026-11-04T22:40:00Z
-updated: 2026-11-06T00:30:00Z
+updated: 2026-11-15T18:00:00Z
 ---
 
 # ICP_3 — Anika Sharma (she/her)
@@ -41,6 +41,7 @@ The score line from each `/icp` session, newest last. Scale 1–10: Clarity · T
 | 2026-11-05 | [[25-journal/2026-11-05-icp-cmo-three-steps]] Landing 'Three steps' section only (laptop + iPhone) · simple 8 · amazing 5 | MEH | 8 · 5 · n/a · n/a · 5 · 7 · n/a | 5 | 0.05 · 0.20 · 0.40 | Step 2 chip shows '4 of 6' not 'Fairly sure', plus one line on whether AI writes the reason |
 | 2026-11-05 | [[25-journal/2026-11-05-icp-moments]] Landing 'When is it?' moments demo (laptop + iPhone) · picked Late night | MEH | 8 · 5 · 6 · 5 · 5 · 7 · 3 | 5 (+1) | 0.10 · 0.20 · 0.40 | 'Where it goes' block: storage, retention, AI fields, who sees pilot data |
 | 2026-11-05 | [[25-journal/2026-11-05-icp-hero]] Landing hero only (laptop + iPhone) | MEH | 8 · 5 · n/a · 4 · 4 · 7 · n/a | 5 | 0.05 · 0.20 · 0.40 | Hero line on what the laptop app records, OS, where it goes, whether AI sees it |
+| 2026-11-15 | [[25-journal/2026-11-15-icp-three-problems]] Three-problem reframe: free wearable view + device-use tracking + sleep-to-device link (concept, no screens) | MEH | 7 · 4 · 6 · 4 · 3 · n/a · 3 | 4 (−1) | 0.15 · 0.10 · 0.30 | 'What's recorded and where it goes' screen before any connect or install: fields, storage, retention, AI yes/no, one-button delete |
 
 ## Open asks
 
@@ -107,6 +108,13 @@ Marked at the wearables test (2026-11-05). ✅ fixed · ◐ partly fixed · ⬜ 
 - 🆕 new: Delete and Disconnect say exactly what happens, with a confirmation
 - 🆕 new: Drop HRV until a reason uses it; show Google's exact scope strings
 - 🆕 new: Name the real device model (Charge, not Air)
+
+Marked at the three-problem reframe review (2026-11-15). ✅ fixed · ◐ partly fixed · ⬜ not fixed · ❔ can't tell · 🆕 new.
+
+- ⬜ worse: 'where it goes' block (more data asked, less disclosed); app switches while debugging counted as distraction
+- ⬜ not fixed: AI mentioned
+- ❔ can't tell: Linux; confidence with a count
+- 🆕 new: show n and a chance check on the link; let me pick the direction (last night's behaviour → sleep); no Instagram framing on the laptop (needs URLs)
 
 ## Related
 

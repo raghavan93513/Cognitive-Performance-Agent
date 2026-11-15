@@ -29,7 +29,7 @@ Five **synthetic** target users, all US college students on iPhones, that the `/
 | ICP_4 | Jordan Lee, transfer student with ADHD | No wearable (laptop-only path), the small iPhone SE screen, no shaming |
 | ICP_5 | Sam Whitaker, English senior | Non-technical reading, tone, and the escalation-to-a-human question |
 
-Ledgers: [[03-users/personas/icp-1-maya-okafor|ICP_1]] · [[03-users/personas/icp-2-diego-ramirez|ICP_2]] · [[03-users/personas/icp-3-anika-sharma|ICP_3]] · [[03-users/personas/icp-4-jordan-lee|ICP_4]] · [[03-users/personas/icp-5-sam-whitaker|ICP_5]]
+Ledgers: [[03-users/personas/icp-1-maya-okafor|ICP_1]] · [[03-users/personas/icp-2-diego-ramirez|ICP_2]] · [[03-users/personas/icp-3-anika-sharma|ICP_3]] · [[03-users/personas/icp-4-jordan-lee|ICP_4]] · [[03-users/personas/icp-5-sam-whitaker|ICP_5]] · [[03-users/personas/icp-6-ethan-park|ICP_6]] (added 2026-11-14: MS student-athlete, WHOOP; round reports in `ICP testing/`)
 
 ## Score sheet (1–10)
 

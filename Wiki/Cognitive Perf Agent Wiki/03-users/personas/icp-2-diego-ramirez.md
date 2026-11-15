@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-11-04
 tier: supporting
 created: 2026-11-04T22:40:00Z
-updated: 2026-11-06T00:30:00Z
+updated: 2026-11-15T18:00:00Z
 ---
 
 # ICP_2 — Diego Ramírez (he/him)
@@ -41,6 +41,7 @@ The score line from each `/icp` session, newest last. Scale 1–10: Clarity · T
 | 2026-11-05 | [[25-journal/2026-11-05-icp-cmo-three-steps]] Landing 'Three steps' section only (iPhone) · simple 8 · amazing 5 | MEH | 8 · 7 · n/a · 4 · 7 · 7 · 3 | 5 (=) | 0.20 · 0.15 · 0.55 | Step 1 names which devices count (Garmin: yes or 'not yet') and says phone study isn't counted |
 | 2026-11-05 | [[25-journal/2026-11-05-icp-moments]] Landing 'When is it?' moments demo (iPhone) · picked After practice | MEH | 8 · 8 · 6 · 6 · 8 · 7 · 4 | 6 (+1) | 0.30 · 0.20 · 0.55 | Garmin supported, with 'your coach never sees this' beside it |
 | 2026-11-05 | [[25-journal/2026-11-05-icp-hero]] Landing hero only (iPhone) | MEH | 8 · 7 · n/a · 5 · 6 · 7 · 4 | 6 (=) | 0.30 · 0.20 · 0.55 | Device line names Garmin (or 'not yet') plus 'your coach never sees it' |
+| 2026-11-15 | [[25-journal/2026-11-15-icp-three-problems]] Three-problem reframe: free wearable view + device-use tracking + sleep-to-device link (concept, no screens) | I'D QUIT | 6 · 5 · 4 · 4 · 4 · n/a · 3 | 4 (−2) | 0.15 · 0.05 · 0.30 | Link number split by practice / lift / travel / off days |
 
 ## Open asks
 
@@ -102,6 +103,13 @@ Marked at the wearables test (2026-11-05). ✅ fixed · ◐ partly fixed · ⬜ 
 - 🆕 new: A Garmin row, or an honest 'not supported' plus a team-issued warning
 - 🆕 new: Fill Stored / Kept for; name 'the project team'
 - 🆕 new: Remove the buttons on the learning card
+
+Marked at the three-problem reframe review (2026-11-15). ✅ fixed · ◐ partly fixed · ⬜ not fixed · ❔ can't tell · 🆕 new.
+
+- ⬜ not fixed: Garmin row or honest 'not supported'; training-aware options (sit or nap, not walk); back up 'athletes'
+- ⬜ worse: who sees my data + Stored / Kept for (now with Instagram time)
+- ❔ can't tell: practice from the calendar; real sign-up
+- 🆕 new: Screen Time stays on the phone with one line naming who sees what; cut the 5-minute walk on bus and study-hall sessions
 
 ## Related
 

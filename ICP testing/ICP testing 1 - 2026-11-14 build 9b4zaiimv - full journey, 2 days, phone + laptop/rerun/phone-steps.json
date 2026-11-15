@@ -1,0 +1,533 @@
+[
+ {
+  "go": "/"
+ },
+ {
+  "wait": 1500
+ },
+ {
+  "shot": "d1-landing-5s"
+ },
+ {
+  "scroll": 1
+ },
+ {
+  "wait": 300
+ },
+ {
+  "shot": "d1-landing-1"
+ },
+ {
+  "scroll": 1
+ },
+ {
+  "wait": 300
+ },
+ {
+  "shot": "d1-landing-2"
+ },
+ {
+  "scroll": 1
+ },
+ {
+  "wait": 300
+ },
+ {
+  "shot": "d1-landing-3"
+ },
+ {
+  "scroll": 1
+ },
+ {
+  "wait": 300
+ },
+ {
+  "shot": "d1-landing-4"
+ },
+ {
+  "scroll": 1
+ },
+ {
+  "wait": 300
+ },
+ {
+  "shot": "d1-landing-5"
+ },
+ {
+  "scroll": 1
+ },
+ {
+  "wait": 300
+ },
+ {
+  "shot": "d1-landing-6"
+ },
+ {
+  "go": "/start#account"
+ },
+ {
+  "wait": 900
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:#name"
+ },
+ {
+  "type": "Ethan"
+ },
+ {
+  "shot": "d1-setup-account"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:#go"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "shot": "d1-setup-about"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Late nights"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Student-athlete"
+ },
+ {
+  "shot": "d1-setup-about-picked"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:.cta[data-next]"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-setup-reads"
+ },
+ {
+  "scroll": 1
+ },
+ {
+  "shot": "d1-setup-reads-2"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Sounds good"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-setup-laptop"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:#pair"
+ },
+ {
+  "wait": 900
+ },
+ {
+  "shot": "d1-setup-laptop-paired"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:.cta[data-next]"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-setup-wearable"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:WHOOP"
+ },
+ {
+  "wait": 300
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:.cta[data-next]"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-setup-permission"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Allow"
+ },
+ {
+  "wait": 800
+ },
+ {
+  "shot": "d1-setup-syncing"
+ },
+ {
+  "wait": 4000
+ },
+ {
+  "shot": "d1-setup-whoop-connected"
+ },
+ {
+  "scroll": 1
+ },
+ {
+  "shot": "d1-setup-whoop-connected-2"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:.cta[data-next]"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-setup-calendar"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:[data-cal=google]"
+ },
+ {
+  "wait": 900
+ },
+ {
+  "shot": "d1-setup-calendar-connected"
+ },
+ {
+  "scroll": 1
+ },
+ {
+  "shot": "d1-setup-calendar-connected-2"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:.cta[data-next]"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-setup-done"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:#open"
+ },
+ {
+  "wait": 1800
+ },
+ {
+  "shot": "d1-app-first-open"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:.ht-next"
+ },
+ {
+  "wait": 1100
+ },
+ {
+  "shot": "d1-tour-1"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:.ht-next"
+ },
+ {
+  "wait": 1100
+ },
+ {
+  "shot": "d1-tour-2"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:.ht-next"
+ },
+ {
+  "wait": 1100
+ },
+ {
+  "shot": "d1-tour-3"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:.ht-next"
+ },
+ {
+  "wait": 1100
+ },
+ {
+  "shot": "d1-tour-4"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:.ht-next"
+ },
+ {
+  "wait": 1100
+ },
+ {
+  "shot": "d1-tour-5"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:.ht-next"
+ },
+ {
+  "wait": 1100
+ },
+ {
+  "shot": "d1-tour-6"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:.ht-next"
+ },
+ {
+  "wait": 1100
+ },
+ {
+  "shot": "d1-tour-7"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:.ht-next"
+ },
+ {
+  "wait": 1100
+ },
+ {
+  "shot": "d1-tour-8"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:.ht-next"
+ },
+ {
+  "wait": 1100
+ },
+ {
+  "shot": "d1-tour-9"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:.ht-next"
+ },
+ {
+  "wait": 1100
+ },
+ {
+  "shot": "d1-tour-10"
+ },
+ {
+  "eval": "localStorage.getItem('ht-tour-done') || (localStorage.setItem('ht-tour-done','1'), 'set'); true"
+ },
+ {
+  "go": "/app"
+ },
+ {
+  "wait": 1500
+ },
+ {
+  "eval": "<<seed.js>>\n__icp.shift(-1)"
+ },
+ {
+  "shot": "d1-now"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Night"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "shot": "d1-night-phone"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:See a sample night"
+ },
+ {
+  "wait": 1500
+ },
+ {
+  "shot": "d1-night-sample"
+ },
+ {
+  "scroll": 2
+ },
+ {
+  "shot": "d1-night-sample-2"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:History"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-history"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:See a sample week"
+ },
+ {
+  "wait": 500
+ },
+ {
+  "shot": "d1-history-sample"
+ },
+ {
+  "scroll": 2
+ },
+ {
+  "shot": "d1-history-sample-2"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:You"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-you"
+ },
+ {
+  "scroll": 2
+ },
+ {
+  "shot": "d1-you-2"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:#demobtn"
+ },
+ {
+  "wait": 800
+ },
+ {
+  "shot": "d1-demo-sheet"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "css:#dlist button"
+ },
+ {
+  "wait": 1500
+ },
+ {
+  "shot": "d1-demo-moment"
+ },
+ {
+  "go": "/app"
+ },
+ {
+  "wait": 1500
+ },
+ {
+  "shot": "d2-phone-now"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Night"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "shot": "d2-phone-night"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:History"
+ },
+ {
+  "wait": 500
+ },
+ {
+  "shot": "d2-phone-history"
+ }
+]

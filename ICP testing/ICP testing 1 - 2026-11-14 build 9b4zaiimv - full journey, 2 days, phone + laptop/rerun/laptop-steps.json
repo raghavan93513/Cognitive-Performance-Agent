@@ -1,0 +1,691 @@
+[
+ {
+  "go": "/"
+ },
+ {
+  "wait": 1500
+ },
+ {
+  "shot": "d1-laptop-landing"
+ },
+ {
+  "go": "/start#login"
+ },
+ {
+  "wait": 900
+ },
+ {
+  "shot": "d1-laptop-login"
+ },
+ {
+  "click": "css:#name"
+ },
+ {
+  "type": "Ethan"
+ },
+ {
+  "shot": "d1-laptop-setup-account"
+ },
+ {
+  "click": "css:#go"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "shot": "d1-laptop-setup-about"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Late nights"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Student-athlete"
+ },
+ {
+  "shot": "d1-laptop-setup-about-picked"
+ },
+ {
+  "click": "css:.cta[data-next]"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-laptop-setup-reads"
+ },
+ {
+  "scroll": 1
+ },
+ {
+  "shot": "d1-laptop-setup-reads-2"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Sounds good"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-laptop-setup-laptop"
+ },
+ {
+  "click": "css:#pair"
+ },
+ {
+  "wait": 900
+ },
+ {
+  "shot": "d1-laptop-setup-laptop-paired"
+ },
+ {
+  "click": "css:.cta[data-next]"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-laptop-setup-wearable"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:WHOOP"
+ },
+ {
+  "wait": 300
+ },
+ {
+  "click": "css:.cta[data-next]"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-laptop-setup-permission"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Allow"
+ },
+ {
+  "wait": 800
+ },
+ {
+  "shot": "d1-laptop-setup-syncing"
+ },
+ {
+  "wait": 4000
+ },
+ {
+  "shot": "d1-laptop-setup-whoop-connected"
+ },
+ {
+  "scroll": 1
+ },
+ {
+  "shot": "d1-laptop-setup-whoop-connected-2"
+ },
+ {
+  "click": "css:.cta[data-next]"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-laptop-setup-calendar"
+ },
+ {
+  "click": "css:[data-cal=google]"
+ },
+ {
+  "wait": 900
+ },
+ {
+  "shot": "d1-laptop-setup-calendar-connected"
+ },
+ {
+  "scroll": 1
+ },
+ {
+  "shot": "d1-laptop-setup-calendar-connected-2"
+ },
+ {
+  "click": "css:.cta[data-next]"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-laptop-setup-done"
+ },
+ {
+  "click": "css:#open"
+ },
+ {
+  "wait": 1800
+ },
+ {
+  "shot": "d1-laptop-first-open"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Skip tour"
+ },
+ {
+  "wait": 900
+ },
+ {
+  "go": "/app?tab=night"
+ },
+ {
+  "wait": 1400
+ },
+ {
+  "eval": "<<seed.js>>\n__icp.shift(-1); NIGHTTAB.show(); true"
+ },
+ {
+  "wait": 400
+ },
+ {
+  "shot": "d1-laptop-night-connect"
+ },
+ {
+  "eval": "<<seed.js>>\n__icp.shift(-1); (async () => { const r = await __icp.seedNights(30, [0, 10, 5, 20]); __icp.seedLog(); NIGHTTAB.show(); window.__seedlog = r; return true; })()"
+ },
+ {
+  "wait": 800
+ },
+ {
+  "shot": "d1-laptop-night-first-check"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Yes"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "shot": "d1-laptop-night"
+ },
+ {
+  "scroll": 2
+ },
+ {
+  "shot": "d1-laptop-night-2"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:How these are worked out"
+ },
+ {
+  "wait": 500
+ },
+ {
+  "scroll": 3
+ },
+ {
+  "shot": "d1-laptop-night-how"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:History"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "shot": "d1-laptop-history"
+ },
+ {
+  "scroll": 2
+ },
+ {
+  "shot": "d1-laptop-history-2"
+ },
+ {
+  "go": "/app?speed=60&arm=halftime"
+ },
+ {
+  "wait": 1500
+ },
+ {
+  "eval": "<<seed.js>>\n__icp.shift(-1)"
+ },
+ {
+  "shot": "d1-laptop-now"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Start studying"
+ },
+ {
+  "wait": 800
+ },
+ {
+  "shot": "d1-laptop-consent"
+ },
+ {
+  "scroll": 2
+ },
+ {
+  "shot": "d1-laptop-consent-2"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Agree and join"
+ },
+ {
+  "wait": 1200
+ },
+ {
+  "shot": "d1-laptop-after-consent"
+ },
+ {
+  "click": "css:#s-plan"
+ },
+ {
+  "type": "STAT 5703 problem set 6"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:1 h"
+ },
+ {
+  "wait": 300
+ },
+ {
+  "shot": "d1-laptop-setup-session"
+ },
+ {
+  "wait": 1200
+ },
+ {
+  "click": "css:[data-s=begin]"
+ },
+ {
+  "wait": 1500
+ },
+ {
+  "shot": "d1-laptop-live"
+ },
+ {
+  "waitFor": "text:Start walk",
+  "ms": 70000
+ },
+ {
+  "wait": 500
+ },
+ {
+  "shot": "d1-laptop-suggestion"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:See why"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-laptop-why"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Start walk"
+ },
+ {
+  "wait": 1500
+ },
+ {
+  "shot": "d1-laptop-walk"
+ },
+ {
+  "wait": 6000
+ },
+ {
+  "shot": "d1-laptop-after-walk"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:End session"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-laptop-end-ask"
+ },
+ {
+  "click": "css:[data-s=end-yes]"
+ },
+ {
+  "wait": 900
+ },
+ {
+  "shot": "d1-laptop-checkin-1"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Continue"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-laptop-checkin-2"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Mostly"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "shot": "d1-laptop-checkin-3"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:No, it fit"
+ },
+ {
+  "wait": 900
+ },
+ {
+  "shot": "d1-laptop-checkin-done"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Two more minutes"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "shot": "d1-laptop-sus-1"
+ },
+ {
+  "click": "css:[data-s=sus][data-v=\"4\"]"
+ },
+ {
+  "wait": 800
+ },
+ {
+  "click": "css:[data-s=sus][data-v=\"2\"]"
+ },
+ {
+  "wait": 800
+ },
+ {
+  "click": "css:[data-s=sus][data-v=\"4\"]"
+ },
+ {
+  "wait": 800
+ },
+ {
+  "click": "css:[data-s=sus][data-v=\"2\"]"
+ },
+ {
+  "wait": 800
+ },
+ {
+  "click": "css:[data-s=sus][data-v=\"4\"]"
+ },
+ {
+  "wait": 800
+ },
+ {
+  "click": "css:[data-s=sus][data-v=\"2\"]"
+ },
+ {
+  "wait": 800
+ },
+ {
+  "click": "css:[data-s=sus][data-v=\"5\"]"
+ },
+ {
+  "wait": 800
+ },
+ {
+  "click": "css:[data-s=sus][data-v=\"2\"]"
+ },
+ {
+  "wait": 800
+ },
+ {
+  "click": "css:[data-s=sus][data-v=\"4\"]"
+ },
+ {
+  "wait": 800
+ },
+ {
+  "click": "css:[data-s=sus][data-v=\"2\"]"
+ },
+ {
+  "wait": 800
+ },
+ {
+  "shot": "d1-laptop-sus-done"
+ },
+ {
+  "go": "/app?tab=night"
+ },
+ {
+  "wait": 1500
+ },
+ {
+  "shot": "d2-laptop-night-before-sync"
+ },
+ {
+  "eval": "<<seed.js>>\n(async () => { await __icp.addNight([23, 25], [6, 45]); NIGHTTAB.show(); return true; })()"
+ },
+ {
+  "wait": 800
+ },
+ {
+  "shot": "d2-laptop-night-synced"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Change"
+ },
+ {
+  "wait": 500
+ },
+ {
+  "shot": "d2-laptop-night-change"
+ },
+ {
+  "eval": "document.querySelector('#nt-bed').value = '23:05'; document.querySelector('.nt-edit button[type=submit]').click(); true"
+ },
+ {
+  "wait": 1200
+ },
+ {
+  "shot": "d2-laptop-night-changed"
+ },
+ {
+  "go": "/app?speed=60&arm=pomodoro"
+ },
+ {
+  "wait": 1500
+ },
+ {
+  "shot": "d2-laptop-now"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Start studying"
+ },
+ {
+  "wait": 900
+ },
+ {
+  "shot": "d2-laptop-setup-session"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:45 min"
+ },
+ {
+  "wait": 1200
+ },
+ {
+  "click": "css:[data-s=begin]"
+ },
+ {
+  "wait": 1500
+ },
+ {
+  "shot": "d2-laptop-live"
+ },
+ {
+  "waitFor": "text:Start break",
+  "ms": 45000
+ },
+ {
+  "wait": 500
+ },
+ {
+  "shot": "d2-laptop-pomo-break"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Start break"
+ },
+ {
+  "wait": 2500
+ },
+ {
+  "shot": "d2-laptop-pomo-on-break"
+ },
+ {
+  "wait": 6000
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:End session"
+ },
+ {
+  "wait": 600
+ },
+ {
+  "click": "css:[data-s=end-yes]"
+ },
+ {
+  "wait": 900
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Continue"
+ },
+ {
+  "wait": 500
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:Yes"
+ },
+ {
+  "wait": 500
+ },
+ {
+  "shot": "d2-laptop-checkin-q3"
+ },
+ {
+  "click": "css:[data-s=wrongq]"
+ },
+ {
+  "wait": 900
+ },
+ {
+  "shot": "d2-laptop-checkin-done"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:History"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "shot": "d2-laptop-history"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "click": "text:You"
+ },
+ {
+  "wait": 700
+ },
+ {
+  "shot": "d2-laptop-you"
+ },
+ {
+  "go": "/desktop"
+ },
+ {
+  "wait": 3000
+ },
+ {
+  "shot": "d2-laptop-desktop"
+ }
+]
