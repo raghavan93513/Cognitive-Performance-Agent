@@ -36,11 +36,17 @@ self.addEventListener("push", (e) => {
 self.addEventListener("notificationclick", (e) => {
   e.notification.close();
   const kind = (e.notification.data && e.notification.data.kind) || "";
-  const url = "/app?from=push" + (/^[a-z_]{1,24}$/.test(kind) ? "&k=" + kind : "");
   e.waitUntil((async () => {
+    // which app the notification belongs to: /v2 (the decluttered app, 2026-11-16) keeps its running session's id in the
+    // cache as "/__v2study"; a notification for that session opens /v2, everything else opens /app as before
+    const data = e.notification.data || {};
+    let home = "/app";
+    try { const r = await caches.match("/__v2study"); const id = r ? (await r.text()).trim() : ""; if (data.study && id && data.study === id) home = "/v2"; } catch {}
+    if (!data.study && typeof data.url === "string" && data.url.startsWith("/v2")) home = "/v2";
+    const url = home + "?from=push" + (/^[a-z_]{1,24}$/.test(kind) ? "&k=" + kind : "");
     const all = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
     // the app itself, never an /app preview framed inside /admin, /desktop or /preview (those have no session)
-    const open = all.find((c) => { const u = new URL(c.url); return u.pathname === "/app" && (!c.frameType || c.frameType === "top-level") && !u.searchParams.has("preview"); });
+    const open = all.find((c) => { const u = new URL(c.url); return u.pathname === home && (!c.frameType || c.frameType === "top-level") && !u.searchParams.has("preview"); });
     if (open) { open.postMessage({ type: "push_open", kind }); return open.focus(); }
     return self.clients.openWindow(url);
   })());

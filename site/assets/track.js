@@ -34,7 +34,7 @@
     if (id !== visitor) { visitor = id; store.set("ht-visitor", id); queue.forEach((e) => { e.visitor = id; }); }
   };
   let session = store.sget("ht-session"); if (!session) { session = uid(); store.sset("ht-session", session); }
-  const optedOut = () => store.get("ht-optout") === "1";
+  const optedOut = () => store.get("ht-optout") === "1" || window.HT_HOLD === true; // /v2 holds recording until "Agree and join" (2026-11-16)
   const consent = () => true; // recording is on by default; opting out (HT.optOut) is the only way to stop it
   const page = location.pathname.replace(/\.html$/, "").replace(/\/$/, "/") || "/";
   let seq = +(store.sget("ht-seq") || 0);
@@ -233,7 +233,7 @@
     event: (type, data) => ev(type, data),
     identify(n) { usePerson(n); store.set("ht-name", String(n).slice(0, 40)); ev("identify", { value: String(n).slice(0, 40) }); },
     optOut() { ev("consent", { value: "opt_out" }); flush(true); store.set("ht-optout", "1"); queue = []; }, // send what was recorded while on, then stop
-    optIn() { try { localStorage.removeItem("ht-optout"); } catch {} store.set("ht-consent", "1"); ev("consent", { value: "opt_in" }); },
+    optIn() { window.HT_HOLD = false; try { localStorage.removeItem("ht-optout"); } catch {} store.set("ht-consent", "1"); ev("consent", { value: "opt_in" }); },
     isRecording: () => !optedOut(),
     visitor: () => visitor,
     forget() { queue = []; inflight = null; path = []; store.set("ht-optout", "1"); }, // "Delete my data": stop, and send nothing that is still waiting
