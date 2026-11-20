@@ -419,3 +419,68 @@ study setup reads. QA states with sample data: `/app?night=ok|usual|confirm|lear
 - Checked on the real band only for the connect / battery / live / clock path (the test page, 2026-11-14). A full
   history sync and a real night still need checking on Heramb's band.
 - Not validated against a reference (a Polar H10 check is proposed). Not checked in Safari on the iOS Simulator.
+
+## The decluttered phone app (`/v2`, added 2026-11-16)
+
+Asked for by Heramb (2026-11-16): build the four-screen app from the declutter brief
+(`Wiki/Cognitive Perf Agent Wiki/24-synthesis/declutter-brief-2026-11-15.md`), phone first. It lives at its own
+address, **`/v2`**, so the live `/app` keeps working unchanged until the team confirms the cuts. Live since 2026-11-19 at https://halftime-study.vercel.app/v2.
+
+### Files
+- `site/v2.html`: the page and its CSS (the Island + Forecast look: paper ground, a black card that speaks, one mint accent).
+- `site/assets/v2.js`: the app. It reuses `RULE` v0, the study tasks and the SUS score from `site/assets/study.js`
+  (loaded, never started), so there is one timing rule. Same push server, `/api/collect` and `/api/forget`.
+- `site/assets/link.js`: the comparison, method `link-v0` (plain code, no AI). Tests: `node tools/qa/link-test.mjs`.
+- `site/manifest-v2.webmanifest`: the Home Screen app opens `/v2`.
+- `site/sw.js`: a tapped notification for a `/v2` session opens `/v2` (it keeps its session id in the cache as `/__v2study`); everything else opens `/app` as before.
+- `site/assets/track.js`: honours `window.HT_HOLD` (see below); nothing else changed.
+
+### The screens
+1. **Today, "the two halves":** last night (black) beside today's studying (white), a one-line link or "N more
+   logged nights", what last night changes in today's breaks, and one button, **Start studying**. The first open shows
+   a labelled sample. "Add last night's sleep" opens a sheet with a stepper.
+2. **Session:** the timer, the session line, and the one suggestion card (reasons with numbered sources, How sure,
+   See why, Snooze, Looks wrong, **Talk to someone**). Take a break / End session; Keep the screen on.
+3. **Check-in:** Finished what you planned? · How much did your phone pull you away? (2 taps; 3 once the team picks
+   the study task). Then "38 of 50 min kept · out of view 6 times".
+4. **Week:** seven pairs (night bar against your usual, kept minutes), the link with its night counts and
+   "could be chance", how it's worked out, and your sessions.
+- **Sources & privacy** (sheet): what it reads, what it can't see, Share with the team, Notifications, Sleep
+  tracker, everything collected, Delete my data.
+- **Talk to someone** (sheet): campus counseling (contact still to be confirmed by the team), someone you trust,
+  988 and 911. On the card, and on Today when 3 of the last 5 logged nights were under 6 h.
+
+**First run:** Today → Start studying → consent → "Do you wear a sleep tracker?" → length (sleep is typed here) →
+Start the timer: 5 taps to a running timer (was about 24).
+
+### What it collects (new, so the consent text is version 2)
+Everything `/app` collects, with `extra.app = "v2"` on every event, plus:
+- **Out of view** (route A of the brief): how many times and how long the page was hidden during a session
+  (`study_end`: `away_n`, `away_min`). It can't tell a locked screen from another app, and never sees which app.
+- **Phone pull** (`study_checkin.pull`: none / little / lot), replacing "Did the suggestion feel wrong?" (the card
+  still has Looks wrong).
+- **Which tracker** the person has, in `study_start.band` (words only; nothing is read from it).
+- Typed nights stay on the phone (`ht2-nights`); only the night typed at session start is sent, as before.
+- **Nothing is recorded before "Agree and join"**, unlike `/app`: an inline script sets `window.HT_HOLD`, which
+  `track.js` honours until `HT.optIn()`. `?demo=week` never records. (`/app` is unaffected: it never sets the flag.)
+These are **team decisions** (declutter brief, items 1 and 4): confirm them, and the consent text, before a real tester.
+
+### Storage
+`ht2-session`, `ht2-log`, `ht2-n`, `ht2-arms`, `ht2-consent`, `ht2-band`, `ht2-nights`, `ht2-last`, `ht2-sus-done`,
+`ht2-install-hide`. Shared with `/app` on purpose: `ht-visitor` (one person), `ht-push-saved`, `ht-task`.
+Delete my data clears every `ht*` key and the WHOOP readings.
+
+### QA
+```bash
+node tools/site/serve.mjs 3007
+```
+- `http://127.0.0.1:3007/v2?speed=60&arm=halftime`: a session 60× faster.
+- `/v2?demo=week`: a labelled synthetic fortnight that shows the link in its "ready" state; it saves and sends nothing.
+- `/v2?tab=week`: opens on Week.
+
+**Checked (2026-11-16):** full first-run journeys on iPhone SE, 14 and Pro Max (headless Chrome), the fixed-timer
+arm, Looks wrong, reload mid-session, a manual break with +5, check-in, Delete my data and the synthetic week: 0
+console errors. In Safari on the iOS 26.5 Simulator (iPhone 17): Today, consent, the tracker question, setup, the
+suggestion card, a walk and the end ask. Safari found two bugs Chrome didn't (a sticky action bar sent taps to the
+field under it; a hidden backdrop tinted Safari's bars), both fixed. **Not checked:** a real iPhone, a notification on a
+locked phone, the Home Screen app, the laptop layout.
