@@ -1,6 +1,6 @@
 ---
 title: Hot Cache
-updated: 2026-11-15T17:10:00Z
+updated: 2026-11-16T20:00:00Z
 ---
 
 # Hot Cache
@@ -8,6 +8,12 @@ updated: 2026-11-15T17:10:00Z
 *A ~500-word semantic snapshot of recent activity. Updated after every major write operation.*
 
 ## Recent Activity
+
+- [2026-11-16] **The decluttered phone app is built at `/v2`** (Heramb: "start building … phone first"), beside the unchanged live `/app`. **Live since 2026-11-19** at https://halftime-study.vercel.app/v2 (sample: `/v2?demo=week`); not committed.
+  - Four screens and a sheet: Today ("the two halves": last night vs today's kept minutes), Session (the same timer and card, plus Talk to someone), a 2-tap check-in (finished? · phone pull), Week (seven pairs, the link, sessions), and Sources & privacy. 5 taps to a timer.
+  - The link is `link-v0`, plain code: kept minutes after shorter vs usual nights, with counts and "could be chance", only after 7 nights and 5 study days.
+  - New data (out-of-view time, phone pull, which tracker) is in the consent text (v2) but needs the team before a real tester.
+  - Checked in Chrome at three iPhone sizes and in Safari on the iOS Simulator; Safari caught two bugs Chrome missed. See [[25-journal/2026-11-16-v2-phone-app]].
 
 - [2026-11-15] **Everything since Nov 6 is committed locally** on `heramb-setup+context`, in sorted commits by topic. It is not pushed. Uncommitted `.obsidian` settings and the ICP testing screenshots stay out on purpose.
 
@@ -129,6 +135,7 @@ updated: 2026-11-15T17:10:00Z
 
 ## Active Threads
 
+- **`/v2` to the team:** confirm the four screens, the new data and consent v2, and the link thresholds; then point `/app` at `/v2`, try it on a real iPhone, and build its laptop layout. See [[25-journal/2026-11-16-v2-phone-app]].
 - **Fix the landing page's false or unconfirmed claims before sharing the link:**
   - "never tells your … school";
   - "Fitbit, Oura or WHOOP" (only Fitbit is confirmed);

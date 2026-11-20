@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-11-15
 tier: core
 created: 2026-11-15T18:00:00Z
-updated: 2026-11-15T22:30:00Z
+updated: 2026-11-16T20:00:00Z
 relationships:
   - target: "[[24-synthesis/open-decisions]]"
     type: related_to
@@ -19,7 +19,7 @@ relationships:
 
 # Declutter brief: one product, body × device use
 
-**Status:** Heramb's decisions (2026-11-15) plus a proposal for the team. Scope is a **team** decision: Raghavan, Alexa and Yulee have not seen this yet. Nothing in `site/` has changed.
+**Status:** Heramb's decisions (2026-11-15) plus a proposal for the team. Scope is a **team** decision: Raghavan, Alexa and Yulee have not seen this yet. **Update 2026-11-16:** Heramb asked for the build, phone first. It runs at `/v2` beside the unchanged `/app`, not deployed; see [[25-journal/2026-11-16-v2-phone-app|the /v2 build]].
 
 **Why.** Heramb, 2026-11-15: the app is "way too cluttered", "we are solving too many problems at once", and he wants "the easiest possible way". From landing page to a running timer took about 24 taps and 20+ screens. Most of the app was shown on sample data: the tour, the Demo tab, the sample week, the sample calendar, a pretend laptop pairing and a fake "Allow" screen.
 

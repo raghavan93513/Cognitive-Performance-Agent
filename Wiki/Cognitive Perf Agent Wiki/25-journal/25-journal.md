@@ -9,7 +9,7 @@ lifecycle: draft
 lifecycle_changed: 2026-10-26
 tier: core
 created: 2026-10-26T20:00:00Z
-updated: 2026-11-15T17:00:00Z
+updated: 2026-11-16T20:00:00Z
 ---
 
 # 25 · Journal
@@ -47,4 +47,5 @@ updated: 2026-11-15T17:00:00Z
 - [[25-journal/2026-11-15-icp-three-problems]]: six ICP testers on the reframe (concept): 4 MEH, 2 I'D QUIT, overall 4.5/10; they want the link, with n shown, no app names, and a route to a person
 - [[25-journal/2026-11-15-spike-phone-use]]: phone-use spike, routes B and D (on paper; no phone test yet). B (Shortcuts app triggers → our endpoint) works with caveats; a two-phone test by Nov 21 decides it. D (dev-signed Family Controls app) works for a few testers without approval but needs a paid team and a Mac
 - [[25-journal/2026-11-15-spike-laptop-use]]: route C spike: a 2-permission Chrome/Edge extension splits each session into picked sites / other tabs / other apps / away and gives Halftime the four totals, never which site (checks pass on a Mac against macOS's own focus record; Windows/Edge untested; ~13–18 h to pilot)
+- [[25-journal/2026-11-16-v2-phone-app]]: the declutter brief built, phone first, at /v2 beside the live /app: Today (the two halves), Session with Talk to someone, a 2-tap check-in with phone pull, Week with the link (link-v0), a Sources & privacy sheet; 5 taps to a timer; checked in Chrome and Safari (iOS Simulator); not deployed, new data needs the team
 - ICP testing 1 (2026-11-14/15, outside the vault in `ICP testing/`): new reusable framework and ICP_6 Ethan Park; a 2-day full journey on phone + laptop: I'D QUIT, 4/10, SUS 52.5; quick bugs and a UI/UX batch fixed and deployed the same night. Synthetic, not research
